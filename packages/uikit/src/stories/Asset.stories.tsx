@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { Asset } from '../components/Asset';
-import defaultTheme from '../styles/defaultTheme';
+import { defaultTheme } from '../styles/defaultTheme';
 
 export default {
   title: 'Asset/Asset',

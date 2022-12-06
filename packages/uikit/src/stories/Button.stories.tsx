@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { Button } from '../components/Button';
-import defaultTheme from '../styles/defaultTheme';
+import { defaultTheme } from '../styles/defaultTheme';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
