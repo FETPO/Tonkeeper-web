@@ -2,9 +2,7 @@
   "name": "uikit",
   "version": "1.0.0",
   "description": "",
-  "exports": {
-    "./*": "./build/*"
-  },
+  "main": "dist/index.js",
   "scripts": {
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",

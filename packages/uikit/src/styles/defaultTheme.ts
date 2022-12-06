@@ -1,6 +1,6 @@
 import { DefaultTheme } from 'styled-components';
 
-const defaultTheme: DefaultTheme = {
+export const defaultTheme: DefaultTheme = {
   textPrimary: '#FFFFFF',
   textSecondary: '#8994A3',
   textTertiary: '#556170',
@@ -85,5 +85,3 @@ const defaultTheme: DefaultTheme = {
   cornerLarge: '24px',
   cornerFull: '100%',
 };
-
-export default defaultTheme;
