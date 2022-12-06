@@ -1,7 +1,8 @@
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
-
-import { Button } from './Button';
+import { ThemeProvider } from 'styled-components';
+import { Button } from '../components/Button';
+import defaultTheme from '../styles/defaultTheme';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -9,33 +10,37 @@ export default {
   component: Button,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
-    backgroundColor: { control: 'color' },
+    size: { control: 'select', options: ['small', 'medium', 'large'] },
+    disabled: { control: 'boolean' },
+    primary: { control: 'boolean' },
+    secondary: { control: 'boolean' },
+    children: { control: 'text' },
   },
 } as ComponentMeta<typeof Button>;
 
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
+const Template: ComponentStory<typeof Button> = (args) => (
+  <ThemeProvider theme={defaultTheme}>
+    <Button {...args} />
+  </ThemeProvider>
+);
 
 export const Primary = Template.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
 Primary.args = {
+  size: 'small',
   primary: true,
-  label: 'Button',
+  disabled: false,
+  children: 'Label',
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-  label: 'Button',
+  secondary: true,
+  disabled: true,
+  children: 'Button',
 };
 
 export const Large = Template.bind({});
 Large.args = {
   size: 'large',
-  label: 'Button',
-};
-
-export const Small = Template.bind({});
-Small.args = {
-  size: 'small',
-  label: 'Button',
+  children: 'Large',
 };
