@@ -1,0 +1,21 @@
+{
+  "name": "Tonkeeper",
+  "short_name": "Tonkeeper",
+  "description": "Your extension wallet on The Open Network",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Open the wallet"
+  },
+  "icons": {
+    "32": "favicon.png"
+  },
+  "permissions": ["storage", "unlimitedStorage", "clipboardWrite", "activeTab"],
+  "web_accessible_resources": [
+    {
+      "resources": ["provider.js"],
+      "matches": ["file://*/*", "http://*/*", "https://*/*"]
+    }
+  ]
+}

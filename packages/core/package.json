@@ -1,12 +1,12 @@
 {
-  "name": "core",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@tonkeeper/core",
+  "version": "0.1.0",
+  "author": "Nikita Kuznetsov <nkuz915@gmail.com>",
+  "description": "Core features and state for tonkeeper wallet",
   "main": "index.js",
   "scripts": {
     "build": "rm -fr dist && tsc"
   },
-  "author": "",
   "license": "ISC",
   "devDependencies": {
     "typescript": "^4.9.3"

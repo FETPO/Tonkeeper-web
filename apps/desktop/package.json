@@ -1,7 +1,8 @@
 {
-  "name": "desktop",
-  "version": "1.0.0",
-  "author": "Yoshihide Shiono <shiono.yoshihide@gmail.com>",
+  "name": "@tonkeeper/desktop",
+  "version": "0.1.0",
+  "author": "Nikita Kuznetsov <nkuz915@gmail.com>",
+  "description": "Your desktop wallet on The Open Network",
   "main": "app/background.js",
   "scripts": {
     "dev": "nextron",
@@ -9,13 +10,16 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "@tonkeeper/uikit": "0.1.0",
     "electron-serve": "^1.1.0",
-    "electron-store": "^8.1.0"
+    "electron-store": "^8.1.0",
+    "styled-components": "^5.3.6"
   },
   "devDependencies": {
     "@types/node": "^16.11.7",
     "@types/react": "^18.0.8",
-    "electron": "^20.1.0",
+    "@types/styled-components": "^5.1.26",
+    "electron": "20.1.0",
     "electron-builder": "^23.3.3",
     "next": "^12.2.5",
     "nextron": "^8.2.0",

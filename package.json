@@ -2,13 +2,16 @@
   "name": "tonkeeper-web",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "npx turbo build"
+  },
   "private": true,
   "devDependencies": {
     "prettier": "^2.6.2",
     "turbo": "^1.6.3"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ]
 }

@@ -1,5 +1,5 @@
+import { Asset } from '@tonkeeper/uikit/dist/components/Asset';
 import Head from 'next/head';
-import { Asset } from 'uikit/dist/components/Asset';
 
 export default function Home() {
   return (
