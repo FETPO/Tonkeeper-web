@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { useTranslation } from '../hooks/translation';
 import { H3 } from './Text';
 
 const Block = styled.div`
@@ -14,10 +15,12 @@ const Block = styled.div`
 export interface AssetProps {
   symbol: string;
 }
+
 export const Asset: FC<AssetProps> = () => {
+  const { t } = useTranslation();
   return (
     <Block>
-      <H3>Wallet</H3>
+      <H3>{t('Wallet')}</H3>
     </Block>
   );
 };

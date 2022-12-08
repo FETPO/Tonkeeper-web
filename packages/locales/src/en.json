@@ -1,0 +1,18 @@
+{
+  "appName": {
+    "message": "Tonkeeper",
+    "description": "The name of the application"
+  },
+  "appExtensionDescription": {
+    "message": "Your extension wallet on The Open Network",
+    "description": "The description of the application"
+  },
+  "actionTitle": {
+    "message": "Open the wallet",
+    "description": "The action title of the application"
+  },
+  "Wallet": {
+    "message": "Wallet",
+    "description": "Wallet title"
+  }
+}

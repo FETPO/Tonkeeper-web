@@ -1,0 +1,14 @@
+{
+  "appName": {
+    "message": "Tonkeeper"
+  },
+  "appExtensionDescription": {
+    "message": "Your extension wallet on The Open Network"
+  },
+  "actionTitle": {
+    "message": "Открыть Кошелек"
+  },
+  "Wallet": {
+    "message": "Кошелек"
+  }
+}

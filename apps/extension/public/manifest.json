@@ -1,12 +1,13 @@
 {
-  "name": "Tonkeeper",
-  "short_name": "Tonkeeper",
-  "description": "Your extension wallet on The Open Network",
+  "name": "__MSG_appName__",
+  "short_name": "__MSG_appName__",
+  "description": "__MSG_appExtensionDescription__",
+  "default_locale": "en",
   "version": "0.0.1",
   "manifest_version": 3,
   "action": {
     "default_popup": "index.html",
-    "default_title": "Open the wallet"
+    "default_title": "__MSG_actionTitle__"
   },
   "icons": {
     "32": "favicon.png"
