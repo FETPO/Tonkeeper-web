@@ -82,7 +82,6 @@ export const Button = styled.div<{ active: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
   cursor: pointer;
   gap: 0.25rem;
 
@@ -102,7 +101,7 @@ export const Button = styled.div<{ active: boolean }>`
 export const Block = styled.div`
   flex-shrink: 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   position: sticky;
   bottom: 0;
   padding: 1rem 0;
