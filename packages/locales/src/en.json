@@ -14,5 +14,13 @@
   "Wallet": {
     "message": "Wallet",
     "description": "Wallet title"
+  },
+  "Activity": {
+    "message": "Activity",
+    "description": "Activity footer button"
+  },
+  "Settings": {
+    "message": "Settings",
+    "description": "Settings footer button"
   }
 }
