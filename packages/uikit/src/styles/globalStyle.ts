@@ -13,7 +13,7 @@ body {
 
 export const Container = styled.div`
   min-width: 375px;
-  max-width: 600px;
+  max-width: 550px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;

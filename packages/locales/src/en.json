@@ -22,5 +22,41 @@
   "Settings": {
     "message": "Settings",
     "description": "Settings footer button"
+  },
+  "Subscriptions": {
+    "message": "Subscriptions",
+    "description": "Subscriptions settings button"
+  },
+  "Recovery phrase": {
+    "message": "Recovery phrase",
+    "description": "Recovery phrase settings button"
+  },
+  "Active address": {
+    "message": "Active address",
+    "description": "Active address settings button"
+  },
+  "List of tokens": {
+    "message": "List of tokens",
+    "description": "List of tokens settings button"
+  },
+  "Security": {
+    "message": "Security",
+    "description": "Security settings button"
+  },
+  "Theme": {
+    "message": "Theme",
+    "description": "Theme settings button"
+  },
+  "Log out": {
+    "message": "Log out",
+    "description": "Log out settings button"
+  },
+  "Primary currency": {
+    "message": "Primary currency",
+    "description": "Primary currency settings button"
+  },
+  "Localization": {
+    "message": "Localization",
+    "description": "Localization settings button"
   }
 }

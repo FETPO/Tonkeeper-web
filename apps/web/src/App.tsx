@@ -58,12 +58,19 @@ export const App = () => {
 
   return (
     <Container>
-      <Header />
       <Body>
         <Routes>
           <Route path={AppRoute.activity} element={<Activity />} />
           <Route path={AppRoute.settings} element={<Settings />} />
-          <Route path="*" element={<Home />} />
+          <Route
+            path="*"
+            element={
+              <>
+                <Header />
+                <Home />
+              </>
+            }
+          />
         </Routes>
       </Body>
       <Footer active={active} onClick={setActive} />
