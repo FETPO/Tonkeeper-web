@@ -4,6 +4,11 @@ export enum AppRoute {
   home = '/',
 }
 
+export enum SettingsRoute {
+  index = '/',
+  localization = '/localization',
+}
+
 export const any = (route: string): string => {
   return `${route}/*`;
 };

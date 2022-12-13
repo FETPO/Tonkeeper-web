@@ -130,8 +130,8 @@ export const ThemeIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="28"
-      height="29"
+      width="1.5em"
+      height="1.5em"
       viewBox="0 0 28 29"
       fill="none"
     >
@@ -156,8 +156,8 @@ export const LogOutIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="28"
-      height="29"
+      width="1.5em"
+      height="1.5em"
       viewBox="0 0 28 29"
       fill="none"
     >

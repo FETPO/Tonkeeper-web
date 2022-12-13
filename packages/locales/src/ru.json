@@ -10,5 +10,38 @@
   },
   "Wallet": {
     "message": "Кошелек"
+  },
+  "Activity": {
+    "message": "Aктивность"
+  },
+  "Settings": {
+    "message": "Настройки"
+  },
+  "Subscriptions": {
+    "message": "Подписки"
+  },
+  "Recovery phrase": {
+    "message": "Восстановление фраз"
+  },
+  "Active address": {
+    "message": "Активный адрес"
+  },
+  "List of tokens": {
+    "message": "Список токенов"
+  },
+  "Security": {
+    "message": "Безопасность"
+  },
+  "Theme": {
+    "message": "Тема"
+  },
+  "Log out": {
+    "message": "Выход"
+  },
+  "Primary currency": {
+    "message": "Основая валюта"
+  },
+  "Localization": {
+    "message": "Язык"
   }
 }

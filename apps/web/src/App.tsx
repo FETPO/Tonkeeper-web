@@ -1,7 +1,7 @@
 import { Footer, PageKind } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
 import { translationContext } from '@tonkeeper/uikit/dist/hooks/translation';
-import { AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
+import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
 import { defaultTheme } from '@tonkeeper/uikit/dist/styles/defaultTheme';
 import {
   Body,
@@ -9,23 +9,29 @@ import {
   GlobalStyle,
 } from '@tonkeeper/uikit/dist/styles/globalStyle';
 import { FC, PropsWithChildren, Suspense, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import i18next from './i18n';
 import { Activity } from './pages/Activity';
 import { Home } from './pages/Home';
-import { Settings } from './pages/Settigns';
+import { SettingsRouter } from './pages/settings';
+
+const queryClient = new QueryClient();
 
 export const Providers: FC<PropsWithChildren> = ({ children }) => {
+  const { t } = useTranslation();
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <GlobalStyle />
-      <Suspense fallback="...is loading">
-        <translationContext.Provider value={i18next.t}>
-          <BrowserRouter>{children}</BrowserRouter>
-        </translationContext.Provider>
-      </Suspense>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={defaultTheme}>
+        <GlobalStyle />
+        <Suspense fallback="...is loading">
+          <translationContext.Provider value={t}>
+            <BrowserRouter>{children}</BrowserRouter>
+          </translationContext.Provider>
+        </Suspense>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 };
 
@@ -61,7 +67,7 @@ export const App = () => {
       <Body>
         <Routes>
           <Route path={AppRoute.activity} element={<Activity />} />
-          <Route path={AppRoute.settings} element={<Settings />} />
+          <Route path={any(AppRoute.settings)} element={<SettingsRouter />} />
           <Route
             path="*"
             element={

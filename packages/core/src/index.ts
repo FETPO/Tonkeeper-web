@@ -1,3 +1,5 @@
+export * from './Storage';
+
 import { Configuration, RawBlockchainApi } from 'tonapi-sdk-js';
 
 // Get list of transactions

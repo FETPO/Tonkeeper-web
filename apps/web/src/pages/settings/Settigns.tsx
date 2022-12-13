@@ -13,10 +13,13 @@ import {
 } from '@tonkeeper/uikit/dist/components/SettingsList';
 import { Title } from '@tonkeeper/uikit/dist/components/Text';
 import { useTranslation } from '@tonkeeper/uikit/dist/hooks/translation';
+import { relative, SettingsRoute } from '@tonkeeper/uikit/dist/libs/routes';
 import { FC, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Settings: FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const mainItems = useMemo<SettingsItem[]>(() => {
     return [
@@ -68,10 +71,10 @@ export const Settings: FC = () => {
       {
         name: t('Localization'),
         icon: <LocalizationIcon />,
-        action: () => null,
+        action: () => navigate(relative(SettingsRoute.localization)),
       },
     ];
-  }, [t]);
+  }, [t, navigate]);
 
   return (
     <>
