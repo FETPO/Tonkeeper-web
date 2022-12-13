@@ -101,10 +101,7 @@ export const Settings: FC = () => {
         appPage="tonkeeper.com"
       />
       <SettingsList items={accountItems} />
-      <SettingsNetwork
-        onChangeNetwork={() => null}
-        version={process.env.REACT_APP_VERSION}
-      />
+      <SettingsNetwork version={process.env.REACT_APP_VERSION} />
     </>
   );
 };

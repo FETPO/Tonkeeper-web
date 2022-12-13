@@ -1,6 +1,8 @@
-import React, { FC } from 'react';
+import { switchNetwork } from '@tonkeeper/core/dist/entries/network';
+import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from '../../hooks/translation';
+import { useMutateNetwork, useNetwork } from '../../state/network';
 import { TonkeeperIcon } from '../Icon';
 import { Body3, Label2 } from '../Text';
 
@@ -16,7 +18,6 @@ const Logo = styled.span`
 `;
 
 export interface SettingsNetworkProps {
-  onChangeNetwork: () => void;
   version: string | undefined;
 }
 
@@ -24,13 +25,18 @@ const Version = styled(Body3)`
   color: ${(props) => props.theme.textSecondary};
 `;
 
-export const SettingsNetwork: FC<SettingsNetworkProps> = ({
-  onChangeNetwork,
-  version,
-}) => {
+export const SettingsNetwork: FC<SettingsNetworkProps> = ({ version }) => {
   const { t } = useTranslation();
+  const { data: network } = useNetwork();
+  const { mutate } = useMutateNetwork();
+
+  const onChange = useCallback(() => {
+    if (!network) return;
+    mutate(switchNetwork(network));
+  }, [network]);
+
   return (
-    <Block>
+    <Block onClick={onChange}>
       <Logo>
         <TonkeeperIcon />
       </Logo>

@@ -1,3 +1,4 @@
+export * from './Keys';
 export * from './Storage';
 
 import { Configuration, RawBlockchainApi } from 'tonapi-sdk-js';
