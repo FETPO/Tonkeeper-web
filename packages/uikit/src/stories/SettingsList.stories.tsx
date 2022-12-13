@@ -4,8 +4,8 @@ import { ThemeProvider } from 'styled-components';
 import {
   RecoveryPhraseIcon,
   SubscriptionIcon,
-} from '../components/SettingsIcons';
-import { SettingsList } from '../components/SettingsList';
+} from '../components/settings/SettingsIcons';
+import { SettingsList } from '../components/settings/SettingsList';
 import { defaultTheme } from '../styles/defaultTheme';
 import { GlobalStyle } from '../styles/globalStyle';
 

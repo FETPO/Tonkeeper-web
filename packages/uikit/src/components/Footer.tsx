@@ -105,6 +105,8 @@ export const Block = styled.div`
   position: sticky;
   bottom: 0;
   padding: 1rem 0;
+
+  background-color: ${(props) => props.theme.backgroundPage};
 `;
 
 export type PageKind = 'wallet' | 'activity' | 'settings';

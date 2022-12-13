@@ -58,5 +58,33 @@
   "Localization": {
     "message": "Localization",
     "description": "Localization settings button"
+  },
+  "Rate this app": {
+    "message": "Rate this app",
+    "description": "Rate this app settings button"
+  },
+  "Contact support": {
+    "message": "Contact support",
+    "description": "Contact support settings button"
+  },
+  "Tonkeeper news": {
+    "message": "Tonkeeper news",
+    "description": "Tonkeeper news settings button"
+  },
+  "Tonkeeper discussion": {
+    "message": "Tonkeeper discussion",
+    "description": "Tonkeeper discussion settings button"
+  },
+  "Legal documents": {
+    "message": "Legal documents",
+    "description": "Legal documents settings button"
+  },
+  "Delete account": {
+    "message": "Delete account",
+    "description": "Delete account settings button"
+  },
+  "Version": {
+    "message": "Version",
+    "description": "Version settings button"
   }
 }

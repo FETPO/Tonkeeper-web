@@ -1,4 +1,5 @@
 import {
+  DeleteAccountIcon,
   ListOfTokensIcon,
   LocalizationIcon,
   LogOutIcon,
@@ -6,11 +7,14 @@ import {
   SecurityIcon,
   SubscriptionIcon,
   ThemeIcon,
-} from '@tonkeeper/uikit/dist/components/SettingsIcons';
+} from '@tonkeeper/uikit/dist/components/settings/SettingsIcons';
 import {
   SettingsItem,
   SettingsList,
-} from '@tonkeeper/uikit/dist/components/SettingsList';
+} from '@tonkeeper/uikit/dist/components/settings/SettingsList';
+import { SettingsNetwork } from '@tonkeeper/uikit/dist/components/settings/SettingsNetwork';
+import { SettingsSocialList } from '@tonkeeper/uikit/dist/components/settings/SettingsSocialList';
+
 import { Title } from '@tonkeeper/uikit/dist/components/Text';
 import { useTranslation } from '@tonkeeper/uikit/dist/hooks/translation';
 import { relative, SettingsRoute } from '@tonkeeper/uikit/dist/libs/routes';
@@ -76,11 +80,31 @@ export const Settings: FC = () => {
     ];
   }, [t, navigate]);
 
+  const accountItems = useMemo(() => {
+    return [
+      {
+        name: t('Delete account'),
+        icon: <DeleteAccountIcon />,
+        action: () => null,
+      },
+    ];
+  }, [t]);
+
   return (
     <>
       <Title>{t('Settings')}</Title>
       <SettingsList items={mainItems} />
       <SettingsList items={secondaryItems} />
+      <SettingsSocialList
+        onLegal={() => null}
+        openPage={() => null}
+        appPage="tonkeeper.com"
+      />
+      <SettingsList items={accountItems} />
+      <SettingsNetwork
+        onChangeNetwork={() => null}
+        version={process.env.REACT_APP_VERSION}
+      />
     </>
   );
 };
