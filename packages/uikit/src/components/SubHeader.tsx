@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { ChevronLeftIcon } from './Icon';
 import { H3 } from './Text';
@@ -34,13 +35,14 @@ const BackButton = styled.div`
 `;
 
 export interface SubHeaderProps {
-  onBack: () => void;
   title: string;
 }
-export const SubHeader: FC<SubHeaderProps> = ({ onBack, title }) => {
+
+export const SubHeader: FC<SubHeaderProps> = ({ title }) => {
+  const navigate = useNavigate();
   return (
     <Block>
-      <BackButton onClick={onBack}>
+      <BackButton onClick={() => navigate('../')}>
         <ChevronLeftIcon />
       </BackButton>
       <H3>{title}</H3>

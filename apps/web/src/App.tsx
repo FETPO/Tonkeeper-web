@@ -1,8 +1,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Footer, PageKind } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
-import { storageContext } from '@tonkeeper/uikit/dist/hooks/storage';
-import { translationContext } from '@tonkeeper/uikit/dist/hooks/translation';
+import { AppSdkContext } from '@tonkeeper/uikit/dist/hooks/appSdk';
+import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
+import { TranslationContext } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
 import { useLanguage } from '@tonkeeper/uikit/dist/state/language';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
@@ -23,6 +24,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
+import { BrowserAppSdk } from './libs/appSdk';
 import { BrowserStorage } from './libs/storage';
 import { Activity } from './pages/Activity';
 import { Home } from './pages/Home';
@@ -30,24 +32,28 @@ import { SettingsRouter } from './pages/settings';
 
 const queryClient = new QueryClient();
 const storage = new BrowserStorage();
+const sdk = new BrowserAppSdk();
 
 export const Providers: FC<PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation();
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={defaultTheme}>
-        <GlobalStyle />
-        <Suspense fallback="...is loading">
-          <translationContext.Provider value={t}>
-            <storageContext.Provider value={storage}>
-              <BrowserRouter>
-                <Loader>{children}</Loader>
-              </BrowserRouter>
-            </storageContext.Provider>
-          </translationContext.Provider>
-        </Suspense>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={defaultTheme}>
+          <GlobalStyle />
+          <Suspense fallback="...is loading">
+            <AppSdkContext.Provider value={sdk}>
+              <TranslationContext.Provider value={t}>
+                <StorageContext.Provider value={storage}>
+                  <Loader>{children}</Loader>
+                </StorageContext.Provider>
+              </TranslationContext.Provider>
+            </AppSdkContext.Provider>
+          </Suspense>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   );
 };
 

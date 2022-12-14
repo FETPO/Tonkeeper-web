@@ -4,10 +4,10 @@ import {
   Language,
 } from '@tonkeeper/core/dist/entries/language';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
-import { useStore } from '../hooks/storage';
+import { useStorage } from '../hooks/storage';
 
 export const useLanguage = () => {
-  const storage = useStore();
+  const storage = useStorage();
   return useQuery([AppKey.lang], async () => {
     const lang = await storage.get<Language>(AppKey.lang);
     return lang ?? defaultLanguage;
@@ -15,7 +15,7 @@ export const useLanguage = () => {
 };
 
 export const useMutateLanguage = () => {
-  const storage = useStore();
+  const storage = useStorage();
   const client = useQueryClient();
   return useMutation<void, Error, Language>(async (language) => {
     await storage.set(AppKey.lang, language);

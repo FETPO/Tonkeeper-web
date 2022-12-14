@@ -7,6 +7,7 @@ export enum AppRoute {
 export enum SettingsRoute {
   index = '/',
   localization = '/localization',
+  legal = '/legal',
 }
 
 export const any = (route: string): string => {

@@ -95,11 +95,7 @@ export const Settings: FC = () => {
       <Title>{t('Settings')}</Title>
       <SettingsList items={mainItems} />
       <SettingsList items={secondaryItems} />
-      <SettingsSocialList
-        onLegal={() => null}
-        openPage={() => null}
-        appPage="tonkeeper.com"
-      />
+      <SettingsSocialList appPage="https://tonkeeper.com/" />
       <SettingsList items={accountItems} />
       <SettingsNetwork version={process.env.REACT_APP_VERSION} />
     </>

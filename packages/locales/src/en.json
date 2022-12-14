@@ -86,5 +86,25 @@
   "Version": {
     "message": "Version",
     "description": "Version settings button"
+  },
+  "Legal": {
+    "message": "Legal",
+    "description": "Legal settings header"
+  },
+  "Terms of use": {
+    "message": "Terms of use",
+    "description": "Terms of use settings button"
+  },
+  "Privacy policy": {
+    "message": "Privacy policy",
+    "description": "Privacy policy settings button"
+  },
+  "Licenses": {
+    "message": "Licenses",
+    "description": "Licenses settings header"
+  },
+  "Montserrat font": {
+    "message": "Montserrat font",
+    "description": "Montserrat font settings button"
   }
 }

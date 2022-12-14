@@ -12,13 +12,11 @@ import { SubHeader } from '@tonkeeper/uikit/dist/components/SubHeader';
 import { useTranslation } from '@tonkeeper/uikit/dist/hooks/translation';
 import { useMutateLanguage } from '@tonkeeper/uikit/dist/state/language';
 import { useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import i18next from '../../i18n';
 
 export const Localization = () => {
   const { t } = useTranslation();
   const { mutateAsync } = useMutateLanguage();
-  const navigate = useNavigate();
   const onChange = useCallback(
     async (lang: Language) => {
       await i18next.reloadResources([lang]);
@@ -39,7 +37,7 @@ export const Localization = () => {
 
   return (
     <>
-      <SubHeader onBack={() => navigate('../')} title={t('Localization')} />
+      <SubHeader title={t('Localization')} />
       <SettingsList items={items} />
     </>
   );
