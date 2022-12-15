@@ -5,6 +5,7 @@ import installExtension, {
 import * as isDev from 'electron-is-dev';
 import * as path from 'path';
 import { Message } from '../src/libs/message';
+import { handleBackgroundMessage } from './background/background';
 
 let win: BrowserWindow | null = null;
 
@@ -53,14 +54,12 @@ function createWindow() {
     win.webContents.openDevTools();
   }
 
-  ipcMain.handle('ping', async (event, message: Message) => {
-    console.log(win?.id);
-    console.log(event);
-    console.log(message);
-
-    return new Promise((resolve) =>
-      setTimeout(() => resolve({ pong: message }), 5000)
-    );
+  ipcMain.handle('message', async (event, message: Message) => {
+    try {
+      return await handleBackgroundMessage(message);
+    } catch (e) {
+      return e;
+    }
   });
 }
 
