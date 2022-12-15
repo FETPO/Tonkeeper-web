@@ -8,6 +8,7 @@ import { H3 } from '../Text';
 import { SettingsItem, SettingsList } from './SettingsList';
 
 const Icon = styled.span`
+  display: flex;
   color: ${(props) => props.theme.iconTertiary};
 `;
 
@@ -17,7 +18,7 @@ export const SettingsLegal = React.memo(() => {
   const items = useMemo<SettingsItem[]>(() => {
     return [
       {
-        name: t('Terms of use'),
+        name: t('Terms_of_use'),
         icon: (
           <Icon>
             <ChevronRightIcon />
@@ -26,7 +27,7 @@ export const SettingsLegal = React.memo(() => {
         action: () => sdk.openPage('https://tonkeeper.com/terms/'),
       },
       {
-        name: t('Privacy policy'),
+        name: t('Privacy_policy'),
         icon: (
           <Icon>
             <ChevronRightIcon />
@@ -40,7 +41,7 @@ export const SettingsLegal = React.memo(() => {
   const licenses = useMemo<SettingsItem[]>(() => {
     return [
       {
-        name: t('Montserrat font'),
+        name: t('Montserrat_font'),
         icon: (
           <Icon>
             <ChevronRightIcon />

@@ -24,29 +24,29 @@ export const SettingsSocialList: FC<SettingsSocialProps> = React.memo(
       const result = [] as SettingsItem[];
       if (appPage) {
         result.push({
-          name: t('Rate this app'),
+          name: t('Rate_this_app'),
           icon: <RateThisAppIcon />,
           action: () => sdk.openPage(appPage),
         });
       }
       return result.concat([
         {
-          name: t('Contact support'),
+          name: t('Contact_support'),
           icon: <ContactSupportIcon />,
           action: () => sdk.openPage('mailto:support@tonkeeper.com'),
         },
         {
-          name: t('Tonkeeper news'),
+          name: t('Tonkeeper_news'),
           icon: <TelegramIcon />,
           action: () => sdk.openPage('https://t.me/tonkeeper'),
         },
         {
-          name: t('Tonkeeper discussion'),
+          name: t('Tonkeeper_discussion'),
           icon: <TelegramIcon />,
           action: () => sdk.openPage('https://t.me/tonkeeper_discuss'),
         },
         {
-          name: t('Legal documents'),
+          name: t('Legal_documents'),
           icon: <LegalDocumentsIcon />,
           action: () => navigate(relative(SettingsRoute.legal)),
         },

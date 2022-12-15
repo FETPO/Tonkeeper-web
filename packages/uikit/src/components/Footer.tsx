@@ -1,6 +1,8 @@
-import React, { FC } from 'react';
+import React, { useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { useTranslation } from '../hooks/translation';
+import { AppRoute } from '../libs/routes';
 import { Label3 } from './Text';
 
 export const WalletIcon = () => {
@@ -109,30 +111,40 @@ export const Block = styled.div`
   background-color: ${(props) => props.theme.backgroundPage};
 `;
 
-export type PageKind = 'wallet' | 'activity' | 'settings';
-
-export const Footer: FC<{
-  active: PageKind;
-  onClick: (key: PageKind) => void;
-}> = ({ active, onClick }) => {
+export const Footer = () => {
   const { t } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const active = useMemo<AppRoute>(() => {
+    if (location.pathname.includes(AppRoute.activity)) {
+      return AppRoute.activity;
+    }
+    if (location.pathname.includes(AppRoute.settings)) {
+      return AppRoute.settings;
+    }
+    return AppRoute.home;
+  }, [location.pathname]);
 
   return (
     <Block>
-      <Button active={active === 'wallet'} onClick={() => onClick('wallet')}>
+      <Button
+        active={active === AppRoute.home}
+        onClick={() => navigate(AppRoute.home)}
+      >
         <WalletIcon />
         <Label3>{t('Wallet')}</Label3>
       </Button>
       <Button
-        active={active === 'activity'}
-        onClick={() => onClick('activity')}
+        active={active === AppRoute.activity}
+        onClick={() => navigate(AppRoute.activity)}
       >
         <ActivityIcon />
         <Label3>{t('Activity')}</Label3>
       </Button>
       <Button
-        active={active === 'settings'}
-        onClick={() => onClick('settings')}
+        active={active === AppRoute.settings}
+        onClick={() => navigate(AppRoute.settings)}
       >
         <SettingsIcon />
         <Label3>{t('Settings')}</Label3>

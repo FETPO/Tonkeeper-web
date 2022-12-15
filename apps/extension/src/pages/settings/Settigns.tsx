@@ -1,7 +1,6 @@
 import {
   DeleteAccountIcon,
   ListOfTokensIcon,
-  LocalizationIcon,
   LogOutIcon,
   RecoveryPhraseIcon,
   SecurityIcon,
@@ -14,12 +13,11 @@ import {
 } from '@tonkeeper/uikit/dist/components/settings/SettingsList';
 import { SettingsNetwork } from '@tonkeeper/uikit/dist/components/settings/SettingsNetwork';
 import { SettingsSocialList } from '@tonkeeper/uikit/dist/components/settings/SettingsSocialList';
-
 import { Title } from '@tonkeeper/uikit/dist/components/Text';
 import { useTranslation } from '@tonkeeper/uikit/dist/hooks/translation';
-import { relative, SettingsRoute } from '@tonkeeper/uikit/dist/libs/routes';
 import { FC, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import packageJson from '../../../package.json';
 
 export const Settings: FC = () => {
   const { t } = useTranslation();
@@ -72,11 +70,6 @@ export const Settings: FC = () => {
         icon: 'USD',
         action: () => null,
       },
-      {
-        name: t('Localization'),
-        icon: <LocalizationIcon />,
-        action: () => navigate(relative(SettingsRoute.localization)),
-      },
     ];
   }, [t, navigate]);
 
@@ -97,7 +90,7 @@ export const Settings: FC = () => {
       <SettingsList items={secondaryItems} />
       <SettingsSocialList appPage="https://tonkeeper.com/" />
       <SettingsList items={accountItems} />
-      <SettingsNetwork version={process.env.REACT_APP_VERSION} />
+      <SettingsNetwork version={packageJson.version} />
     </>
   );
 };

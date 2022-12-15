@@ -20,13 +20,13 @@
   "Subscriptions": {
     "message": "Подписки"
   },
-  "Recovery phrase": {
+  "Recovery_phrase": {
     "message": "Восстановление фраз"
   },
-  "Active address": {
+  "Active_address": {
     "message": "Активный адрес"
   },
-  "List of tokens": {
+  "List_of_tokens": {
     "message": "Список токенов"
   },
   "Security": {
@@ -35,10 +35,10 @@
   "Theme": {
     "message": "Тема"
   },
-  "Log out": {
+  "Log_out": {
     "message": "Выход"
   },
-  "Primary currency": {
+  "Primary_currency": {
     "message": "Основая валюта"
   },
   "Localization": {

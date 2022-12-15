@@ -1,9 +1,9 @@
 export interface IAppSdk {
-  openPage: (url: string) => void;
+  openPage: (url: string) => Promise<unknown>;
 }
 
 export class MockAppSdk implements IAppSdk {
-  openPage = (url: string) => {
+  openPage = async (url: string): Promise<void> => {
     console.log(url);
   };
 }

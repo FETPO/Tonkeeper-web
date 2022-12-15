@@ -27,15 +27,15 @@
     "message": "Subscriptions",
     "description": "Subscriptions settings button"
   },
-  "Recovery phrase": {
+  "Recovery_phrase": {
     "message": "Recovery phrase",
     "description": "Recovery phrase settings button"
   },
-  "Active address": {
+  "Active_address": {
     "message": "Active address",
     "description": "Active address settings button"
   },
-  "List of tokens": {
+  "List_of_tokens": {
     "message": "List of tokens",
     "description": "List of tokens settings button"
   },
@@ -47,11 +47,11 @@
     "message": "Theme",
     "description": "Theme settings button"
   },
-  "Log out": {
+  "Log_out": {
     "message": "Log out",
     "description": "Log out settings button"
   },
-  "Primary currency": {
+  "Primary_currency": {
     "message": "Primary currency",
     "description": "Primary currency settings button"
   },
@@ -59,27 +59,27 @@
     "message": "Localization",
     "description": "Localization settings button"
   },
-  "Rate this app": {
+  "Rate_this_app": {
     "message": "Rate this app",
     "description": "Rate this app settings button"
   },
-  "Contact support": {
+  "Contact_support": {
     "message": "Contact support",
     "description": "Contact support settings button"
   },
-  "Tonkeeper news": {
+  "Tonkeeper_news": {
     "message": "Tonkeeper news",
     "description": "Tonkeeper news settings button"
   },
-  "Tonkeeper discussion": {
+  "Tonkeeper_discussion": {
     "message": "Tonkeeper discussion",
     "description": "Tonkeeper discussion settings button"
   },
-  "Legal documents": {
+  "Legal_documents": {
     "message": "Legal documents",
     "description": "Legal documents settings button"
   },
-  "Delete account": {
+  "Delete_account": {
     "message": "Delete account",
     "description": "Delete account settings button"
   },
@@ -91,11 +91,11 @@
     "message": "Legal",
     "description": "Legal settings header"
   },
-  "Terms of use": {
+  "Terms_of_use": {
     "message": "Terms of use",
     "description": "Terms of use settings button"
   },
-  "Privacy policy": {
+  "Privacy_policy": {
     "message": "Privacy policy",
     "description": "Privacy policy settings button"
   },
@@ -103,7 +103,7 @@
     "message": "Licenses",
     "description": "Licenses settings header"
   },
-  "Montserrat font": {
+  "Montserrat_font": {
     "message": "Montserrat font",
     "description": "Montserrat font settings button"
   }

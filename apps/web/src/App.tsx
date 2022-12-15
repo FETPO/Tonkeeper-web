@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Footer, PageKind } from '@tonkeeper/uikit/dist/components/Footer';
+import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
 import { AppSdkContext } from '@tonkeeper/uikit/dist/hooks/appSdk';
 import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
@@ -13,16 +13,9 @@ import {
   Container,
   GlobalStyle,
 } from '@tonkeeper/uikit/dist/styles/globalStyle';
-import {
-  FC,
-  PropsWithChildren,
-  Suspense,
-  useCallback,
-  useEffect,
-  useMemo,
-} from 'react';
+import { FC, PropsWithChildren, Suspense, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { BrowserAppSdk } from './libs/appSdk';
 import { BrowserStorage } from './libs/storage';
@@ -77,32 +70,6 @@ export const Loader: FC<PropsWithChildren> = ({ children }) => {
 };
 
 export const App = () => {
-  const navigate = useNavigate();
-
-  const active = useMemo<PageKind>(() => {
-    if (window.location.pathname.includes(AppRoute.activity)) {
-      return 'activity';
-    }
-    if (window.location.pathname.includes(AppRoute.settings)) {
-      return 'settings';
-    }
-    return 'wallet';
-  }, [window.location.pathname]);
-
-  const setActive = useCallback(
-    (key: PageKind) => {
-      switch (key) {
-        case 'activity':
-          return navigate(AppRoute.activity);
-        case 'settings':
-          return navigate(AppRoute.settings);
-        default:
-          return navigate(AppRoute.home);
-      }
-    },
-    [navigate]
-  );
-
   return (
     <Container>
       <Body>
@@ -120,7 +87,7 @@ export const App = () => {
           />
         </Routes>
       </Body>
-      <Footer active={active} onClick={setActive} />
+      <Footer />
     </Container>
   );
 };
