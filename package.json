@@ -10,8 +10,14 @@
     "prettier": "^2.6.2",
     "turbo": "^1.6.3"
   },
-  "workspaces": [
-    "packages/*",
-    "apps/*"
-  ]
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "apps/*"
+    ],
+    "nohoist": [
+      "**/electron",
+      "**/electron**"
+    ]
+  }
 }

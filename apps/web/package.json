@@ -32,8 +32,8 @@
   },
   "scripts": {
     "locales": "ts-node ./task/locales",
-    "start": "npm run locales && react-scripts start",
-    "build": "react-scripts build && npm run locales",
+    "start": "yarn locales && react-scripts start",
+    "build": "react-scripts build && yarn locales",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

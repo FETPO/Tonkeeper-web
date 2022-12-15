@@ -19,17 +19,18 @@
   "scripts": {
     "clean": "rm -fr dist && rm -fr build",
     "locales": "ts-node ./task/locales",
-    "react:start": "npm run locales && PORT=3005 react-scripts start",
-    "react:build": "react-scripts build && npm run locales",
+    "react:start": "yarn locales && PORT=3005 react-scripts start",
+    "react:build": "react-scripts build && yarn locales",
     "postinstall": "electron-builder install-app-deps",
-    "electron:dev": "concurrently \"cross-env BROWSER=none npm run react:start\" \"wait-on http://127.0.0.1:3005 && tsc -p electron -w\" \"wait-on http://127.0.0.1:3005 && tsc -p electron && electron .\"",
-    "electron:build": "npm run react:build && tsc -p electron && electron-builder",
-    "start": "npm run electron:dev",
-    "build": "npm run clean && npm run electron:build",
+    "electron:dev": "concurrently \"cross-env BROWSER=none yarn react:start\" \"wait-on http://127.0.0.1:3005 && tsc -p electron -w\" \"wait-on http://127.0.0.1:3005 && tsc -p electron && electron .\"",
+    "electron:build": "yarn react:build && tsc -p electron && electron-builder",
+    "start": "yarn electron:dev",
+    "build": "yarn clean && yarn electron:build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@tonkeeper/core": "0.1.0",
     "@tonkeeper/locales": "0.1.0",
     "@tonkeeper/uikit": "0.1.0",
     "react": "^18.2.0",
@@ -65,14 +66,10 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "last 1 electron version"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 electron version"
     ]
   }
 }

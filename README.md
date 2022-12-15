@@ -3,7 +3,7 @@
 ## Build script
 
 ```sh
-npm install
+yarn install
 
-npm run build
+yarn run build
 ```

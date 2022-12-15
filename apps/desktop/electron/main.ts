@@ -1,9 +1,10 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer';
 import * as isDev from 'electron-is-dev';
 import * as path from 'path';
+import { Message } from '../src/libs/message';
 
 let win: BrowserWindow | null = null;
 
@@ -12,6 +13,7 @@ function createWindow() {
     width: 1200,
     height: 800,
     webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
     },
   });
@@ -50,6 +52,16 @@ function createWindow() {
   if (isDev) {
     win.webContents.openDevTools();
   }
+
+  ipcMain.handle('ping', async (event, message: Message) => {
+    console.log(win?.id);
+    console.log(event);
+    console.log(message);
+
+    return new Promise((resolve) =>
+      setTimeout(() => resolve({ pong: message }), 5000)
+    );
+  });
 }
 
 app.on('ready', createWindow);
