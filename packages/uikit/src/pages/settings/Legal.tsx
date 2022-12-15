@@ -1,18 +1,21 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
+import { ChevronRightIcon } from '../../components/Icon';
+import {
+  SettingsItem,
+  SettingsList,
+} from '../../components/settings/SettingsList';
+import { SubHeader } from '../../components/SubHeader';
+import { H3 } from '../../components/Text';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useTranslation } from '../../hooks/translation';
-import { ChevronRightIcon } from '../Icon';
-import { SubHeader } from '../SubHeader';
-import { H3 } from '../Text';
-import { SettingsItem, SettingsList } from './SettingsList';
 
 const Icon = styled.span`
   display: flex;
   color: ${(props) => props.theme.iconTertiary};
 `;
 
-export const SettingsLegal = React.memo(() => {
+export const Legal = React.memo(() => {
   const { t } = useTranslation();
   const sdk = useAppSdk();
   const items = useMemo<SettingsItem[]>(() => {

@@ -1,10 +1,15 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Language, languages } from '@tonkeeper/core/dist/entries/language';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
 import { AppSdkContext } from '@tonkeeper/uikit/dist/hooks/appSdk';
 import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
-import { TranslationContext } from '@tonkeeper/uikit/dist/hooks/translation';
+import {
+  I18nContext,
+  TranslationContext,
+} from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
+import { SettingsRouter } from '@tonkeeper/uikit/dist/pages/settings';
 import { useLanguage } from '@tonkeeper/uikit/dist/state/language';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
 import { defaultTheme } from '@tonkeeper/uikit/dist/styles/defaultTheme';
@@ -13,7 +18,7 @@ import {
   Container,
   GlobalStyle,
 } from '@tonkeeper/uikit/dist/styles/globalStyle';
-import { FC, PropsWithChildren, Suspense, useEffect } from 'react';
+import { FC, PropsWithChildren, Suspense, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
@@ -21,14 +26,27 @@ import { BrowserAppSdk } from './libs/appSdk';
 import { BrowserStorage } from './libs/storage';
 import { Activity } from './pages/Activity';
 import { Home } from './pages/Home';
-import { SettingsRouter } from './pages/settings';
 
 const queryClient = new QueryClient();
 const storage = new BrowserStorage();
 const sdk = new BrowserAppSdk();
 
 export const Providers: FC<PropsWithChildren> = ({ children }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const translation = useMemo(() => {
+    const client: I18nContext = {
+      t,
+      i18n: {
+        enable: true,
+        reloadResources: i18n.reloadResources,
+        changeLanguage: i18n.changeLanguage as any,
+        language: i18n.language as Language,
+        languages: [...languages],
+      },
+    };
+    return client;
+  }, [t, i18n]);
 
   return (
     <BrowserRouter>
@@ -37,7 +55,7 @@ export const Providers: FC<PropsWithChildren> = ({ children }) => {
           <GlobalStyle />
           <Suspense fallback="...is loading">
             <AppSdkContext.Provider value={sdk}>
-              <TranslationContext.Provider value={t}>
+              <TranslationContext.Provider value={translation}>
                 <StorageContext.Provider value={storage}>
                   <Loader>{children}</Loader>
                 </StorageContext.Provider>

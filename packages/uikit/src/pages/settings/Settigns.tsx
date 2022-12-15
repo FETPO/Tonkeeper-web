@@ -1,3 +1,5 @@
+import React, { FC, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   DeleteAccountIcon,
   ListOfTokensIcon,
@@ -7,22 +9,19 @@ import {
   SecurityIcon,
   SubscriptionIcon,
   ThemeIcon,
-} from '@tonkeeper/uikit/dist/components/settings/SettingsIcons';
+} from '../../components/settings/SettingsIcons';
 import {
   SettingsItem,
   SettingsList,
-} from '@tonkeeper/uikit/dist/components/settings/SettingsList';
-import { SettingsNetwork } from '@tonkeeper/uikit/dist/components/settings/SettingsNetwork';
-import { SettingsSocialList } from '@tonkeeper/uikit/dist/components/settings/SettingsSocialList';
-
-import { Title } from '@tonkeeper/uikit/dist/components/Text';
-import { useTranslation } from '@tonkeeper/uikit/dist/hooks/translation';
-import { relative, SettingsRoute } from '@tonkeeper/uikit/dist/libs/routes';
-import { FC, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+} from '../../components/settings/SettingsList';
+import { SettingsNetwork } from '../../components/settings/SettingsNetwork';
+import { SettingsSocialList } from '../../components/settings/SettingsSocialList';
+import { Title } from '../../components/Text';
+import { useTranslation } from '../../hooks/translation';
+import { relative, SettingsRoute } from '../../libs/routes';
 
 export const Settings: FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const mainItems = useMemo<SettingsItem[]>(() => {
@@ -65,20 +64,24 @@ export const Settings: FC = () => {
     ];
   }, [t]);
 
-  const secondaryItems = useMemo<SettingsItem[]>(() => {
-    return [
+  const secondaryItems = useMemo(() => {
+    const items: SettingsItem[] = [
       {
         name: t('Primary_currency'),
         icon: 'USD',
         action: () => null,
       },
-      {
+    ];
+
+    if (i18n.enable) {
+      items.push({
         name: t('Localization'),
         icon: <LocalizationIcon />,
         action: () => navigate(relative(SettingsRoute.localization)),
-      },
-    ];
-  }, [t, navigate]);
+      });
+    }
+    return items;
+  }, [t, i18n.enable, navigate]);
 
   const accountItems = useMemo(() => {
     return [
