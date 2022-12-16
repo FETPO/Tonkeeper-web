@@ -19,13 +19,15 @@ import { SettingsSocialList } from '../../components/settings/SettingsSocialList
 import { Title } from '../../components/Text';
 import { useTranslation } from '../../hooks/translation';
 import { relative, SettingsRoute } from '../../libs/routes';
+import { useUserThemes } from '../../state/theme';
 
 export const Settings: FC = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
+  const { data: themes } = useUserThemes();
   const mainItems = useMemo<SettingsItem[]>(() => {
-    return [
+    const items: SettingsItem[] = [
       {
         name: t('Subscriptions'),
         icon: <SubscriptionIcon />,
@@ -51,18 +53,22 @@ export const Settings: FC = () => {
         icon: <SecurityIcon />,
         action: () => null,
       },
-      {
+    ];
+
+    if (themes && themes.length > 1) {
+      items.push({
         name: t('Theme'),
         icon: <ThemeIcon />,
-        action: () => null,
-      },
-      {
-        name: t('Log_out'),
-        icon: <LogOutIcon />,
-        action: () => null,
-      },
-    ];
-  }, [t]);
+        action: () => navigate(relative(SettingsRoute.theme)),
+      });
+    }
+    items.push({
+      name: t('Log_out'),
+      icon: <LogOutIcon />,
+      action: () => null,
+    });
+    return items;
+  }, [t, themes, navigate]);
 
   const secondaryItems = useMemo(() => {
     const items: SettingsItem[] = [

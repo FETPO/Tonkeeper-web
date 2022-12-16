@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Language, languages } from '@tonkeeper/core/dist/entries/language';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
+import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
 import { AppSdkContext } from '@tonkeeper/uikit/dist/hooks/appSdk';
 import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
 import {
@@ -10,18 +11,13 @@ import {
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
 import { SettingsRouter } from '@tonkeeper/uikit/dist/pages/settings';
+import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useLanguage } from '@tonkeeper/uikit/dist/state/language';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
-import { defaultTheme } from '@tonkeeper/uikit/dist/styles/defaultTheme';
-import {
-  Body,
-  Container,
-  GlobalStyle,
-} from '@tonkeeper/uikit/dist/styles/globalStyle';
+import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
 import { FC, PropsWithChildren, Suspense, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
 import { BrowserAppSdk } from './libs/appSdk';
 import { BrowserStorage } from './libs/storage';
 import { Activity } from './pages/Activity';
@@ -51,18 +47,17 @@ export const Providers: FC<PropsWithChildren> = ({ children }) => {
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={defaultTheme}>
-          <GlobalStyle />
-          <Suspense fallback="...is loading">
-            <AppSdkContext.Provider value={sdk}>
-              <TranslationContext.Provider value={translation}>
-                <StorageContext.Provider value={storage}>
+        <Suspense fallback={<Loading />}>
+          <AppSdkContext.Provider value={sdk}>
+            <TranslationContext.Provider value={translation}>
+              <StorageContext.Provider value={storage}>
+                <UserThemeProvider>
                   <Loader>{children}</Loader>
-                </StorageContext.Provider>
-              </TranslationContext.Provider>
-            </AppSdkContext.Provider>
-          </Suspense>
-        </ThemeProvider>
+                </UserThemeProvider>
+              </StorageContext.Provider>
+            </TranslationContext.Provider>
+          </AppSdkContext.Provider>
+        </Suspense>
       </QueryClientProvider>
     </BrowserRouter>
   );
@@ -83,6 +78,10 @@ export const Loader: FC<PropsWithChildren> = ({ children }) => {
 
   console.log(network, isNetworkLoading);
   console.log(language, isLanguageLoading);
+
+  if (isNetworkLoading || isLanguageLoading) {
+    return <Loading />;
+  }
 
   return <>{children}</>;
 };

@@ -10,16 +10,11 @@ import {
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
 import { SettingsRouter } from '@tonkeeper/uikit/dist/pages/settings';
-import { defaultTheme } from '@tonkeeper/uikit/dist/styles/defaultTheme';
-import {
-  Body,
-  Container,
-  GlobalStyle,
-} from '@tonkeeper/uikit/dist/styles/globalStyle';
+import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
+import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
 import { FC, PropsWithChildren, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
 import { DesktopAppSdk } from './libs/appSdk';
 import { DesktopStorage } from './libs/storage';
 
@@ -47,16 +42,13 @@ export const Providers: FC<PropsWithChildren> = ({ children }) => {
   return (
     <MemoryRouter>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={defaultTheme}>
-          <GlobalStyle />
-          <AppSdkContext.Provider value={sdk}>
-            <StorageContext.Provider value={storage}>
-              <TranslationContext.Provider value={translation}>
-                {children}
-              </TranslationContext.Provider>
-            </StorageContext.Provider>
-          </AppSdkContext.Provider>
-        </ThemeProvider>
+        <AppSdkContext.Provider value={sdk}>
+          <StorageContext.Provider value={storage}>
+            <TranslationContext.Provider value={translation}>
+              <UserThemeProvider>{children}</UserThemeProvider>
+            </TranslationContext.Provider>
+          </StorageContext.Provider>
+        </AppSdkContext.Provider>
       </QueryClientProvider>
     </MemoryRouter>
   );

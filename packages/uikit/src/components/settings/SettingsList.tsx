@@ -12,6 +12,7 @@ export interface SettingsItem {
 
 export interface SettingsListProps {
   items: SettingsItem[];
+  loading?: boolean;
 }
 
 const SettingsListBlock = styled.div`
@@ -65,20 +66,23 @@ const Secondary = styled(Body1)`
   color: ${(props) => props.theme.textSecondary};
 `;
 
-export const SettingsList: FC<SettingsListProps> = React.memo(({ items }) => {
-  return (
-    <SettingsListBlock>
-      {items.map((item) => (
-        <SettingsListItem key={item.name} onClick={() => item.action(item)}>
-          <ItemPayload>
-            <span>
-              <Label1>{item.name}</Label1>
-              {item.secondary && <Secondary>{item.secondary}</Secondary>}
-            </span>
-            <Icon color={item.iconColor}>{item.icon}</Icon>
-          </ItemPayload>
-        </SettingsListItem>
-      ))}
-    </SettingsListBlock>
-  );
-});
+export const SettingsList: FC<SettingsListProps> = React.memo(
+  ({ items, loading }) => {
+    // TODO handle loading
+    return (
+      <SettingsListBlock>
+        {items.map((item) => (
+          <SettingsListItem key={item.name} onClick={() => item.action(item)}>
+            <ItemPayload>
+              <span>
+                <Label1>{item.name}</Label1>
+                {item.secondary && <Secondary>{item.secondary}</Secondary>}
+              </span>
+              <Icon color={item.iconColor}>{item.icon}</Icon>
+            </ItemPayload>
+          </SettingsListItem>
+        ))}
+      </SettingsListBlock>
+    );
+  }
+);
