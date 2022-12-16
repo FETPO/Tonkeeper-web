@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as util from 'util';
 import {
+  ClearStorageMessage,
   DeleteStorageMessage,
   GetStorageMessage,
   SetBatchStorageMessage,
@@ -15,6 +16,7 @@ console.log('configPath', configPath);
 
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
+const unlinkAsync = util.promisify(fs.unlink);
 
 const getConfig = async (): Promise<Record<string, unknown>> => {
   if (!fs.existsSync(configPath)) {
@@ -56,4 +58,10 @@ export const storageDelete = async ({ key }: DeleteStorageMessage) => {
   }
   await setConfig(config);
   return value ?? null;
+};
+
+export const storageClear = async ({}: ClearStorageMessage) => {
+  if (!fs.existsSync(configPath)) {
+    await unlinkAsync(configPath);
+  }
 };

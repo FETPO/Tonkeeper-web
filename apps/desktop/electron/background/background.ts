@@ -1,5 +1,6 @@
 import { Message } from '../../src/libs/message';
 import {
+  storageClear,
   storageDelete,
   storageGet,
   storageSet,
@@ -18,6 +19,8 @@ export const handleBackgroundMessage = async (
       return storageSetBatch(message);
     case 'storage-delete':
       return storageDelete(message);
+    case 'storage-clear':
+      return storageClear(message);
     default:
       throw new Error(`Unknown message: ${JSON.stringify(message)}`);
   }

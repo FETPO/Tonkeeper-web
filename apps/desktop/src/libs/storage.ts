@@ -17,4 +17,8 @@ export class DesktopStorage implements IStorage {
   delete = async <R>(key: string) => {
     return sendBackground<R>({ king: 'storage-delete', key });
   };
+
+  clear = async () => {
+    await sendBackground({ king: 'storage-clear' });
+  };
 }

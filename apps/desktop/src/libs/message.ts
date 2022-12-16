@@ -19,8 +19,13 @@ export interface DeleteStorageMessage {
   key: string;
 }
 
+export interface ClearStorageMessage {
+  king: 'storage-clear';
+}
+
 export type Message =
   | GetStorageMessage
   | SetStorageMessage
   | SetBatchStorageMessage
-  | DeleteStorageMessage;
+  | DeleteStorageMessage
+  | ClearStorageMessage;

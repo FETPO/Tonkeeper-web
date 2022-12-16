@@ -3,6 +3,7 @@ export interface IStorage {
   set: <R>(key: string, value: R) => Promise<R | null>;
   setBatch: <V extends Record<string, unknown>>(values: V) => Promise<V>;
   delete: <R>(key: string) => Promise<R | null>;
+  clear: () => Promise<void>;
 }
 
 export class MemoryStorage implements IStorage {
@@ -28,5 +29,9 @@ export class MemoryStorage implements IStorage {
       delete this.storage[key];
     }
     return payload;
+  };
+
+  clear = async () => {
+    this.storage = {};
   };
 }

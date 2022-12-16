@@ -42,4 +42,12 @@ export class ExtensionStorage implements IStorage {
     }
     return payload;
   };
+
+  clear = async () => {
+    await browser.storage.local.clear();
+    const err = checkForError();
+    if (err) {
+      throw err;
+    }
+  };
 }
