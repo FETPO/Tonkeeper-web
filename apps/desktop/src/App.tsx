@@ -9,14 +9,17 @@ import {
   TranslationContext,
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
-import { SettingsRouter } from '@tonkeeper/uikit/dist/pages/settings';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
-import { FC, PropsWithChildren, useMemo } from 'react';
+import React, { FC, PropsWithChildren, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { DesktopAppSdk } from './libs/appSdk';
 import { DesktopStorage } from './libs/storage';
+
+const SettingsRouter = React.lazy(
+  () => import('@tonkeeper/uikit/dist/pages/settings')
+);
 
 const queryClient = new QueryClient();
 const sdk = new DesktopAppSdk();

@@ -6,7 +6,7 @@ import { Localization } from './Localization';
 import { Settings } from './Settigns';
 import { UserTheme } from './Theme';
 
-export const SettingsRouter = () => {
+export default SettingsRouter = () => {
   return (
     <Routes>
       <Route path={SettingsRoute.localization} element={<Localization />} />

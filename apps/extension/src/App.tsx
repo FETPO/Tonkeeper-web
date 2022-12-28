@@ -15,13 +15,12 @@ import {
   Initialize,
   InitializeContainer,
 } from '@tonkeeper/uikit/dist/pages/initialize/Initialize';
-import { SettingsRouter } from '@tonkeeper/uikit/dist/pages/settings';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
-import { FC, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 import browser from 'webextension-polyfill';
@@ -29,6 +28,10 @@ import { ExtensionAppSdk } from './libs/appSdk';
 import { ExtensionStorage } from './libs/storage';
 import { Activity } from './pages/Activity';
 import { Home } from './pages/Home';
+
+const SettingsRouter = React.lazy(
+  () => import('@tonkeeper/uikit/dist/pages/settings')
+);
 
 const queryClient = new QueryClient();
 const sdk = new ExtensionAppSdk();

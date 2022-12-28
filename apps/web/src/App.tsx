@@ -15,20 +15,29 @@ import {
   Initialize,
   InitializeContainer,
 } from '@tonkeeper/uikit/dist/pages/initialize/Initialize';
-import { SettingsRouter } from '@tonkeeper/uikit/dist/pages/settings';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
 import { useLanguage } from '@tonkeeper/uikit/dist/state/language';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
-import { FC, PropsWithChildren, Suspense, useEffect, useMemo } from 'react';
+import React, {
+  FC,
+  PropsWithChildren,
+  Suspense,
+  useEffect,
+  useMemo,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { BrowserAppSdk } from './libs/appSdk';
 import { BrowserStorage } from './libs/storage';
 import { Activity } from './pages/Activity';
 import { Home } from './pages/Home';
+
+const SettingsRouter = React.lazy(
+  () => import('@tonkeeper/uikit/dist/pages/settings')
+);
 
 const queryClient = new QueryClient();
 const storage = new BrowserStorage();
