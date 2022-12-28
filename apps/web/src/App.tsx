@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AccountState } from '@tonkeeper/core/dist/entries/account';
 import { Language, languages } from '@tonkeeper/core/dist/entries/language';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
@@ -10,10 +11,13 @@ import {
   TranslationContext,
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
+import { Initialize } from '@tonkeeper/uikit/dist/pages/initialize/Initialize';
 import { SettingsRouter } from '@tonkeeper/uikit/dist/pages/settings';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
+import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
 import { useLanguage } from '@tonkeeper/uikit/dist/state/language';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
+import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
 import { FC, PropsWithChildren, Suspense, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -27,7 +31,7 @@ const queryClient = new QueryClient();
 const storage = new BrowserStorage();
 const sdk = new BrowserAppSdk();
 
-export const Providers: FC<PropsWithChildren> = ({ children }) => {
+export const App: FC<PropsWithChildren> = () => {
   const { t, i18n } = useTranslation();
 
   const translation = useMemo(() => {
@@ -52,7 +56,7 @@ export const Providers: FC<PropsWithChildren> = ({ children }) => {
             <TranslationContext.Provider value={translation}>
               <StorageContext.Provider value={storage}>
                 <UserThemeProvider>
-                  <Loader>{children}</Loader>
+                  <Loader />
                 </UserThemeProvider>
               </StorageContext.Provider>
             </TranslationContext.Provider>
@@ -67,6 +71,8 @@ export const Loader: FC<PropsWithChildren> = ({ children }) => {
   const { i18n } = useTranslation();
   const { data: network, isFetching: isNetworkLoading } = useNetwork();
   const { data: language, isFetching: isLanguageLoading } = useLanguage();
+  const { data: account, isFetching: isAccountLoading } = useAccountState();
+  const { data: auth, isFetching: isAuthLoading } = useAuthState();
 
   useEffect(() => {
     if (language && i18n.language !== language) {
@@ -79,14 +85,28 @@ export const Loader: FC<PropsWithChildren> = ({ children }) => {
   console.log(network, isNetworkLoading);
   console.log(language, isLanguageLoading);
 
-  if (isNetworkLoading || isLanguageLoading) {
+  if (
+    isNetworkLoading ||
+    isLanguageLoading ||
+    isAuthLoading ||
+    isAccountLoading ||
+    !account
+  ) {
     return <Loading />;
   }
 
-  return <>{children}</>;
+  return <Content account={account} />;
 };
 
-export const App = () => {
+export const Content: FC<{ account: AccountState }> = ({ account }) => {
+  if (account.wallets.length === 0) {
+    return (
+      <Container>
+        <Initialize />
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <Body>

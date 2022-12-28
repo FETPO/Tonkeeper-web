@@ -1,7 +1,6 @@
 import { IStorage } from '@tonkeeper/core/dist';
 
 export class BrowserStorage implements IStorage {
-  clean: () => Promise<void>;
   prefix = 'tonkeeper';
 
   get = async <R>(key: string) => {

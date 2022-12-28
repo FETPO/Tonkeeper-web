@@ -48,6 +48,13 @@ export const Body1 = styled.span`
   line-height: 24px;
 `;
 
+export const Body2 = styled.span`
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+`;
+
 export const Body3 = styled.span`
   font-style: normal;
   font-weight: 500;

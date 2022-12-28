@@ -106,5 +106,37 @@
   "Montserrat_font": {
     "message": "Montserrat font",
     "description": "Montserrat font settings button"
+  },
+  "Welcome_to": {
+    "message": "Welcome to",
+    "description": "Title in initialize screen"
+  },
+  "World_class_speed": {
+    "message": " World-class speed",
+    "description": "Initialize screen bullet block title"
+  },
+  "World_class_speed_description": {
+    "message": "TON is a network designed for speed and throughput. Fees are significantly lower than on other blockchains, and transactions are confirmed in a matter of seconds.",
+    "description": "Initialize screen bullet block description"
+  },
+  "End_to_end_security": {
+    "message": "End-to-end security",
+    "description": "Initialize screen bullet block title"
+  },
+  "End_to_end_security_description": {
+    "message": "Tonkeeper stores your cryptographic keys on your device without requiring documents, personal information, contact details, or KYC.",
+    "description": "Initialize screen bullet block description"
+  },
+  "Built_in_subscriptions": {
+    "message": "Built-in subscriptions",
+    "description": "Initialize screen bullet block title"
+  },
+  "Built_in_subscriptions_description": {
+    "message": "TON subscriptions are peer-to-peer and borderless so that no one can restrict providers or customers. Near-zero fees and full control for you.",
+    "description": "Initialize screen bullet block description"
+  },
+  "Get_started": {
+    "message": "Get started",
+    "description": "Get started button"
   }
 }

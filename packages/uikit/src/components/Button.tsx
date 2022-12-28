@@ -6,6 +6,7 @@ export interface ButtonProps {
   primary?: boolean;
   secondary?: boolean;
   disabled?: boolean;
+  fullWith?: boolean;
 }
 
 const ButtonElement = styled.button<ButtonProps>`
@@ -21,6 +22,17 @@ const ButtonElement = styled.button<ButtonProps>`
   font-family: 'Montserrat';
   font-style: normal;
   font-weight: 600;
+
+  cursor: pointer;
+
+  ${(props) =>
+    props.fullWith
+      ? css`
+          width: 100%;
+        `
+      : css`
+          width: auth;
+        `}
 
   ${(props) => {
     switch (props.size) {
