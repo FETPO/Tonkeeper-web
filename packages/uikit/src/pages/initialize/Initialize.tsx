@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import styled from 'styled-components';
+import React, { FC, PropsWithChildren } from 'react';
+import styled, { css } from 'styled-components';
 import { Button } from '../../components/Button';
 import {
   RocketIcon,
@@ -10,6 +10,28 @@ import { Description } from '../../components/create/Description';
 import { Title } from '../../components/Text';
 import { useTranslation } from '../../hooks/translation';
 
+const Block = styled.div<{ fullHeight: boolean }>`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  ${(props) =>
+    props.fullHeight
+      ? css`
+          justify-content: space-between;
+        `
+      : css`
+          justify-content: center;
+          gap: 3rem;
+        `}
+`;
+
+export const InitializeContainer: FC<
+  PropsWithChildren<{ fullHeight?: boolean }>
+> = ({ fullHeight = true, children }) => {
+  return <Block fullHeight={fullHeight}>{children}</Block>;
+};
+
 export const Initialize: FC = () => {
   return <WelcomePage />;
 };
@@ -18,19 +40,12 @@ const Accent = styled.span`
   color: ${(props) => props.theme.accentBlue};
 `;
 
-const Block = styled.div`
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-`;
-
-export const WelcomePage = () => {
+export const WelcomePage: FC = () => {
   const { t } = useTranslation();
   return (
-    <Block>
+    <>
       <Title>
-        {t('Welcome_to')} <Accent>Tonkeeper</Accent>
+        {t('Welcome_to')}&nbsp;<Accent>Tonkeeper</Accent>
       </Title>
       <div>
         <Description
@@ -49,9 +64,9 @@ export const WelcomePage = () => {
           description={t('Built_in_subscriptions_description')}
         />
       </div>
-      <Button size="large" fullWith primary>
+      <Button size="large" fullWith primary bottom>
         {t('Get_started')}
       </Button>
-    </Block>
+    </>
   );
 };

@@ -11,7 +11,10 @@ import {
   TranslationContext,
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
-import { Initialize } from '@tonkeeper/uikit/dist/pages/initialize/Initialize';
+import {
+  Initialize,
+  InitializeContainer,
+} from '@tonkeeper/uikit/dist/pages/initialize/Initialize';
 import { SettingsRouter } from '@tonkeeper/uikit/dist/pages/settings';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
@@ -102,7 +105,9 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
   if (account.wallets.length === 0) {
     return (
       <Container>
-        <Initialize />
+        <InitializeContainer fullHeight={false}>
+          <Initialize />
+        </InitializeContainer>
       </Container>
     );
   }

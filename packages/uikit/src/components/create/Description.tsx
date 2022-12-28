@@ -17,6 +17,7 @@ const Block = styled.div`
 const Icon = styled.div`
   flex-shrink: 0;
   color: ${(props) => props.theme.accentBlue};
+  font-size: 135%;
 `;
 const Text = styled.div`
   flex-grow: 1;
@@ -41,7 +42,7 @@ export const Description: FC<DescriptionProps> = ({
 }) => {
   return (
     <Block>
-      <Icon> {icon}</Icon>
+      <Icon>{icon}</Icon>
       <Text>
         <Title>{title}</Title>
         <Body>{description}</Body>

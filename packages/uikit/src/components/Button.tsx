@@ -7,6 +7,7 @@ export interface ButtonProps {
   secondary?: boolean;
   disabled?: boolean;
   fullWith?: boolean;
+  bottom?: boolean;
 }
 
 const ButtonElement = styled.button<ButtonProps>`
@@ -24,6 +25,15 @@ const ButtonElement = styled.button<ButtonProps>`
   font-weight: 600;
 
   cursor: pointer;
+
+  flex-shrink: 0;
+
+  ${(props) =>
+    props.bottom
+      ? css`
+          margin-bottom: 1rem;
+        `
+      : undefined}
 
   ${(props) =>
     props.fullWith

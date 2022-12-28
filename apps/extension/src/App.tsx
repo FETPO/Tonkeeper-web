@@ -1,7 +1,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AccountState } from '@tonkeeper/core/dist/entries/account';
 import { Language } from '@tonkeeper/core/dist/entries/language';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
+import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
 import { AppSdkContext } from '@tonkeeper/uikit/dist/hooks/appSdk';
 import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
 import {
@@ -9,10 +11,17 @@ import {
   TranslationContext,
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
+import {
+  Initialize,
+  InitializeContainer,
+} from '@tonkeeper/uikit/dist/pages/initialize/Initialize';
 import { SettingsRouter } from '@tonkeeper/uikit/dist/pages/settings';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
+import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
+import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
+import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
-import { FC, PropsWithChildren, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 import browser from 'webextension-polyfill';
@@ -25,7 +34,7 @@ const queryClient = new QueryClient();
 const sdk = new ExtensionAppSdk();
 const storage = new ExtensionStorage();
 
-export const Providers: FC<PropsWithChildren> = ({ children }) => {
+export const App: FC = () => {
   const translation = useMemo(() => {
     const client: I18nContext = {
       t: browser.i18n.getMessage,
@@ -46,7 +55,9 @@ export const Providers: FC<PropsWithChildren> = ({ children }) => {
         <AppSdkContext.Provider value={sdk}>
           <StorageContext.Provider value={storage}>
             <TranslationContext.Provider value={translation}>
-              <UserThemeProvider>{children}</UserThemeProvider>
+              <UserThemeProvider>
+                <Loader />
+              </UserThemeProvider>
             </TranslationContext.Provider>
           </StorageContext.Provider>
         </AppSdkContext.Provider>
@@ -59,7 +70,29 @@ const Wrapper = styled(Container)`
   height: 600px;
 `;
 
-export const App = () => {
+export const Loader: FC = () => {
+  const { data: network, isFetching: isNetworkLoading } = useNetwork();
+  const { data: account, isFetching: isAccountLoading } = useAccountState();
+  const { data: auth, isFetching: isAuthLoading } = useAuthState();
+
+  if (isNetworkLoading || isAuthLoading || isAccountLoading || !account) {
+    return <Loading />;
+  }
+
+  return <Content account={account} />;
+};
+
+export const Content: FC<{ account: AccountState }> = ({ account }) => {
+  if (account.wallets.length === 0) {
+    return (
+      <Wrapper>
+        <InitializeContainer>
+          <Initialize />
+        </InitializeContainer>
+      </Wrapper>
+    );
+  }
+
   return (
     <Wrapper>
       <Body>
