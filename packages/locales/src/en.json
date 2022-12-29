@@ -116,7 +116,7 @@
     "description": "Initialize screen bullet block title"
   },
   "World_class_speed_description": {
-    "message": "TON is a network designed for speed and throughput. Fees are significantly lower than on other blockchains, and transactions are confirmed in a matter of seconds.",
+    "message": "TON is a network designed for speed and throughput. Fees are significantly lower than on other blockchains, and transactions are confirmed in a matter of seconds.",
     "description": "Initialize screen bullet block description"
   },
   "End_to_end_security": {
@@ -124,7 +124,7 @@
     "description": "Initialize screen bullet block title"
   },
   "End_to_end_security_description": {
-    "message": "Tonkeeper stores your cryptographic keys on your device without requiring documents, personal information, contact details, or KYC.",
+    "message": "Tonkeeper stores your cryptographic keys on your device without requiring documents, personal information, contact details, or KYC.",
     "description": "Initialize screen bullet block description"
   },
   "Built_in_subscriptions": {
@@ -132,11 +132,27 @@
     "description": "Initialize screen bullet block title"
   },
   "Built_in_subscriptions_description": {
-    "message": "TON subscriptions are peer-to-peer and borderless so that no one can restrict providers or customers. Near-zero fees and full control for you.",
+    "message": "TON subscriptions are peer-to-peer and borderless so that no one can restrict providers or customers. Near-zero fees and full control for you.",
     "description": "Initialize screen bullet block description"
   },
   "Get_started": {
     "message": "Get started",
     "description": "Get started button"
+  },
+  "Let_s_set_up_your_wallet": {
+    "message": "Let’s set up your wallet",
+    "description": "Initialize screen title"
+  },
+  "Let_s_set_up_your_wallet_description": {
+    "message": "You need a connected wallet to use Tonkeeper. Either create a new wallet or import an existing one.",
+    "description": "Initialize screen description"
+  },
+  "Create_new_wallet": {
+    "message": "Create new wallet",
+    "description": "Create new wallet button"
+  },
+  "Import_existing_wallet": {
+    "message": "Import existing wallet",
+    "description": "Import existing wallet button"
   }
 }
