@@ -1,4 +1,4 @@
-import { IStorage } from '@tonkeeper/core/dist';
+import { IStorage } from '@tonkeeper/core/dist/Storage';
 
 export class BrowserStorage implements IStorage {
   prefix = 'tonkeeper';

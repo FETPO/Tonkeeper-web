@@ -1,17 +1,17 @@
 import { Address, WalletContractV4 } from 'ton';
 import { KeyPair, mnemonicToPrivateKey } from 'ton-crypto';
-import { TonApi } from '../api/Api';
 import { WalletState, WalletVersion } from '../entries/wallet';
+import { Configuration, WalletApi } from '../tonApi';
 import { encrypt } from './cryptoService';
 
 export const importWallet = async (
-  tonApi: TonApi<unknown>,
+  tonApiConfig: Configuration,
   mnemonic: string[],
   password: string
 ): Promise<WalletState> => {
   const encryptedMnemonic = await encrypt(mnemonic.join(' '), password);
   const keyPair = await mnemonicToPrivateKey(mnemonic);
-  const [version, address] = await findContract(tonApi, keyPair);
+  const [version, address] = await findContract(tonApiConfig, keyPair);
 
   return {
     revision: 0,
@@ -23,14 +23,15 @@ export const importWallet = async (
 };
 
 const findContract = async (
-  tonApi: TonApi<unknown>,
+  tonApiConfig: Configuration,
   keyPair: KeyPair
 ): Promise<readonly [WalletVersion, Address]> => {
-  const result = await tonApi.v1.findWalletsByPubKey({
-    public_key: keyPair.publicKey.toString('hex'),
+  const api = new WalletApi(tonApiConfig);
+  const result = await api.findWalletsByPubKey({
+    publicKey: keyPair.publicKey.toString('hex'),
   });
 
-  const wallet = result.data.wallets.find(
+  const wallet = result.wallets.find(
     (wallet) => wallet.balance > 0 || wallet.status === 'active'
   );
   if (wallet) {

@@ -1,4 +1,4 @@
-import { TonApi } from '../api/Api';
+import { Configuration } from '../tonApi';
 
 export enum Network {
   MAINNET = '-239',
@@ -19,12 +19,10 @@ const getTonApiEndpoint = (network: Network) => {
 };
 
 export const getTonClient = (network?: Network) => {
-  return new TonApi({
-    baseURL: network ? getTonApiEndpoint(network) : undefined,
-    withCredentials: true,
-    headers: {
-      Authorization: `Bearer ${process.env.REACT_APP_TONAPI_CLIENT_KEY}`,
-      'Content-Type': 'application/json',
-    },
+  return new Configuration({
+    basePath: network ? getTonApiEndpoint(network) : undefined,
+    // headers: {
+    //   Authorization: `Bearer ${process.env.REACT_APP_TONAPI_CLIENT_KEY}`,
+    // },
   });
 };

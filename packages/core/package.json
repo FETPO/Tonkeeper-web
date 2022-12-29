@@ -5,9 +5,9 @@
   "description": "Core features and state for tonkeeper web wallet",
   "main": "index.js",
   "scripts": {
-    "build": "rm -fr dist && yarn generate:api && tsc",
+    "build": "rm -fr dist && yarn generate:sdk && tsc",
     "start": "tsc -w",
-    "generate:api": "npx swagger-typescript-api -p https://tonapi.io/swagger/swagger.json -o ./src/api --axios --api-class-name TonApi"
+    "generate:sdk": "rm -fr src/tonApi && docker build . -t tonapisdk && docker run --rm -v $PWD:/local tonapisdk"
   },
   "license": "ISC",
   "devDependencies": {
