@@ -1,11 +1,13 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AccountState } from '@tonkeeper/core/dist/entries/account';
 import { Language, languages } from '@tonkeeper/core/dist/entries/language';
+import { getTonClient } from '@tonkeeper/core/dist/entries/network';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
 import { AppSdkContext } from '@tonkeeper/uikit/dist/hooks/appSdk';
 import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
+import { TonApiContext } from '@tonkeeper/uikit/dist/hooks/tonApi';
 import {
   I18nContext,
   TranslationContext,
@@ -91,7 +93,7 @@ export const Loader: FC<PropsWithChildren> = ({ children }) => {
   const { data: network, isFetching: isNetworkLoading } = useNetwork();
   const { data: language, isFetching: isLanguageLoading } = useLanguage();
   const { data: account, isFetching: isAccountLoading } = useAccountState();
-  const { data: auth, isFetching: isAuthLoading } = useAuthState();
+  const { isFetching: isAuthLoading } = useAuthState();
 
   useEffect(() => {
     if (language && i18n.language !== language) {
@@ -101,8 +103,11 @@ export const Loader: FC<PropsWithChildren> = ({ children }) => {
     }
   }, [language, i18n]);
 
-  console.log(network, isNetworkLoading);
   console.log(language, isLanguageLoading);
+
+  const tonApi = useMemo(() => {
+    return getTonClient(network);
+  }, [network]);
 
   if (
     isNetworkLoading ||
@@ -114,7 +119,11 @@ export const Loader: FC<PropsWithChildren> = ({ children }) => {
     return <Loading />;
   }
 
-  return <Content account={account} />;
+  return (
+    <TonApiContext.Provider value={tonApi}>
+      <Content account={account} />
+    </TonApiContext.Provider>
+  );
 };
 
 export const Content: FC<{ account: AccountState }> = ({ account }) => {

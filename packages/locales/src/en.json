@@ -194,5 +194,9 @@
   "Congratulations_You_ve_set_up_your_wallet": {
     "message": " Congratulations! You’ve set up your wallet",
     "description": "Initialize screen Congratulations! You’ve set up your wallet title"
+  },
+  "Create_password": {
+    "message": "Create password",
+    "description": "Initialize screen Create password title"
   }
 }

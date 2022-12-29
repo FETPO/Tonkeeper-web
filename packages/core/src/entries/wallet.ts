@@ -1,13 +1,11 @@
-export type WalletVersion = 'v3R1' | 'v3R2' | 'v4R1' | 'v4R2';
+export type WalletVersion = 'v3R1' | 'v3R2' | 'v4R2';
 
 export interface WalletState {
-  name: string;
+  revision: number;
   mnemonic: string;
-  rawAddress: string;
+  address: string;
   publicKey: string;
   version: WalletVersion;
-}
-
-export interface WalletConfig {
-  assets: string[];
+  name?: string;
+  assets?: string[];
 }

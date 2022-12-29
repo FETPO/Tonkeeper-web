@@ -1,11 +1,13 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AccountState } from '@tonkeeper/core/dist/entries/account';
 import { Language } from '@tonkeeper/core/dist/entries/language';
+import { getTonClient } from '@tonkeeper/core/dist/entries/network';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
 import { AppSdkContext } from '@tonkeeper/uikit/dist/hooks/appSdk';
 import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
+import { TonApiContext } from '@tonkeeper/uikit/dist/hooks/tonApi';
 import {
   I18nContext,
   TranslationContext,
@@ -83,13 +85,21 @@ const Wrapper = styled(Container)`
 export const Loader: FC = () => {
   const { data: network, isFetching: isNetworkLoading } = useNetwork();
   const { data: account, isFetching: isAccountLoading } = useAccountState();
-  const { data: auth, isFetching: isAuthLoading } = useAuthState();
+  const { isFetching: isAuthLoading } = useAuthState();
+
+  const tonApi = useMemo(() => {
+    return getTonClient(network);
+  }, [network]);
 
   if (isNetworkLoading || isAuthLoading || isAccountLoading || !account) {
     return <Loading />;
   }
 
-  return <Content account={account} />;
+  return (
+    <TonApiContext.Provider value={tonApi}>
+      <Content account={account} />
+    </TonApiContext.Provider>
+  );
 };
 
 const useInitialRedirect = () => {

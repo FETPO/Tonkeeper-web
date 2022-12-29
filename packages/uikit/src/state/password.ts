@@ -18,7 +18,7 @@ export const useMutateAuthState = () => {
   const storage = useStorage();
   const client = useQueryClient();
   return useMutation<void, Error, AuthState>(async (state) => {
-    await storage.set(AppKey.password, state);
+    await storage.set(AppKey.password, { state });
     await client.invalidateQueries([AppKey.password]);
   });
 };

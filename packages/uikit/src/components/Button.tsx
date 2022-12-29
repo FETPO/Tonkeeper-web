@@ -1,7 +1,10 @@
 import React, { FC, PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
+import { SpinnerIcon } from './Icon';
 
 export interface ButtonProps {
+  loading?: boolean;
+
   size?: 'small' | 'medium' | 'large';
   primary?: boolean;
   secondary?: boolean;
@@ -10,7 +13,7 @@ export interface ButtonProps {
   bottom?: boolean;
 }
 
-export const ButtonElement = styled.button<ButtonProps>`
+export const ButtonElement = styled.button<Omit<ButtonProps, 'loading'>>`
   border: 0;
   outline: 0;
 
@@ -150,6 +153,14 @@ export const Button: FC<
         'size' | 'children' | 'ref' | 'type' | 'as'
       >
   >
-> = ({ children, ...props }) => {
-  return <ButtonElement {...props}>{children}</ButtonElement>;
+> = ({ children, loading, ...props }) => {
+  if (loading) {
+    return (
+      <ButtonElement {...props} disabled>
+        <SpinnerIcon />
+      </ButtonElement>
+    );
+  } else {
+    return <ButtonElement {...props}>{children}</ButtonElement>;
+  }
 };

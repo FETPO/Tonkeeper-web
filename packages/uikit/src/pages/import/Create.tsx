@@ -1,12 +1,22 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AuthState } from '@tonkeeper/core/dist/entries/password';
+import { AppKey } from '@tonkeeper/core/dist/Keys';
+import { appendWallet } from '@tonkeeper/core/dist/service/accountService';
+import { importWallet } from '@tonkeeper/core/dist/service/walletService';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { mnemonicNew } from 'ton-crypto';
 import { Button } from '../../components/Button';
+import { CreatePassword } from '../../components/create/Password';
 import { Check, Worlds } from '../../components/create/Words';
 import { CheckMarkIcon, GearIcon, WriteIcon } from '../../components/Icon';
 import { IconPage } from '../../components/Layout';
+import { useAppSdk } from '../../hooks/appSdk';
+import { useStorage } from '../../hooks/storage';
+import { useTonApi } from '../../hooks/tonApi';
 import { useTranslation } from '../../hooks/translation';
-import { useAuthState } from '../../state/password';
+import { getAccountState } from '../../state/account';
+
 const Blue = styled.span`
   color: ${(props) => props.theme.accentBlue};
 `;
@@ -15,16 +25,72 @@ const Green = styled.span`
   color: ${(props) => props.theme.accentGreen};
 `;
 
+const useConfirmMutation = () => {
+  const sdk = useAppSdk();
+  const storage = useStorage();
+  const tonApi = useTonApi();
+
+  const client = useQueryClient();
+
+  return useMutation<boolean, Error, { mnemonic: string[] }>(
+    async ({ mnemonic }) => {
+      const auth = await storage.get<AuthState>(AppKey.password);
+      if (auth === null) {
+        return false;
+      }
+      const password = await sdk.memoryStore.get<string>(AppKey.password);
+      if (password === null) {
+        return false;
+      }
+
+      const walletState = await importWallet(tonApi, mnemonic, password);
+      const account = await getAccountState(storage);
+
+      const update = appendWallet(account, walletState);
+
+      await storage.set(AppKey.account, update);
+      client.setQueryData([AppKey.account], update);
+
+      return true;
+    }
+  );
+};
+
+const useAddWalletMutation = () => {
+  const tonApi = useTonApi();
+  const storage = useStorage();
+  const client = useQueryClient();
+  return useMutation<void, Error, { password: string; mnemonic: string[] }>(
+    async ({ password, mnemonic }) => {
+      const walletState = await importWallet(tonApi, mnemonic, password);
+
+      const account = await getAccountState(storage);
+
+      const update = appendWallet(account, walletState);
+
+      await storage.set(AppKey.account, update);
+      client.setQueryData([AppKey.account], update);
+    }
+  );
+};
+
 export const Create = () => {
   const { t } = useTranslation();
 
-  const { data: auth } = useAuthState();
+  const {
+    mutateAsync: checkPasswordAndCreateWalletAsync,
+    isLoading: isConfirmLoading,
+  } = useConfirmMutation();
+  const { mutateAsync: createWalletAsync, isLoading: isCreateLoading } =
+    useAddWalletMutation();
+
   const [mnemonic, setMnemonic] = useState<string[]>([]);
 
   const [create, setCreate] = useState(false);
   const [open, setOpen] = useState(false);
   const [check, setCheck] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [password, setPassword] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -106,7 +172,26 @@ export const Create = () => {
       <Check
         mnemonic={mnemonic}
         onBack={() => setCheck(false)}
-        onConfirm={() => setChecked(true)}
+        onConfirm={() =>
+          checkPasswordAndCreateWalletAsync({ mnemonic }).then((value) => {
+            setPassword(value);
+            setChecked(true);
+          })
+        }
+        isLoading={isConfirmLoading}
+      />
+    );
+  }
+
+  if (!password) {
+    return (
+      <CreatePassword
+        afterCreate={(pass) =>
+          createWalletAsync({ password: pass, mnemonic }).then(() =>
+            setPassword(true)
+          )
+        }
+        isLoading={isCreateLoading}
       />
     );
   }
