@@ -1,4 +1,5 @@
 import React, { FC, PropsWithChildren } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Button } from '../../components/Button';
 import {
@@ -9,6 +10,7 @@ import {
 import { Description } from '../../components/create/Description';
 import { Title } from '../../components/Text';
 import { useTranslation } from '../../hooks/translation';
+import { AppRoute, ImportRoute } from '../../libs/routes';
 
 const Block = styled.div<{ fullHeight: boolean }>`
   display: flex;
@@ -42,6 +44,7 @@ const Accent = styled.span`
 
 export const WelcomePage: FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   return (
     <>
       <Title>
@@ -64,7 +67,13 @@ export const WelcomePage: FC = () => {
           description={t('Built_in_subscriptions_description')}
         />
       </div>
-      <Button size="large" fullWith primary bottom>
+      <Button
+        size="large"
+        fullWith
+        primary
+        bottom
+        onClick={() => navigate(AppRoute.import + ImportRoute.create)}
+      >
         {t('Get_started')}
       </Button>
     </>

@@ -10,7 +10,7 @@ export interface ButtonProps {
   bottom?: boolean;
 }
 
-const ButtonElement = styled.button<ButtonProps>`
+export const ButtonElement = styled.button<ButtonProps>`
   border: 0;
   outline: 0;
 

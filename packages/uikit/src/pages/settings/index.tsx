@@ -3,10 +3,10 @@ import { Route, Routes } from 'react-router-dom';
 import { SettingsRoute } from '../../libs/routes';
 import { Legal } from './Legal';
 import { Localization } from './Localization';
-import { Settings } from './Settigns';
+import { Settings } from './Settings';
 import { UserTheme } from './Theme';
 
-export default SettingsRouter = () => {
+const SettingsRouter = () => {
   return (
     <Routes>
       <Route path={SettingsRoute.localization} element={<Localization />} />
@@ -16,3 +16,5 @@ export default SettingsRouter = () => {
     </Routes>
   );
 };
+
+export default SettingsRouter;

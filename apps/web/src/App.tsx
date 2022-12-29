@@ -14,7 +14,7 @@ import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
 import {
   Initialize,
   InitializeContainer,
-} from '@tonkeeper/uikit/dist/pages/initialize/Initialize';
+} from '@tonkeeper/uikit/dist/pages/import/Initialize';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
 import { useLanguage } from '@tonkeeper/uikit/dist/state/language';
@@ -29,7 +29,7 @@ import React, {
   useMemo,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { BrowserAppSdk } from './libs/appSdk';
 import { BrowserStorage } from './libs/storage';
 import { Activity } from './pages/Activity';
@@ -37,6 +37,9 @@ import { Home } from './pages/Home';
 
 const SettingsRouter = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/settings')
+);
+const ImportRouter = React.lazy(
+  () => import('@tonkeeper/uikit/dist/pages/import')
 );
 
 const queryClient = new QueryClient();
@@ -111,11 +114,19 @@ export const Loader: FC<PropsWithChildren> = ({ children }) => {
 };
 
 export const Content: FC<{ account: AccountState }> = ({ account }) => {
-  if (account.wallets.length === 0) {
+  const location = useLocation();
+
+  if (
+    account.wallets.length === 0 ||
+    location.pathname.startsWith(AppRoute.import)
+  ) {
     return (
       <Container>
         <InitializeContainer fullHeight={false}>
-          <Initialize />
+          <Routes>
+            <Route path={any(AppRoute.import)} element={<ImportRouter />} />
+            <Route path="*" element={<Initialize />} />
+          </Routes>
         </InitializeContainer>
       </Container>
     );
