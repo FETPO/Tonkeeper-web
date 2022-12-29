@@ -14,7 +14,7 @@ const Block = styled.div`
   position: relative;
 `;
 
-const BackButton = styled.div`
+export const BackButton = styled.div`
   cursor: pointer;
   position: absolute;
   top: 50%;

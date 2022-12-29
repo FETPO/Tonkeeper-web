@@ -139,12 +139,16 @@
     "message": "Get started",
     "description": "Get started button"
   },
+  "Continue": {
+    "message": "Continue",
+    "description": "Continue button"
+  },
   "Let_s_set_up_your_wallet": {
     "message": "Let’s set up your wallet",
     "description": "Initialize screen title"
   },
   "Let_s_set_up_your_wallet_description": {
-    "message": "You need a connected wallet to use Tonkeeper. Either create a new wallet or import an existing one.",
+    "message": "You need a connected wallet to use Tonkeeper. Either create a new wallet or import an existing one.",
     "description": "Initialize screen description"
   },
   "Create_new_wallet": {
@@ -154,5 +158,41 @@
   "Import_existing_wallet": {
     "message": "Import existing wallet",
     "description": "Import existing wallet button"
+  },
+  "Generating_wallet": {
+    "message": "Generating wallet...",
+    "description": "Generating wallet title"
+  },
+  "Your_wallet_has_just_been_created": {
+    "message": "Your wallet has just been created!",
+    "description": "Your wallet has just been created title"
+  },
+  "Grab_a_pen": {
+    "message": "Grab a pen and a piece of paper",
+    "description": "Initialize screen Grab a pen and a piece of paper title"
+  },
+  "Grab_a_pen_description": {
+    "message": "We strongly recommend you write down the recovery phrase because it’s the only way to have access to and recover your wallet should you lose your device. Do not send it to yourself via email or take a screenshot. It’s safer when kept offline.",
+    "description": "Initialize screen Grab a pen and a piece of paper description"
+  },
+  "Your_recovery_phrase": {
+    "message": "Your recovery phrase",
+    "description": "Initialize screen Your recovery phrase title"
+  },
+  "Your_recovery_phrase_description": {
+    "message": "Write down these 24 words in the order given below and store them in a secret, safe place.",
+    "description": "Initialize screen Your recovery phrase description"
+  },
+  "So_let_s_check": {
+    "message": "So, let’s check",
+    "description": "Initialize screen So, let’s check title"
+  },
+  "So_let_s_check_description": {
+    "message": "To check whether you’ve written down your recovery phrase correctly, please enter the %1%th, %2%th, and %3%st words.",
+    "description": "Initialize screen So, let’s check description"
+  },
+  "Congratulations_You_ve_set_up_your_wallet": {
+    "message": " Congratulations! You’ve set up your wallet",
+    "description": "Initialize screen Congratulations! You’ve set up your wallet title"
   }
 }
