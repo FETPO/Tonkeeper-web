@@ -39,5 +39,6 @@ testem.log
 Thumbs.db
 
 .turbo
+.env
 
 **/public/locales/*
