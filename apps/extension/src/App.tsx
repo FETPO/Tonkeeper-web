@@ -11,17 +11,24 @@ import {
   TranslationContext,
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
+import ImportRouter from '@tonkeeper/uikit/dist/pages/import';
 import {
   Initialize,
   InitializeContainer,
-} from '@tonkeeper/uikit/dist/pages/initialize/Initialize';
+} from '@tonkeeper/uikit/dist/pages/import/Initialize';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
-import React, { FC, useMemo } from 'react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import React, { FC, useEffect, useMemo } from 'react';
+import {
+  MemoryRouter,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import styled from 'styled-components';
 import browser from 'webextension-polyfill';
 import { ExtensionAppSdk } from './libs/appSdk';
@@ -85,13 +92,45 @@ export const Loader: FC = () => {
   return <Content account={account} />;
 };
 
+const useInitialRedirect = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (window.location.hash) {
+      navigate(window.location.hash.substring(1));
+    }
+  }, []);
+};
+
 export const Content: FC<{ account: AccountState }> = ({ account }) => {
-  if (account.wallets.length === 0) {
+  const location = useLocation();
+
+  useInitialRedirect();
+
+  if (
+    account.wallets.length === 0 ||
+    location.pathname.startsWith(AppRoute.import)
+  ) {
     return (
       <Wrapper>
-        <InitializeContainer>
-          <Initialize />
-        </InitializeContainer>
+        <Routes>
+          <Route
+            path={any(AppRoute.import)}
+            element={
+              <InitializeContainer fullHeight={false}>
+                <ImportRouter />
+              </InitializeContainer>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <InitializeContainer>
+                <Initialize onImport={sdk.openExtensionInBrowser} />
+              </InitializeContainer>
+            }
+          />
+        </Routes>
       </Wrapper>
     );
   }

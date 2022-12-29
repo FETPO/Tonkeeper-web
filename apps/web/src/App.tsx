@@ -11,6 +11,7 @@ import {
   TranslationContext,
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
+import ImportRouter from '@tonkeeper/uikit/dist/pages/import';
 import {
   Initialize,
   InitializeContainer,
@@ -29,7 +30,13 @@ import React, {
   useMemo,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { BrowserAppSdk } from './libs/appSdk';
 import { BrowserStorage } from './libs/storage';
 import { Activity } from './pages/Activity';
@@ -37,9 +44,6 @@ import { Home } from './pages/Home';
 
 const SettingsRouter = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/settings')
-);
-const ImportRouter = React.lazy(
-  () => import('@tonkeeper/uikit/dist/pages/import')
 );
 
 const queryClient = new QueryClient();
@@ -115,6 +119,7 @@ export const Loader: FC<PropsWithChildren> = ({ children }) => {
 
 export const Content: FC<{ account: AccountState }> = ({ account }) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   if (
     account.wallets.length === 0 ||
@@ -125,7 +130,7 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
         <InitializeContainer fullHeight={false}>
           <Routes>
             <Route path={any(AppRoute.import)} element={<ImportRouter />} />
-            <Route path="*" element={<Initialize />} />
+            <Route path="*" element={<Initialize onImport={navigate} />} />
           </Routes>
         </InitializeContainer>
       </Container>

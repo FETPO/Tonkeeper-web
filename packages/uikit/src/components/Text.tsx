@@ -12,6 +12,14 @@ export const Title = styled(H1)`
   margin: 1rem 0;
 `;
 
+export const H2 = styled.h2`
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  margin: 0;
+`;
+
 export const H3 = styled.h3`
   font-style: normal;
   font-weight: 700;
