@@ -5,7 +5,10 @@ import { getTonClient } from '@tonkeeper/core/dist/entries/network';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
-import { AppContext } from '@tonkeeper/uikit/dist/hooks/appContext';
+import {
+  AppContext,
+  WalletStateContext,
+} from '@tonkeeper/uikit/dist/hooks/appContext';
 import { AppSdkContext } from '@tonkeeper/uikit/dist/hooks/appSdk';
 import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
 import {
@@ -13,6 +16,7 @@ import {
   TranslationContext,
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
+import { Home } from '@tonkeeper/uikit/dist/pages/home/Home';
 import ImportRouter from '@tonkeeper/uikit/dist/pages/import';
 import {
   Initialize,
@@ -21,6 +25,7 @@ import {
 import SettingsRouter from '@tonkeeper/uikit/dist/pages/settings';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
+import { useFiatCurrency } from '@tonkeeper/uikit/dist/state/fiat';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
@@ -37,7 +42,6 @@ import browser from 'webextension-polyfill';
 import { ExtensionAppSdk } from './libs/appSdk';
 import { ExtensionStorage } from './libs/storage';
 import { Activity } from './pages/Activity';
-import { Home } from './pages/Home';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -93,21 +97,21 @@ export const Loader: FC = React.memo(() => {
   const { data: network } = useNetwork();
   const { data: account } = useAccountState();
   const { data: auth } = useAuthState();
+  const { data: fiat } = useFiatCurrency();
 
-  const context = useMemo(() => {
-    return {
-      tonApi: getTonClient(network),
-      network: network!,
-      account: account!,
-      auth: auth!,
-    };
-  }, [network, account, auth]);
+  console.log('Loader', network, account, auth, fiat);
 
-  console.log('Loader', network, account, auth);
-
-  if (!network || !account || !auth) {
+  if (!network || !account || !auth || !fiat) {
     return <Loading />;
   }
+
+  const context = {
+    tonApi: getTonClient(network),
+    network,
+    account,
+    auth,
+    fiat,
+  };
 
   return (
     <AppContext.Provider value={context}>
@@ -133,10 +137,15 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
   const location = useLocation();
 
   console.log('Content');
-  if (
-    account.wallets.length === 0 ||
-    location.pathname.startsWith(AppRoute.import)
-  ) {
+
+  const activeWallet = useMemo(() => {
+    const wallet = account.wallets.find(
+      (item) => item.address === account.activeAddress
+    );
+    return wallet;
+  }, [account]);
+
+  if (!activeWallet || location.pathname.startsWith(AppRoute.import)) {
     return (
       <Wrapper>
         <Routes>
@@ -162,23 +171,25 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
   }
 
   return (
-    <Wrapper>
-      <Body>
-        <Routes>
-          <Route path={AppRoute.activity} element={<Activity />} />
-          <Route path={any(AppRoute.settings)} element={<SettingsRouter />} />
-          <Route
-            path="*"
-            element={
-              <>
-                <Header />
-                <Home />
-              </>
-            }
-          />
-        </Routes>
-      </Body>
-      <Footer />
-    </Wrapper>
+    <WalletStateContext.Provider value={activeWallet}>
+      <Wrapper>
+        <Body>
+          <Routes>
+            <Route path={AppRoute.activity} element={<Activity />} />
+            <Route path={any(AppRoute.settings)} element={<SettingsRouter />} />
+            <Route
+              path="*"
+              element={
+                <>
+                  <Header />
+                  <Home />
+                </>
+              }
+            />
+          </Routes>
+        </Body>
+        <Footer />
+      </Wrapper>
+    </WalletStateContext.Provider>
   );
 };

@@ -8,15 +8,16 @@ import {
   RecoveryPhraseIcon,
   SecurityIcon,
   SubscriptionIcon,
-  ThemeIcon,
+  ThemeIcon
 } from '../../components/settings/SettingsIcons';
 import {
   SettingsItem,
-  SettingsList,
+  SettingsList
 } from '../../components/settings/SettingsList';
 import { SettingsNetwork } from '../../components/settings/SettingsNetwork';
 import { SettingsSocialList } from '../../components/settings/SettingsSocialList';
 import { Title } from '../../components/Text';
+import { useAppContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { relative, SettingsRoute } from '../../libs/routes';
 import { useUserThemes } from '../../state/theme';
@@ -25,6 +26,7 @@ export const Settings: FC = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
+  const { fiat } = useAppContext();
   const { data: themes } = useUserThemes();
   const mainItems = useMemo<SettingsItem[]>(() => {
     const items: SettingsItem[] = [
@@ -74,8 +76,8 @@ export const Settings: FC = () => {
     const items: SettingsItem[] = [
       {
         name: t('Primary_currency'),
-        icon: 'USD',
-        action: () => null,
+        icon: fiat,
+        action: () => navigate(relative(SettingsRoute.fiat)),
       },
     ];
 
@@ -87,7 +89,7 @@ export const Settings: FC = () => {
       });
     }
     return items;
-  }, [t, i18n.enable, navigate]);
+  }, [t, i18n.enable, navigate, fiat]);
 
   const accountItems = useMemo(() => {
     return [

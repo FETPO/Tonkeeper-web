@@ -2,11 +2,13 @@ import {
   AccountState,
   defaultAccountState,
 } from '@tonkeeper/core/dist/entries/account';
+import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
 import { Network } from '@tonkeeper/core/dist/entries/network';
 import {
   AuthState,
   defaultAuthState,
 } from '@tonkeeper/core/dist/entries/password';
+import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { Configuration } from '@tonkeeper/core/dist/tonApi';
 import React, { useContext } from 'react';
 
@@ -15,13 +17,21 @@ export const AppContext = React.createContext<{
   network: Network;
   account: AccountState;
   auth: AuthState;
+  fiat: FiatCurrencies;
 }>({
   tonApi: new Configuration(),
   network: Network.MAINNET,
   account: defaultAccountState,
   auth: defaultAuthState,
+  fiat: FiatCurrencies.USD,
 });
 
 export const useAppContext = () => {
   return useContext(AppContext);
+};
+
+export const WalletStateContext = React.createContext<WalletState>(undefined!);
+
+export const useWalletContext = () => {
+  return useContext(WalletStateContext);
 };

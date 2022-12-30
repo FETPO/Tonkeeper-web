@@ -206,5 +206,50 @@
   "Create_password": {
     "message": "Create password",
     "description": "Initialize screen Create password title"
+  },
+
+  "USD_full": {
+    "message": "United States Dollar",
+    "description": "USD fill name"
+  },
+  "EUR_full": {
+    "message": "Euro",
+    "description": "EUR fill name"
+  },
+  "RUB_full": {
+    "message": "Russian Ruble",
+    "description": "RUB fill name"
+  },
+  "AED_full": {
+    "message": "United Arab Emirates Dirham",
+    "description": "AED fill name"
+  },
+  "GBP_full": {
+    "message": "Great Britain Pound",
+    "description": "GBP fill name"
+  },
+  "CHF_full": {
+    "message": "Swiss Franc",
+    "description": "CHF fill name"
+  },
+  "CNY_full": {
+    "message": "China Yuan",
+    "description": "CNY fill name"
+  },
+  "KRW_full": {
+    "message": "South Korean Won",
+    "description": "KRW fill name"
+  },
+  "IDR_full": {
+    "message": "Indonesian Rupiah",
+    "description": "IDR fill name"
+  },
+  "INR_full": {
+    "message": "Indian Rupee",
+    "description": "INR fill name"
+  },
+  "JPY_full": {
+    "message": "Japanese Yen",
+    "description": "JPY fill name"
   }
 }

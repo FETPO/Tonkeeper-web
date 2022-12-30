@@ -5,14 +5,18 @@ import { getTonClient } from '@tonkeeper/core/dist/entries/network';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
+import {
+  AppContext,
+  WalletStateContext,
+} from '@tonkeeper/uikit/dist/hooks/appContext';
 import { AppSdkContext } from '@tonkeeper/uikit/dist/hooks/appSdk';
 import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
-import { TonApiContext } from '@tonkeeper/uikit/dist/hooks/tonApi';
 import {
   I18nContext,
   TranslationContext,
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
+import { Home } from '@tonkeeper/uikit/dist/pages/home/Home';
 import ImportRouter from '@tonkeeper/uikit/dist/pages/import';
 import {
   Initialize,
@@ -20,6 +24,7 @@ import {
 } from '@tonkeeper/uikit/dist/pages/import/Initialize';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
+import { useFiatCurrency } from '@tonkeeper/uikit/dist/state/fiat';
 import { useLanguage } from '@tonkeeper/uikit/dist/state/language';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
@@ -42,7 +47,6 @@ import {
 import { BrowserAppSdk } from './libs/appSdk';
 import { BrowserStorage } from './libs/storage';
 import { Activity } from './pages/Activity';
-import { Home } from './pages/Home';
 
 const SettingsRouter = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/settings')
@@ -88,12 +92,13 @@ export const App: FC<PropsWithChildren> = () => {
   );
 };
 
-export const Loader: FC<PropsWithChildren> = ({ children }) => {
+export const Loader: FC = () => {
   const { i18n } = useTranslation();
-  const { data: network, isFetching: isNetworkLoading } = useNetwork();
-  const { data: language, isFetching: isLanguageLoading } = useLanguage();
-  const { data: account, isFetching: isAccountLoading } = useAccountState();
-  const { isFetching: isAuthLoading } = useAuthState();
+  const { data: network } = useNetwork();
+  const { data: language } = useLanguage();
+  const { data: account } = useAccountState();
+  const { data: auth } = useAuthState();
+  const { data: fiat } = useFiatCurrency();
 
   useEffect(() => {
     if (language && i18n.language !== language) {
@@ -103,26 +108,22 @@ export const Loader: FC<PropsWithChildren> = ({ children }) => {
     }
   }, [language, i18n]);
 
-  console.log(language, isLanguageLoading);
-
-  const tonApi = useMemo(() => {
-    return getTonClient(network);
-  }, [network]);
-
-  if (
-    isNetworkLoading ||
-    isLanguageLoading ||
-    isAuthLoading ||
-    isAccountLoading ||
-    !account
-  ) {
+  if (!language || !network || !auth || !account || !fiat) {
     return <Loading />;
   }
 
+  const context = {
+    tonApi: getTonClient(network),
+    network,
+    auth,
+    account,
+    fiat,
+  };
+
   return (
-    <TonApiContext.Provider value={tonApi}>
+    <AppContext.Provider value={context}>
       <Content account={account} />
-    </TonApiContext.Provider>
+    </AppContext.Provider>
   );
 };
 
@@ -130,10 +131,14 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  if (
-    account.wallets.length === 0 ||
-    location.pathname.startsWith(AppRoute.import)
-  ) {
+  const activeWallet = useMemo(() => {
+    const wallet = account.wallets.find(
+      (item) => item.address === account.activeAddress
+    );
+    return wallet;
+  }, [account]);
+
+  if (!activeWallet || location.pathname.startsWith(AppRoute.import)) {
     return (
       <Container>
         <InitializeContainer fullHeight={false}>
@@ -147,23 +152,25 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
   }
 
   return (
-    <Container>
-      <Body>
-        <Routes>
-          <Route path={AppRoute.activity} element={<Activity />} />
-          <Route path={any(AppRoute.settings)} element={<SettingsRouter />} />
-          <Route
-            path="*"
-            element={
-              <>
-                <Header />
-                <Home />
-              </>
-            }
-          />
-        </Routes>
-      </Body>
-      <Footer />
-    </Container>
+    <WalletStateContext.Provider value={activeWallet}>
+      <Container>
+        <Body>
+          <Routes>
+            <Route path={AppRoute.activity} element={<Activity />} />
+            <Route path={any(AppRoute.settings)} element={<SettingsRouter />} />
+            <Route
+              path="*"
+              element={
+                <>
+                  <Header />
+                  <Home />
+                </>
+              }
+            />
+          </Routes>
+        </Body>
+        <Footer />
+      </Container>
+    </WalletStateContext.Provider>
   );
 };
