@@ -251,5 +251,73 @@
   "JPY_full": {
     "message": "Japanese Yen",
     "description": "JPY fill name"
+  },
+  "Buy": {
+    "message": "Buy",
+    "description": "Buy action button on home page"
+  },
+  "Send": {
+    "message": "Send",
+    "description": "Send action button on home page"
+  },
+  "Receive": {
+    "message": "Receive",
+    "description": "Receive action button on home page"
+  },
+  "Open": {
+    "message": "Open",
+    "description": "Open button"
+  },
+  "Terms_Of_Use": {
+    "message": "Terms Of Use",
+    "description": "Terms Of Use"
+  },
+  "Privacy_Policy": {
+    "message": "Privacy Policy",
+    "description": "Privacy Policy button"
+  },
+  "Do_not_show_again": {
+    "message": "Do not show again",
+    "description": "Do not show again checkbox label"
+  },
+  "Buy_TON": {
+    "message": "Buy TON",
+    "description": "Buy TON title"
+  },
+  "Sell_TON": {
+    "message": "Sell TON",
+    "description": "Sell TON title"
+  },
+  "Other_ways_to_buy_or_sell_TON": {
+    "message": "Other ways to buy or sell TON",
+    "description": "Other ways to buy or sell TON link"
+  },
+  "Mercuryo_description": {
+    "message": "Instantly buy with a credit card",
+    "description": "Buy TON Mercuryo description"
+  },
+  "Mercuryo_sell_description": {
+    "message": "Sale with withdrawal to a credit card",
+    "description": "Sale TON Mercuryo description"
+  },
+  "Neocrypto_description": {
+    "message": "Instantly buy with a credit card",
+    "description": "Buy TON Mercuryo description"
+  },
+  "Dreamwalkers_description": {
+    "message": "Instantly buy with RUB, UAH credit card",
+    "description": "Buy TON Dreamwalkers description"
+  },
+  "Wallet_description": {
+    "message": "Instantly buy with a credit card",
+    "description": "Buy TON Mercuryo description"
+  },
+  "Telegram_bot": {
+    "message": "Telegram Bot",
+    "description": "Telegram Bot label"
+  },
+  "You_are_opening_an_external_app": {
+    "message": "You are opening an external app not operated by Tonkeeper",
+    "description": "You are opening an external app disclaimer"
   }
 }

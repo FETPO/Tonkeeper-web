@@ -15,7 +15,7 @@ export interface SettingsListProps {
   loading?: boolean;
 }
 
-const SettingsListBlock = styled.div`
+export const SettingsListBlock = styled.div`
   display: flex;
   flex-direction: column;
 
@@ -27,14 +27,14 @@ const SettingsListBlock = styled.div`
   overflow: hidden;
 `;
 
-const ItemPayload = styled.div`
+export const ItemPayload = styled.div`
   flex-grow: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1rem 1rem 0;
 `;
-const SettingsListItem = styled.div`
+export const SettingsListItem = styled.div`
   display: flex;
   padding: 0 0 0 1rem;
   cursor: pointer;
