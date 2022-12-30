@@ -47,6 +47,14 @@
     "message": "Theme",
     "description": "Theme settings button"
   },
+  "Network": {
+    "message": "Network",
+    "description": "Network settings button"
+  },
+  "Dev": {
+    "message": "Dev Settings",
+    "description": "Dev settings title"
+  },
   "Log_out": {
     "message": "Log out",
     "description": "Log out settings button"

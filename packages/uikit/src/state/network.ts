@@ -6,6 +6,7 @@ import { useStorage } from '../hooks/storage';
 export const useNetwork = () => {
   const storage = useStorage();
   return useQuery([AppKey.network], async () => {
+    console.log('load network');
     const network = await storage.get<Network>(AppKey.network);
     return network ?? defaultNetwork;
   });
@@ -16,6 +17,6 @@ export const useMutateNetwork = () => {
   const client = useQueryClient();
   return useMutation<void, Error, Network>(async (network) => {
     await storage.set(AppKey.network, network);
-    await client.invalidateQueries([AppKey.network]);
+    client.setQueryData([AppKey.network], network);
   });
 };

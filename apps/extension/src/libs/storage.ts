@@ -1,4 +1,4 @@
-import { IStorage } from '@tonkeeper/core/dist';
+import { IStorage } from '@tonkeeper/core/dist/Storage';
 import browser from 'webextension-polyfill';
 import { checkForError } from './utils';
 

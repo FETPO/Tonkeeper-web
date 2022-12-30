@@ -3056,17 +3056,17 @@
   dependencies:
     defer-to-connect "^2.0.0"
 
-"@tanstack/query-core@4.20.4":
-  version "4.20.4"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.20.4.tgz#1f7975a2db26a8bc2f382bad8a44cd422c846b17"
-  integrity sha512-lhLtGVNJDsJ/DyZXrLzekDEywQqRVykgBqTmkv0La32a/RleILXy6JMLBb7UmS3QCatg/F/0N9/5b0i5j6IKcA==
+"@tanstack/query-core@4.3.4":
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.3.4.tgz#b93da17232fda91ec08ef14d2ca1d8326fc599f2"
+  integrity sha512-NLAe3j5Vk1yYEtoPP5fPGPjRzkZPx67KUM3f14L3InziJZJ0wVecCh7uKfgYkbRKJSeq6PlbND7iuCGdTplN6Q==
 
-"@tanstack/react-query@^4.19.1", "@tanstack/react-query@^4.20.4":
-  version "4.20.4"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.20.4.tgz#562b34fb919adea884eccaba2b5be50e8ba7fb16"
-  integrity sha512-SJRxx13k/csb9lXAJfycgVA1N/yU/h3bvRNWP0+aHMfMjmbyX82FdoAcckDBbOdEyAupvb0byelNHNeypCFSyA==
+"@tanstack/react-query@4.3.4":
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.3.4.tgz#91a4232a967de04a0662d63d53b18ecc3e11c7e2"
+  integrity sha512-IiAo+B8bxphEpO7xwLQaCptd2rY4Ef3pW1q9J3pT66G+J/st4QpGQ+cSm9iESp9ccRy1YNUk3klk/hQtWewl6g==
   dependencies:
-    "@tanstack/query-core" "4.20.4"
+    "@tanstack/query-core" "4.3.4"
     use-sync-external-store "^1.2.0"
 
 "@testing-library/dom@^8.3.0", "@testing-library/dom@^8.5.0":
@@ -4666,7 +4666,7 @@ axe-core@^4.4.3:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.6.1.tgz#79cccdee3e3ab61a8f42c458d4123a6768e6fbce"
   integrity sha512-lCZN5XRuOnpG4bpMq8v0khrWtUOn+i8lZSb6wHZH56ZfbIEv6XwJV84AAueh9/zi7qPVJ/E4yz6fmsiyOmXR4w==
 
-axios@0.25.0, axios@^0.25.0:
+axios@^0.25.0:
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.25.0.tgz#349cfbb31331a9b4453190791760a8d35b093e0a"
   integrity sha512-cD8FOb0tRH3uuEe6+evtAbgJtfxr7ly3fQjYcMcuPlgkwVS9xboaVIpcDV+cYQe+yGykgwZCs1pzjntcGa6l5g==
@@ -15141,7 +15141,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
 
-typescript@^4.9.3, typescript@^4.9.4:
+typescript@^4.9.4:
   version "4.9.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.4.tgz#a2a3d2756c079abda241d75f149df9d561091e78"
   integrity sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==

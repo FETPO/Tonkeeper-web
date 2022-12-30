@@ -5,9 +5,9 @@ import { getTonClient } from '@tonkeeper/core/dist/entries/network';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
+import { AppContext } from '@tonkeeper/uikit/dist/hooks/appContext';
 import { AppSdkContext } from '@tonkeeper/uikit/dist/hooks/appSdk';
 import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
-import { TonApiContext } from '@tonkeeper/uikit/dist/hooks/tonApi';
 import {
   I18nContext,
   TranslationContext,
@@ -18,12 +18,13 @@ import {
   Initialize,
   InitializeContainer,
 } from '@tonkeeper/uikit/dist/pages/import/Initialize';
+import SettingsRouter from '@tonkeeper/uikit/dist/pages/settings';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, PropsWithChildren, useEffect, useMemo } from 'react';
 import {
   MemoryRouter,
   Route,
@@ -38,15 +39,19 @@ import { ExtensionStorage } from './libs/storage';
 import { Activity } from './pages/Activity';
 import { Home } from './pages/Home';
 
-const SettingsRouter = React.lazy(
-  () => import('@tonkeeper/uikit/dist/pages/settings')
-);
-
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 const sdk = new ExtensionAppSdk();
 const storage = new ExtensionStorage();
 
 export const App: FC = () => {
+  console.log('app');
+
   const translation = useMemo(() => {
     const client: I18nContext = {
       t: browser.i18n.getMessage,
@@ -62,19 +67,21 @@ export const App: FC = () => {
   }, []);
 
   return (
-    <MemoryRouter>
-      <QueryClientProvider client={queryClient}>
-        <AppSdkContext.Provider value={sdk}>
-          <StorageContext.Provider value={storage}>
-            <TranslationContext.Provider value={translation}>
-              <UserThemeProvider>
-                <Loader />
-              </UserThemeProvider>
-            </TranslationContext.Provider>
-          </StorageContext.Provider>
-        </AppSdkContext.Provider>
-      </QueryClientProvider>
-    </MemoryRouter>
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
+        <InitialRedirect>
+          <AppSdkContext.Provider value={sdk}>
+            <StorageContext.Provider value={storage}>
+              <TranslationContext.Provider value={translation}>
+                <UserThemeProvider>
+                  <Loader />
+                </UserThemeProvider>
+              </TranslationContext.Provider>
+            </StorageContext.Provider>
+          </AppSdkContext.Provider>
+        </InitialRedirect>
+      </MemoryRouter>
+    </QueryClientProvider>
   );
 };
 
@@ -82,41 +89,50 @@ const Wrapper = styled(Container)`
   height: 600px;
 `;
 
-export const Loader: FC = () => {
-  const { data: network, isFetching: isNetworkLoading } = useNetwork();
-  const { data: account, isFetching: isAccountLoading } = useAccountState();
-  const { isFetching: isAuthLoading } = useAuthState();
+export const Loader: FC = React.memo(() => {
+  const { data: network } = useNetwork();
+  const { data: account } = useAccountState();
+  const { data: auth } = useAuthState();
 
-  const tonApi = useMemo(() => {
-    return getTonClient(network);
-  }, [network]);
+  const context = useMemo(() => {
+    return {
+      tonApi: getTonClient(network),
+      network: network!,
+      account: account!,
+      auth: auth!,
+    };
+  }, [network, account, auth]);
 
-  if (isNetworkLoading || isAuthLoading || isAccountLoading || !account) {
+  console.log('Loader', network, account, auth);
+
+  if (!network || !account || !auth) {
     return <Loading />;
   }
 
   return (
-    <TonApiContext.Provider value={tonApi}>
+    <AppContext.Provider value={context}>
       <Content account={account} />
-    </TonApiContext.Provider>
+    </AppContext.Provider>
   );
-};
+});
 
-const useInitialRedirect = () => {
+const InitialRedirect: FC<PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
     if (window.location.hash) {
+      console.log('navigate');
       navigate(window.location.hash.substring(1));
     }
   }, []);
+
+  return <>{children}</>;
 };
 
 export const Content: FC<{ account: AccountState }> = ({ account }) => {
   const location = useLocation();
 
-  useInitialRedirect();
-
+  console.log('Content');
   if (
     account.wallets.length === 0 ||
     location.pathname.startsWith(AppRoute.import)

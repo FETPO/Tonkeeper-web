@@ -1,8 +1,8 @@
-import { switchNetwork } from '@tonkeeper/core/dist/entries/network';
 import React, { FC, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTranslation } from '../../hooks/translation';
-import { useMutateNetwork, useNetwork } from '../../state/network';
+import { relative, SettingsRoute } from '../../libs/routes';
 import { TonkeeperIcon } from '../Icon';
 import { Body3, Label2 } from '../Text';
 
@@ -27,13 +27,16 @@ const Version = styled(Body3)`
 
 export const SettingsNetwork: FC<SettingsNetworkProps> = ({ version }) => {
   const { t } = useTranslation();
-  const { data: network } = useNetwork();
-  const { mutate } = useMutateNetwork();
+  const navigate = useNavigate();
 
-  const onChange = useCallback(() => {
-    if (!network) return;
-    mutate(switchNetwork(network));
-  }, [network]);
+  const onChange: React.MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      if (e.detail === 6) {
+        navigate(relative(SettingsRoute.dev));
+      }
+    },
+    [navigate]
+  );
 
   return (
     <Block onClick={onChange}>

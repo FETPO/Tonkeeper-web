@@ -15,6 +15,7 @@ export enum SettingsRoute {
   localization = '/localization',
   legal = '/legal',
   theme = '/theme',
+  dev = '/dev',
 }
 
 export const any = (route: string): string => {

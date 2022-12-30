@@ -8,6 +8,7 @@ import { IStorage } from '@tonkeeper/core/dist/Storage';
 import { useStorage } from '../hooks/storage';
 
 export const getAccountState = async (storage: IStorage) => {
+  console.log('load account');
   const state = await storage.get<AccountState>(AppKey.account);
   return state ?? defaultAccountState;
 };

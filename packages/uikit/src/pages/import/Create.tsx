@@ -11,9 +11,9 @@ import { CreatePassword } from '../../components/create/Password';
 import { Check, Worlds } from '../../components/create/Words';
 import { CheckMarkIcon, GearIcon, WriteIcon } from '../../components/Icon';
 import { IconPage } from '../../components/Layout';
+import { useAppContext } from '../../hooks/appContext';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useStorage } from '../../hooks/storage';
-import { useTonApi } from '../../hooks/tonApi';
 import { useTranslation } from '../../hooks/translation';
 import { getAccountState } from '../../state/account';
 
@@ -28,8 +28,7 @@ const Green = styled.span`
 const useConfirmMutation = () => {
   const sdk = useAppSdk();
   const storage = useStorage();
-  const tonApi = useTonApi();
-
+  const { tonApi } = useAppContext();
   const client = useQueryClient();
 
   return useMutation<boolean, Error, { mnemonic: string[] }>(
@@ -57,7 +56,7 @@ const useConfirmMutation = () => {
 };
 
 const useAddWalletMutation = () => {
-  const tonApi = useTonApi();
+  const { tonApi } = useAppContext();
   const storage = useStorage();
   const client = useQueryClient();
   return useMutation<void, Error, { password: string; mnemonic: string[] }>(

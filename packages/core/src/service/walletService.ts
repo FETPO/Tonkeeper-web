@@ -16,7 +16,7 @@ export const importWallet = async (
   return {
     revision: 0,
     mnemonic: encryptedMnemonic,
-    address: address.toString(),
+    address: address.toRawString(),
     publicKey: keyPair.publicKey.toString('hex'),
     version,
   };

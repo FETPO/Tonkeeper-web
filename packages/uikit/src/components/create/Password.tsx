@@ -78,7 +78,7 @@ const PasswordInput: FC<{
   const [active, setActive] = useState(false);
 
   return (
-    <InputBlock active={active} valid={!active && isValid}>
+    <InputBlock active={active} valid={active || isValid}>
       <Input
         type="password"
         value={value}

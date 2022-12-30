@@ -166,10 +166,10 @@ export const Check: FC<{
       .replace(`%3%`, String(test3));
   }, [t, test1, test2, test3]);
 
-  const isValid = true;
-  // one.toLowerCase().trim() === mnemonic[test1 - 1] &&
-  // two.toLowerCase().trim() === mnemonic[test2 - 1] &&
-  // three.toLowerCase().trim() === mnemonic[test3 - 1];
+  const isValid =
+    one.toLowerCase().trim() === mnemonic[test1 - 1] &&
+    two.toLowerCase().trim() === mnemonic[test2 - 1] &&
+    three.toLowerCase().trim() === mnemonic[test3 - 1];
 
   return (
     <>
