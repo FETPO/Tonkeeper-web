@@ -7,8 +7,8 @@ import { useTranslation } from '../../hooks/translation';
 import { Button } from '../Button';
 import { Checkbox } from '../Checkbox';
 import { ChevronRightIcon } from '../Icon';
+import { ListItem, ListItemPayload } from '../List';
 import { Notification } from '../Notification';
-import { ItemPayload, SettingsListItem } from '../settings/SettingsList';
 import { Body2, H2, Label1, Label2 } from '../Text';
 
 export interface BuyItem {
@@ -155,8 +155,8 @@ export const BuyItemNotification: FC<{
 
   return (
     <>
-      <SettingsListItem key={item.title} onClick={onOpen}>
-        <ItemPayload>
+      <ListItem key={item.title} onClick={onOpen}>
+        <ListItemPayload>
           <Description>
             <Logo src={item.logo} />
             <Text>
@@ -167,8 +167,8 @@ export const BuyItemNotification: FC<{
           <Icon>
             <ChevronRightIcon />
           </Icon>
-        </ItemPayload>
-      </SettingsListItem>
+        </ListItemPayload>
+      </ListItem>
       <Notification isOpen={open} handleClose={() => setOpen(false)}>
         <NotificationBlock>
           <Logo large src={item.logo} />

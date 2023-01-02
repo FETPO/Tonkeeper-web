@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import styled, { css } from 'styled-components';
+import { ListBlock, ListItem, ListItemPayload } from '../List';
 import { Body1, Label1 } from '../Text';
 
 export interface SettingsItem {
@@ -14,39 +15,6 @@ export interface SettingsListProps {
   items: SettingsItem[];
   loading?: boolean;
 }
-
-export const SettingsListBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  background: ${(props) => props.theme.backgroundContent};
-  padding: 0;
-  margin: 1rem 0 2rem;
-
-  border-radius: ${(props) => props.theme.cornerMedium};
-  overflow: hidden;
-`;
-
-export const ItemPayload = styled.div`
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1rem 1rem 0;
-`;
-export const SettingsListItem = styled.div`
-  display: flex;
-  padding: 0 0 0 1rem;
-  cursor: pointer;
-
-  &:hover {
-    background: ${(props) => props.theme.backgroundContentTint};
-  }
-
-  + * ${ItemPayload} {
-    border-top: 1px solid ${(props) => props.theme.separatorCommon};
-  }
-`;
 
 const Icon = styled(Label1)<{ color?: string }>`
   display: flex;
@@ -70,19 +38,19 @@ export const SettingsList: FC<SettingsListProps> = React.memo(
   ({ items, loading }) => {
     // TODO handle loading
     return (
-      <SettingsListBlock>
+      <ListBlock>
         {items.map((item) => (
-          <SettingsListItem key={item.name} onClick={() => item.action(item)}>
-            <ItemPayload>
+          <ListItem key={item.name} onClick={() => item.action(item)}>
+            <ListItemPayload>
               <span>
                 <Label1>{item.name}</Label1>
                 {item.secondary && <Secondary>{item.secondary}</Secondary>}
               </span>
               <Icon color={item.iconColor}>{item.icon}</Icon>
-            </ItemPayload>
-          </SettingsListItem>
+            </ListItemPayload>
+          </ListItem>
         ))}
-      </SettingsListBlock>
+      </ListBlock>
     );
   }
 );

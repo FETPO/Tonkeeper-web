@@ -23,9 +23,14 @@
     "message": "Settings",
     "description": "Settings footer button"
   },
+
   "Subscriptions": {
     "message": "Subscriptions",
     "description": "Subscriptions settings button"
+  },
+  "Manage_wallets": {
+    "message": "Manage wallets",
+    "description": "Manage wallets settings button"
   },
   "Recovery_phrase": {
     "message": "Recovery phrase",
@@ -267,6 +272,18 @@
   "Open": {
     "message": "Open",
     "description": "Open button"
+  },
+  "Toncoin": {
+    "message": "Toncoin",
+    "description": "Toncoin currency"
+  },
+  "Set_up_wallet": {
+    "message": "Set up wallet",
+    "description": "Set up wallet button in header"
+  },
+  "Manage": {
+    "message": "Manage",
+    "description": "Manage button in header"
   },
   "Terms_Of_Use": {
     "message": "Terms Of Use",

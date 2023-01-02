@@ -9,11 +9,7 @@ import { useAppContext } from '../../hooks/appContext';
 import { useFormattedBalance, useFormattedPrice } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { ToncoinIcon } from '../Icon';
-import {
-  ItemPayload,
-  SettingsListBlock,
-  SettingsListItem,
-} from '../settings/SettingsList';
+import { ListBlock, ListItem, ListItemPayload } from '../List';
 import { Body2, Label1 } from '../Text';
 
 export interface AssetProps {
@@ -47,8 +43,8 @@ export const TonAsset: FC<{ info: AccountRepr | undefined }> = ({ info }) => {
   const price = useFormattedPrice(fiat, tonPrice, 0);
 
   return (
-    <SettingsListItem>
-      <ItemPayload>
+    <ListItem>
+      <ListItemPayload>
         <Description>
           <ToncoinIcon />
           <Text>
@@ -60,8 +56,8 @@ export const TonAsset: FC<{ info: AccountRepr | undefined }> = ({ info }) => {
           <Label1>{balance}</Label1>
           <Body>{fiatAmount}</Body>
         </Text>
-      </ItemPayload>
-    </SettingsListItem>
+      </ListItemPayload>
+    </ListItem>
   );
 };
 
@@ -80,8 +76,8 @@ export const JettonAsset: FC<{ jetton: JettonBalance }> = ({ jetton }) => {
   );
 
   return (
-    <SettingsListItem>
-      <ItemPayload>
+    <ListItem>
+      <ListItemPayload>
         <Description>
           <Logo src={jetton.metadata?.image} />
           <Label1>{jetton.metadata?.name}</Label1>
@@ -90,18 +86,18 @@ export const JettonAsset: FC<{ jetton: JettonBalance }> = ({ jetton }) => {
         <Text>
           <Label1>{balance}</Label1>
         </Text>
-      </ItemPayload>
-    </SettingsListItem>
+      </ListItemPayload>
+    </ListItem>
   );
 };
 
 export const Assets: FC<AssetProps> = ({ info, jettons }) => {
   return (
-    <SettingsListBlock>
+    <ListBlock>
       <TonAsset info={info} />
       {(jettons?.balances ?? []).map((jetton) => (
         <JettonAsset key={jetton.jettonAddress} jetton={jetton} />
       ))}
-    </SettingsListBlock>
+    </ListBlock>
   );
 };

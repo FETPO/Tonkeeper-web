@@ -2,8 +2,8 @@ import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useTranslation } from '../../hooks/translation';
+import { ListBlock } from '../List';
 import { Notification } from '../Notification';
-import { SettingsListBlock } from '../settings/SettingsList';
 import { H2, Label2 } from '../Text';
 import { Action } from './Actions';
 import { BuyItem, BuyItemNotification } from './BuyItemNotification';
@@ -57,11 +57,11 @@ const BuyList: FC<{ items: BuyItem[]; kind: 'buy' | 'sell' }> = ({
   kind,
 }) => {
   return (
-    <SettingsListBlock>
+    <ListBlock>
       {items.map((item) => (
         <BuyItemNotification key={item.title} item={item} kind={kind} />
       ))}
-    </SettingsListBlock>
+    </ListBlock>
   );
 };
 

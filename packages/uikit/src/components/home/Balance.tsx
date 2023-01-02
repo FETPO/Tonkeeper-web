@@ -1,5 +1,6 @@
 import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
 import { AccountRepr } from '@tonkeeper/core/dist/tonApi';
+import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useFormattedPrice } from '../../hooks/balance';
@@ -18,10 +19,6 @@ const Body = styled(Body2)`
 const Error = styled.div`
   height: 30px;
 `;
-
-const toShortAddress = (address: string, length = 4): string => {
-  return address.slice(0, length) + '....' + address.slice(-length);
-};
 
 export const Balance: FC<{
   address: string;

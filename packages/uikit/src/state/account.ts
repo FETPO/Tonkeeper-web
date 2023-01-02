@@ -26,3 +26,16 @@ export const useMutateAccountState = () => {
     await client.invalidateQueries([AppKey.account]);
   });
 };
+
+export const useMutateActiveWallet = () => {
+  const storage = useStorage();
+  const client = useQueryClient();
+  return useMutation<void, Error, string>(async (activeAddress) => {
+    let account = await getAccountState(storage);
+
+    account = { ...account, activeAddress };
+
+    await storage.set(AppKey.account, account);
+    await client.invalidateQueries([AppKey.account]);
+  });
+};

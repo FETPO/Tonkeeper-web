@@ -17,6 +17,7 @@ export enum SettingsRoute {
   theme = '/theme',
   dev = '/dev',
   fiat = '/fiat',
+  account = '/account',
 }
 
 export const any = (route: string): string => {

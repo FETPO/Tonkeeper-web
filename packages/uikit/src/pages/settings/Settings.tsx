@@ -8,16 +8,17 @@ import {
   RecoveryPhraseIcon,
   SecurityIcon,
   SubscriptionIcon,
-  ThemeIcon
+  ThemeIcon,
+  WalletsIcon,
 } from '../../components/settings/SettingsIcons';
 import {
   SettingsItem,
-  SettingsList
+  SettingsList,
 } from '../../components/settings/SettingsList';
 import { SettingsNetwork } from '../../components/settings/SettingsNetwork';
 import { SettingsSocialList } from '../../components/settings/SettingsSocialList';
 import { Title } from '../../components/Text';
-import { useAppContext } from '../../hooks/appContext';
+import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { relative, SettingsRoute } from '../../libs/routes';
 import { useUserThemes } from '../../state/theme';
@@ -26,15 +27,32 @@ export const Settings: FC = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  const { fiat } = useAppContext();
+  const { fiat, account } = useAppContext();
+  const wallet = useWalletContext();
   const { data: themes } = useUserThemes();
-  const mainItems = useMemo<SettingsItem[]>(() => {
+
+  const accountItems = useMemo(() => {
     const items: SettingsItem[] = [
       {
+        name: t('Manage_wallets'),
+        icon: <WalletsIcon />,
+        action: () => navigate(relative(SettingsRoute.account)),
+      },
+    ];
+
+    if (wallet.version === 'v4R2') {
+      items.push({
         name: t('Subscriptions'),
         icon: <SubscriptionIcon />,
         action: () => null,
-      },
+      });
+    }
+
+    return items;
+  }, [wallet, account, t]);
+
+  const mainItems = useMemo<SettingsItem[]>(() => {
+    const items: SettingsItem[] = [
       {
         name: t('Recovery_phrase'),
         icon: <RecoveryPhraseIcon />,
@@ -42,7 +60,7 @@ export const Settings: FC = () => {
       },
       {
         name: t('Active_address'),
-        icon: 'v4R2',
+        icon: wallet.version,
         action: () => null,
       },
       {
@@ -70,7 +88,7 @@ export const Settings: FC = () => {
       action: () => null,
     });
     return items;
-  }, [t, themes, navigate]);
+  }, [t, themes, navigate, wallet]);
 
   const secondaryItems = useMemo(() => {
     const items: SettingsItem[] = [
@@ -91,7 +109,7 @@ export const Settings: FC = () => {
     return items;
   }, [t, i18n.enable, navigate, fiat]);
 
-  const accountItems = useMemo(() => {
+  const deleteItems = useMemo(() => {
     return [
       {
         name: t('Delete_account'),
@@ -104,10 +122,11 @@ export const Settings: FC = () => {
   return (
     <>
       <Title>{t('Settings')}</Title>
+      <SettingsList items={accountItems} />
       <SettingsList items={mainItems} />
       <SettingsList items={secondaryItems} />
       <SettingsSocialList appPage="https://tonkeeper.com/" />
-      <SettingsList items={accountItems} />
+      <SettingsList items={deleteItems} />
       <SettingsNetwork version={process.env.REACT_APP_VERSION} />
     </>
   );

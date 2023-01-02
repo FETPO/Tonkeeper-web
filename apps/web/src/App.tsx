@@ -162,7 +162,7 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
               path="*"
               element={
                 <>
-                  <Header />
+                  <Header onImport={navigate} />
                   <Home />
                 </>
               }
