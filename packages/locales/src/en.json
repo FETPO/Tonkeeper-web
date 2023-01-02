@@ -196,6 +196,14 @@
     "message": "Write down these 24 words in the order given below and store them in a secret, safe place.",
     "description": "Initialize screen Your recovery phrase description"
   },
+  "Enter_your_recovery_phrase": {
+    "message": "Enter your recovery phrase",
+    "description": "Initialize screen Enter your recovery phrase title"
+  },
+  "Enter_your_recovery_phrase_description": {
+    "message": "To restore access to your wallet, enter the 24 secret recovery words given to you when you created your wallet.",
+    "description": "Initialize screen Enter your recovery phrase description"
+  },
   "So_let_s_check": {
     "message": "So, let’s check",
     "description": "Initialize screen So, let’s check title"

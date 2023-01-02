@@ -1,6 +1,8 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { useTranslation } from '../../hooks/translation';
+import { AppRoute } from '../../libs/routes';
 import { Button } from '../Button';
 import { ChevronLeftIcon } from '../Icon';
 import { Body1, Body2, H2 } from '../Text';
@@ -209,6 +211,83 @@ export const Check: FC<{
         loading={isLoading}
         disabled={!isValid}
         onClick={onConfirm}
+      >
+        {t('Continue')}
+      </Button>
+    </>
+  );
+};
+
+const Inputs = styled.div`
+  display: grid;
+  grid-template-rows: repeat(12, minmax(0, 1fr));
+  grid-auto-flow: column;
+  gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-rows: repeat(24, minmax(0, 1fr));
+  }
+`;
+
+export const ImportWords: FC<{
+  isLoading: boolean;
+  onMnemonic: (mnemonic: string[]) => void;
+}> = ({ isLoading, onMnemonic }) => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const [mnemonic, setMnemonic] = useState<string[]>(Array(24).fill(''));
+
+  const onChange = useCallback((newValue: string, index: number) => {
+    if (newValue.includes(' ')) {
+      let values = newValue.split(' ');
+      const max = Math.min(24 - index, values.length);
+      values = values.slice(0, max);
+      return setMnemonic((items) => {
+        items = [...items];
+        items.splice(index, max, ...values);
+        return items;
+      });
+    } else {
+      return setMnemonic((items) =>
+        items.map((v, i) => (i === index ? newValue : v))
+      );
+    }
+  }, []);
+
+  const isValid = useMemo(
+    () => mnemonic.length === 24 && mnemonic.every((item) => item != ''),
+    [mnemonic]
+  );
+
+  return (
+    <>
+      <Block>
+        <BackButton onClick={() => navigate(AppRoute.home)}>
+          <ChevronLeftIcon />
+        </BackButton>
+        <H2>{t('Enter_your_recovery_phrase')}</H2>
+        <Body>{t('Enter_your_recovery_phrase_description')}</Body>
+      </Block>
+
+      <Inputs>
+        {mnemonic.map((item, index) => (
+          <WordInput
+            key={index}
+            value={item}
+            test={index + 1}
+            valid={item}
+            onChange={(newValue) => onChange(newValue, index)}
+          />
+        ))}
+      </Inputs>
+      <Button
+        size="large"
+        fullWith
+        primary
+        disabled={!isValid}
+        loading={isLoading}
+        onClick={() => onMnemonic(mnemonic)}
       >
         {t('Continue')}
       </Button>

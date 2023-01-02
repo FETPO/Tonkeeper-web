@@ -14,7 +14,9 @@ import { useTranslation } from '../../hooks/translation';
 const Block = styled.div<{ fullHeight: boolean }>`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 2rem 0;
+  box-sizing: border-box;
 
   ${(props) =>
     props.fullHeight
