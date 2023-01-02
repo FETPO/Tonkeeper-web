@@ -11,7 +11,7 @@ export const useJettonsInfo = () => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
   return useQuery<JettonsBalances, Error>(
-    [wallet.address, AppKey.jettions],
+    [wallet.address, AppKey.jettons],
     async () => {
       const result = await new JettonApi(tonApi).getJettonsBalances({
         account: wallet.address,

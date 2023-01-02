@@ -1,15 +1,29 @@
 import styled, { css } from 'styled-components';
 
-export const ListBlock = styled.div`
+export const ListBlock = styled.div<{ margin?: boolean }>`
   display: flex;
   flex-direction: column;
 
   background: ${(props) => props.theme.backgroundContent};
   padding: 0;
-  margin: 1rem 0 2rem;
+
+  ${(props) =>
+    props.margin !== false
+      ? css`
+          margin: 1rem 0 2rem;
+        `
+      : undefined}
 
   border-radius: ${(props) => props.theme.cornerMedium};
-  overflow: hidden;
+
+  > div:first-child {
+    border-top-right-radius: ${(props) => props.theme.cornerMedium};
+    border-top-left-radius: ${(props) => props.theme.cornerMedium};
+  }
+  > div:last-child {
+    border-bottom-right-radius: ${(props) => props.theme.cornerMedium};
+    border-bottom-left-radius: ${(props) => props.theme.cornerMedium};
+  }
 `;
 
 export const ListItemPayload = styled.div`
@@ -33,7 +47,7 @@ export const ListItem = styled.div<{ hover?: boolean }>`
         `
       : undefined}
 
-  + * ${ListItemPayload} {
+  & + & ${ListItemPayload} {
     border-top: 1px solid ${(props) => props.theme.separatorCommon};
   }
 `;

@@ -10,7 +10,7 @@ import { useMutateActiveWallet } from '../state/account';
 import { ImportNotification } from './create/ImportNotification';
 import { DropDown } from './DropDown';
 import { CheckIcon, DownIcon, PlusIcon, SettingsIcon } from './Icon';
-import { ColumnText } from './Layout';
+import { ColumnText, Divider } from './Layout';
 import { ListItem, ListItemPayload } from './List';
 import { Body2, H3, Label1 } from './Text';
 
@@ -94,12 +94,6 @@ const WalletRow: FC<{
     </ListItem>
   );
 };
-
-const Divider = styled.div`
-  height: 8px;
-  width: 100%;
-  background: ${(props) => props.theme.backgroundOverlayExtraLight};
-`;
 
 const DropDownPayload: FC<{ onClose: () => void; onCreate: () => void }> = ({
   onClose,

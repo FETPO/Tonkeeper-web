@@ -360,5 +360,13 @@
   "Unknown_COIN": {
     "message": "Unknown COIN",
     "description": "Label for missing jettons names"
+  },
+  "Rename": {
+    "message": "Rename",
+    "description": "Rename settings button"
+  },
+  "Show_recovery_phrase": {
+    "message": "Show recovery phrase",
+    "description": "Show recovery phrase settings button"
   }
 }
