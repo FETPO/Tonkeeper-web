@@ -14,3 +14,9 @@ export const OnImportAction = React.createContext<(path: string) => void>(
 export const useOnImportAction = () => {
   return useContext(OnImportAction);
 };
+
+export const AfterImportAction = React.createContext<() => void>(console.log);
+
+export const useAfterImportAction = () => {
+  return useContext(AfterImportAction);
+};

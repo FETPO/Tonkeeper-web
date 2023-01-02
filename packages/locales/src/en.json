@@ -336,5 +336,17 @@
   "You_are_opening_an_external_app": {
     "message": "You are opening an external app not operated by Tonkeeper",
     "description": "You are opening an external app disclaimer"
+  },
+  "Log_out_description": {
+    "message": "Wallet keys will be erased from this device.",
+    "description": "Log out description"
+  },
+  "I_have_a_backup_copy_of_recovery_phrase": {
+    "message": "I have a backup copy of recovery phrase",
+    "description": "Dangerous notification for clear actions"
+  },
+  "Back_up_now": {
+    "message": "Back up now",
+    "description": "Back up now button label"
   }
 }

@@ -8,4 +8,5 @@ export interface WalletState {
   version: WalletVersion;
   name?: string;
   assets?: string[];
+  tonkeeperId: string;
 }

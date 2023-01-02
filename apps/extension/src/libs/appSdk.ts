@@ -31,6 +31,10 @@ export class ExtensionAppSdk implements IAppSdk {
     });
   }
 
+  closeExtensionInBrowser = () => {
+    window.close();
+  };
+
   openExtensionInBrowser = async (
     route: string | null = null,
     queryString: string | null = null

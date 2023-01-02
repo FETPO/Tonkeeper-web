@@ -65,7 +65,7 @@ const CheckboxBlock = styled.span`
   margin: 1rem 0;
   display: flex;
 `;
-const DisclaimerBlock = styled.div`
+export const DisclaimerBlock = styled.div`
   padding: 1rem;
   box-sizing: border-box;
   display: flex;
@@ -77,7 +77,7 @@ const DisclaimerBlock = styled.div`
   border-radius: ${(props) => props.theme.cornerSmall};
 `;
 
-const DisclaimerText = styled(Label2)`
+export const DisclaimerText = styled(Label2)`
   display: block;
 `;
 
@@ -170,23 +170,25 @@ export const BuyItemNotification: FC<{
         </ListItemPayload>
       </ListItem>
       <Notification isOpen={open} handleClose={() => setOpen(false)}>
-        <NotificationBlock>
-          <Logo large src={item.logo} />
-          <H2>{item.title}</H2>
-          <Body>{t(item.description)}</Body>
-          <Disclaimer
-            privacyPolicy={item.privacyPolicy}
-            termsOfUse={item.termsOfUse}
-          />
-          <Button size="large" fullWith primary onClick={onForceOpen}>
-            {t('Open')} {item.title}
-          </Button>
-          <CheckboxBlock>
-            <Checkbox checked={!!hided} onChange={mutate}>
-              {t('Do_not_show_again')}
-            </Checkbox>
-          </CheckboxBlock>
-        </NotificationBlock>
+        {() => (
+          <NotificationBlock>
+            <Logo large src={item.logo} />
+            <H2>{item.title}</H2>
+            <Body>{t(item.description)}</Body>
+            <Disclaimer
+              privacyPolicy={item.privacyPolicy}
+              termsOfUse={item.termsOfUse}
+            />
+            <Button size="large" fullWith primary onClick={onForceOpen}>
+              {t('Open')} {item.title}
+            </Button>
+            <CheckboxBlock>
+              <Checkbox checked={!!hided} onChange={mutate}>
+                {t('Do_not_show_again')}
+              </Checkbox>
+            </CheckboxBlock>
+          </NotificationBlock>
+        )}
       </Notification>
     </>
   );

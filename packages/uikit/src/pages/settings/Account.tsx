@@ -31,7 +31,7 @@ export const Account = () => {
       <SubHeader title={t('Manage_wallets')} />
       <ListBlock>
         {account.wallets.map((item, index) => (
-          <ListItem>
+          <ListItem key={item.address}>
             <ListItemPayload>
               <ColumnText
                 text={wallet.name ? wallet.name : `${t('Wallet')} ${index + 1}`}

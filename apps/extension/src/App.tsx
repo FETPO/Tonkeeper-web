@@ -10,6 +10,7 @@ import {
   WalletStateContext,
 } from '@tonkeeper/uikit/dist/hooks/appContext';
 import {
+  AfterImportAction,
   AppSdkContext,
   OnImportAction,
 } from '@tonkeeper/uikit/dist/hooks/appSdk';
@@ -118,9 +119,11 @@ export const Loader: FC = React.memo(() => {
 
   return (
     <OnImportAction.Provider value={sdk.openExtensionInBrowser}>
-      <AppContext.Provider value={context}>
-        <Content account={account} />
-      </AppContext.Provider>
+      <AfterImportAction.Provider value={sdk.closeExtensionInBrowser}>
+        <AppContext.Provider value={context}>
+          <Content account={account} />
+        </AppContext.Provider>
+      </AfterImportAction.Provider>
     </OnImportAction.Provider>
   );
 });
@@ -145,7 +148,7 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
 
   const activeWallet = useMemo(() => {
     const wallet = account.wallets.find(
-      (item) => item.address === account.activeAddress
+      (item) => item.tonkeeperId === account.activeWallet
     );
     return wallet;
   }, [account]);

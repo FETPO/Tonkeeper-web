@@ -18,6 +18,7 @@ const SettingsRouter = () => {
       <Route path={SettingsRoute.dev} element={<DevSettings />} />
       <Route path={SettingsRoute.fiat} element={<FiatCurrency />} />
       <Route path={SettingsRoute.account} element={<Account />} />
+      <Route path={SettingsRoute.recovery} element={<>Recovery</>} />
       <Route path="*" element={<Settings />} />
     </Routes>
   );

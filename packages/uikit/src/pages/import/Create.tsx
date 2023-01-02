@@ -12,7 +12,7 @@ import { Check, Worlds } from '../../components/create/Words';
 import { CheckMarkIcon, GearIcon, WriteIcon } from '../../components/Icon';
 import { IconPage } from '../../components/Layout';
 import { useAppContext } from '../../hooks/appContext';
-import { useAppSdk } from '../../hooks/appSdk';
+import { useAfterImportAction, useAppSdk } from '../../hooks/appSdk';
 import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
 import { getAccountState } from '../../state/account';
@@ -73,6 +73,25 @@ const useAddWalletMutation = () => {
   );
 };
 
+const FinalView = () => {
+  const { t } = useTranslation();
+  const afterImport = useAfterImportAction();
+
+  useEffect(() => {
+    setTimeout(afterImport, 3000);
+  }, []);
+
+  return (
+    <IconPage
+      icon={
+        <Green>
+          <CheckMarkIcon />
+        </Green>
+      }
+      title={t('Congratulations_You_ve_set_up_your_wallet')}
+    />
+  );
+};
 export const Create = () => {
   const { t } = useTranslation();
 
@@ -195,14 +214,5 @@ export const Create = () => {
     );
   }
 
-  return (
-    <IconPage
-      icon={
-        <Green>
-          <CheckMarkIcon />
-        </Green>
-      }
-      title={t('Congratulations_You_ve_set_up_your_wallet')}
-    />
-  );
+  return <FinalView />;
 };

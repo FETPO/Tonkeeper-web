@@ -1,5 +1,5 @@
 import { Address, WalletContractV4 } from 'ton';
-import { KeyPair, mnemonicToPrivateKey } from 'ton-crypto';
+import { KeyPair, mnemonicToPrivateKey, sha512 } from 'ton-crypto';
 import { WalletState, WalletVersion } from '../entries/wallet';
 import { Configuration, WalletApi } from '../tonApi';
 import { encrypt } from './cryptoService';
@@ -9,6 +9,7 @@ export const importWallet = async (
   mnemonic: string[],
   password: string
 ): Promise<WalletState> => {
+  const tonkeeperId = (await sha512(mnemonic.join(' '))).toString();
   const encryptedMnemonic = await encrypt(mnemonic.join(' '), password);
   const keyPair = await mnemonicToPrivateKey(mnemonic);
   const [version, address] = await findContract(tonApiConfig, keyPair);
@@ -19,6 +20,7 @@ export const importWallet = async (
     address: address.toRawString(),
     publicKey: keyPair.publicKey.toString('hex'),
     version,
+    tonkeeperId,
   };
 };
 

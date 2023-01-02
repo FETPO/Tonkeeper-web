@@ -18,6 +18,7 @@ export enum SettingsRoute {
   dev = '/dev',
   fiat = '/fiat',
   account = '/account',
+  recovery = '/recovery',
 }
 
 export const any = (route: string): string => {

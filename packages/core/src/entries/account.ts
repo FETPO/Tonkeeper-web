@@ -2,7 +2,7 @@ import { WalletState } from './wallet';
 
 export interface AccountState {
   wallets: WalletState[];
-  activeAddress?: string;
+  activeWallet?: string;
 }
 
 export const defaultAccountState: AccountState = {

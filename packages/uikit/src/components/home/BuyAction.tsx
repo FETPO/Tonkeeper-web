@@ -88,17 +88,21 @@ export const BuyAction = () => {
         action={() => setOpen(true)}
       />
       <Notification isOpen={open} handleClose={() => setOpen(false)}>
-        <div>
-          <H2>{t('Buy_TON')}</H2>
-          <BuyList items={buyItems} kind="buy" />
-          <H2>{t('Sell_TON')}</H2>
-          <BuyList items={sellItems} kind="sell" />
-          <OtherBlock>
-            <OtherLink onClick={() => sdk.openPage('https://t.me/toncoin/576')}>
-              {t('Other_ways_to_buy_or_sell_TON')}
-            </OtherLink>
-          </OtherBlock>
-        </div>
+        {() => (
+          <div>
+            <H2>{t('Buy_TON')}</H2>
+            <BuyList items={buyItems} kind="buy" />
+            <H2>{t('Sell_TON')}</H2>
+            <BuyList items={sellItems} kind="sell" />
+            <OtherBlock>
+              <OtherLink
+                onClick={() => sdk.openPage('https://t.me/toncoin/576')}
+              >
+                {t('Other_ways_to_buy_or_sell_TON')}
+              </OtherLink>
+            </OtherBlock>
+          </div>
+        )}
       </Notification>
     </>
   );

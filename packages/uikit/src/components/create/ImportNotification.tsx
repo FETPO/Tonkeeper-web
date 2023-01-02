@@ -33,45 +33,39 @@ export const ImportNotification: FC<{
 
   return (
     <Notification isOpen={isOpen} handleClose={() => setOpen(false)}>
-      <div>
-        <IconBlock>
-          <TonkeeperIcon />
-        </IconBlock>
-        <TextBlock>
-          <H2>{t('Let_s_set_up_your_wallet')}</H2>
-          <BodyText>{t('Let_s_set_up_your_wallet_description')}</BodyText>
-        </TextBlock>
-        <Button
-          size="large"
-          fullWith
-          primary
-          bottom
-          onClick={() => {
-            setOpen(false);
-            setTimeout(
-              () => onImport(AppRoute.import + ImportRoute.create),
-              300
-            );
-          }}
-        >
-          {t('Create_new_wallet')}
-        </Button>
-        <Button
-          size="large"
-          fullWith
-          secondary
-          bottom
-          onClick={() => {
-            setOpen(false);
-            setTimeout(
-              () => onImport(AppRoute.import + ImportRoute.import),
-              300
-            );
-          }}
-        >
-          {t('Import_existing_wallet')}
-        </Button>
-      </div>
+      {(onClose) => (
+        <div>
+          <IconBlock>
+            <TonkeeperIcon />
+          </IconBlock>
+          <TextBlock>
+            <H2>{t('Let_s_set_up_your_wallet')}</H2>
+            <BodyText>{t('Let_s_set_up_your_wallet_description')}</BodyText>
+          </TextBlock>
+          <Button
+            size="large"
+            fullWith
+            primary
+            bottom
+            onClick={() => {
+              onClose(() => onImport(AppRoute.import + ImportRoute.create));
+            }}
+          >
+            {t('Create_new_wallet')}
+          </Button>
+          <Button
+            size="large"
+            fullWith
+            secondary
+            bottom
+            onClick={() => {
+              onClose(() => onImport(AppRoute.import + ImportRoute.import));
+            }}
+          >
+            {t('Import_existing_wallet')}
+          </Button>
+        </div>
+      )}
     </Notification>
   );
 };

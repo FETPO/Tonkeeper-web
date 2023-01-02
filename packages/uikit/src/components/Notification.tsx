@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 import { Container } from '../styles/globalStyle';
@@ -76,9 +76,11 @@ const Content = styled.div`
   box-sizing: border-box;
 `;
 
-export const Notification: FC<
-  PropsWithChildren<{ isOpen: boolean; handleClose: () => void }>
-> = ({ children, isOpen, handleClose }) => {
+export const Notification: FC<{
+  isOpen: boolean;
+  handleClose: () => void;
+  children: (afterClose: (action: () => void) => void) => React.ReactNode;
+}> = ({ children, isOpen, handleClose }) => {
   const nodeRef = useRef(null);
   useEffect(() => {
     const closeOnEscapeKey = (e: KeyboardEvent) =>
@@ -88,6 +90,11 @@ export const Notification: FC<
       document.body.removeEventListener('keydown', closeOnEscapeKey);
     };
   }, [handleClose]);
+
+  const Child = children((afterClose: () => void) => {
+    setTimeout(() => afterClose(), 300);
+    handleClose();
+  });
 
   return (
     <ReactPortal wrapperId="react-portal-modal-container">
@@ -106,7 +113,7 @@ export const Notification: FC<
                   <CloseIcon />
                 </CloseButton>
               </ButtonContainer>
-              {children}
+              {Child}
             </Content>
           </Wrapper>
         </Splash>

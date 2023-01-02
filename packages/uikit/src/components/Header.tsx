@@ -76,7 +76,7 @@ const WalletRow: FC<{
   return (
     <ListItem
       onClick={() => {
-        mutate(wallet.address);
+        mutate(wallet.tonkeeperId);
         onClose();
       }}
     >
@@ -85,7 +85,7 @@ const WalletRow: FC<{
           text={wallet.name ? wallet.name : `${t('Wallet')} ${index + 1}`}
           secondary={toShortAddress(wallet.address)}
         />
-        {activeWallet === wallet.address ? (
+        {activeWallet === wallet.tonkeeperId ? (
           <Icon>
             <CheckIcon />
           </Icon>
@@ -130,7 +130,7 @@ const DropDownPayload: FC<{ onClose: () => void; onCreate: () => void }> = ({
           <WalletRow
             key={wallet.address}
             wallet={wallet}
-            activeWallet={account.activeAddress}
+            activeWallet={account.activeWallet}
             index={index}
             onClose={onClose}
           />

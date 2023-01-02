@@ -30,12 +30,21 @@ export const useMutateAccountState = () => {
 export const useMutateActiveWallet = () => {
   const storage = useStorage();
   const client = useQueryClient();
-  return useMutation<void, Error, string>(async (activeAddress) => {
+  return useMutation<void, Error, string>(async (activeWallet) => {
     let account = await getAccountState(storage);
 
-    account = { ...account, activeAddress };
+    account = { ...account, activeWallet };
 
     await storage.set(AppKey.account, account);
     await client.invalidateQueries([AppKey.account]);
+  });
+};
+
+export const useMutateLogOut = () => {
+  const storage = useStorage();
+  const client = useQueryClient();
+  return useMutation<void, Error, void>(async () => {
+    await storage.clear();
+    await client.invalidateQueries();
   });
 };

@@ -7,6 +7,6 @@ export const appendWallet = (
 ): AccountState => {
   return {
     wallets: account.wallets.concat([wallet]),
-    activeAddress: wallet.address,
+    activeWallet: wallet.tonkeeperId,
   };
 };
