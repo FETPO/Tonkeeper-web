@@ -4,10 +4,13 @@ import {
   AccountApi,
   AccountRepr,
   Configuration,
+  JettonApi,
+  JettonsBalances,
 } from '@tonkeeper/core/dist/tonApi';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Action, ActionsRow } from '../../components/home/Actions';
+import { Assets } from '../../components/home/Assets';
 import { Balance } from '../../components/home/Balance';
 import { BuyAction } from '../../components/home/BuyAction';
 import { ReceiveIcon, SendIcon } from '../../components/home/HomeIcons';
@@ -20,19 +23,29 @@ const useAccountInfo = (tonApi: Configuration, account: string) => {
   });
 };
 
+const useJettonsInfo = (tonApi: Configuration, account: string) => {
+  return useQuery<JettonsBalances, Error>(
+    [account, AppKey.balance],
+    async () => {
+      return await new JettonApi(tonApi).getJettonsBalances({ account });
+    }
+  );
+};
+
 export const Home = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const wallet = useWalletContext();
   const { tonApi, fiat } = useAppContext();
 
-  const { data, error } = useAccountInfo(tonApi, wallet.address);
+  const { data: info, error } = useAccountInfo(tonApi, wallet.address);
+  const { data: jettons } = useJettonsInfo(tonApi, wallet.address);
 
   return (
     <>
       <Balance
         address={wallet.address}
-        info={data}
+        info={info}
         error={error}
         currency={fiat}
       />
@@ -45,6 +58,7 @@ export const Home = () => {
           action={() => null}
         />
       </ActionsRow>
+      <Assets info={info} jettons={jettons} />
     </>
   );
 };

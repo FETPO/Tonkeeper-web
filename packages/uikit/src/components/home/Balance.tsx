@@ -1,10 +1,8 @@
-import {
-  FiatCurrencies,
-  FiatCurrencySymbolsConfig,
-} from '@tonkeeper/core/dist/entries/fiat';
+import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
 import { AccountRepr } from '@tonkeeper/core/dist/tonApi';
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
+import { useFormattedPrice } from '../../hooks/balance';
 import { Body2, Title } from '../Text';
 
 const Block = styled.div`
@@ -31,18 +29,7 @@ export const Balance: FC<{
   info?: AccountRepr | undefined;
   error?: Error | null;
 }> = ({ address, currency, info, error }) => {
-  const balance = useMemo(() => {
-    const config = FiatCurrencySymbolsConfig[currency];
-    console.log(config, currency);
-    const balanceFormat = new Intl.NumberFormat(config.numberFormat, {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-      style: 'currency',
-      currency: currency,
-    });
-
-    return info?.balance !== undefined ? balanceFormat.format(123123.123) : '-';
-  }, [info, currency]);
+  const balance = useFormattedPrice(currency, 123123123123123);
 
   return (
     <Block>
