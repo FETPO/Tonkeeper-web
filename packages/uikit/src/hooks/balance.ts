@@ -58,6 +58,24 @@ export const parseCoinValue = (
   return ethunit.toWei(amount, format);
 };
 
+export const useCoinBalance = (
+  currency: FiatCurrencies,
+  balance?: number | string,
+  decimals?: number
+) => {
+  return useMemo(() => {
+    const config = FiatCurrencySymbolsConfig[currency];
+    const balanceFormat = new Intl.NumberFormat(config.numberFormat, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: decimals ?? 9,
+    });
+
+    return balance !== undefined
+      ? balanceFormat.format(formatAmountValue(String(balance), decimals))
+      : '-';
+  }, [currency, balance, decimals]);
+};
+
 export const useFormattedBalance = (
   currency: FiatCurrencies,
   balance?: number | string,

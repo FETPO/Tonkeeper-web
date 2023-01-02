@@ -6,9 +6,14 @@ import {
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useAppContext } from '../../hooks/appContext';
-import { useFormattedBalance, useFormattedPrice } from '../../hooks/balance';
+import {
+  useCoinBalance,
+  useFormattedBalance,
+  useFormattedPrice,
+} from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { ToncoinIcon } from '../Icon';
+import { ColumnText } from '../Layout';
 import { ListBlock, ListItem, ListItemPayload } from '../List';
 import { Body2, Label1 } from '../Text';
 
@@ -20,6 +25,7 @@ export interface AssetProps {
 const Description = styled.div`
   display: flex;
   gap: 1rem;
+  align-items: center;
 `;
 
 const Text = styled.div`
@@ -69,7 +75,7 @@ const Logo = styled.img`
 export const JettonAsset: FC<{ jetton: JettonBalance }> = ({ jetton }) => {
   const { fiat } = useAppContext();
 
-  const balance = useFormattedBalance(
+  const balance = useCoinBalance(
     fiat,
     jetton?.balance,
     jetton.metadata?.decimals
@@ -80,12 +86,11 @@ export const JettonAsset: FC<{ jetton: JettonBalance }> = ({ jetton }) => {
       <ListItemPayload>
         <Description>
           <Logo src={jetton.metadata?.image} />
-          <Label1>{jetton.metadata?.name}</Label1>
-          <Body>{jetton.metadata?.symbol}</Body>
+          <ColumnText
+            text={jetton.metadata?.name ?? 'Unknown COIN'}
+            secondary={`${balance} ${jetton.metadata?.symbol}`}
+          />
         </Description>
-        <Text>
-          <Label1>{balance}</Label1>
-        </Text>
       </ListItemPayload>
     </ListItem>
   );
