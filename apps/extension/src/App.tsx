@@ -9,7 +9,10 @@ import {
   AppContext,
   WalletStateContext,
 } from '@tonkeeper/uikit/dist/hooks/appContext';
-import { AppSdkContext } from '@tonkeeper/uikit/dist/hooks/appSdk';
+import {
+  AppSdkContext,
+  OnImportAction,
+} from '@tonkeeper/uikit/dist/hooks/appSdk';
 import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
 import {
   I18nContext,
@@ -114,9 +117,11 @@ export const Loader: FC = React.memo(() => {
   };
 
   return (
-    <AppContext.Provider value={context}>
-      <Content account={account} />
-    </AppContext.Provider>
+    <OnImportAction.Provider value={sdk.openExtensionInBrowser}>
+      <AppContext.Provider value={context}>
+        <Content account={account} />
+      </AppContext.Provider>
+    </OnImportAction.Provider>
   );
 });
 
@@ -161,7 +166,7 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
             path="*"
             element={
               <InitializeContainer>
-                <Initialize onImport={sdk.openExtensionInBrowser} />
+                <Initialize />
               </InitializeContainer>
             }
           />

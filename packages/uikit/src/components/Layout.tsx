@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { Body2, H2 } from './Text';
+import { Body2, H2, Label1 } from './Text';
 
 export const Gap = styled.div`
   flex-grow: 1;
@@ -33,5 +33,27 @@ export const IconPage: FC<{
       </Block>
       {button}
     </>
+  );
+};
+
+const Text = styled.div`
+  display: flex;
+  flex-direction: column;
+  pap: 0.25rem;
+`;
+
+const Secondary = styled(Body2)`
+  color: ${(props) => props.theme.textSecondary};
+`;
+
+export const ColumnText: FC<{ text: string; secondary: string }> = ({
+  text,
+  secondary,
+}) => {
+  return (
+    <Text>
+      <Label1>{text}</Label1>
+      <Secondary>{secondary}</Secondary>
+    </Text>
   );
 };

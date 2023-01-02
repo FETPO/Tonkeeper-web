@@ -10,6 +10,7 @@ import { useMutateActiveWallet } from '../state/account';
 import { ImportNotification } from './create/ImportNotification';
 import { DropDown } from './DropDown';
 import { CheckIcon, DownIcon, PlusIcon, SettingsIcon } from './Icon';
+import { ColumnText } from './Layout';
 import { ListItem, ListItemPayload } from './List';
 import { Body2, H3, Label1 } from './Text';
 
@@ -80,12 +81,10 @@ const WalletRow: FC<{
       }}
     >
       <ListItemPayload>
-        <Text>
-          <Label1>
-            {wallet.name ? wallet.name : `${t('Wallet')} ${index + 1}`}
-          </Label1>
-          <Body>{toShortAddress(wallet.address)}</Body>
-        </Text>
+        <ColumnText
+          text={wallet.name ? wallet.name : `${t('Wallet')} ${index + 1}`}
+          secondary={toShortAddress(wallet.address)}
+        />
         {activeWallet === wallet.address ? (
           <Icon>
             <CheckIcon />
@@ -153,9 +152,7 @@ const DropDownPayload: FC<{ onClose: () => void; onCreate: () => void }> = ({
   }
 };
 
-export const Header: FC<{ onImport: (path: string) => void }> = ({
-  onImport,
-}) => {
+export const Header = () => {
   const { t } = useTranslation();
   const wallet = useWalletContext();
   const [isOpen, setOpen] = useState(false);
@@ -174,11 +171,7 @@ export const Header: FC<{ onImport: (path: string) => void }> = ({
           </DownIconWrapper>
         </Title>
       </DropDown>
-      <ImportNotification
-        isOpen={isOpen}
-        setOpen={setOpen}
-        onImport={onImport}
-      />
+      <ImportNotification isOpen={isOpen} setOpen={setOpen} />
     </Block>
   );
 };

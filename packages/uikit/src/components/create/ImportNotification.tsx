@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { useOnImportAction } from '../../hooks/appSdk';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute, ImportRoute } from '../../libs/routes';
 import { Button } from '../Button';
@@ -26,9 +27,10 @@ const TextBlock = styled.div`
 export const ImportNotification: FC<{
   isOpen: boolean;
   setOpen: (value: boolean) => void;
-  onImport: (path: string) => void;
-}> = ({ isOpen, setOpen, onImport }) => {
+}> = ({ isOpen, setOpen }) => {
   const { t } = useTranslation();
+  const onImport = useOnImportAction();
+
   return (
     <Notification isOpen={isOpen} handleClose={() => setOpen(false)}>
       <div>

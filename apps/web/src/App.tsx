@@ -9,7 +9,10 @@ import {
   AppContext,
   WalletStateContext,
 } from '@tonkeeper/uikit/dist/hooks/appContext';
-import { AppSdkContext } from '@tonkeeper/uikit/dist/hooks/appSdk';
+import {
+  AppSdkContext,
+  OnImportAction,
+} from '@tonkeeper/uikit/dist/hooks/appSdk';
 import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
 import {
   I18nContext,
@@ -100,6 +103,8 @@ export const Loader: FC = () => {
   const { data: auth } = useAuthState();
   const { data: fiat } = useFiatCurrency();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (language && i18n.language !== language) {
       i18n
@@ -121,15 +126,16 @@ export const Loader: FC = () => {
   };
 
   return (
-    <AppContext.Provider value={context}>
-      <Content account={account} />
-    </AppContext.Provider>
+    <OnImportAction.Provider value={navigate}>
+      <AppContext.Provider value={context}>
+        <Content account={account} />
+      </AppContext.Provider>
+    </OnImportAction.Provider>
   );
 };
 
 export const Content: FC<{ account: AccountState }> = ({ account }) => {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const activeWallet = useMemo(() => {
     const wallet = account.wallets.find(
@@ -144,7 +150,7 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
         <InitializeContainer fullHeight={false}>
           <Routes>
             <Route path={any(AppRoute.import)} element={<ImportRouter />} />
-            <Route path="*" element={<Initialize onImport={navigate} />} />
+            <Route path="*" element={<Initialize />} />
           </Routes>
         </InitializeContainer>
       </Container>
@@ -162,7 +168,7 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
               path="*"
               element={
                 <>
-                  <Header onImport={navigate} />
+                  <Header />
                   <Home />
                 </>
               }

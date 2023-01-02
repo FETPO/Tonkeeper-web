@@ -6,3 +6,11 @@ export const AppSdkContext = React.createContext<IAppSdk>(new MockAppSdk());
 export const useAppSdk = () => {
   return useContext(AppSdkContext);
 };
+
+export const OnImportAction = React.createContext<(path: string) => void>(
+  console.log
+);
+
+export const useOnImportAction = () => {
+  return useContext(OnImportAction);
+};

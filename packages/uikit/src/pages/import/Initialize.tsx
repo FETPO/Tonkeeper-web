@@ -37,9 +37,7 @@ const Accent = styled.span`
   color: ${(props) => props.theme.accentBlue};
 `;
 
-export const Initialize: FC<{ onImport: (path: string) => void }> = ({
-  onImport,
-}) => {
+export const Initialize: FC = () => {
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
 
@@ -74,11 +72,7 @@ export const Initialize: FC<{ onImport: (path: string) => void }> = ({
       >
         {t('Get_started')}
       </Button>
-      <ImportNotification
-        isOpen={isOpen}
-        setOpen={setOpen}
-        onImport={onImport}
-      />
+      <ImportNotification isOpen={isOpen} setOpen={setOpen} />
     </>
   );
 };
