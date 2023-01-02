@@ -6,11 +6,7 @@ import {
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useAppContext } from '../../hooks/appContext';
-import {
-  useCoinBalance,
-  useFormattedBalance,
-  useFormattedPrice,
-} from '../../hooks/balance';
+import { useCoinBalance, useFormattedPrice } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { ToncoinIcon } from '../Icon';
 import { ColumnText } from '../Layout';
@@ -44,7 +40,7 @@ export const TonAsset: FC<{ info: AccountRepr | undefined }> = ({ info }) => {
   const { t } = useTranslation();
   const { fiat } = useAppContext();
 
-  const balance = useFormattedBalance(fiat, info?.balance);
+  const balance = useCoinBalance(fiat, info?.balance);
   const fiatAmount = useFormattedPrice(fiat, (info?.balance ?? 0) * tonPrice);
   const price = useFormattedPrice(fiat, tonPrice, 0);
 
@@ -55,12 +51,11 @@ export const TonAsset: FC<{ info: AccountRepr | undefined }> = ({ info }) => {
           <ToncoinIcon />
           <Text>
             <Label1>{t('Toncoin')}</Label1>
-            <Body>{price}</Body>
+            <Body>{balance} TON</Body>
           </Text>
         </Description>
         <Text>
-          <Label1>{balance}</Label1>
-          <Body>{fiatAmount}</Body>
+          <Label1>{fiatAmount}</Label1>
         </Text>
       </ListItemPayload>
     </ListItem>
@@ -73,6 +68,7 @@ const Logo = styled.img`
 `;
 
 export const JettonAsset: FC<{ jetton: JettonBalance }> = ({ jetton }) => {
+  const { t } = useTranslation();
   const { fiat } = useAppContext();
 
   const balance = useCoinBalance(
@@ -87,7 +83,7 @@ export const JettonAsset: FC<{ jetton: JettonBalance }> = ({ jetton }) => {
         <Description>
           <Logo src={jetton.metadata?.image} />
           <ColumnText
-            text={jetton.metadata?.name ?? 'Unknown COIN'}
+            text={jetton.metadata?.name ?? t('Unknown_COIN')}
             secondary={`${balance} ${jetton.metadata?.symbol}`}
           />
         </Description>

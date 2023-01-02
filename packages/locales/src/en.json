@@ -356,5 +356,9 @@
   "Back_up_now": {
     "message": "Back up now",
     "description": "Back up now button label"
+  },
+  "Unknown_COIN": {
+    "message": "Unknown COIN",
+    "description": "Label for missing jettons names"
   }
 }

@@ -4,6 +4,7 @@ import { SettingsRoute } from '../../libs/routes';
 import { Account } from './Account';
 import { DevSettings } from './Dev';
 import { FiatCurrency } from './FiatCurrency';
+import { JettonsSettings } from './Jettons';
 import { Legal } from './Legal';
 import { Localization } from './Localization';
 import { Settings } from './Settings';
@@ -21,6 +22,7 @@ const SettingsRouter = () => {
       <Route path={SettingsRoute.account} element={<Account />} />
       <Route path={SettingsRoute.recovery} element={<>Recovery</>} />
       <Route path={SettingsRoute.version} element={<WalletVersion />} />
+      <Route path={SettingsRoute.jettons} element={<JettonsSettings />} />
       <Route path="*" element={<Settings />} />
     </Routes>
   );

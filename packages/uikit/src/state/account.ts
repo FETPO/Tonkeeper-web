@@ -5,8 +5,10 @@ import {
 } from '@tonkeeper/core/dist/entries/account';
 import { WalletVersion } from '@tonkeeper/core/dist/entries/wallet';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
+import { updateWallet } from '@tonkeeper/core/dist/service/accountService';
 import { updateWalletVersion } from '@tonkeeper/core/dist/service/walletService';
 import { IStorage } from '@tonkeeper/core/dist/Storage';
+import { useWalletContext } from '../hooks/appContext';
 import { useStorage } from '../hooks/storage';
 
 export const getAccountState = async (storage: IStorage) => {
@@ -54,19 +56,11 @@ export const useMutateLogOut = () => {
 export const useMutateWalletVersion = () => {
   const storage = useStorage();
   const client = useQueryClient();
+  const wallet = useWalletContext();
   return useMutation<void, Error, WalletVersion>(async (version) => {
-    const { wallets, activeWallet } = await getAccountState(storage);
+    let account = await getAccountState(storage);
 
-    const account = {
-      wallets: wallets.map((item) => {
-        if (item.tonkeeperId === activeWallet) {
-          return updateWalletVersion(item, version);
-        } else {
-          return item;
-        }
-      }),
-      activeWallet,
-    };
+    account = updateWallet(account, updateWalletVersion(wallet, version));
 
     await storage.set(AppKey.account, account);
     await client.invalidateQueries([AppKey.account]);

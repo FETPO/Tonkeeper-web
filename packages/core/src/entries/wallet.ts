@@ -9,6 +9,6 @@ export interface WalletState {
   publicKey: string;
   version: WalletVersion;
   name?: string;
-  assets?: string[];
+  hiddenJettons?: string[];
   tonkeeperId: string;
 }

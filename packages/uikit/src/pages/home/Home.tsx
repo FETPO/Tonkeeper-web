@@ -1,11 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
+import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import {
   AccountApi,
   AccountRepr,
   Configuration,
-  JettonApi,
-  JettonsBalances,
 } from '@tonkeeper/core/dist/tonApi';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -16,18 +15,15 @@ import { BuyAction } from '../../components/home/BuyAction';
 import { ReceiveIcon, SendIcon } from '../../components/home/HomeIcons';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
+import { useUserJettonList } from '../../state/jetton';
 
-const useAccountInfo = (tonApi: Configuration, account: string) => {
-  return useQuery<AccountRepr, Error>([account, AppKey.balance], async () => {
-    return await new AccountApi(tonApi).getAccountInfo({ account });
-  });
-};
-
-const useJettonsInfo = (tonApi: Configuration, account: string) => {
-  return useQuery<JettonsBalances, Error>(
-    [account, AppKey.jettions],
+const useAccountInfo = (tonApi: Configuration, wallet: WalletState) => {
+  return useQuery<AccountRepr, Error>(
+    [wallet.address, AppKey.balance],
     async () => {
-      return await new JettonApi(tonApi).getJettonsBalances({ account });
+      return await new AccountApi(tonApi).getAccountInfo({
+        account: wallet.address,
+      });
     }
   );
 };
@@ -38,8 +34,8 @@ export const Home = () => {
   const wallet = useWalletContext();
   const { tonApi, fiat } = useAppContext();
 
-  const { data: info, error } = useAccountInfo(tonApi, wallet.address);
-  const { data: jettons } = useJettonsInfo(tonApi, wallet.address);
+  const { data: info, error } = useAccountInfo(tonApi, wallet);
+  const jettons = useUserJettonList();
 
   return (
     <>

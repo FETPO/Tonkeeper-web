@@ -20,6 +20,7 @@ export enum SettingsRoute {
   account = '/account',
   recovery = '/recovery',
   version = '/version',
+  jettons = '/jettons',
 }
 
 export const any = (route: string): string => {

@@ -47,7 +47,7 @@ const MainSettings = () => {
       {
         name: t('List_of_tokens'),
         icon: <ListOfTokensIcon />,
-        action: () => null,
+        action: () => navigate(relative(SettingsRoute.jettons)),
       },
       {
         name: t('Security'),

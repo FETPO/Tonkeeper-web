@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const ListBlock = styled.div`
   display: flex;
@@ -19,14 +19,19 @@ export const ListItemPayload = styled.div`
   justify-content: space-between;
   padding: 1rem 1rem 1rem 0;
 `;
-export const ListItem = styled.div`
+export const ListItem = styled.div<{ hover?: boolean }>`
   display: flex;
   padding: 0 0 0 1rem;
   cursor: pointer;
 
-  &:hover {
-    background: ${(props) => props.theme.backgroundContentTint};
-  }
+  ${(props) =>
+    props.hover !== false
+      ? css`
+          &:hover {
+            background: ${props.theme.backgroundContentTint};
+          }
+        `
+      : undefined}
 
   + * ${ListItemPayload} {
     border-top: 1px solid ${(props) => props.theme.separatorCommon};

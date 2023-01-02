@@ -10,3 +10,15 @@ export const appendWallet = (
     activeWallet: wallet.tonkeeperId,
   };
 };
+
+export const updateWallet = (
+  account: AccountState,
+  wallet: WalletState
+): AccountState => {
+  return {
+    wallets: account.wallets.map((item) =>
+      item.tonkeeperId === wallet.tonkeeperId ? wallet : item
+    ),
+    activeWallet: account.activeWallet,
+  };
+};

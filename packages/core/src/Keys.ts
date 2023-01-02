@@ -5,6 +5,6 @@ export enum AppKey {
   theme = 'theme',
   password = 'password',
   account = 'account',
-
   balance = 'balance',
+  jettons = 'jettons',
 }
