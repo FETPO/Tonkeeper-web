@@ -38,8 +38,8 @@ export const TonAsset: FC<{ info: AccountRepr | undefined }> = ({ info }) => {
   const { t } = useTranslation();
   const { fiat } = useAppContext();
 
-  const balance = useFormattedBalance(fiat, 1231231231231); //info?.balance);
-  const fiatAmount = useFormattedPrice(fiat, 1231231231231 * tonPrice);
+  const balance = useFormattedBalance(fiat, info?.balance);
+  const fiatAmount = useFormattedPrice(fiat, (info?.balance ?? 0) * tonPrice);
   const price = useFormattedPrice(fiat, tonPrice, 0);
 
   return (
@@ -62,7 +62,7 @@ export const TonAsset: FC<{ info: AccountRepr | undefined }> = ({ info }) => {
 };
 
 const Logo = styled.img`
-  width: 60px;
+  width: 44px;
   border-radius: ${(props) => props.theme.cornerFull};
 `;
 

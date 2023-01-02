@@ -25,7 +25,7 @@ const useAccountInfo = (tonApi: Configuration, account: string) => {
 
 const useJettonsInfo = (tonApi: Configuration, account: string) => {
   return useQuery<JettonsBalances, Error>(
-    [account, AppKey.balance],
+    [account, AppKey.jettions],
     async () => {
       return await new JettonApi(tonApi).getJettonsBalances({ account });
     }

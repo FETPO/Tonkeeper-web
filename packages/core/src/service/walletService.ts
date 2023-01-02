@@ -1,4 +1,9 @@
-import { Address, WalletContractV4 } from 'ton';
+import {
+  Address,
+  WalletContractV3R1,
+  WalletContractV3R2,
+  WalletContractV4,
+} from 'ton';
 import { KeyPair, mnemonicToPrivateKey, sha512 } from 'ton-crypto';
 import { WalletState, WalletVersion } from '../entries/wallet';
 import { Configuration, WalletApi } from '../tonApi';
@@ -54,4 +59,51 @@ const findContract = async (
     publicKey: keyPair.publicKey,
   });
   return ['v4R2', contact.address] as const;
+};
+
+export const getAddress = (
+  publicKey: Buffer,
+  version: WalletVersion,
+  raw = true
+) => {
+  switch (version) {
+    case 'v3R1': {
+      const contact = WalletContractV3R1.create({
+        workchain: 0,
+        publicKey,
+      });
+      return raw
+        ? contact.address.toRawString()
+        : contact.address.toString({ urlSafe: true, bounceable: true });
+    }
+    case 'v3R2': {
+      const contact = WalletContractV3R2.create({
+        workchain: 0,
+        publicKey,
+      });
+      return raw
+        ? contact.address.toRawString()
+        : contact.address.toString({ urlSafe: true, bounceable: true });
+    }
+    case 'v4R2': {
+      const contact = WalletContractV4.create({
+        workchain: 0,
+        publicKey,
+      });
+      return raw
+        ? contact.address.toRawString()
+        : contact.address.toString({ urlSafe: true, bounceable: true });
+    }
+  }
+};
+
+export const updateWalletVersion = (
+  wallet: WalletState,
+  version: WalletVersion
+): WalletState => {
+  return {
+    ...wallet,
+    version: version,
+    address: getAddress(Buffer.from(wallet.publicKey, 'hex'), version),
+  };
 };

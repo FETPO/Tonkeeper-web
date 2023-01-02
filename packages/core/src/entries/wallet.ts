@@ -1,4 +1,6 @@
-export type WalletVersion = 'v3R1' | 'v3R2' | 'v4R2';
+export const WalletVersions = ['v3R1', 'v3R2', 'v4R2'] as const;
+
+export type WalletVersion = typeof WalletVersions[number];
 
 export interface WalletState {
   revision: number;

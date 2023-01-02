@@ -26,7 +26,7 @@ export const Balance: FC<{
   info?: AccountRepr | undefined;
   error?: Error | null;
 }> = ({ address, currency, info, error }) => {
-  const balance = useFormattedPrice(currency, 123123123123123);
+  const balance = useFormattedPrice(currency, info?.balance);
 
   return (
     <Block>

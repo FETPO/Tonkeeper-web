@@ -42,7 +42,7 @@ const MainSettings = () => {
       {
         name: t('Active_address'),
         icon: wallet.version,
-        action: () => null,
+        action: () => navigate(relative(SettingsRoute.version)),
       },
       {
         name: t('List_of_tokens'),
@@ -106,45 +106,6 @@ export const Settings: FC = () => {
 
     return items;
   }, [wallet, account, t]);
-
-  const mainItems = useMemo<SettingsItem[]>(() => {
-    const items: SettingsItem[] = [
-      {
-        name: t('Recovery_phrase'),
-        icon: <RecoveryPhraseIcon />,
-        action: () => null,
-      },
-      {
-        name: t('Active_address'),
-        icon: wallet.version,
-        action: () => null,
-      },
-      {
-        name: t('List_of_tokens'),
-        icon: <ListOfTokensIcon />,
-        action: () => null,
-      },
-      {
-        name: t('Security'),
-        icon: <SecurityIcon />,
-        action: () => null,
-      },
-    ];
-
-    if (themes && themes.length > 1) {
-      items.push({
-        name: t('Theme'),
-        icon: <ThemeIcon />,
-        action: () => navigate(relative(SettingsRoute.theme)),
-      });
-    }
-    items.push({
-      name: t('Log_out'),
-      icon: <LogOutIcon />,
-      action: () => null,
-    });
-    return items;
-  }, [t, themes, navigate, wallet]);
 
   const secondaryItems = useMemo(() => {
     const items: SettingsItem[] = [

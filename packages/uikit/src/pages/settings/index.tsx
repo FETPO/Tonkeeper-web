@@ -8,6 +8,7 @@ import { Legal } from './Legal';
 import { Localization } from './Localization';
 import { Settings } from './Settings';
 import { UserTheme } from './Theme';
+import { WalletVersion } from './Version';
 
 const SettingsRouter = () => {
   return (
@@ -19,6 +20,7 @@ const SettingsRouter = () => {
       <Route path={SettingsRoute.fiat} element={<FiatCurrency />} />
       <Route path={SettingsRoute.account} element={<Account />} />
       <Route path={SettingsRoute.recovery} element={<>Recovery</>} />
+      <Route path={SettingsRoute.version} element={<WalletVersion />} />
       <Route path="*" element={<Settings />} />
     </Routes>
   );

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { ListBlock, ListItem, ListItemPayload } from '../List';
 import { Body1, Label1 } from '../Text';
 
@@ -16,17 +16,9 @@ export interface SettingsListProps {
   loading?: boolean;
 }
 
-const Icon = styled(Label1)<{ color?: string }>`
+const Icon = styled(Label1)`
   display: flex;
-
-  ${(props) =>
-    props.color
-      ? css`
-          color: ${props.color};
-        `
-      : css`
-          color: ${props.theme.accentBlue};
-        `}
+  color: ${(props) => props.theme.accentBlue};
 `;
 
 const Secondary = styled(Body1)`
