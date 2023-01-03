@@ -365,6 +365,10 @@
     "message": "Rename",
     "description": "Rename settings button"
   },
+  "Edit": {
+    "message": "Edit",
+    "description": "Edit settings button"
+  },
   "Show_recovery_phrase": {
     "message": "Show recovery phrase",
     "description": "Show recovery phrase settings button"

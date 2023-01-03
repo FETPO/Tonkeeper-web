@@ -7,15 +7,15 @@ import {
   Configuration,
 } from '@tonkeeper/core/dist/tonApi';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Action, ActionsRow } from '../../components/home/Actions';
-import { Assets } from '../../components/home/Assets';
 import { Balance } from '../../components/home/Balance';
 import { BuyAction } from '../../components/home/BuyAction';
+import { CompactView } from '../../components/home/CompactView';
 import { ReceiveIcon, SendIcon } from '../../components/home/HomeIcons';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { useUserJettonList } from '../../state/jetton';
+import { useNftInfo } from '../../state/nft';
 
 const useAccountInfo = (tonApi: Configuration, wallet: WalletState) => {
   return useQuery<AccountRepr, Error>(
@@ -29,13 +29,13 @@ const useAccountInfo = (tonApi: Configuration, wallet: WalletState) => {
 };
 
 export const Home = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const wallet = useWalletContext();
   const { tonApi, fiat } = useAppContext();
 
   const { data: info, error } = useAccountInfo(tonApi, wallet);
   const jettons = useUserJettonList();
+  const { data: nfts } = useNftInfo();
 
   return (
     <>
@@ -54,7 +54,7 @@ export const Home = () => {
           action={() => null}
         />
       </ActionsRow>
-      <Assets info={info} jettons={jettons} />
+      <CompactView info={info} jettons={jettons} nfts={nfts} />
     </>
   );
 };
