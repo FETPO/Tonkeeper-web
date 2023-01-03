@@ -4,24 +4,22 @@ import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTranslation } from '../../hooks/translation';
 import { useNftInfo } from '../../state/nft';
-import { Button } from '../Button';
-import { Notification } from '../Notification';
-import { Body3, H2, Label2 } from '../Text';
+import {
+  Notification,
+  NotificationBlock,
+  NotificationTitle,
+} from '../Notification';
+import { Body3, Label2 } from '../Text';
+import { NftAction } from './NftAction';
 import { NftDetails } from './NftDetails';
 import { Image, NftBlock } from './Nfts';
-
-const NotificationBlock = styled.div`
-  display: flex;
-  gap: 1.5rem;
-  flex-direction: column;
-  align-items: center;
-`;
+import { NftTransferNotification } from './NftTransferNotification';
 
 const Text = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.75rem;
-  gap: 0.25rem;
+  gap: 0.5rem;
 `;
 
 const Body = styled(Body3)`
@@ -45,7 +43,7 @@ const NftPreview: FC<{
 
   return (
     <NotificationBlock>
-      {name && <H2>{name}</H2>}
+      {name && <NotificationTitle>{name}</NotificationTitle>}
       <NftBlock>
         {image && <Image src={image.url} />}
         <Text>
@@ -55,9 +53,7 @@ const NftPreview: FC<{
         </Text>
       </NftBlock>
 
-      <Button size="large" fullWith primary>
-        {t('Transfer')}
-      </Button>
+      <NftAction nftItem={nftItem} kind="token" />
 
       <NftDetails nftItem={nftItem} />
     </NotificationBlock>
@@ -86,7 +82,12 @@ export const NftNotification = () => {
   const Content = useCallback(
     (afterClose: (action: () => void) => void) => {
       if (!nftItem) return undefined;
-      return <NftPreview afterClose={afterClose} nftItem={nftItem} />;
+      return (
+        <>
+          <NftPreview afterClose={afterClose} nftItem={nftItem} />
+          <NftTransferNotification nftItem={nftItem} />
+        </>
+      );
     },
     [nftItem]
   );

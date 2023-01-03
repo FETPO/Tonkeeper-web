@@ -390,7 +390,35 @@
     "description": "Contract address header"
   },
   "View_in_explorer": {
-    "message": " View in explorer",
+    "message": "View in explorer",
     "description": " View in explorer button"
+  },
+  "Transfer_token": {
+    "message": "Transfer token",
+    "description": "Transfer token button"
+  },
+  "Transfer_DNS": {
+    "message": "Transfer DNS",
+    "description": "Transfer DNS button"
+  },
+  "Transfer_number": {
+    "message": "Transfer number",
+    "description": "Transfer number button"
+  },
+  "Transfer_name": {
+    "message": "Transfer name",
+    "description": "Transfer name button"
+  },
+  "View_on_market": {
+    "message": "View on market",
+    "description": "View on market button"
+  },
+  "Transfer_NFT": {
+    "message": "Transfer NFT",
+    "description": "Transfer NFT header"
+  },
+  "Address_or_name": {
+    "message": "Address or name",
+    "description": "Address or name input placeholder"
   }
 }

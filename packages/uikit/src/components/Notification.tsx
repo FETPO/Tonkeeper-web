@@ -5,6 +5,7 @@ import { Container } from '../styles/globalStyle';
 import { CloseIcon } from './Icon';
 import { Gap } from './Layout';
 import ReactPortal from './ReactPortal';
+import { H2 } from './Text';
 
 const Wrapper = styled(Container)`
   width: 100%;
@@ -12,12 +13,13 @@ const Wrapper = styled(Container)`
 `;
 
 const ButtonContainer = styled.div`
-  padding: 0 0 0 1rem;
-  display: flex;
-  justify-content: end;
+  position: relative;
 `;
 
 const CloseButton = styled.div`
+  position: absolute;
+  right: 0;
+  ton: 0;
   cursor: pointer;
   width: 28px;
   height: 28px;
@@ -74,6 +76,18 @@ const Content = styled.div`
   flex-shrink: 0;
   min-height: 40vh;
   box-sizing: border-box;
+`;
+
+export const NotificationTitle = styled(H2)`
+  padding-right: 2rem;
+  box-sizing: border-box;
+`;
+
+export const NotificationBlock = styled.div`
+  display: flex;
+  gap: 1.5rem;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const Notification: FC<{
