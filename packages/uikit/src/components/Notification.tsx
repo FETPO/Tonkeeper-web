@@ -8,7 +8,6 @@ import ReactPortal from './ReactPortal';
 
 const Wrapper = styled(Container)`
   width: 100%;
-  overflow: auto;
   padding: 0;
 `;
 
@@ -56,6 +55,7 @@ const Splash = styled.div`
     opacity: 1;
     pointer-events: auto;
     transform: scale(1);
+    overflow: auto;
   }
 
   &.exit {
@@ -80,7 +80,7 @@ export const Notification: FC<{
   isOpen: boolean;
   handleClose: () => void;
   children: (afterClose: (action: () => void) => void) => React.ReactNode;
-}> = ({ children, isOpen, handleClose }) => {
+}> = React.memo(({ children, isOpen, handleClose }) => {
   const nodeRef = useRef(null);
   useEffect(() => {
     const closeOnEscapeKey = (e: KeyboardEvent) =>
@@ -120,4 +120,4 @@ export const Notification: FC<{
       </CSSTransition>
     </ReactPortal>
   );
-};
+});

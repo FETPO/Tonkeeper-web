@@ -8,9 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute, SettingsRoute } from '../../libs/routes';
+import { NftsList } from '../nft/Nfts';
 import { Label2 } from '../Text';
 import { Assets } from './Jettons';
-import { NftsList } from './Nfts';
 
 const ButtonRow = styled.div`
   display: flex;

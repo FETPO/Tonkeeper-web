@@ -372,5 +372,25 @@
   "Show_recovery_phrase": {
     "message": "Show recovery phrase",
     "description": "Show recovery phrase settings button"
+  },
+  "Transfer": {
+    "message": "Transfer",
+    "description": "Transfer button"
+  },
+  "Details": {
+    "message": "Details",
+    "description": "Details header"
+  },
+  "Owner": {
+    "message": "Owner",
+    "description": "Owner header"
+  },
+  "Contract_address": {
+    "message": "Contract address",
+    "description": "Contract address header"
+  },
+  "View_in_explorer": {
+    "message": " View in explorer",
+    "description": " View in explorer button"
   }
 }

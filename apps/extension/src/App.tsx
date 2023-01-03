@@ -5,6 +5,7 @@ import { getTonClient } from '@tonkeeper/core/dist/entries/network';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
+import { NftNotification } from '@tonkeeper/uikit/dist/components/nft/NftNotification';
 import {
   AppContext,
   WalletStateContext,
@@ -198,6 +199,7 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
         </Body>
         <Footer />
       </Wrapper>
+      <NftNotification />
     </WalletStateContext.Provider>
   );
 };
