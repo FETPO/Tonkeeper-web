@@ -23,7 +23,6 @@
     "message": "Settings",
     "description": "Settings footer button"
   },
-
   "Subscriptions": {
     "message": "Subscriptions",
     "description": "Subscriptions settings button"
@@ -220,7 +219,6 @@
     "message": "Create password",
     "description": "Initialize screen Create password title"
   },
-
   "USD_full": {
     "message": "United States Dollar",
     "description": "USD fill name"
@@ -276,6 +274,10 @@
   "Receive": {
     "message": "Receive",
     "description": "Receive action button on home page"
+  },
+  "Sell": {
+    "message": "Sell",
+    "description": "Sell action button on home page"
   },
   "Open": {
     "message": "Open",

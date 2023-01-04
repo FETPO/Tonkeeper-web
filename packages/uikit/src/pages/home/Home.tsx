@@ -11,7 +11,11 @@ import { Action, ActionsRow } from '../../components/home/Actions';
 import { Balance } from '../../components/home/Balance';
 import { BuyAction } from '../../components/home/BuyAction';
 import { CompactView } from '../../components/home/CompactView';
-import { ReceiveIcon, SendIcon } from '../../components/home/HomeIcons';
+import {
+  ReceiveIcon,
+  SellIcon,
+  SendIcon,
+} from '../../components/home/HomeIcons';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { useUserJettonList } from '../../state/jetton';
@@ -53,6 +57,7 @@ export const Home = () => {
           title={t('Receive')}
           action={() => null}
         />
+        <Action icon={<SellIcon />} title={t('Sell')} action={() => null} />
       </ActionsRow>
       <CompactView info={info} jettons={jettons} nfts={nfts} />
     </>
