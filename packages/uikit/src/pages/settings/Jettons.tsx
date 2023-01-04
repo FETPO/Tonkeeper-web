@@ -1,26 +1,48 @@
 import { JettonBalance } from '@tonkeeper/core/dist/tonApi';
 import React, { FC, useCallback, useMemo } from 'react';
+import {
+  DragDropContext,
+  Draggable,
+  DraggableProvidedDragHandleProps,
+  Droppable,
+  OnDragEndResponder,
+} from 'react-beautiful-dnd';
 import styled from 'styled-components';
+import { Radio } from '../../components/Checkbox';
+import { ReorderIcon } from '../../components/Icon';
 import { ColumnText } from '../../components/Layout';
 
 import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
 import { SubHeader } from '../../components/SubHeader';
-import { Switch } from '../../components/Switch';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useCoinBalance } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
-import { useJettonsInfo, useToggleJettonMutation } from '../../state/jetton';
+import {
+  sortJettons,
+  useJettonsInfo,
+  useOrderJettonMutation,
+  useToggleJettonMutation,
+} from '../../state/jetton';
 
 const Row = styled.div`
   display: flex;
-  gap: 0.5rem;
+  gap: 0.75rem;
 `;
 const Logo = styled.img`
   width: 44px;
+  height: 44px;
   border-radius: ${(props) => props.theme.cornerFull};
 `;
 
-const JettonRow: FC<{ jetton: JettonBalance }> = ({ jetton }) => {
+const Icon = styled.span`
+  display: flex;
+  color: ${(props) => props.theme.iconSecondary};
+`;
+
+const JettonRow: FC<{
+  jetton: JettonBalance;
+  dragHandleProps: DraggableProvidedDragHandleProps | null | undefined;
+}> = ({ jetton, dragHandleProps }) => {
   const { t } = useTranslation();
   const { fiat } = useAppContext();
   const wallet = useWalletContext();
@@ -45,32 +67,75 @@ const JettonRow: FC<{ jetton: JettonBalance }> = ({ jetton }) => {
   );
 
   return (
-    <ListItem hover={false}>
-      <ListItemPayload>
-        <Row>
-          <Logo src={jetton.metadata?.image} />
-          <ColumnText
-            text={jetton.metadata?.name ?? t('Unknown_COIN')}
-            secondary={`${balance} ${jetton.metadata?.symbol}`}
-          />
-        </Row>
-        <Switch checked={checked} onChange={onChange} />
-      </ListItemPayload>
-    </ListItem>
+    <ListItemPayload>
+      <Row>
+        <Radio checked={checked} onChange={onChange} />
+        <Logo src={jetton.metadata?.image} />
+        <ColumnText
+          text={jetton.metadata?.name ?? t('Unknown_COIN')}
+          secondary={`${balance} ${jetton.metadata?.symbol}`}
+        />
+      </Row>
+      <Icon {...dragHandleProps}>
+        <ReorderIcon />
+      </Icon>
+    </ListItemPayload>
   );
 };
 
 export const JettonsSettings = () => {
   const { t } = useTranslation();
   const { data } = useJettonsInfo();
+  const wallet = useWalletContext();
+
+  const jettons = useMemo(() => {
+    return sortJettons(wallet.orderJettons, data?.balances ?? []);
+  }, [data, wallet.orderJettons]);
+
+  const { mutate } = useOrderJettonMutation();
+  const handleDrop: OnDragEndResponder = useCallback(
+    (droppedItem) => {
+      if (!droppedItem.destination) return;
+      var updatedList = [...jettons];
+      const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
+      updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
+      mutate(updatedList.map((item) => item.jettonAddress));
+    },
+    [jettons, mutate]
+  );
+
   return (
     <>
       <SubHeader title={t('List_of_tokens')} />
-      <ListBlock>
-        {(data?.balances ?? []).map((jetton) => (
-          <JettonRow key={jetton.jettonAddress} jetton={jetton} />
-        ))}
-      </ListBlock>
+      <DragDropContext onDragEnd={handleDrop}>
+        <Droppable droppableId="jettons">
+          {(provided) => (
+            <ListBlock {...provided.droppableProps} ref={provided.innerRef}>
+              {(data?.balances ?? []).map((jetton, index) => (
+                <Draggable
+                  key={jetton.jettonAddress}
+                  draggableId={jetton.jettonAddress}
+                  index={index}
+                >
+                  {(provided) => (
+                    <ListItem
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      hover={false}
+                    >
+                      <JettonRow
+                        dragHandleProps={provided.dragHandleProps}
+                        jetton={jetton}
+                      />
+                    </ListItem>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </ListBlock>
+          )}
+        </Droppable>
+      </DragDropContext>
     </>
   );
 };

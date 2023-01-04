@@ -64,6 +64,7 @@ export const TonAsset: FC<{ info: AccountRepr | undefined }> = ({ info }) => {
 
 const Logo = styled.img`
   width: 44px;
+  height: 44px;
   border-radius: ${(props) => props.theme.cornerFull};
 `;
 

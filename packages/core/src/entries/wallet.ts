@@ -10,5 +10,6 @@ export interface WalletState {
   version: WalletVersion;
   name?: string;
   hiddenJettons?: string[];
+  orderJettons?: string[];
   tonkeeperId: string;
 }

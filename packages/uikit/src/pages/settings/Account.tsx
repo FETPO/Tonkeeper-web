@@ -117,7 +117,7 @@ export const Account = () => {
     <>
       <SubHeader title={t('Manage_wallets')} />
       <DragDropContext onDragEnd={handleDrop}>
-        <Droppable droppableId="list-container">
+        <Droppable droppableId="wallets">
           {(provided) => (
             <ListBlock {...provided.droppableProps} ref={provided.innerRef}>
               {account.wallets.map((item, index) => (

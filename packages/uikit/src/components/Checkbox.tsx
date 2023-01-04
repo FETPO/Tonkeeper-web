@@ -18,9 +18,7 @@ const Wrapper = styled.div`
   cursor: pointer;
 `;
 
-const Icon = styled.div<{ checked: boolean; disabled?: boolean }>`
-  width: 22px;
-  height: 22px;
+const IconBase = styled.div<{ checked: boolean; disabled?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,7 +26,6 @@ const Icon = styled.div<{ checked: boolean; disabled?: boolean }>`
   border-width: 2px;
   border-style: solid;
   box-sizing: border-box;
-  border-radius: ${(props) => props.theme.cornerExtraExtraSmall};
 
   ${(props) =>
     props.disabled
@@ -48,6 +45,19 @@ const Icon = styled.div<{ checked: boolean; disabled?: boolean }>`
           border-color: ${props.theme.backgroundContentTint};
         `}
 `;
+const CheckboxItem = styled(IconBase)`
+  width: 22px;
+  height: 22px;
+
+  border-radius: ${(props) => props.theme.cornerExtraExtraSmall};
+`;
+
+const RadioItem = styled(IconBase)`
+  width: 24px;
+  height: 24px;
+
+  border-radius: ${(props) => props.theme.cornerFull};
+`;
 
 const Text = styled(Label2)`
   color: ${(props) => props.theme.textSecondary};
@@ -61,10 +71,26 @@ export const Checkbox: FC<PropsWithChildren<CheckboxProps>> = ({
 }) => {
   return (
     <Wrapper onClick={() => onChange(!checked)}>
-      <Icon checked={checked} disabled={disabled}>
+      <CheckboxItem checked={checked} disabled={disabled}>
         {checked ? <CheckboxIcon /> : undefined}
-      </Icon>
-      <Text>{children}</Text>
+      </CheckboxItem>
+      {children && <Text>{children}</Text>}
+    </Wrapper>
+  );
+};
+
+export const Radio: FC<PropsWithChildren<CheckboxProps>> = ({
+  checked,
+  onChange,
+  disabled,
+  children,
+}) => {
+  return (
+    <Wrapper onClick={() => onChange(!checked)}>
+      <RadioItem checked={checked} disabled={disabled}>
+        {checked ? <CheckboxIcon /> : undefined}
+      </RadioItem>
+      {children && <Text>{children}</Text>}
     </Wrapper>
   );
 };
