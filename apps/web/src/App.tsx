@@ -164,21 +164,35 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
   return (
     <WalletStateContext.Provider value={activeWallet}>
       <Container>
-        <Body>
-          <Routes>
-            <Route path={AppRoute.activity} element={<Activity />} />
-            <Route path={any(AppRoute.settings)} element={<SettingsRouter />} />
-            <Route
-              path="*"
-              element={
-                <>
-                  <Header />
+        <Routes>
+          <Route
+            path={AppRoute.activity}
+            element={
+              <Body>
+                <Activity />
+              </Body>
+            }
+          />
+          <Route
+            path={any(AppRoute.settings)}
+            element={
+              <Body>
+                <SettingsRouter />
+              </Body>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <>
+                <Header />
+                <Body>
                   <Home />
-                </>
-              }
-            />
-          </Routes>
-        </Body>
+                </Body>
+              </>
+            }
+          />
+        </Routes>
         <Footer />
       </Container>
       <NftNotification />

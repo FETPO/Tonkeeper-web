@@ -1,8 +1,8 @@
 import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useAppContext, useWalletContext } from '../hooks/appContext';
 import { useTranslation } from '../hooks/translation';
 import { AppRoute, SettingsRoute } from '../libs/routes';
@@ -14,7 +14,7 @@ import { ColumnText, Divider } from './Layout';
 import { ListItem, ListItemPayload } from './List';
 import { Body2, H3, Label1 } from './Text';
 
-const Block = styled.div`
+const Block = styled.div<{ top: boolean }>`
   flex-shrink: 0;
 
   position: sticky;
@@ -23,6 +23,14 @@ const Block = styled.div`
 
   display: flex;
   justify-content: center;
+
+  background-color: ${(props) => props.theme.backgroundPage};
+
+  ${(props) =>
+    !props.top &&
+    css`
+      border-bottom: 1px solid ${props.theme.backgroundContentTint};
+    `}
 `;
 
 const Title = styled(H3)`
@@ -146,12 +154,34 @@ const DropDownPayload: FC<{ onClose: () => void; onCreate: () => void }> = ({
   }
 };
 
+const useIsScrollTop = () => {
+  const [isTop, setTop] = useState(true);
+  useEffect(() => {
+    const handler = () => {
+      if (window.scrollY > 20) {
+        setTop(false);
+      } else {
+        setTop(true);
+      }
+    };
+
+    window.addEventListener('scroll', handler);
+
+    return () => {
+      window.removeEventListener('scroll', handler);
+    };
+  }, []);
+
+  return isTop;
+};
+
 export const Header = () => {
   const { t } = useTranslation();
   const wallet = useWalletContext();
   const [isOpen, setOpen] = useState(false);
+  const top = useIsScrollTop();
   return (
-    <Block>
+    <Block top={top}>
       <DropDown
         center
         payload={(onClose) => (

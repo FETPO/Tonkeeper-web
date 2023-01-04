@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { useTranslation } from '../hooks/translation';
@@ -100,7 +100,7 @@ export const Button = styled.div<{ active: boolean }>`
     `}
 `;
 
-export const Block = styled.div`
+export const Block = styled.div<{ bottom: boolean }>`
   flex-shrink: 0;
   display: flex;
   justify-content: space-around;
@@ -109,13 +109,40 @@ export const Block = styled.div`
   padding: 1rem 0;
 
   background-color: ${(props) => props.theme.backgroundPage};
+
+  ${(props) =>
+    !props.bottom &&
+    css`
+      border-top: 1px solid ${(props) => props.theme.backgroundContentTint};
+    `}
 `;
 
+const useIsScrollBottom = () => {
+  const [isBottom, setBottom] = useState(false);
+  useEffect(() => {
+    const handler = () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        setBottom(true);
+      } else {
+        setBottom(false);
+      }
+    };
+
+    window.addEventListener('scroll', handler);
+
+    return () => {
+      window.removeEventListener('scroll', handler);
+    };
+  }, []);
+
+  return isBottom;
+};
 export const Footer = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
 
+  const bottom = useIsScrollBottom();
   const active = useMemo<AppRoute>(() => {
     if (location.pathname.includes(AppRoute.activity)) {
       return AppRoute.activity;
@@ -127,7 +154,7 @@ export const Footer = () => {
   }, [location.pathname]);
 
   return (
-    <Block>
+    <Block bottom={bottom}>
       <Button
         active={active === AppRoute.home}
         onClick={() => navigate(AppRoute.home)}
