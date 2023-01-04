@@ -1,6 +1,13 @@
 import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
+import {
+  DragDropContext,
+  Draggable,
+  DraggableProvidedDragHandleProps,
+  Droppable,
+  OnDragEndResponder,
+} from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { ImportNotification } from '../../components/create/ImportNotification';
 import { DropDown } from '../../components/DropDown';
@@ -10,8 +17,9 @@ import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
 import { SettingsList } from '../../components/settings/SettingsList';
 import { SubHeader } from '../../components/SubHeader';
 import { Label1 } from '../../components/Text';
-import { useAppContext, useWalletContext } from '../../hooks/appContext';
+import { useAppContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
+import { useMutateAccountState } from '../../state/account';
 
 const Row = styled.div`
   display: flex;
@@ -24,57 +32,56 @@ const Icon = styled.span`
   color: ${(props) => props.theme.iconSecondary};
 `;
 
-const WalletRow: FC<{ wallet: WalletState; index: number }> = ({
-  wallet,
-  index,
-}) => {
+const WalletRow: FC<{
+  wallet: WalletState;
+  index: number;
+  dragHandleProps: DraggableProvidedDragHandleProps | null | undefined;
+}> = ({ wallet, index, dragHandleProps }) => {
   const { t } = useTranslation();
 
   return (
-    <ListItem>
-      <ListItemPayload>
-        <Row>
-          <Icon>
-            <ReorderIcon />
-          </Icon>
-          <ColumnText
-            text={wallet.name ? wallet.name : `${t('Wallet')} ${index + 1}`}
-            secondary={toShortAddress(wallet.address)}
-          />
-        </Row>
-        <DropDown
-          payload={(onClose) => (
-            <ListBlock margin={false}>
-              <ListItem>
-                <ListItemPayload>
-                  <Label1>{t('Rename')}</Label1>
-                </ListItemPayload>
-              </ListItem>
-              <ListItem>
-                <ListItemPayload>
-                  <Label1>{t('Show_recovery_phrase')}</Label1>
-                </ListItemPayload>
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListItemPayload>
-                  <Label1>{t('Log_out')}</Label1>
-                </ListItemPayload>
-              </ListItem>
-              <ListItem>
-                <ListItemPayload>
-                  <Label1>{t('Delete_account')}</Label1>
-                </ListItemPayload>
-              </ListItem>
-            </ListBlock>
-          )}
-        >
-          <Icon>
-            <EllipsisIcon />
-          </Icon>
-        </DropDown>
-      </ListItemPayload>
-    </ListItem>
+    <ListItemPayload>
+      <Row>
+        <Icon {...dragHandleProps}>
+          <ReorderIcon />
+        </Icon>
+        <ColumnText
+          text={wallet.name ? wallet.name : `${t('Wallet')} ${index + 1}`}
+          secondary={toShortAddress(wallet.address)}
+        />
+      </Row>
+      <DropDown
+        payload={(onClose) => (
+          <ListBlock margin={false}>
+            <ListItem>
+              <ListItemPayload>
+                <Label1>{t('Rename')}</Label1>
+              </ListItemPayload>
+            </ListItem>
+            <ListItem>
+              <ListItemPayload>
+                <Label1>{t('Show_recovery_phrase')}</Label1>
+              </ListItemPayload>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <ListItemPayload>
+                <Label1>{t('Log_out')}</Label1>
+              </ListItemPayload>
+            </ListItem>
+            <ListItem>
+              <ListItemPayload>
+                <Label1>{t('Delete_account')}</Label1>
+              </ListItemPayload>
+            </ListItem>
+          </ListBlock>
+        )}
+      >
+        <Icon>
+          <EllipsisIcon />
+        </Icon>
+      </DropDown>
+    </ListItemPayload>
   );
 };
 
@@ -83,7 +90,7 @@ export const Account = () => {
   const { t } = useTranslation();
 
   const { account } = useAppContext();
-  const wallet = useWalletContext();
+  const { mutate } = useMutateAccountState();
 
   const createItems = useMemo(() => {
     return [
@@ -95,14 +102,50 @@ export const Account = () => {
     ];
   }, []);
 
+  const handleDrop: OnDragEndResponder = useCallback(
+    (droppedItem) => {
+      if (!droppedItem.destination) return;
+      var updatedList = [...account.wallets];
+      const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
+      updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
+      mutate({ activeWallet: account.activeWallet, wallets: updatedList });
+    },
+    [account, mutate]
+  );
+
   return (
     <>
       <SubHeader title={t('Manage_wallets')} />
-      <ListBlock>
-        {account.wallets.map((item, index) => (
-          <WalletRow key={item.address} wallet={item} index={index} />
-        ))}
-      </ListBlock>
+      <DragDropContext onDragEnd={handleDrop}>
+        <Droppable droppableId="list-container">
+          {(provided) => (
+            <ListBlock {...provided.droppableProps} ref={provided.innerRef}>
+              {account.wallets.map((item, index) => (
+                <Draggable
+                  key={item.address}
+                  draggableId={item.address}
+                  index={index}
+                >
+                  {(provided) => (
+                    <ListItem
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                    >
+                      <WalletRow
+                        dragHandleProps={provided.dragHandleProps}
+                        wallet={item}
+                        index={index}
+                      />
+                    </ListItem>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </ListBlock>
+          )}
+        </Droppable>
+      </DragDropContext>
+
       <SettingsList items={createItems} />
       <ImportNotification isOpen={isOpen} setOpen={setOpen} />
     </>

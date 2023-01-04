@@ -38,6 +38,8 @@ export const ListItem = styled.div<{ hover?: boolean }>`
   padding: 0 0 0 1rem;
   cursor: pointer;
 
+  background: ${(props) => props.theme.backgroundContent};
+
   ${(props) =>
     props.hover !== false
       ? css`

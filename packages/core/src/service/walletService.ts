@@ -12,7 +12,8 @@ import { encrypt } from './cryptoService';
 export const importWallet = async (
   tonApiConfig: Configuration,
   mnemonic: string[],
-  password: string
+  password: string,
+  name: string
 ): Promise<WalletState> => {
   const tonkeeperId = (await sha512(mnemonic.join(' '))).toString();
   const encryptedMnemonic = await encrypt(mnemonic.join(' '), password);
@@ -20,6 +21,7 @@ export const importWallet = async (
   const [version, address] = await findContract(tonApiConfig, keyPair);
 
   return {
+    name,
     revision: 0,
     mnemonic: encryptedMnemonic,
     address: address.toRawString(),

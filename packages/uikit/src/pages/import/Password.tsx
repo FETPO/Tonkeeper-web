@@ -15,6 +15,7 @@ import { useTranslation } from '../../hooks/translation';
 import { getAccountState } from '../../state/account';
 
 export const useConfirmMutation = () => {
+  const { t } = useTranslation();
   const sdk = useAppSdk();
   const storage = useStorage();
   const { tonApi } = useAppContext();
@@ -35,13 +36,14 @@ export const useConfirmMutation = () => {
         return false;
       }
 
-      const walletState = await importWallet(tonApi, mnemonic, password);
       const account = await getAccountState(storage);
+      const name = `${t('Wallet')} ${account.wallets.length + 1}`;
+      const walletState = await importWallet(tonApi, mnemonic, password, name);
 
       const update = appendWallet(account, walletState);
 
       await storage.set(AppKey.account, update);
-      client.setQueryData([AppKey.account], update);
+      await client.invalidateQueries([AppKey.account]);
 
       return true;
     }
@@ -49,6 +51,7 @@ export const useConfirmMutation = () => {
 };
 
 export const useAddWalletMutation = () => {
+  const { t } = useTranslation();
   const { tonApi } = useAppContext();
   const storage = useStorage();
   const client = useQueryClient();
@@ -59,14 +62,15 @@ export const useAddWalletMutation = () => {
         throw new Error('Mnemonic is not valid.');
       }
 
-      const walletState = await importWallet(tonApi, mnemonic, password);
-
       const account = await getAccountState(storage);
+      const name = `${t('Wallet')} ${account.wallets.length + 1}`;
+
+      const walletState = await importWallet(tonApi, mnemonic, password, name);
 
       const update = appendWallet(account, walletState);
 
       await storage.set(AppKey.account, update);
-      client.setQueryData([AppKey.account], update);
+      await client.invalidateQueries([AppKey.account]);
     }
   );
 };
