@@ -2,6 +2,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AccountState } from '@tonkeeper/core/dist/entries/account';
 import { Language } from '@tonkeeper/core/dist/entries/language';
 import { getTonClient } from '@tonkeeper/core/dist/entries/network';
+import { AuthState } from '@tonkeeper/core/dist/entries/password';
+import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
@@ -22,6 +24,7 @@ import {
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
 import { Home } from '@tonkeeper/uikit/dist/pages/home/Home';
+import { Unlock } from '@tonkeeper/uikit/dist/pages/home/Unlock';
 import ImportRouter from '@tonkeeper/uikit/dist/pages/import';
 import {
   Initialize,
@@ -34,7 +37,13 @@ import { useFiatCurrency } from '@tonkeeper/uikit/dist/state/fiat';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
-import React, { FC, PropsWithChildren, useEffect, useMemo } from 'react';
+import React, {
+  FC,
+  PropsWithChildren,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
   MemoryRouter,
   Route,
@@ -98,7 +107,33 @@ const Wrapper = styled(Container)`
   height: 600px;
 `;
 
+const useLock = () => {
+  const [lock, setLock] = useState<boolean | undefined>(undefined);
+  useEffect(() => {
+    storage.get<AuthState>(AppKey.password).then((item) => {
+      if (!item || item.kind === 'none') {
+        setLock(false);
+      } else {
+        sdk.memoryStore.get<string>(AppKey.password).then((pass) => {
+          setTimeout(() => setLock(pass === null), 100);
+        });
+      }
+    });
+
+    const unlock = () => {
+      setLock(false);
+    };
+    sdk.uiEvents.on('unlock', unlock);
+
+    return () => {
+      sdk.uiEvents.off('unlock', unlock);
+    };
+  }, []);
+  return lock;
+};
+
 export const Loader: FC = React.memo(() => {
+  const lock = useLock();
   const { data: network } = useNetwork();
   const { data: account } = useAccountState();
   const { data: auth } = useAuthState();
@@ -106,7 +141,7 @@ export const Loader: FC = React.memo(() => {
 
   console.log('Loader', network, account, auth, fiat);
 
-  if (!network || !account || !auth || !fiat) {
+  if (!network || !account || !auth || !fiat || lock === undefined) {
     return <Loading />;
   }
 
@@ -122,7 +157,9 @@ export const Loader: FC = React.memo(() => {
     <OnImportAction.Provider value={sdk.openExtensionInBrowser}>
       <AfterImportAction.Provider value={sdk.closeExtensionInBrowser}>
         <AppContext.Provider value={context}>
-          <Content account={account} />
+          <Wrapper>
+            <Content account={account} lock={lock} />
+          </Wrapper>
         </AppContext.Provider>
       </AfterImportAction.Provider>
     </OnImportAction.Provider>
@@ -134,7 +171,6 @@ const InitialRedirect: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (window.location.hash) {
-      console.log('navigate');
       navigate(window.location.hash.substring(1));
     }
   }, []);
@@ -142,10 +178,11 @@ const InitialRedirect: FC<PropsWithChildren> = ({ children }) => {
   return <>{children}</>;
 };
 
-export const Content: FC<{ account: AccountState }> = ({ account }) => {
+export const Content: FC<{ account: AccountState; lock: boolean }> = ({
+  account,
+  lock,
+}) => {
   const location = useLocation();
-
-  console.log('Content');
 
   const activeWallet = useMemo(() => {
     const wallet = account.wallets.find(
@@ -154,51 +191,51 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
     return wallet;
   }, [account]);
 
+  if (lock) {
+    return <Unlock />;
+  }
+
   if (!activeWallet || location.pathname.startsWith(AppRoute.import)) {
     return (
-      <Wrapper>
-        <Routes>
-          <Route
-            path={any(AppRoute.import)}
-            element={
-              <InitializeContainer fullHeight={false}>
-                <ImportRouter />
-              </InitializeContainer>
-            }
-          />
-          <Route
-            path="*"
-            element={
-              <InitializeContainer>
-                <Initialize />
-              </InitializeContainer>
-            }
-          />
-        </Routes>
-      </Wrapper>
+      <Routes>
+        <Route
+          path={any(AppRoute.import)}
+          element={
+            <InitializeContainer fullHeight={false}>
+              <ImportRouter />
+            </InitializeContainer>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <InitializeContainer>
+              <Initialize />
+            </InitializeContainer>
+          }
+        />
+      </Routes>
     );
   }
 
   return (
     <WalletStateContext.Provider value={activeWallet}>
-      <Wrapper>
-        <Body>
-          <Routes>
-            <Route path={AppRoute.activity} element={<Activity />} />
-            <Route path={any(AppRoute.settings)} element={<SettingsRouter />} />
-            <Route
-              path="*"
-              element={
-                <>
-                  <Header />
-                  <Home />
-                </>
-              }
-            />
-          </Routes>
-        </Body>
-        <Footer />
-      </Wrapper>
+      <Body>
+        <Routes>
+          <Route path={AppRoute.activity} element={<Activity />} />
+          <Route path={any(AppRoute.settings)} element={<SettingsRouter />} />
+          <Route
+            path="*"
+            element={
+              <>
+                <Header />
+                <Home />
+              </>
+            }
+          />
+        </Routes>
+      </Body>
+      <Footer />
       <NftNotification />
     </WalletStateContext.Provider>
   );

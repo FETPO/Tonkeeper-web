@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
-import { Button } from '../Button';
+import { Button } from '../fields/Button';
 import { H2 } from '../Text';
 
 const Block = styled.div`
@@ -70,7 +70,7 @@ const useCreatePassword = () => {
   });
 };
 
-const PasswordInput: FC<{
+export const PasswordInput: FC<{
   value: string;
   onChange: (value: string) => void;
   isValid: boolean;

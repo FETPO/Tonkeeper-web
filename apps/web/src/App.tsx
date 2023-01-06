@@ -2,6 +2,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AccountState } from '@tonkeeper/core/dist/entries/account';
 import { Language, languages } from '@tonkeeper/core/dist/entries/language';
 import { getTonClient } from '@tonkeeper/core/dist/entries/network';
+import { AuthState } from '@tonkeeper/core/dist/entries/password';
+import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
@@ -22,6 +24,7 @@ import {
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
 import { Home } from '@tonkeeper/uikit/dist/pages/home/Home';
+import { Unlock } from '@tonkeeper/uikit/dist/pages/home/Unlock';
 import ImportRouter from '@tonkeeper/uikit/dist/pages/import';
 import {
   Initialize,
@@ -40,6 +43,7 @@ import React, {
   Suspense,
   useEffect,
   useMemo,
+  useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -97,7 +101,33 @@ export const App: FC<PropsWithChildren> = () => {
   );
 };
 
+const useLock = () => {
+  const [lock, setLock] = useState<boolean | undefined>(undefined);
+  useEffect(() => {
+    storage.get<AuthState>(AppKey.password).then((item) => {
+      if (!item || item.kind === 'none') {
+        setLock(false);
+      } else {
+        sdk.memoryStore.get<string>(AppKey.password).then((pass) => {
+          setTimeout(() => setLock(pass === null), 100);
+        });
+      }
+    });
+
+    const unlock = () => {
+      setLock(false);
+    };
+    sdk.uiEvents.on('unlock', unlock);
+
+    return () => {
+      sdk.uiEvents.off('unlock', unlock);
+    };
+  }, []);
+  return lock;
+};
+
 export const Loader: FC = () => {
+  const lock = useLock();
   const { i18n } = useTranslation();
   const { data: network } = useNetwork();
   const { data: language } = useLanguage();
@@ -115,7 +145,14 @@ export const Loader: FC = () => {
     }
   }, [language, i18n]);
 
-  if (!language || !network || !auth || !account || !fiat) {
+  if (
+    !language ||
+    !network ||
+    !auth ||
+    !account ||
+    !fiat ||
+    lock === undefined
+  ) {
     return <Loading />;
   }
 
@@ -131,14 +168,19 @@ export const Loader: FC = () => {
     <OnImportAction.Provider value={navigate}>
       <AfterImportAction.Provider value={() => navigate(AppRoute.home)}>
         <AppContext.Provider value={context}>
-          <Content account={account} />
+          <Container>
+            <Content account={account} lock={lock} />
+          </Container>
         </AppContext.Provider>
       </AfterImportAction.Provider>
     </OnImportAction.Provider>
   );
 };
 
-export const Content: FC<{ account: AccountState }> = ({ account }) => {
+export const Content: FC<{ account: AccountState; lock: boolean }> = ({
+  account,
+  lock,
+}) => {
   const location = useLocation();
 
   const activeWallet = useMemo(() => {
@@ -148,22 +190,24 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
     return wallet;
   }, [account]);
 
+  if (lock) {
+    return <Unlock />;
+  }
+
   if (!activeWallet || location.pathname.startsWith(AppRoute.import)) {
     return (
-      <Container>
-        <InitializeContainer fullHeight={false}>
-          <Routes>
-            <Route path={any(AppRoute.import)} element={<ImportRouter />} />
-            <Route path="*" element={<Initialize />} />
-          </Routes>
-        </InitializeContainer>
-      </Container>
+      <InitializeContainer fullHeight={false}>
+        <Routes>
+          <Route path={any(AppRoute.import)} element={<ImportRouter />} />
+          <Route path="*" element={<Initialize />} />
+        </Routes>
+      </InitializeContainer>
     );
   }
 
   return (
     <WalletStateContext.Provider value={activeWallet}>
-      <Container>
+      <Suspense fallback={<Loading />}>
         <Routes>
           <Route
             path={AppRoute.activity}
@@ -193,8 +237,8 @@ export const Content: FC<{ account: AccountState }> = ({ account }) => {
             }
           />
         </Routes>
-        <Footer />
-      </Container>
+      </Suspense>
+      <Footer />
       <NftNotification />
     </WalletStateContext.Provider>
   );

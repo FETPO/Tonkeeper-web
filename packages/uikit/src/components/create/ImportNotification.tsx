@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useOnImportAction } from '../../hooks/appSdk';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute, ImportRoute } from '../../libs/routes';
-import { Button } from '../Button';
+import { Button } from '../fields/Button';
 import { TonkeeperIcon } from '../Icon';
 import { Notification } from '../Notification';
 import { Body1, H2 } from '../Text';

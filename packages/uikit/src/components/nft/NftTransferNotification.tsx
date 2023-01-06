@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Address } from 'ton-core';
 import { useTranslation } from '../../hooks/translation';
-import { Button } from '../Button';
+import { Button } from '../fields/Button';
 import {
   Notification,
   NotificationBlock,

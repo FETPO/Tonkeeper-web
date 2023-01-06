@@ -8,7 +8,7 @@ import {
   OnDragEndResponder,
 } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-import { Radio } from '../../components/Checkbox';
+import { Radio } from '../../components/fields/Checkbox';
 import { ReorderIcon } from '../../components/Icon';
 import { ColumnText } from '../../components/Layout';
 

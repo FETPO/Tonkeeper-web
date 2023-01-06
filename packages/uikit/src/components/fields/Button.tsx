@@ -1,6 +1,6 @@
 import React, { FC, PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
-import { SpinnerIcon } from './Icon';
+import { SpinnerIcon } from '../Icon';
 
 export interface ButtonProps {
   loading?: boolean;
@@ -11,6 +11,8 @@ export interface ButtonProps {
   disabled?: boolean;
   fullWith?: boolean;
   bottom?: boolean;
+
+  type?: 'button' | 'submit' | 'reset' | undefined;
 }
 
 export const ButtonElement = styled.button<Omit<ButtonProps, 'loading'>>`
@@ -150,7 +152,7 @@ export const Button: FC<
     ButtonProps &
       Omit<
         React.HTMLProps<HTMLButtonElement>,
-        'size' | 'children' | 'ref' | 'type' | 'as'
+        'size' | 'children' | 'ref' | 'as'
       >
   >
 > = ({ children, loading, ...props }) => {

@@ -83,7 +83,7 @@ export const NotificationTitle = styled(H2)`
   box-sizing: border-box;
 `;
 
-export const NotificationBlock = styled.div`
+export const NotificationBlock = styled.form`
   display: flex;
   gap: 1.5rem;
   flex-direction: column;
@@ -92,13 +92,13 @@ export const NotificationBlock = styled.div`
 
 export const Notification: FC<{
   isOpen: boolean;
-  handleClose: () => void;
+  handleClose?: () => void;
   children: (afterClose: (action: () => void) => void) => React.ReactNode;
 }> = React.memo(({ children, isOpen, handleClose }) => {
   const nodeRef = useRef(null);
   useEffect(() => {
     const closeOnEscapeKey = (e: KeyboardEvent) =>
-      e.key === 'Escape' ? handleClose() : null;
+      e.key === 'Escape' ? handleClose && handleClose() : null;
     document.body.addEventListener('keydown', closeOnEscapeKey);
     return () => {
       document.body.removeEventListener('keydown', closeOnEscapeKey);
@@ -107,7 +107,7 @@ export const Notification: FC<{
 
   const Child = children((afterClose: () => void) => {
     setTimeout(() => afterClose(), 300);
-    handleClose();
+    handleClose && handleClose();
   });
 
   return (
@@ -122,11 +122,13 @@ export const Notification: FC<{
           <Wrapper>
             <Gap />
             <Content>
-              <ButtonContainer>
-                <CloseButton onClick={handleClose}>
-                  <CloseIcon />
-                </CloseButton>
-              </ButtonContainer>
+              {handleClose && (
+                <ButtonContainer>
+                  <CloseButton onClick={handleClose}>
+                    <CloseIcon />
+                  </CloseButton>
+                </ButtonContainer>
+              )}
               {Child}
             </Content>
           </Wrapper>

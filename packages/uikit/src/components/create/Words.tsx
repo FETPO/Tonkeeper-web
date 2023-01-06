@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute } from '../../libs/routes';
-import { Button } from '../Button';
+import { Button } from '../fields/Button';
 import { ChevronLeftIcon } from '../Icon';
 import { Body1, Body2, H2 } from '../Text';
 

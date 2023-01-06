@@ -1,7 +1,7 @@
 import React, { FC, PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
-import { CheckboxIcon } from './Icon';
-import { Label2 } from './Text';
+import { CheckboxIcon } from '../Icon';
+import { Label2 } from '../Text';
 
 export interface CheckboxProps {
   checked: boolean;

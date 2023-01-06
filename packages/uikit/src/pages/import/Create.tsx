@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { mnemonicNew } from 'ton-crypto';
-import { Button } from '../../components/Button';
 import { CreatePassword } from '../../components/create/Password';
 import { Check, Worlds } from '../../components/create/Words';
+import { Button } from '../../components/fields/Button';
 import { CheckMarkIcon, GearIcon, WriteIcon } from '../../components/Icon';
 import { IconPage } from '../../components/Layout';
 import { useTranslation } from '../../hooks/translation';

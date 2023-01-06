@@ -422,5 +422,13 @@
   "Address_or_name": {
     "message": "Address or name",
     "description": "Address or name input placeholder"
+  },
+  "Password": {
+    "message": "Password",
+    "description": "Password input label"
+  },
+  "Unlock": {
+    "message": "Unlock",
+    "description": "Unlock button label"
   }
 }

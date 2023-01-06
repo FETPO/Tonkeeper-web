@@ -1,6 +1,5 @@
 import React, { FC, PropsWithChildren, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { Button } from '../../components/Button';
 import {
   RocketIcon,
   ShieldIcon,
@@ -8,6 +7,7 @@ import {
 } from '../../components/create/CreateIcon';
 import { Description } from '../../components/create/Description';
 import { ImportNotification } from '../../components/create/ImportNotification';
+import { Button } from '../../components/fields/Button';
 import { Title } from '../../components/Text';
 import { useTranslation } from '../../hooks/translation';
 
