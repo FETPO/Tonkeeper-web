@@ -1,6 +1,7 @@
 import React, { FC, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useAppSdk } from '../../hooks/appSdk';
 import { useTranslation } from '../../hooks/translation';
 import { relative, SettingsRoute } from '../../libs/routes';
 import { TonkeeperIcon } from '../Icon';
@@ -25,9 +26,10 @@ const Version = styled(Body3)`
   color: ${(props) => props.theme.textSecondary};
 `;
 
-export const SettingsNetwork: FC<SettingsNetworkProps> = ({ version }) => {
+export const SettingsNetwork: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { version } = useAppSdk();
 
   const onChange: React.MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {

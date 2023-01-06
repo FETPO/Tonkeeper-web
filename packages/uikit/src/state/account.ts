@@ -44,10 +44,11 @@ export const useMutateActiveWallet = () => {
   });
 };
 
-export const useMutateLogOut = () => {
+export const useMutateDeleteAll = () => {
   const storage = useStorage();
   const client = useQueryClient();
   return useMutation<void, Error, void>(async () => {
+    // TODO: clean remote storage by api
     await storage.clear();
     await client.invalidateQueries();
   });

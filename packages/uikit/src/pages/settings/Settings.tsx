@@ -1,8 +1,7 @@
 import React, { FC, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { LogOutNotification } from '../../components/settings/LogOutNotification';
 import {
-  DeleteAccountIcon,
   ListOfTokensIcon,
   LocalizationIcon,
   LogOutIcon,
@@ -23,6 +22,7 @@ import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { relative, SettingsRoute } from '../../libs/routes';
 import { useUserThemes } from '../../state/theme';
+import { SettingsClear } from './SettingsClear';
 
 const MainSettings = () => {
   const { t } = useTranslation();
@@ -85,7 +85,7 @@ export const Settings: FC = () => {
 
   const { fiat, account } = useAppContext();
   const wallet = useWalletContext();
-  const { data: themes } = useUserThemes();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const accountItems = useMemo(() => {
     const items: SettingsItem[] = [
@@ -126,16 +126,6 @@ export const Settings: FC = () => {
     return items;
   }, [t, i18n.enable, navigate, fiat]);
 
-  const deleteItems = useMemo(() => {
-    return [
-      {
-        name: t('Delete_account'),
-        icon: <DeleteAccountIcon />,
-        action: () => null,
-      },
-    ];
-  }, [t]);
-
   return (
     <>
       <Title>{t('Settings')}</Title>
@@ -143,8 +133,8 @@ export const Settings: FC = () => {
       <MainSettings />
       <SettingsList items={secondaryItems} />
       <SettingsSocialList appPage="https://tonkeeper.com/" />
-      <SettingsList items={deleteItems} />
-      <SettingsNetwork version={process.env.REACT_APP_VERSION} />
+      <SettingsClear />
+      <SettingsNetwork />
     </>
   );
 };

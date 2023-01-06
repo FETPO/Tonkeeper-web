@@ -2,6 +2,7 @@ import { IAppSdk } from '@tonkeeper/core/dist/AppSdk';
 import { EventEmitter } from '@tonkeeper/core/dist/entries/eventEmitter';
 import { MemoryStorage } from '@tonkeeper/core/dist/Storage';
 import browser from 'webextension-polyfill';
+import packageJson from '../../package.json';
 import { checkForError } from './utils';
 
 export class ExtensionAppSdk implements IAppSdk {
@@ -20,6 +21,7 @@ export class ExtensionAppSdk implements IAppSdk {
   // TODO: move to background script
   memoryStore = new MemoryStorage();
   uiEvents = new EventEmitter();
+  version = packageJson.version ?? 'Unknown';
 
   static openTab(options: browser.Tabs.CreateCreatePropertiesType) {
     return new Promise((resolve, reject) => {

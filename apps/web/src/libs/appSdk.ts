@@ -8,4 +8,5 @@ export class BrowserAppSdk implements IAppSdk {
   };
   memoryStore = new MemoryStorage();
   uiEvents = new EventEmitter();
+  version = process.env.REACT_APP_VERSION ?? 'Unknown';
 }

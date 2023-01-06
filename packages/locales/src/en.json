@@ -430,5 +430,17 @@
   "Unlock": {
     "message": "Unlock",
     "description": "Unlock button label"
+  },
+  "Delete_all_accounts_and_logout": {
+    "message": "Delete all accounts and logout",
+    "description": "Delete all accounts and logout settings button"
+  },
+  "Delete_wallet_data": {
+    "message": "Delete wallet data",
+    "description": "Delete wallet data notification title"
+  },
+  "Delete_wallet_data_description": {
+    "message": "Wallet keys and all personal data will be erased from this device.",
+    "description": "Delete wallet data notification description"
   }
 }
