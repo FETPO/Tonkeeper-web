@@ -1,17 +1,15 @@
+import { AccountState } from '@tonkeeper/core/dist/entries/account';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { mnemonicNew } from 'ton-crypto';
-import { CreatePassword } from '../../components/create/Password';
+import { CreateAuthState } from '../../components/create/CreateAuth';
+import { UpdateWalletName } from '../../components/create/WalletName';
 import { Check, Worlds } from '../../components/create/Words';
 import { Button } from '../../components/fields/Button';
 import { CheckMarkIcon, GearIcon, WriteIcon } from '../../components/Icon';
 import { IconPage } from '../../components/Layout';
 import { useTranslation } from '../../hooks/translation';
-import {
-  FinalView,
-  useAddWalletMutation,
-  useConfirmMutation,
-} from './Password';
+import { FinalView, useAddWalletMutation } from './Password';
 
 const Blue = styled.span`
   color: ${(props) => props.theme.accentBlue};
@@ -23,21 +21,20 @@ const Green = styled.span`
 
 export const Create = () => {
   const { t } = useTranslation();
-
   const {
     mutateAsync: checkPasswordAndCreateWalletAsync,
     isLoading: isConfirmLoading,
-  } = useConfirmMutation();
-  const { mutateAsync: createWalletAsync, isLoading: isCreateLoading } =
-    useAddWalletMutation();
+    reset,
+  } = useAddWalletMutation();
 
   const [mnemonic, setMnemonic] = useState<string[]>([]);
+  const [account, setAccount] = useState<AccountState | undefined>(undefined);
 
   const [create, setCreate] = useState(false);
   const [open, setOpen] = useState(false);
   const [check, setCheck] = useState(false);
   const [checked, setChecked] = useState(false);
-  const [password, setPassword] = useState(false);
+  const [hasPassword, setHasPassword] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -120,9 +117,14 @@ export const Create = () => {
         mnemonic={mnemonic}
         onBack={() => setCheck(false)}
         onConfirm={() =>
-          checkPasswordAndCreateWalletAsync({ mnemonic }).then((value) => {
-            setPassword(value);
+          checkPasswordAndCreateWalletAsync({ mnemonic }).then((state) => {
             setChecked(true);
+            if (state === false) {
+              setHasPassword(false);
+            } else {
+              setHasPassword(true);
+              setAccount(state);
+            }
           })
         }
         isLoading={isConfirmLoading}
@@ -130,17 +132,30 @@ export const Create = () => {
     );
   }
 
-  if (!password) {
+  if (!hasPassword) {
     return (
-      <CreatePassword
-        afterCreate={(pass) =>
-          createWalletAsync({ password: pass, mnemonic }).then(() =>
-            setPassword(true)
-          )
-        }
-        isLoading={isCreateLoading}
+      <CreateAuthState
+        afterCreate={() => {
+          reset();
+          checkPasswordAndCreateWalletAsync({ mnemonic }).then((state) => {
+            if (state !== false) {
+              setHasPassword(true);
+              setAccount(state);
+            }
+          });
+        }}
+        isLoading={isConfirmLoading}
       />
     );
+  }
+
+  if (account && account.wallets.length > 1) {
+    const wallet = account.wallets.find(
+      (item) => item.tonkeeperId === account.activeWallet
+    );
+    if (wallet && wallet.name == null) {
+      return <UpdateWalletName account={account} onUpdate={setAccount} />;
+    }
   }
 
   return <FinalView />;

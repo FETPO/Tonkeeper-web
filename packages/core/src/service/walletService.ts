@@ -13,9 +13,11 @@ export const importWallet = async (
   tonApiConfig: Configuration,
   mnemonic: string[],
   password: string,
-  name: string
+  name?: string
 ): Promise<WalletState> => {
-  const tonkeeperId = (await sha512(mnemonic.join(' '))).toString();
+  const tonkeeperId = (await sha512(mnemonic.join(' '))).toString('hex');
+  console.log(tonkeeperId);
+
   const encryptedMnemonic = await encrypt(mnemonic.join(' '), password);
   const keyPair = await mnemonicToPrivateKey(mnemonic);
   const [version, address] = await findContract(tonApiConfig, keyPair);
@@ -105,7 +107,19 @@ export const updateWalletVersion = (
 ): WalletState => {
   return {
     ...wallet,
+    revision: wallet.revision + 1,
     version: version,
     address: getAddress(Buffer.from(wallet.publicKey, 'hex'), version),
+  };
+};
+
+export const updateWalletName = (
+  wallet: WalletState,
+  name: string
+): WalletState => {
+  return {
+    ...wallet,
+    revision: wallet.revision + 1,
+    name: name,
   };
 };

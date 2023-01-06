@@ -1,49 +1,64 @@
+import { AccountState } from '@tonkeeper/core/dist/entries/account';
 import React, { useState } from 'react';
-import { CreatePassword } from '../../components/create/Password';
+import { CreateAuthState } from '../../components/create/CreateAuth';
+import { UpdateWalletName } from '../../components/create/WalletName';
 import { ImportWords } from '../../components/create/Words';
-import {
-  FinalView,
-  useAddWalletMutation,
-  useConfirmMutation,
-} from './Password';
+import { FinalView, useAddWalletMutation } from './Password';
 
 export const Import = () => {
   const [mnemonic, setMnemonic] = useState<string[]>([]);
-  const [password, setPassword] = useState(false);
+  const [account, setAccount] = useState<AccountState | undefined>(undefined);
+  const [hasPassword, setHasPassword] = useState(false);
 
   const {
     mutateAsync: checkPasswordAndCreateWalletAsync,
     isLoading: isConfirmLoading,
-  } = useConfirmMutation();
-
-  const { mutateAsync: createWalletAsync, isLoading: isCreateLoading } =
-    useAddWalletMutation();
+    reset,
+  } = useAddWalletMutation();
 
   if (mnemonic.length === 0) {
     return (
       <ImportWords
         isLoading={isConfirmLoading}
         onMnemonic={(mnemonic) => {
-          checkPasswordAndCreateWalletAsync({ mnemonic }).then((value) => {
+          checkPasswordAndCreateWalletAsync({ mnemonic }).then((state) => {
             setMnemonic(mnemonic);
-            setPassword(value);
+            if (state === false) {
+              setHasPassword(false);
+            } else {
+              setHasPassword(true);
+              setAccount(state);
+            }
           });
         }}
       />
     );
   }
 
-  if (!password) {
+  if (!hasPassword) {
     return (
-      <CreatePassword
-        afterCreate={(pass) =>
-          createWalletAsync({ password: pass, mnemonic }).then(() =>
-            setPassword(true)
-          )
-        }
-        isLoading={isCreateLoading}
+      <CreateAuthState
+        afterCreate={() => {
+          reset();
+          checkPasswordAndCreateWalletAsync({ mnemonic }).then((state) => {
+            if (state !== false) {
+              setHasPassword(true);
+              setAccount(state);
+            }
+          });
+        }}
+        isLoading={isConfirmLoading}
       />
     );
+  }
+
+  if (account && account.wallets.length > 1) {
+    const wallet = account.wallets.find(
+      (item) => item.tonkeeperId === account.activeWallet
+    );
+    if (wallet && wallet.name == null) {
+      return <UpdateWalletName account={account} onUpdate={setAccount} />;
+    }
   }
 
   return <FinalView />;

@@ -427,6 +427,18 @@
     "message": "Password",
     "description": "Password input label"
   },
+  "Confirm": {
+    "message": "Confirm",
+    "description": "Confirm input label"
+  },
+  "Save": {
+    "message": "Save",
+    "description": "Save button label"
+  },
+  "Without_authentication": {
+    "message": "Without authentication",
+    "description": "Without authentication button label"
+  },
   "Unlock": {
     "message": "Unlock",
     "description": "Unlock button label"
@@ -442,5 +454,17 @@
   "Delete_wallet_data_description": {
     "message": "Wallet keys and all personal data will be erased from this device.",
     "description": "Delete wallet data notification description"
+  },
+  "Name_your_wallet": {
+    "message": "Name your wallet",
+    "description": "Name your wallet notification title"
+  },
+  "Name_your_wallet_description": {
+    "message": "Name your wallet to easily identify it while using the Tonkeeper. These names are stored locally, and can only be seen by you.",
+    "description": "Name your wallet notification description"
+  },
+  "Wallet_name": {
+    "message": "Wallet name",
+    "description": "Wallet name input label"
   }
 }

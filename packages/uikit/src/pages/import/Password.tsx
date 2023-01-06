@@ -1,8 +1,15 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { AccountState } from '@tonkeeper/core/dist/entries/account';
 import { AuthState } from '@tonkeeper/core/dist/entries/password';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { appendWallet } from '@tonkeeper/core/dist/service/accountService';
 import { importWallet } from '@tonkeeper/core/dist/service/walletService';
+import { IStorage } from '@tonkeeper/core/dist/Storage';
+import { Configuration } from '@tonkeeper/core/dist/tonApi';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { mnemonicValidate } from 'ton-crypto';
@@ -14,14 +21,37 @@ import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
 import { getAccountState } from '../../state/account';
 
-export const useConfirmMutation = () => {
+const createWallet = async (
+  client: QueryClient,
+  tonApi: Configuration,
+  storage: IStorage,
+  mnemonic: string[],
+  auth: AuthState,
+  password?: string
+) => {
+  const account = await getAccountState(storage);
+
+  const key = auth.kind === 'none' ? 'none' : password;
+  if (!key) {
+    throw new Error('Missing encrypt password key');
+  }
+  const walletState = await importWallet(tonApi, mnemonic, key);
+
+  const update = appendWallet(account, walletState);
+
+  await storage.set(AppKey.account, update);
+  await client.invalidateQueries([AppKey.account]);
+  return update;
+};
+
+export const useAddWalletMutation = () => {
   const { t } = useTranslation();
   const sdk = useAppSdk();
   const storage = useStorage();
   const { tonApi } = useAppContext();
   const client = useQueryClient();
 
-  return useMutation<boolean, Error, { mnemonic: string[] }>(
+  return useMutation<false | AccountState, Error, { mnemonic: string[] }>(
     async ({ mnemonic }) => {
       const valid = await mnemonicValidate(mnemonic);
       if (!valid) {
@@ -31,46 +61,24 @@ export const useConfirmMutation = () => {
       if (auth === null) {
         return false;
       }
+
+      if (auth.kind === 'none') {
+        return await createWallet(client, tonApi, storage, mnemonic, auth);
+      }
+
       const password = await sdk.memoryStore.get<string>(AppKey.password);
       if (password === null) {
         return false;
       }
 
-      const account = await getAccountState(storage);
-      const name = `${t('Wallet')} ${account.wallets.length + 1}`;
-      const walletState = await importWallet(tonApi, mnemonic, password, name);
-
-      const update = appendWallet(account, walletState);
-
-      await storage.set(AppKey.account, update);
-      await client.invalidateQueries([AppKey.account]);
-
-      return true;
-    }
-  );
-};
-
-export const useAddWalletMutation = () => {
-  const { t } = useTranslation();
-  const { tonApi } = useAppContext();
-  const storage = useStorage();
-  const client = useQueryClient();
-  return useMutation<void, Error, { password: string; mnemonic: string[] }>(
-    async ({ password, mnemonic }) => {
-      const valid = await mnemonicValidate(mnemonic);
-      if (!valid) {
-        throw new Error('Mnemonic is not valid.');
-      }
-
-      const account = await getAccountState(storage);
-      const name = `${t('Wallet')} ${account.wallets.length + 1}`;
-
-      const walletState = await importWallet(tonApi, mnemonic, password, name);
-
-      const update = appendWallet(account, walletState);
-
-      await storage.set(AppKey.account, update);
-      await client.invalidateQueries([AppKey.account]);
+      return await createWallet(
+        client,
+        tonApi,
+        storage,
+        mnemonic,
+        auth,
+        password
+      );
     }
   );
 };

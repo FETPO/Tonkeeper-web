@@ -11,9 +11,10 @@ import {
 import styled from 'styled-components';
 import { ImportNotification } from '../../components/create/ImportNotification';
 import { DropDown } from '../../components/DropDown';
-import { EllipsisIcon, PlusIcon, ReorderIcon } from '../../components/Icon';
+import { EllipsisIcon, ReorderIcon } from '../../components/Icon';
 import { ColumnText, Divider } from '../../components/Layout';
 import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
+import { SetUpWalletIcon } from '../../components/settings/SettingsIcons';
 import { SettingsList } from '../../components/settings/SettingsList';
 import { SubHeader } from '../../components/SubHeader';
 import { Label1 } from '../../components/Text';
@@ -46,7 +47,7 @@ const WalletRow: FC<{
           <ReorderIcon />
         </Icon>
         <ColumnText
-          text={wallet.name ? wallet.name : `${t('Wallet')} ${index + 1}`}
+          text={wallet.name ? wallet.name : t('Wallet')}
           secondary={toShortAddress(wallet.address)}
         />
       </Row>
@@ -96,7 +97,7 @@ export const Account = () => {
     return [
       {
         name: t('Set_up_wallet'),
-        icon: <PlusIcon />,
+        icon: <SetUpWalletIcon />,
         action: () => setOpen(true),
       },
     ];
@@ -128,6 +129,7 @@ export const Account = () => {
                 >
                   {(provided) => (
                     <ListItem
+                      hover={false}
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                     >

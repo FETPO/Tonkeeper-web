@@ -50,7 +50,7 @@ export const useMutateDeleteAll = () => {
   return useMutation<void, Error, void>(async () => {
     // TODO: clean remote storage by api
     await storage.clear();
-    await client.invalidateQueries();
+    //await client.invalidateQueries();
   });
 };
 

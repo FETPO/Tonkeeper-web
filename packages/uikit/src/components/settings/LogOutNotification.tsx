@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -91,7 +92,16 @@ const DeleteAllContent: FC<{ onClose: (action: () => void) => void }> = ({
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [checked, setChecked] = useState(false);
-  const { mutate, isLoading } = useMutateDeleteAll();
+  const { mutateAsync, isLoading } = useMutateDeleteAll();
+  const client = useQueryClient();
+
+  const onDelete = async () => {
+    await mutateAsync();
+    onClose(async () => {
+      await client.invalidateQueries();
+      navigate(AppRoute.home);
+    });
+  };
 
   return (
     <NotificationBlock>
@@ -120,10 +130,7 @@ const DeleteAllContent: FC<{ onClose: (action: () => void) => void }> = ({
         fullWith
         bottom
         loading={isLoading}
-        onClick={() => {
-          mutate();
-          onClose(() => navigate(AppRoute.home));
-        }}
+        onClick={onDelete}
       >
         {t('Log_out')}
       </Button>

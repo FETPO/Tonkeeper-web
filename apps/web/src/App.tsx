@@ -64,6 +64,7 @@ const SettingsRouter = React.lazy(
 const queryClient = new QueryClient();
 const storage = new BrowserStorage();
 const sdk = new BrowserAppSdk();
+console.log('recreate sdk');
 
 export const App: FC<PropsWithChildren> = () => {
   const { t, i18n } = useTranslation();
