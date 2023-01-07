@@ -44,6 +44,28 @@ export const useMutateActiveWallet = () => {
   });
 };
 
+export const useMutateLogOut = (tonkeeperId: string, remove = false) => {
+  const storage = useStorage();
+  const client = useQueryClient();
+  return useMutation<void, Error, void>(async () => {
+    if (remove) {
+      // TODO: clean remote storage by api
+    }
+    let account = await getAccountState(storage);
+    const wallets = account.wallets.filter(
+      (item) => item.tonkeeperId !== tonkeeperId
+    );
+
+    account = {
+      wallets,
+      activeWallet: wallets.length > 0 ? wallets[0].tonkeeperId : undefined,
+    };
+
+    await storage.set(AppKey.account, account);
+    await client.invalidateQueries([AppKey.account]);
+  });
+};
+
 export const useMutateDeleteAll = () => {
   const storage = useStorage();
   const client = useQueryClient();

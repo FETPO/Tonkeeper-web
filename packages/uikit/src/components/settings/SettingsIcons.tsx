@@ -365,9 +365,9 @@ export const SetUpWalletIcon = () => {
         opacity="0.32"
         d="M14 14.001H19M14 14.001H9M14 14.001V9.00098M14 14.001V19.001"
         stroke="currentColor"
-        stroke-width="3"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

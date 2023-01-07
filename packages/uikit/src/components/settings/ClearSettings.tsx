@@ -1,14 +1,15 @@
 import React, { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { DeleteAllNotification } from '../../components/settings/LogOutNotification';
-import { DeleteAccountIcon } from '../../components/settings/SettingsIcons';
-import { SettingsList } from '../../components/settings/SettingsList';
+import { useAppContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
+import { DeleteAllNotification } from './LogOutNotification';
+import { DeleteAccountIcon } from './SettingsIcons';
+import { SettingsList } from './SettingsList';
 
-export const SettingsClear = () => {
+export const ClearSettings = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const { account } = useAppContext();
   const deleteItems = useMemo(() => {
     const deleteAll = () => {
       searchParams.append('notification', 'delete-all');
@@ -17,7 +18,10 @@ export const SettingsClear = () => {
 
     return [
       {
-        name: t('Delete_all_accounts_and_logout'),
+        name:
+          account.wallets.length > 1
+            ? t('Delete_all_accounts_and_logout')
+            : t('Delete_account'),
         icon: <DeleteAccountIcon />,
         action: deleteAll,
       },

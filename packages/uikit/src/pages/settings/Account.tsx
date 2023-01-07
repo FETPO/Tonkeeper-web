@@ -8,6 +8,7 @@ import {
   Droppable,
   OnDragEndResponder,
 } from 'react-beautiful-dnd';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { ImportNotification } from '../../components/create/ImportNotification';
 import { DropDown } from '../../components/DropDown';
@@ -35,9 +36,9 @@ const Icon = styled.span`
 
 const WalletRow: FC<{
   wallet: WalletState;
-  index: number;
   dragHandleProps: DraggableProvidedDragHandleProps | null | undefined;
-}> = ({ wallet, index, dragHandleProps }) => {
+}> = ({ wallet, dragHandleProps }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation();
 
   return (
@@ -65,12 +66,26 @@ const WalletRow: FC<{
               </ListItemPayload>
             </ListItem>
             <Divider />
-            <ListItem>
+            <ListItem
+              onClick={() => {
+                searchParams.delete('logout');
+                searchParams.append('logout', wallet.tonkeeperId);
+                setSearchParams(searchParams);
+                onClose();
+              }}
+            >
               <ListItemPayload>
                 <Label1>{t('Log_out')}</Label1>
               </ListItemPayload>
             </ListItem>
-            <ListItem>
+            <ListItem
+              onClick={() => {
+                searchParams.delete('delete');
+                searchParams.append('delete', wallet.tonkeeperId);
+                setSearchParams(searchParams);
+                onClose();
+              }}
+            >
               <ListItemPayload>
                 <Label1>{t('Delete_account')}</Label1>
               </ListItemPayload>
@@ -136,7 +151,6 @@ export const Account = () => {
                       <WalletRow
                         dragHandleProps={provided.dragHandleProps}
                         wallet={item}
-                        index={index}
                       />
                     </ListItem>
                   )}
