@@ -1,8 +1,7 @@
 import { NftItemRepr } from '@tonkeeper/core/dist/tonApi';
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useTranslation } from '../../hooks/translation';
 import { useNftInfo } from '../../state/nft';
 import {
   Notification,
@@ -30,8 +29,15 @@ const NftPreview: FC<{
   afterClose: (action: () => void) => void;
   nftItem: NftItemRepr;
 }> = ({ afterClose, nftItem }) => {
-  const { t } = useTranslation();
-  console.log(nftItem);
+  const ref = useRef<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    if (ref.current && ref.current.parentNode!.parentNode) {
+      ref.current.style.minHeight =
+        (ref.current.parentNode!.parentNode as HTMLElement).offsetWidth + 'px';
+      console.log(ref.current.style.minHeight);
+    }
+  }, [ref.current]);
 
   const { name, description } = nftItem.metadata;
 
@@ -45,7 +51,7 @@ const NftPreview: FC<{
     <NotificationBlock>
       {name && <NotificationTitle>{name}</NotificationTitle>}
       <NftBlock>
-        {image && <Image src={image.url} />}
+        {image && <Image ref={ref} src={image.url} />}
         <Text>
           {name && <Label2>{name}</Label2>}
           {collectionName && <Body>{collectionName}</Body>}

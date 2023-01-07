@@ -16,6 +16,11 @@ const ButtonContainer = styled.div`
   position: relative;
 `;
 
+const Padding = styled.div`
+  flex-shrink: 0;
+  height: 2rem;
+`;
+
 const CloseButton = styled.div`
   position: absolute;
   right: 0;
@@ -120,6 +125,7 @@ export const Notification: FC<{
       >
         <Splash ref={nodeRef}>
           <Wrapper>
+            <Padding />
             <Gap />
             <Content>
               {handleClose && (
