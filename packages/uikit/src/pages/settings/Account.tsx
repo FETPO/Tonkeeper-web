@@ -54,19 +54,20 @@ const WalletRow: FC<{
       </Row>
       <DropDown
         payload={(onClose) => (
-          <ListBlock margin={false}>
-            <ListItem>
+          <ListBlock margin={false} dropDown>
+            <ListItem dropDown>
               <ListItemPayload>
                 <Label1>{t('Rename')}</Label1>
               </ListItemPayload>
             </ListItem>
-            <ListItem>
+            <ListItem dropDown>
               <ListItemPayload>
                 <Label1>{t('Show_recovery_phrase')}</Label1>
               </ListItemPayload>
             </ListItem>
             <Divider />
             <ListItem
+              dropDown
               onClick={() => {
                 searchParams.delete('logout');
                 searchParams.append('logout', wallet.tonkeeperId);
@@ -79,6 +80,7 @@ const WalletRow: FC<{
               </ListItemPayload>
             </ListItem>
             <ListItem
+              dropDown
               onClick={() => {
                 searchParams.delete('delete');
                 searchParams.append('delete', wallet.tonkeeperId);

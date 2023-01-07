@@ -1,10 +1,18 @@
 import styled, { css } from 'styled-components';
 
-export const ListBlock = styled.div<{ margin?: boolean }>`
+export const ListBlock = styled.div<{ margin?: boolean; dropDown?: boolean }>`
   display: flex;
   flex-direction: column;
 
-  background: ${(props) => props.theme.backgroundContent};
+  ${(props) =>
+    props.dropDown
+      ? css`
+          background: ${(props) => props.theme.backgroundContentTint};
+        `
+      : css`
+          background: ${(props) => props.theme.backgroundContent};
+        `}
+
   padding: 0;
 
   ${(props) =>
@@ -33,16 +41,23 @@ export const ListItemPayload = styled.div`
   justify-content: space-between;
   padding: 1rem 1rem 1rem 0;
 `;
-export const ListItem = styled.div<{ hover?: boolean }>`
+export const ListItem = styled.div<{ hover?: boolean; dropDown?: boolean }>`
   display: flex;
   padding: 0 0 0 1rem;
-  cursor: pointer;
 
-  background: ${(props) => props.theme.backgroundContent};
+  ${(props) =>
+    props.dropDown
+      ? css`
+          background: ${(props) => props.theme.backgroundContentTint};
+        `
+      : css`
+          background: ${(props) => props.theme.backgroundContent};
+        `}
 
   ${(props) =>
     props.hover !== false
       ? css`
+          cursor: pointer;
           &:hover {
             background: ${props.theme.backgroundContentTint};
           }

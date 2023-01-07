@@ -57,9 +57,7 @@ const Row = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  &:hover {
-    background: ${(props) => props.theme.backgroundContentTint};
-  }
+  background: ${(props) => props.theme.backgroundContentTint};
 `;
 
 const Text = styled.div`
@@ -83,6 +81,7 @@ const WalletRow: FC<{
 
   return (
     <ListItem
+      dropDown
       onClick={() => {
         mutate(wallet.tonkeeperId);
         onClose();
