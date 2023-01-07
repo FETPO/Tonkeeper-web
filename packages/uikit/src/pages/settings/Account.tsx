@@ -8,7 +8,7 @@ import {
   Droppable,
   OnDragEndResponder,
 } from 'react-beautiful-dnd';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { ImportNotification } from '../../components/create/ImportNotification';
 import { DropDown } from '../../components/DropDown';
@@ -21,6 +21,7 @@ import { SubHeader } from '../../components/SubHeader';
 import { Label1 } from '../../components/Text';
 import { useAppContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
+import { AppRoute, SettingsRoute } from '../../libs/routes';
 import { useMutateAccountState } from '../../state/account';
 
 const Row = styled.div`
@@ -38,6 +39,7 @@ const WalletRow: FC<{
   wallet: WalletState;
   dragHandleProps: DraggableProvidedDragHandleProps | null | undefined;
 }> = ({ wallet, dragHandleProps }) => {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation();
 
@@ -55,12 +57,29 @@ const WalletRow: FC<{
       <DropDown
         payload={(onClose) => (
           <ListBlock margin={false} dropDown>
-            <ListItem dropDown>
+            <ListItem
+              dropDown
+              onClick={() => {
+                searchParams.delete('rename');
+                searchParams.append('rename', wallet.tonkeeperId);
+                setSearchParams(searchParams);
+                onClose();
+              }}
+            >
               <ListItemPayload>
                 <Label1>{t('Rename')}</Label1>
               </ListItemPayload>
             </ListItem>
-            <ListItem dropDown>
+            <ListItem
+              dropDown
+              onClick={() => {
+                navigate(
+                  AppRoute.settings +
+                    SettingsRoute.recovery +
+                    `/${wallet.tonkeeperId}`
+                );
+              }}
+            >
               <ListItemPayload>
                 <Label1>{t('Show_recovery_phrase')}</Label1>
               </ListItemPayload>

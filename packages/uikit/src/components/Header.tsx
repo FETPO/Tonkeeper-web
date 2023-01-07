@@ -12,7 +12,7 @@ import { DropDown } from './DropDown';
 import { CheckIcon, DownIcon, PlusIcon, SettingsIcon } from './Icon';
 import { ColumnText, Divider } from './Layout';
 import { ListItem, ListItemPayload } from './List';
-import { Body2, H3, Label1 } from './Text';
+import { H3, Label1 } from './Text';
 
 const Block = styled.div<{ top: boolean }>`
   flex-shrink: 0;
@@ -58,16 +58,6 @@ const Row = styled.div`
   justify-content: space-between;
 
   background: ${(props) => props.theme.backgroundContentTint};
-`;
-
-const Text = styled.div`
-  display: flex;
-  flex-direction: column;
-  pap: 0.25rem;
-`;
-
-const Body = styled(Body2)`
-  color: ${(props) => props.theme.textSecondary};
 `;
 
 const WalletRow: FC<{
@@ -165,6 +155,8 @@ const useIsScrollTop = () => {
     };
 
     window.addEventListener('scroll', handler);
+
+    handler();
 
     return () => {
       window.removeEventListener('scroll', handler);

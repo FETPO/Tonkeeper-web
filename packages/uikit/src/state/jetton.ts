@@ -40,6 +40,7 @@ export const useOrderJettonMutation = () => {
 
     account = updateWallet(account, {
       ...wallet,
+      revision: wallet.revision + 1,
       orderJettons,
     });
 

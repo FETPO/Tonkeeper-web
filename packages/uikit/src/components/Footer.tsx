@@ -80,7 +80,7 @@ export const SettingsIcon = () => {
   );
 };
 
-export const Button = styled.div<{ active: boolean }>`
+const Button = styled.div<{ active: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -100,7 +100,7 @@ export const Button = styled.div<{ active: boolean }>`
     `}
 `;
 
-export const Block = styled.div<{ bottom: boolean }>`
+const Block = styled.div<{ bottom: boolean }>`
   flex-shrink: 0;
   display: flex;
   justify-content: space-around;
@@ -129,6 +129,8 @@ const useIsScrollBottom = () => {
     };
 
     window.addEventListener('scroll', handler);
+
+    handler();
 
     return () => {
       window.removeEventListener('scroll', handler);

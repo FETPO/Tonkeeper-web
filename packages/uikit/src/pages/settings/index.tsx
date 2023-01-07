@@ -11,6 +11,7 @@ import { FiatCurrency } from './FiatCurrency';
 import { JettonsSettings } from './Jettons';
 import { Legal } from './Legal';
 import { Localization } from './Localization';
+import { ActiveRecovery, Recovery } from './Recovery';
 import { Settings } from './Settings';
 import { UserTheme } from './Theme';
 import { WalletVersion } from './Version';
@@ -25,7 +26,9 @@ const SettingsRouter = () => {
         <Route path={SettingsRoute.dev} element={<DevSettings />} />
         <Route path={SettingsRoute.fiat} element={<FiatCurrency />} />
         <Route path={SettingsRoute.account} element={<Account />} />
-        <Route path={SettingsRoute.recovery} element={<>Recovery</>} />
+        <Route path={SettingsRoute.recovery} element={<ActiveRecovery />}>
+          <Route path=":tonkeeperId" element={<Recovery />} />
+        </Route>
         <Route path={SettingsRoute.version} element={<WalletVersion />} />
         <Route path={SettingsRoute.jettons} element={<JettonsSettings />} />
         <Route path="*" element={<Settings />} />
