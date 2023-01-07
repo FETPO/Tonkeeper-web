@@ -4,6 +4,7 @@ import {
   DeleteWalletNotification,
   LogOutWalletNotification,
 } from '../../components/settings/LogOutNotification';
+import { RenameWalletNotification } from '../../components/settings/WalletNameNotification';
 import { SettingsRoute } from '../../libs/routes';
 import { Account } from './Account';
 import { DevSettings } from './Dev';
@@ -35,6 +36,7 @@ const SettingsRouter = () => {
       </Routes>
       <DeleteWalletNotification />
       <LogOutWalletNotification />
+      <RenameWalletNotification />
     </>
   );
 };

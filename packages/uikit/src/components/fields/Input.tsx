@@ -71,11 +71,11 @@ const Label = styled.label<{ active?: boolean }>`
 export const Input: FC<{
   type?: 'password' | undefined;
   value: string;
-  onChange: (value: string) => void;
-  isValid: boolean;
+  onChange?: (value: string) => void;
+  isValid?: boolean;
   label?: string;
   disabled?: boolean;
-}> = ({ type, value, onChange, isValid, label, disabled }) => {
+}> = ({ type, value, onChange, isValid = true, label, disabled }) => {
   const [focus, setFocus] = useState(false);
 
   return (
@@ -84,7 +84,7 @@ export const Input: FC<{
         disabled={disabled}
         type={type}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange && onChange(e.target.value)}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
       />

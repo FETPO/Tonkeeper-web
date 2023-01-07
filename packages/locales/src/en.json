@@ -466,5 +466,9 @@
   "Wallet_name": {
     "message": "Wallet name",
     "description": "Wallet name input label"
+  },
+  "Address": {
+    "message": "Address",
+    "description": "Address input label"
   }
 }
