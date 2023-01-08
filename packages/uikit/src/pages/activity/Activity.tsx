@@ -3,7 +3,7 @@ import { FiatCurrencySymbolsConfig } from '@tonkeeper/core/dist/entries/fiat';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { Action, EventApi } from '@tonkeeper/core/dist/tonApi';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
-import React, { FC, useMemo } from 'react';
+import React, { FC, PropsWithChildren, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import {
   ActivityIcon,
@@ -14,6 +14,7 @@ import { Button } from '../../components/fields/Button';
 import { ColumnText } from '../../components/Layout';
 import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
 import { Loading } from '../../components/Loading';
+import { Label1 } from '../../components/Text';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { formatAmountValue } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
@@ -36,77 +37,193 @@ const formatDate = (timestamp: number): string => {
   return `${date.getHours()}:${('0' + date.getMinutes()).slice(-2)}`;
 };
 
-const ActivityAction: FC<{ action: Action; address: string; date: string }> = ({
+export const useFormatCoinValue = () => {
+  const { fiat } = useAppContext();
+
+  const commonFormat = useMemo(
+    () =>
+      new Intl.NumberFormat(FiatCurrencySymbolsConfig[fiat].numberFormat, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      }),
+    [fiat]
+  );
+
+  return useCallback(
+    (amount: number | string, decimals: number = 9) => {
+      const value = formatAmountValue(String(amount), decimals);
+
+      const formatted = commonFormat.format(value);
+      if (formatted != '0') {
+        return formatted;
+      }
+
+      const countFormat = new Intl.NumberFormat(
+        FiatCurrencySymbolsConfig[fiat].numberFormat,
+        {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: decimals,
+        }
+      );
+
+      return countFormat.format(value);
+    },
+    [fiat, commonFormat]
+  );
+};
+
+const ErrorAction: FC<PropsWithChildren> = ({ children }) => {
+  const { t } = useTranslation();
+  return (
+    <ListItemPayload>
+      <Row>
+        <ActivityIcon>
+          <ReceiveIcon />
+        </ActivityIcon>
+        <Label1>{children ?? t('Error')}</Label1>
+      </Row>
+    </ListItemPayload>
+  );
+};
+
+const TonTransferAction: FC<{ action: Action; date: string }> = ({
   action,
-  address,
   date,
 }) => {
-  const { fiat } = useAppContext();
-  const { format } = useMemo(() => {
-    const config = FiatCurrencySymbolsConfig[fiat];
-    return new Intl.NumberFormat(config.numberFormat, {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-    });
-  }, [fiat]);
-
   const { t } = useTranslation();
+  const wallet = useWalletContext();
+  const { tonTransfer } = action;
+
+  const format = useFormatCoinValue();
+
+  if (!tonTransfer) {
+    return <ErrorAction />;
+  }
+
+  if (tonTransfer.recipient.address === wallet.address) {
+    return (
+      <ListItemPayload>
+        <Row>
+          <ActivityIcon>
+            <ReceiveIcon />
+          </ActivityIcon>
+          <ColumnText
+            text={t('Received')}
+            secondary={toShortAddress(tonTransfer.sender.address)}
+          />
+        </Row>
+
+        <ColumnText
+          right
+          green
+          text={`+ ${format(tonTransfer.amount)} TON`}
+          secondary={date}
+        />
+      </ListItemPayload>
+    );
+  }
+  return (
+    <ListItemPayload>
+      <Row>
+        <ActivityIcon>
+          <SentIcon />
+        </ActivityIcon>
+        <ColumnText
+          text={t('Sent')}
+          secondary={toShortAddress(tonTransfer.recipient.address)}
+        />
+      </Row>
+      <ColumnText
+        right
+        text={`- ${format(tonTransfer.amount)} TON`}
+        secondary={date}
+      />
+    </ListItemPayload>
+  );
+};
+
+export const JettonTransferAction: FC<{ action: Action; date: string }> = ({
+  action,
+  date,
+}) => {
+  const { t } = useTranslation();
+  const wallet = useWalletContext();
+  const { jettonTransfer } = action;
+
+  const format = useFormatCoinValue();
+
+  if (!jettonTransfer) {
+    return <ErrorAction />;
+  }
+
+  if (jettonTransfer.sender?.address === wallet.address) {
+    return (
+      <ListItemPayload>
+        <Row>
+          <ActivityIcon>
+            <SentIcon />
+          </ActivityIcon>
+          <ColumnText
+            text={t('Sent')}
+            secondary={toShortAddress(
+              jettonTransfer.sender?.address ?? jettonTransfer.sendersWallet
+            )}
+          />
+        </Row>
+        <ColumnText
+          right
+          text={`- ${format(
+            jettonTransfer.amount,
+            jettonTransfer.jetton.decimals
+          )} ${jettonTransfer.jetton.symbol}`}
+          secondary={date}
+        />
+      </ListItemPayload>
+    );
+  }
+
+  return (
+    <ListItemPayload>
+      <Row>
+        <ActivityIcon>
+          <ReceiveIcon />
+        </ActivityIcon>
+        <ColumnText
+          text={t('Received')}
+          secondary={toShortAddress(jettonTransfer.recipientsWallet)}
+        />
+      </Row>
+
+      <ColumnText
+        right
+        green
+        text={`+ ${format(
+          jettonTransfer.amount,
+          jettonTransfer.jetton.decimals
+        )} ${jettonTransfer.jetton.symbol}`}
+        secondary={date}
+      />
+    </ListItemPayload>
+  );
+};
+
+const ActivityAction: FC<{ action: Action; date: string }> = ({
+  action,
+  date,
+}) => {
+  const { t } = useTranslation();
+
   switch (action.type) {
-    case 'TonTransfer': {
-      const { tonTransfer } = action;
-      if (!tonTransfer) {
-        return <>{t('Error')}</>;
-      }
-
-      if (tonTransfer.recipient.address === address) {
-        return (
-          <>
-            <Row>
-              <ActivityIcon>
-                <ReceiveIcon />
-              </ActivityIcon>
-              <ColumnText
-                text={t('Received')}
-                secondary={toShortAddress(tonTransfer.sender.address)}
-              />
-            </Row>
-
-            <ColumnText
-              right
-              green
-              text={`+ ${format(
-                formatAmountValue(String(tonTransfer.amount), 9)
-              )} TON`}
-              secondary={date}
-            />
-          </>
-        );
-      } else {
-        return (
-          <>
-            <Row>
-              <ActivityIcon>
-                <SentIcon />
-              </ActivityIcon>
-              <ColumnText
-                text={t('Sent')}
-                secondary={toShortAddress(tonTransfer.recipient.address)}
-              />
-            </Row>
-            <ColumnText
-              right
-              text={`- ${format(
-                formatAmountValue(String(tonTransfer.amount), 9)
-              )} TON`}
-              secondary={date}
-            />
-          </>
-        );
-      }
+    case 'TonTransfer':
+      return <TonTransferAction action={action} date={date} />;
+    case 'JettonTransfer':
+      return <JettonTransferAction action={action} date={date} />;
+    case 'Unknown':
+      return <ErrorAction>{t('Unknown')}</ErrorAction>;
+    default: {
+      console.log(action);
+      return <ListItemPayload>{action.type}</ListItemPayload>;
     }
-
-    default:
-      return <>{action.type}</>;
   }
 };
 
@@ -134,19 +251,13 @@ export const Activity: FC = () => {
     <Body>
       {data.pages.map((page) => {
         return page.events.map((event) => {
-          console.log(event);
+          //console.log(event);
           const date = formatDate(event.timestamp);
           return (
             <List key={event.eventId}>
               {event.actions.map((action, index) => (
                 <ListItem key={index}>
-                  <ListItemPayload>
-                    <ActivityAction
-                      action={action}
-                      address={wallet.address}
-                      date={date}
-                    />
-                  </ListItemPayload>
+                  <ActivityAction action={action} date={date} />
                 </ListItem>
               ))}
             </List>

@@ -478,5 +478,9 @@
   "Received": {
     "message": "Received",
     "description": "Received activity title"
+  },
+  "Unknown": {
+    "message": "Unknown",
+    "description": "Unknown activity title"
   }
 }

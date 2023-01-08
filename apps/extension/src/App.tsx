@@ -5,7 +5,10 @@ import { getTonClient } from '@tonkeeper/core/dist/entries/network';
 import { AuthState } from '@tonkeeper/core/dist/entries/password';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
-import { Header } from '@tonkeeper/uikit/dist/components/Header';
+import {
+  ActivityHeader,
+  Header,
+} from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
 import { NftNotification } from '@tonkeeper/uikit/dist/components/nft/NftNotification';
 import {
@@ -23,6 +26,7 @@ import {
   TranslationContext,
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
+import { Activity } from '@tonkeeper/uikit/dist/pages/activity/Activity';
 import { Home } from '@tonkeeper/uikit/dist/pages/home/Home';
 import { Unlock } from '@tonkeeper/uikit/dist/pages/home/Unlock';
 import ImportRouter from '@tonkeeper/uikit/dist/pages/import';
@@ -55,7 +59,6 @@ import styled from 'styled-components';
 import browser from 'webextension-polyfill';
 import { ExtensionAppSdk } from './libs/appSdk';
 import { ExtensionStorage } from './libs/storage';
-import { Activity } from './pages/Activity';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -222,7 +225,15 @@ export const Content: FC<{ account: AccountState; lock: boolean }> = ({
     <WalletStateContext.Provider value={activeWallet}>
       <Body>
         <Routes>
-          <Route path={AppRoute.activity} element={<Activity />} />
+          <Route
+            path={AppRoute.activity}
+            element={
+              <>
+                <ActivityHeader />
+                <Activity />
+              </>
+            }
+          />
           <Route path={any(AppRoute.settings)} element={<SettingsRouter />} />
           <Route
             path="*"
