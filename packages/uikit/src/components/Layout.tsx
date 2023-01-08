@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Body2, H2, Label1 } from './Text';
 
 export const Gap = styled.div`
@@ -36,23 +36,40 @@ export const IconPage: FC<{
   );
 };
 
-const Text = styled.div`
+const Text = styled.div<{ right?: boolean }>`
   display: flex;
   flex-direction: column;
   pap: 0.25rem;
+  ${(props) =>
+    props.right
+      ? css`
+          text-align: right;
+        `
+      : undefined}
+`;
+
+const Label = styled(Label1)<{ green?: boolean }>`
+  ${(props) =>
+    props.green
+      ? css`
+          color: ${props.theme.accentGreen};
+        `
+      : undefined}
 `;
 
 const Secondary = styled(Body2)`
   color: ${(props) => props.theme.textSecondary};
 `;
 
-export const ColumnText: FC<{ text: string; secondary: string }> = ({
-  text,
-  secondary,
-}) => {
+export const ColumnText: FC<{
+  green?: boolean;
+  right?: boolean;
+  text: string;
+  secondary: string;
+}> = ({ green, text, secondary, right }) => {
   return (
-    <Text>
-      <Label1>{text}</Label1>
+    <Text right={right}>
+      <Label green={green}>{text}</Label>
       <Secondary>{secondary}</Secondary>
     </Text>
   );

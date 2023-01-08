@@ -8,4 +8,5 @@ export enum AppKey {
   balance = 'balance',
   jettons = 'jettons',
   nft = 'nft',
+  activity = 'activity',
 }

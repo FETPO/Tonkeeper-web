@@ -12,9 +12,9 @@ import { DropDown } from './DropDown';
 import { CheckIcon, DownIcon, PlusIcon, SettingsIcon } from './Icon';
 import { ColumnText, Divider } from './Layout';
 import { ListItem, ListItemPayload } from './List';
-import { H3, Label1 } from './Text';
+import { H1, H3, Label1 } from './Text';
 
-const Block = styled.div<{ top: boolean }>`
+const Block = styled.div<{ top: boolean; center?: boolean }>`
   flex-shrink: 0;
 
   position: sticky;
@@ -22,7 +22,12 @@ const Block = styled.div<{ top: boolean }>`
   padding: 1rem 0;
 
   display: flex;
-  justify-content: center;
+
+  ${(props) =>
+    props.center &&
+    css`
+      justify-content: center;
+    `}
 
   background-color: ${(props) => props.theme.backgroundPage};
 
@@ -172,7 +177,7 @@ export const Header = () => {
   const [isOpen, setOpen] = useState(false);
   const top = useIsScrollTop();
   return (
-    <Block top={top}>
+    <Block top={top} center>
       <DropDown
         center
         payload={(onClose) => (
@@ -187,6 +192,17 @@ export const Header = () => {
         </Title>
       </DropDown>
       <ImportNotification isOpen={isOpen} setOpen={setOpen} />
+    </Block>
+  );
+};
+
+export const ActivityHeader = () => {
+  const top = useIsScrollTop();
+  const { t } = useTranslation();
+
+  return (
+    <Block top={top}>
+      <H1>{t('Activity')}</H1>
     </Block>
   );
 };

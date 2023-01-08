@@ -470,5 +470,13 @@
   "Address": {
     "message": "Address",
     "description": "Address input label"
+  },
+  "Sent": {
+    "message": "Sent",
+    "description": "Sent activity title"
+  },
+  "Received": {
+    "message": "Received",
+    "description": "Received activity title"
   }
 }
