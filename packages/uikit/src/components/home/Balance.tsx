@@ -1,9 +1,12 @@
 import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
 import { AccountRepr } from '@tonkeeper/core/dist/tonApi';
+import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
-import React, { FC } from 'react';
+import BigNumber from 'bignumber.js';
+import React, { FC, useMemo } from 'react';
 import styled from 'styled-components';
 import { useFormattedPrice } from '../../hooks/balance';
+import { getCoinPrice } from '../../hooks/useFiatRate';
 import { Body2, Title } from '../Text';
 
 const Block = styled.div`
@@ -25,8 +28,16 @@ export const Balance: FC<{
   currency: FiatCurrencies;
   info?: AccountRepr | undefined;
   error?: Error | null;
-}> = ({ address, currency, info, error }) => {
-  const balance = useFormattedPrice(currency, info?.balance);
+  stock?: TonendpointStock | undefined;
+}> = ({ address, currency, info, error, stock }) => {
+  const total = useMemo(() => {
+    if (!info?.balance || !stock) return undefined;
+    return new BigNumber(info.balance)
+      .multipliedBy(getCoinPrice(stock.today, currency))
+      .toFixed(0);
+  }, [info?.balance, stock, currency]);
+
+  const balance = useFormattedPrice(currency, total);
 
   return (
     <Block>

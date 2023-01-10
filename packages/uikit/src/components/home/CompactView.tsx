@@ -3,6 +3,7 @@ import {
   JettonsBalances,
   NftItemsRepr,
 } from '@tonkeeper/core/dist/tonApi';
+import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -34,16 +35,17 @@ const EditButton = styled(Label2)`
 `;
 
 export const CompactView: FC<{
+  stock: TonendpointStock | undefined;
   jettons: JettonsBalances | undefined;
   info: AccountRepr | undefined;
   nfts: NftItemsRepr | undefined;
-}> = ({ jettons, info, nfts }) => {
+}> = ({ stock, jettons, info, nfts }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   return (
     <>
-      <Assets info={info} jettons={jettons} />
+      <Assets info={info} jettons={jettons} stock={stock} />
       <ButtonRow>
         <EditButton
           onClick={() => navigate(AppRoute.settings + SettingsRoute.jettons)}
