@@ -37,7 +37,8 @@
   "scripts": {
     "build": "ts-node ./task/build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:extension": "yarn build"
   },
   "eslintConfig": {
     "extends": [

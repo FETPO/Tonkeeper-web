@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "build": "npx turbo build",
-    "build:web": "npx turbo build:web"
+    "build:web": "npx turbo build:web",
+    "build:extension": "npx turbo build:extension"
   },
   "private": true,
   "devDependencies": {
