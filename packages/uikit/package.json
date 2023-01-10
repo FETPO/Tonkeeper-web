@@ -9,7 +9,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "build": "rm -fr dist && tsc",
-    "start": "tsc -w"
+    "start": "tsc -w",
+    "build:pkg": "yarn build"
   },
   "license": "ISC",
   "dependencies": {

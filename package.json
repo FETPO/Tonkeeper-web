@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "npx turbo build"
+    "build": "npx turbo build",
+    "build:web": "npx turbo build:pkg && npx turbo build:web"
   },
   "private": true,
   "devDependencies": {
