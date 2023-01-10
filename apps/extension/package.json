@@ -5,10 +5,11 @@
   "description": "Your extension wallet on The Open Network",
   "dependencies": {
     "@tanstack/react-query": "4.3.4",
+    "@tonkeeper/core": "0.1.0",
     "@tonkeeper/locales": "0.1.0",
     "@tonkeeper/uikit": "0.1.0",
-    "@tonkeeper/core": "0.1.0",
     "buffer": "^6.0.3",
+    "copy-to-clipboard": "^3.3.3",
     "crypto-browserify": "^3.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

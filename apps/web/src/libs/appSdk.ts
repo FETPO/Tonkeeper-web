@@ -3,6 +3,10 @@ import { EventEmitter } from '@tonkeeper/core/dist/entries/eventEmitter';
 import { MemoryStorage } from '@tonkeeper/core/dist/Storage';
 
 export class BrowserAppSdk implements IAppSdk {
+  copyToClipboard = (value: string) => {
+    navigator.clipboard.writeText(value);
+    this.uiEvents.emit('copy', {});
+  };
   openPage = async (url: string) => {
     window.open(url, '_black');
   };

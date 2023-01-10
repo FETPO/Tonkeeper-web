@@ -3,9 +3,11 @@ import { IStorage, MemoryStorage } from './Storage';
 
 export interface UIEvents {
   unlock: void;
+  copy: void;
 }
 
 export interface IAppSdk {
+  copyToClipboard: (value: string) => void;
   openPage: (url: string) => Promise<unknown>;
   memoryStore: IStorage;
   uiEvents: IEventEmitter<UIEvents>;
@@ -13,6 +15,9 @@ export interface IAppSdk {
 }
 
 export class MockAppSdk implements IAppSdk {
+  copyToClipboard = (value: string) => {
+    console.log(value);
+  };
   openPage = async (url: string): Promise<void> => {
     console.log(url);
   };

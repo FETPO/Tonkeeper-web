@@ -4,6 +4,7 @@ import { Language, languages } from '@tonkeeper/core/dist/entries/language';
 import { getTonClient } from '@tonkeeper/core/dist/entries/network';
 import { AuthState } from '@tonkeeper/core/dist/entries/password';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
+import { CopyNotification } from '@tonkeeper/uikit/dist/components/CopyNotification';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import {
   ActivityHeader,
@@ -184,6 +185,7 @@ export const Loader: FC = () => {
           <Container>
             <Content account={account} lock={lock} />
           </Container>
+          <CopyNotification />
         </AppContext.Provider>
       </AfterImportAction.Provider>
     </OnImportAction.Provider>

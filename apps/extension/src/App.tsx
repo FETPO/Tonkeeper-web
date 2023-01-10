@@ -4,6 +4,7 @@ import { Language } from '@tonkeeper/core/dist/entries/language';
 import { getTonClient } from '@tonkeeper/core/dist/entries/network';
 import { AuthState } from '@tonkeeper/core/dist/entries/password';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
+import { CopyNotification } from '@tonkeeper/uikit/dist/components/CopyNotification';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import {
   ActivityHeader,
@@ -40,7 +41,10 @@ import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
 import { useFiatCurrency } from '@tonkeeper/uikit/dist/state/fiat';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
-import { useTonenpointConfig } from '@tonkeeper/uikit/dist/state/tonendpoint';
+import {
+  useTonendpoint,
+  useTonenpointConfig,
+} from '@tonkeeper/uikit/dist/state/tonendpoint';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
 import React, {
   FC,
@@ -142,24 +146,31 @@ export const Loader: FC = React.memo(() => {
   const { data: account } = useAccountState();
   const { data: auth } = useAuthState();
   const { data: fiat } = useFiatCurrency();
-  const { data: config } = useTonenpointConfig(
+  const tonendpoint = useTonendpoint(
     sdk.version,
     network,
     browser.i18n.getUILanguage() as Language
   );
+  const { data: config } = useTonenpointConfig(tonendpoint);
+
   console.log('Loader', network, account, auth, fiat);
 
   if (!network || !account || !auth || !fiat || !config || lock === undefined) {
-    return <Loading />;
+    return (
+      <Wrapper>
+        <Loading />
+      </Wrapper>
+    );
   }
 
   const context = {
-    tonApi: getTonClient(config),
+    tonApi: getTonClient(config, network),
     network,
     account,
     auth,
     fiat,
     config,
+    tonendpoint,
   };
 
   return (
@@ -169,6 +180,7 @@ export const Loader: FC = React.memo(() => {
           <Wrapper>
             <Content account={account} lock={lock} />
           </Wrapper>
+          <CopyNotification />
         </AppContext.Provider>
       </AfterImportAction.Provider>
     </OnImportAction.Provider>

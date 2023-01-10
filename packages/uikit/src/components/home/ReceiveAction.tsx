@@ -4,6 +4,7 @@ import QRCode from 'react-qr-code';
 import styled from 'styled-components';
 import { Address } from 'ton-core';
 import { useWalletContext } from '../../hooks/appContext';
+import { useAppSdk } from '../../hooks/appSdk';
 import { useTranslation } from '../../hooks/translation';
 import { ToncoinIcon } from '../Icon';
 import { Notification, NotificationBlock } from '../Notification';
@@ -22,7 +23,7 @@ const Block = styled.div`
   border-radius: ${(props) => props.theme.cornerMedium};
   background: ${(props) => props.theme.backgroundContent};
 
-  max-width: 400px;
+  max-width: 80%;
   overflow: hidden;
 `;
 
@@ -72,17 +73,23 @@ const AddressText = styled(Label2)`
   word-break: break-all;
 `;
 
+const Title = styled(H2)`
+  text-align: center;
+`;
+
 const ReceiveContent = () => {
   const { t } = useTranslation();
+  const sdk = useAppSdk();
   const wallet = useWalletContext();
 
+  const address = Address.parse(wallet.address).toString();
   return (
     <NotificationBlock>
       <Icon>
         <ToncoinIcon />
       </Icon>
 
-      <H2>{t('Receive_TON_and_other_tokens')}</H2>
+      <Title>{t('Receive_TON_and_other_tokens')}</Title>
 
       <Block>
         <Text>{t('Show_QR_code_to_receive')}</Text>
@@ -98,10 +105,10 @@ const ReceiveContent = () => {
       <CopyBlock>
         <TextBlock>
           <Text>{t('Or_use_wallet_address')}</Text>
-          <AddressText>{Address.parse(wallet.address).toString()}</AddressText>
+          <AddressText>{address}</AddressText>
         </TextBlock>
-        <CopyButton>
-          <Label2> {t('Copy')}</Label2>
+        <CopyButton onClick={() => sdk.copyToClipboard(address)}>
+          <Label2>{t('Copy')}</Label2>
         </CopyButton>
       </CopyBlock>
     </NotificationBlock>

@@ -1,11 +1,16 @@
 import { IAppSdk } from '@tonkeeper/core/dist/AppSdk';
 import { EventEmitter } from '@tonkeeper/core/dist/entries/eventEmitter';
 import { MemoryStorage } from '@tonkeeper/core/dist/Storage';
+import copyToClipboard from 'copy-to-clipboard';
 import browser from 'webextension-polyfill';
 import packageJson from '../../package.json';
 import { checkForError } from './utils';
 
 export class ExtensionAppSdk implements IAppSdk {
+  copyToClipboard = (value: string) => {
+    copyToClipboard(value);
+    this.uiEvents.emit('copy', {});
+  };
   openPage = (url: string) => {
     return new Promise((resolve, reject) => {
       browser.tabs.create({ url }).then((newTab) => {

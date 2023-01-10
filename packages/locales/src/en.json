@@ -487,6 +487,10 @@
     "message": "Copy",
     "description": "Copy button label"
   },
+  "Copied": {
+    "message": "Copied!",
+    "description": "Copied notification"
+  },
   "Receive_TON_and_other_tokens": {
     "message": "Receive TON and other tokens",
     "description": "Receive TON and other tokens activity title"

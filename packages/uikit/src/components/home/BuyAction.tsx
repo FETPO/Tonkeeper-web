@@ -99,7 +99,7 @@ export const SellAction: FC<{ sell: TonendpoinFiatCategory | undefined }> = ({
     <>
       <Action
         icon={<SellIcon />}
-        title={t('Sall')}
+        title={t('Sell')}
         action={() => setOpen(true)}
       />
       <Notification
