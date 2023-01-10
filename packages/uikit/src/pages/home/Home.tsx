@@ -20,6 +20,7 @@ import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { useUserJettonList } from '../../state/jetton';
 import { useNftInfo } from '../../state/nft';
+import { useTonenpointStock } from '../../state/tonendpoint';
 
 const useAccountInfo = (tonApi: Configuration, wallet: WalletState) => {
   return useQuery<AccountRepr, Error>(
@@ -35,8 +36,9 @@ const useAccountInfo = (tonApi: Configuration, wallet: WalletState) => {
 export const Home = () => {
   const { t } = useTranslation();
   const wallet = useWalletContext();
-  const { tonApi, fiat } = useAppContext();
+  const { tonApi, fiat, tonendpoint } = useAppContext();
 
+  const { data: stock } = useTonenpointStock(tonendpoint);
   const { data: info, error } = useAccountInfo(tonApi, wallet);
   const jettons = useUserJettonList();
   const { data: nfts } = useNftInfo();
@@ -48,6 +50,7 @@ export const Home = () => {
         info={info}
         error={error}
         currency={fiat}
+        stock={stock}
       />
       <ActionsRow>
         <BuyAction />
@@ -59,7 +62,7 @@ export const Home = () => {
         />
         <Action icon={<SellIcon />} title={t('Sell')} action={() => null} />
       </ActionsRow>
-      <CompactView info={info} jettons={jettons} nfts={nfts} />
+      <CompactView info={info} jettons={jettons} nfts={nfts} stock={stock} />
     </>
   );
 };

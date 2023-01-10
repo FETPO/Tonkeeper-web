@@ -12,8 +12,9 @@ import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { Configuration } from '@tonkeeper/core/dist/tonApi';
 import {
   defaultTonendpointConfig,
-  ServerConfig,
-} from '@tonkeeper/core/dist/tonkeeperApi/serviceConfig';
+  Tonendpoint,
+  TonendpointConfig,
+} from '@tonkeeper/core/dist/tonkeeperApi/tonendpoint';
 import React, { useContext } from 'react';
 
 export const AppContext = React.createContext<{
@@ -22,7 +23,8 @@ export const AppContext = React.createContext<{
   account: AccountState;
   auth: AuthState;
   fiat: FiatCurrencies;
-  config: ServerConfig;
+  config: TonendpointConfig;
+  tonendpoint: Tonendpoint;
 }>({
   tonApi: new Configuration(),
   network: Network.MAINNET,
@@ -30,6 +32,7 @@ export const AppContext = React.createContext<{
   auth: defaultAuthState,
   fiat: FiatCurrencies.USD,
   config: defaultTonendpointConfig,
+  tonendpoint: new Tonendpoint({}, {}),
 });
 
 export const useAppContext = () => {

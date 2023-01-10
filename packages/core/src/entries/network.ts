@@ -1,5 +1,5 @@
 import { Configuration } from '../tonApi';
-import { ServerConfig } from '../tonkeeperApi/serviceConfig';
+import { TonendpointConfig } from '../tonkeeperApi/tonendpoint';
 
 export enum Network {
   MAINNET = '-239',
@@ -12,11 +12,14 @@ export const switchNetwork = (current: Network): Network => {
   return current === Network.MAINNET ? Network.TESTNET : Network.MAINNET;
 };
 
-export const getTonClient = (config: ServerConfig) => {
+export const getTonClient = (config: TonendpointConfig, current?: Network) => {
   return new Configuration({
-    basePath: 'https://tonapi.io',
-    // headers: {
-    //   Authorization: `Bearer ${config.tonApiKey}`,
-    // },
+    basePath:
+      current === Network.MAINNET
+        ? 'https://tonapi.io'
+        : 'https://testnet.tonapi.io',
+    headers: {
+      Authorization: `Bearer ${config.tonApiKey}`,
+    },
   });
 };
