@@ -11,7 +11,8 @@ import { Action, ActionsRow } from '../../components/home/Actions';
 import { Balance } from '../../components/home/Balance';
 import { BuyAction, SellAction } from '../../components/home/BuyAction';
 import { CompactView } from '../../components/home/CompactView';
-import { ReceiveIcon, SendIcon } from '../../components/home/HomeIcons';
+import { SendIcon } from '../../components/home/HomeIcons';
+import { ReceiveAction } from '../../components/home/ReceiveAction';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { useUserJettonList } from '../../state/jetton';
@@ -44,7 +45,7 @@ export const HomeActions = () => {
     <ActionsRow>
       <BuyAction buy={buy} />
       <Action icon={<SendIcon />} title={t('Send')} action={() => null} />
-      <Action icon={<ReceiveIcon />} title={t('Receive')} action={() => null} />
+      <ReceiveAction />
       <SellAction sell={sell} />
     </ActionsRow>
   );

@@ -41,7 +41,7 @@ const ActionNotification: FC<{
       <H2>{item.title}</H2>
       <BuyList items={item.items} kind={kind} />
       <OtherBlock>
-        <OtherLink onClick={() => sdk.openPage(config.exchangePostUrl)}>
+        <OtherLink onClick={() => sdk.openPage(config.exchangePostUrl!)}>
           {t('Other_ways_to_buy_or_sell_TON')}
         </OtherLink>
       </OtherBlock>

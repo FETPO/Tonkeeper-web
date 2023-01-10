@@ -482,5 +482,21 @@
   "Unknown": {
     "message": "Unknown",
     "description": "Unknown activity title"
+  },
+  "Copy": {
+    "message": "Copy",
+    "description": "Copy button label"
+  },
+  "Receive_TON_and_other_tokens": {
+    "message": "Receive TON and other tokens",
+    "description": "Receive TON and other tokens activity title"
+  },
+  "Show_QR_code_to_receive": {
+    "message": "Show QR code to receive",
+    "description": "Show QR code to receive activity"
+  },
+  "Or_use_wallet_address": {
+    "message": "Or use wallet address",
+    "description": "Or use wallet address activity"
   }
 }
