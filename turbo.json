@@ -10,7 +10,7 @@
       "outputs": [".next/**", "dist/**"]
     },
     "build:web": {
-      "dependsOn": ["^build:web"],
+      "dependsOn": ["^build:pkg"],
       "outputs": [".next/**", "dist/**"]
     },
     "dev": {
