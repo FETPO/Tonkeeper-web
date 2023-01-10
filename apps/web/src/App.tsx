@@ -40,6 +40,7 @@ import { useFiatCurrency } from '@tonkeeper/uikit/dist/state/fiat';
 import { useLanguage } from '@tonkeeper/uikit/dist/state/language';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
+import { useTonenpointConfig } from '@tonkeeper/uikit/dist/state/tonendpoint';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
 import React, {
   FC,
@@ -139,6 +140,8 @@ export const Loader: FC = () => {
   const { data: auth } = useAuthState();
   const { data: fiat } = useFiatCurrency();
 
+  const { data: config } = useTonenpointConfig(sdk.version, network, language);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -155,17 +158,19 @@ export const Loader: FC = () => {
     !auth ||
     !account ||
     !fiat ||
+    !config ||
     lock === undefined
   ) {
     return <Loading />;
   }
 
   const context = {
-    tonApi: getTonClient(network),
+    tonApi: getTonClient(config),
     network,
     auth,
     account,
     fiat,
+    config,
   };
 
   return (

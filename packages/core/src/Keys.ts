@@ -9,4 +9,6 @@ export enum AppKey {
   jettons = 'jettons',
   nft = 'nft',
   activity = 'activity',
+
+  tonkeeperApi = 'tonkeeperApi',
 }

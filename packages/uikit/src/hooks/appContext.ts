@@ -10,6 +10,10 @@ import {
 } from '@tonkeeper/core/dist/entries/password';
 import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { Configuration } from '@tonkeeper/core/dist/tonApi';
+import {
+  defaultTonendpointConfig,
+  ServerConfig,
+} from '@tonkeeper/core/dist/tonkeeperApi/serviceConfig';
 import React, { useContext } from 'react';
 
 export const AppContext = React.createContext<{
@@ -18,12 +22,14 @@ export const AppContext = React.createContext<{
   account: AccountState;
   auth: AuthState;
   fiat: FiatCurrencies;
+  config: ServerConfig;
 }>({
   tonApi: new Configuration(),
   network: Network.MAINNET,
   account: defaultAccountState,
   auth: defaultAuthState,
   fiat: FiatCurrencies.USD,
+  config: defaultTonendpointConfig,
 });
 
 export const useAppContext = () => {
