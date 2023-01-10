@@ -112,3 +112,34 @@ export const getServerConfig = async (
 export const getStock = async (tonendpoint: Tonendpoint) => {
   return await tonendpoint.GET<TonendpointStock>('/stock');
 };
+
+export interface TonendpoinFiatButton {
+  title: string;
+  url: string;
+}
+export interface TonendpoinFiatItem {
+  id: string;
+  disabled: boolean;
+  title: string;
+  subtitle: string;
+  description: string;
+  icon_url: string;
+  action_button: TonendpoinFiatButton;
+  badge: null;
+  features: unknown[];
+  info_buttons: TonendpoinFiatButton[];
+  successUrlPattern: unknown;
+}
+
+export interface TonendpoinFiatCategory {
+  items: TonendpoinFiatItem[];
+  subtitle: string;
+  title: string;
+}
+export interface TonendpoinFiatMethods {
+  categories: TonendpoinFiatCategory[];
+}
+
+export const getFiatMethods = async (tonendpoint: Tonendpoint) => {
+  return await tonendpoint.GET<TonendpoinFiatMethods>('/fiat/methods');
+};

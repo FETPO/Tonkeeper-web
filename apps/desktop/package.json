@@ -1,6 +1,6 @@
 {
   "name": "@tonkeeper/desktop",
-  "version": "0.1.0",
+  "version": "3.0.0",
   "author": "Nikita Kuznetsov <nkuz915@gmail.com>",
   "description": "Your desktop wallet on The Open Network",
   "homepage": ".",

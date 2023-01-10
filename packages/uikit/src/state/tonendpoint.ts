@@ -4,8 +4,10 @@ import { Network } from '@tonkeeper/core/dist/entries/network';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import {
+  getFiatMethods,
   getServerConfig,
   getStock,
+  TonendpoinFiatMethods,
   Tonendpoint,
   TonendpointConfig,
 } from '@tonkeeper/core/dist/tonkeeperApi/tonendpoint';
@@ -35,6 +37,15 @@ export const useTonenpointStock = (tonendpoint: Tonendpoint) => {
     [AppKey.tonkeeperApi, 'stock'],
     async () => {
       return getStock(tonendpoint);
+    }
+  );
+};
+
+export const useTonenpointFiatMethods = (tonendpoint: Tonendpoint) => {
+  return useQuery<TonendpoinFiatMethods, Error>(
+    [AppKey.tonkeeperApi, 'stock', tonendpoint.params.lang],
+    async () => {
+      return getFiatMethods(tonendpoint);
     }
   );
 };

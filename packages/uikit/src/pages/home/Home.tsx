@@ -9,18 +9,17 @@ import {
 import React from 'react';
 import { Action, ActionsRow } from '../../components/home/Actions';
 import { Balance } from '../../components/home/Balance';
-import { BuyAction } from '../../components/home/BuyAction';
+import { BuyAction, SellAction } from '../../components/home/BuyAction';
 import { CompactView } from '../../components/home/CompactView';
-import {
-  ReceiveIcon,
-  SellIcon,
-  SendIcon,
-} from '../../components/home/HomeIcons';
+import { ReceiveIcon, SendIcon } from '../../components/home/HomeIcons';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { useUserJettonList } from '../../state/jetton';
 import { useNftInfo } from '../../state/nft';
-import { useTonenpointStock } from '../../state/tonendpoint';
+import {
+  useTonenpointFiatMethods,
+  useTonenpointStock,
+} from '../../state/tonendpoint';
 
 const useAccountInfo = (tonApi: Configuration, wallet: WalletState) => {
   return useQuery<AccountRepr, Error>(
@@ -33,8 +32,24 @@ const useAccountInfo = (tonApi: Configuration, wallet: WalletState) => {
   );
 };
 
-export const Home = () => {
+export const HomeActions = () => {
   const { t } = useTranslation();
+  const { tonendpoint } = useAppContext();
+  const { data: methods } = useTonenpointFiatMethods(tonendpoint);
+
+  const buy = methods && methods.categories[0];
+  const sell = methods && methods.categories[1];
+
+  return (
+    <ActionsRow>
+      <BuyAction buy={buy} />
+      <Action icon={<SendIcon />} title={t('Send')} action={() => null} />
+      <Action icon={<ReceiveIcon />} title={t('Receive')} action={() => null} />
+      <SellAction sell={sell} />
+    </ActionsRow>
+  );
+};
+export const Home = () => {
   const wallet = useWalletContext();
   const { tonApi, fiat, tonendpoint } = useAppContext();
 
@@ -52,16 +67,7 @@ export const Home = () => {
         currency={fiat}
         stock={stock}
       />
-      <ActionsRow>
-        <BuyAction />
-        <Action icon={<SendIcon />} title={t('Send')} action={() => null} />
-        <Action
-          icon={<ReceiveIcon />}
-          title={t('Receive')}
-          action={() => null}
-        />
-        <Action icon={<SellIcon />} title={t('Sell')} action={() => null} />
-      </ActionsRow>
+      <HomeActions />
       <CompactView info={info} jettons={jettons} nfts={nfts} stock={stock} />
     </>
   );

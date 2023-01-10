@@ -1,6 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
+import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
+import {
+  TonendpoinFiatButton,
+  TonendpoinFiatItem,
+  TonendpointConfig,
+} from '@tonkeeper/core/dist/tonkeeperApi/tonendpoint';
 import React, { FC, useState } from 'react';
 import styled, { css } from 'styled-components';
+import { Address } from 'ton-core';
+import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
@@ -11,24 +20,16 @@ import { ListItem, ListItemPayload } from '../List';
 import { Notification } from '../Notification';
 import { Body2, H2, Label1, Label2 } from '../Text';
 
-export interface BuyItem {
-  logo: string;
-  title: string;
-  description: string;
-  isBot?: boolean;
-  termsOfUse?: string;
-  privacyPolicy?: string;
-  link: string;
-}
-
 const Logo = styled.img<{ large?: boolean }>`
   ${(props) =>
     props.large
       ? css`
           width: 60px;
+          height: 60px;
         `
       : css`
           width: 40px;
+          height: 40px;
         `}
 
   border-radius: ${(props) => props.theme.cornerFull};
@@ -88,28 +89,26 @@ const DisclaimerLink = styled(Label2)`
 `;
 
 const Disclaimer: FC<{
-  termsOfUse?: string;
-  privacyPolicy?: string;
-}> = ({ termsOfUse, privacyPolicy }) => {
+  buttons: TonendpoinFiatButton[];
+}> = ({ buttons }) => {
   const { t } = useTranslation();
   const sdk = useAppSdk();
+
   return (
     <DisclaimerBlock>
       <DisclaimerText>{t('You_are_opening_an_external_app')}</DisclaimerText>
-      {termsOfUse || privacyPolicy ? (
+      {buttons && buttons.length > 0 && (
         <div>
-          {termsOfUse && (
-            <DisclaimerLink onClick={() => sdk.openPage(termsOfUse)}>
-              {t('Terms_Of_Use')}
+          {buttons.map((button, index) => (
+            <DisclaimerLink
+              key={index}
+              onClick={() => sdk.openPage(button.url)}
+            >
+              {button.title}
             </DisclaimerLink>
-          )}
-          {privacyPolicy && (
-            <DisclaimerLink onClick={() => sdk.openPage(privacyPolicy)}>
-              {t('Privacy_Policy')}
-            </DisclaimerLink>
-          )}
+          ))}
         </div>
-      ) : undefined}
+      )}
     </DisclaimerBlock>
   );
 };
@@ -131,11 +130,26 @@ const useShowDisclaimer = (title: string, kind: 'buy' | 'sell') => {
   });
 };
 
+const replacePlaceholders = (
+  url: string,
+  config: TonendpointConfig,
+  wallet: WalletState,
+  fiat: FiatCurrencies
+) => {
+  return url
+    .replace('{ADDRESS}', Address.parse(wallet.address).toString())
+    .replace('{CUR_FROM}', fiat)
+    .replace('{CUR_TO}', 'TON')
+    .replaceAll('{TX_ID}', config.mercuryoSecret ?? '');
+};
+
 export const BuyItemNotification: FC<{
-  item: BuyItem;
+  item: TonendpoinFiatItem;
   kind: 'buy' | 'sell';
 }> = ({ item, kind }) => {
   const sdk = useAppSdk();
+  const wallet = useWalletContext();
+  const { config, fiat } = useAppContext();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
@@ -143,11 +157,14 @@ export const BuyItemNotification: FC<{
   const { mutate } = useHideDisclaimerMutation(item.title, kind);
 
   const onForceOpen = () => {
-    sdk.openPage(item.link);
+    sdk.openPage(
+      replacePlaceholders(item.action_button.url, config, wallet, fiat)
+    );
+    setOpen(false);
   };
   const onOpen = () => {
     if (hided) {
-      sdk.openPage(item.link);
+      onForceOpen();
     } else {
       setOpen(true);
     }
@@ -158,10 +175,10 @@ export const BuyItemNotification: FC<{
       <ListItem key={item.title} onClick={onOpen}>
         <ListItemPayload>
           <Description>
-            <Logo src={item.logo} />
+            <Logo src={item.icon_url} />
             <Text>
               <Label1>{item.title}</Label1>
-              <Body>{t(item.description)}</Body>
+              <Body>{item.description}</Body>
             </Text>
           </Description>
           <Icon>
@@ -172,15 +189,12 @@ export const BuyItemNotification: FC<{
       <Notification isOpen={open} handleClose={() => setOpen(false)}>
         {() => (
           <NotificationBlock>
-            <Logo large src={item.logo} />
+            <Logo large src={item.icon_url} />
             <H2>{item.title}</H2>
-            <Body>{t(item.description)}</Body>
-            <Disclaimer
-              privacyPolicy={item.privacyPolicy}
-              termsOfUse={item.termsOfUse}
-            />
+            <Body>{item.description}</Body>
+            <Disclaimer buttons={item.info_buttons} />
             <Button size="large" fullWith primary onClick={onForceOpen}>
-              {t('Open')} {item.title}
+              {item.action_button.title}
             </Button>
             <CheckboxBlock>
               <Checkbox checked={!!hided} onChange={mutate}>
