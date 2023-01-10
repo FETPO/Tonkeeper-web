@@ -1,4 +1,7 @@
-import { FiatCurrencySymbolsConfig } from '@tonkeeper/core/dist/entries/fiat';
+import {
+  FiatCurrencies,
+  FiatCurrencySymbolsConfig,
+} from '@tonkeeper/core/dist/entries/fiat';
 import {
   AccountRepr,
   JettonBalance,
@@ -7,7 +10,7 @@ import {
 import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import BigNumber from 'bignumber.js';
 import React, { FC, useCallback, useMemo } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useAppContext } from '../../hooks/appContext';
 import { formatAmountValue, useFormattedPrice } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
@@ -80,6 +83,33 @@ export const useFormatCoinValue = () => {
   );
 };
 
+const DeltaColor = styled.span<{ positive: boolean }>`
+  margin-left: 0.5rem;
+  
+  ${(props) =>
+    props.positive
+      ? css`
+          color: ${props.theme.accentGreen};
+        `
+      : css`
+          color: ${props.theme.accentRed};
+        `}}
+`;
+
+export const Delta: FC<{ stock: TonendpointStock }> = ({ stock }) => {
+  const [positive, delta] = useMemo(() => {
+    const today = new BigNumber(stock.today[FiatCurrencies.USD]);
+    const yesterday = new BigNumber(stock.yesterday[FiatCurrencies.USD]);
+    const delta = today.minus(yesterday);
+
+    const value = delta.div(yesterday).multipliedBy(100).toFixed(2);
+    const positive = parseFloat(value) >= 0;
+    return [positive, positive ? `+${value}` : value] as const;
+  }, [stock]);
+
+  return <DeltaColor positive={positive}>{delta}%</DeltaColor>;
+};
+
 export const TonAsset: FC<{
   info: AccountRepr | undefined;
   stock: TonendpointStock | undefined;
@@ -112,10 +142,14 @@ export const TonAsset: FC<{
       <ListItemPayload>
         <Description>
           <ToncoinIcon />
-          <Text>
-            <Label1>{t('Toncoin')}</Label1>
-            <Body>{fiatPrice}</Body>
-          </Text>
+          <ColumnText
+            text={t('Toncoin')}
+            secondary={
+              <>
+                {fiatPrice} {stock && <Delta stock={stock} />}
+              </>
+            }
+          />
         </Description>
         <ColumnText text={balance} secondary={fiatAmount} right />
       </ListItemPayload>

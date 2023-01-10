@@ -64,8 +64,8 @@ const Secondary = styled(Body2)`
 export const ColumnText: FC<{
   green?: boolean;
   right?: boolean;
-  text: string;
-  secondary: string;
+  text: React.ReactNode;
+  secondary: React.ReactNode;
 }> = ({ green, text, secondary, right }) => {
   return (
     <Text right={right}>
