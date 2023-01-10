@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { decrypt } from '@tonkeeper/core/dist/service/cryptoService';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { mnemonicValidate } from 'ton-crypto';
 import { Button } from '../../components/fields/Button';
@@ -19,7 +19,7 @@ const Block = styled.form`
   box-sizing: border-box;
 
   justify-content: center;
-  gap: 3rem;
+  gap: 1rem;
 `;
 
 const Logo = styled.div`
@@ -28,6 +28,8 @@ const Logo = styled.div`
   align-items: center;
 
   font-size: 400%;
+
+  margin-bottom: 2rem;
 `;
 
 const useMutateUnlock = () => {
@@ -54,8 +56,15 @@ const useMutateUnlock = () => {
 export const PasswordUnlock = () => {
   const { t } = useTranslation();
 
+  const ref = useRef<HTMLInputElement | null>(null);
   const { mutate, isLoading, isError, reset } = useMutateUnlock();
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.focus();
+    }
+  }, [ref.current]);
 
   const onChange = (value: string) => {
     reset();
@@ -73,6 +82,7 @@ export const PasswordUnlock = () => {
         <TonkeeperIcon />
       </Logo>
       <Input
+        ref={ref}
         value={password}
         onChange={onChange}
         type="password"

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 
 const InputBlock = styled.div<{ focus: boolean; valid: boolean }>`
@@ -68,27 +68,32 @@ const Label = styled.label<{ active?: boolean }>`
     `}
 `;
 
-export const Input: FC<{
+interface InputProps {
   type?: 'password' | undefined;
   value: string;
   onChange?: (value: string) => void;
   isValid?: boolean;
   label?: string;
   disabled?: boolean;
-}> = ({ type, value, onChange, isValid = true, label, disabled }) => {
-  const [focus, setFocus] = useState(false);
+}
 
-  return (
-    <InputBlock focus={focus} valid={isValid}>
-      <InputField
-        disabled={disabled}
-        type={type}
-        value={value}
-        onChange={(e) => onChange && onChange(e.target.value)}
-        onFocus={() => setFocus(true)}
-        onBlur={() => setFocus(false)}
-      />
-      {label && <Label active={value != ''}>{label}</Label>}
-    </InputBlock>
-  );
-};
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ type, value, onChange, isValid = true, label, disabled }, ref) => {
+    const [focus, setFocus] = useState(false);
+
+    return (
+      <InputBlock focus={focus} valid={isValid}>
+        <InputField
+          ref={ref}
+          disabled={disabled}
+          type={type}
+          value={value}
+          onChange={(e) => onChange && onChange(e.target.value)}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+        />
+        {label && <Label active={value != ''}>{label}</Label>}
+      </InputBlock>
+    );
+  }
+);
