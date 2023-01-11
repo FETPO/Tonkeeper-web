@@ -6,8 +6,14 @@ import {
 import { AccountState } from '@tonkeeper/core/dist/entries/account';
 import { AuthState } from '@tonkeeper/core/dist/entries/password';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
-import { appendWallet } from '@tonkeeper/core/dist/service/accountService';
-import { importWallet } from '@tonkeeper/core/dist/service/walletService';
+import {
+  accountAppendWallet,
+  getAccountState,
+} from '@tonkeeper/core/dist/service/accountService';
+import {
+  importWallet,
+  setWalletState,
+} from '@tonkeeper/core/dist/service/walletService';
 import { IStorage } from '@tonkeeper/core/dist/Storage';
 import { Configuration } from '@tonkeeper/core/dist/tonApi';
 import React, { useEffect } from 'react';
@@ -19,7 +25,6 @@ import { useAppContext } from '../../hooks/appContext';
 import { useAfterImportAction, useAppSdk } from '../../hooks/appSdk';
 import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
-import { getAccountState } from '../../state/account';
 
 const createWallet = async (
   client: QueryClient,
@@ -29,19 +34,16 @@ const createWallet = async (
   auth: AuthState,
   password?: string
 ) => {
-  const account = await getAccountState(storage);
-
   const key = auth.kind === 'none' ? 'none' : password;
   if (!key) {
     throw new Error('Missing encrypt password key');
   }
   const walletState = await importWallet(tonApi, mnemonic, key);
+  await setWalletState(storage, walletState);
+  await accountAppendWallet(storage, walletState.publicKey);
 
-  const update = appendWallet(account, walletState);
-
-  await storage.set(AppKey.account, update);
   await client.invalidateQueries([AppKey.account]);
-  return update;
+  return await getAccountState(storage);
 };
 
 export const useAddWalletMutation = () => {

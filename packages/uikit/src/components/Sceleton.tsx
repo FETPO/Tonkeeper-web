@@ -85,7 +85,7 @@ export const SkeletonSubHeader = React.memo(() => {
 });
 
 const ActionBlock = styled.div`
-  width: 50px;
+  width: 55px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -107,6 +107,20 @@ const ListItemBlock = styled.div`
   width: 100%;
 `;
 
+export const SkeletonListPayload = React.memo(() => {
+  return (
+    <ListItemPayload>
+      <ListItemBlock>
+        <SkeletonImage />
+        <ColumnText
+          text={<SkeletonText width={randomIntFromInterval(30, 300) + 'px'} />}
+          secondary={<SkeletonText size="small" width="40px" />}
+        ></ColumnText>
+      </ListItemBlock>
+    </ListItemPayload>
+  );
+});
+
 export const SkeletonList: FC<{ size?: number }> = React.memo(
   ({ size = 1 }) => {
     return (
@@ -115,19 +129,7 @@ export const SkeletonList: FC<{ size?: number }> = React.memo(
           .fill(null)
           .map((item, index) => (
             <ListItem key={index} hover={false}>
-              <ListItemPayload>
-                <ListItemBlock>
-                  <SkeletonImage />
-                  <ColumnText
-                    text={
-                      <SkeletonText
-                        width={randomIntFromInterval(30, 300) + 'px'}
-                      />
-                    }
-                    secondary={<SkeletonText size="small" width="40px" />}
-                  ></ColumnText>
-                </ListItemBlock>
-              </ListItemPayload>
+              <SkeletonListPayload />
             </ListItem>
           ))}
       </ListBlock>

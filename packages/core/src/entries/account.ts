@@ -1,10 +1,8 @@
-import { WalletState } from './wallet';
-
 export interface AccountState {
-  wallets: WalletState[];
-  activeWallet?: string;
+  publicKeys: string[];
+  activePublicKey?: string;
 }
 
 export const defaultAccountState: AccountState = {
-  wallets: [],
+  publicKeys: [],
 };

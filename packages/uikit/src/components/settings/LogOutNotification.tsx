@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
-import React, { FC, useCallback, useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
+import React, { FC, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute, SettingsRoute } from '../../libs/routes';
@@ -32,12 +33,12 @@ const DisclaimerLink = styled(Label2)`
 
 const LotOutContent: FC<{
   onClose: (action: () => void) => void;
-  tonkeeperId: string;
-}> = ({ onClose, tonkeeperId }) => {
+  publicKey: string;
+}> = ({ onClose, publicKey }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [checked, setChecked] = useState(false);
-  const { mutateAsync, isLoading } = useMutateLogOut(tonkeeperId);
+  const { mutateAsync, isLoading } = useMutateLogOut(publicKey);
 
   return (
     <NotificationBlock>
@@ -77,30 +78,22 @@ const LotOutContent: FC<{
   );
 };
 
-export const LogOutWalletNotification = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const tonkeeperId = useMemo(() => {
-    return searchParams.get('logout');
-  }, [searchParams]);
-
-  const handleClose = useCallback(() => {
-    searchParams.delete('logout');
-    setSearchParams(searchParams);
-  }, [searchParams, setSearchParams]);
-
-  const isOpen = tonkeeperId != null;
-
+export const LogOutWalletNotification: FC<{
+  wallet?: WalletState;
+  handleClose: () => void;
+}> = ({ wallet, handleClose }) => {
   const Content = useCallback(
     (afterClose: (action: () => void) => void) => {
-      if (!tonkeeperId) return undefined;
-      return <LotOutContent tonkeeperId={tonkeeperId} onClose={afterClose} />;
+      if (!wallet) return undefined;
+      return (
+        <LotOutContent publicKey={wallet?.publicKey} onClose={afterClose} />
+      );
     },
-    [tonkeeperId]
+    [wallet]
   );
 
   return (
-    <Notification isOpen={isOpen} handleClose={handleClose}>
+    <Notification isOpen={wallet != null} handleClose={handleClose}>
       {Content}
     </Notification>
   );
@@ -108,12 +101,12 @@ export const LogOutWalletNotification = () => {
 
 const DeleteContent: FC<{
   onClose: (action: () => void) => void;
-  tonkeeperId: string;
-}> = ({ onClose, tonkeeperId }) => {
+  publicKey: string;
+}> = ({ onClose, publicKey }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [checked, setChecked] = useState(false);
-  const { mutateAsync, isLoading } = useMutateLogOut(tonkeeperId, true);
+  const { mutateAsync, isLoading } = useMutateLogOut(publicKey, true);
 
   const onDelete = async () => {
     await mutateAsync();
@@ -155,30 +148,22 @@ const DeleteContent: FC<{
   );
 };
 
-export const DeleteWalletNotification = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const tonkeeperId = useMemo(() => {
-    return searchParams.get('delete');
-  }, [searchParams]);
-
-  const handleClose = useCallback(() => {
-    searchParams.delete('delete');
-    setSearchParams(searchParams);
-  }, [searchParams, setSearchParams]);
-
-  const isOpen = tonkeeperId != null;
-
+export const DeleteWalletNotification: FC<{
+  wallet?: WalletState;
+  handleClose: () => void;
+}> = ({ wallet, handleClose }) => {
   const Content = useCallback(
     (afterClose: (action: () => void) => void) => {
-      if (!tonkeeperId) return undefined;
-      return <DeleteContent tonkeeperId={tonkeeperId} onClose={afterClose} />;
+      if (!wallet) return undefined;
+      return (
+        <DeleteContent publicKey={wallet.publicKey} onClose={afterClose} />
+      );
     },
-    [tonkeeperId]
+    [wallet]
   );
 
   return (
-    <Notification isOpen={isOpen} handleClose={handleClose}>
+    <Notification isOpen={wallet != null} handleClose={handleClose}>
       {Content}
     </Notification>
   );
@@ -236,30 +221,20 @@ const DeleteAllContent: FC<{ onClose: (action: () => void) => void }> = ({
   );
 };
 
-export const DeleteAllNotification = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const notification = useMemo(() => {
-    return searchParams.get('notification');
-  }, [searchParams.get('notification')]);
-
-  const handleClose = useCallback(() => {
-    searchParams.delete('notification');
-    setSearchParams(searchParams);
-  }, [searchParams, setSearchParams]);
-
-  const isOpen = notification === 'delete-all';
-
+export const DeleteAllNotification: FC<{
+  open: boolean;
+  handleClose: () => void;
+}> = ({ open, handleClose }) => {
   const Content = useCallback(
     (afterClose: (action: () => void) => void) => {
-      if (!isOpen) return undefined;
+      if (!open) return undefined;
       return <DeleteAllContent onClose={afterClose} />;
     },
-    [isOpen]
+    [open]
   );
 
   return (
-    <Notification isOpen={isOpen} handleClose={handleClose}>
+    <Notification isOpen={open} handleClose={handleClose}>
       {Content}
     </Notification>
   );

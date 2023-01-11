@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
-import { updateWallet } from '@tonkeeper/core/dist/service/accountService';
+import { updateWalletProperty } from '@tonkeeper/core/dist/service/walletService';
 import {
   AccountEvents,
   JettonApi,
@@ -12,13 +12,17 @@ import { delay } from '@tonkeeper/core/dist/utils/common';
 import { useMemo } from 'react';
 import { useAppContext, useWalletContext } from '../hooks/appContext';
 import { useStorage } from '../hooks/storage';
-import { getAccountState } from './account';
 
+enum JettonKey {
+  info,
+  history,
+  balance,
+}
 export const useJettonInfo = (jettonAddress: string) => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
   return useQuery<JettonInfo, Error>(
-    [wallet.address, jettonAddress, AppKey.jettons],
+    [wallet.active.rawAddress, AppKey.jettons, JettonKey.info, jettonAddress],
     async () => {
       await delay(1000);
 
@@ -34,7 +38,12 @@ export const useJettonHistory = (walletAddress: string) => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
   return useQuery<AccountEvents, Error>(
-    [wallet.address, AppKey.jettons, walletAddress],
+    [
+      wallet.active.rawAddress,
+      AppKey.jettons,
+      JettonKey.history,
+      walletAddress,
+    ],
     async () => {
       const result = await new JettonApi(tonApi).getJettonHistory({
         account: walletAddress,
@@ -49,10 +58,15 @@ export const useJettonBalance = (jettonAddress: string) => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
   return useQuery<JettonBalance, Error>(
-    [wallet.address, AppKey.jettons, jettonAddress],
+    [
+      wallet.active.rawAddress,
+      AppKey.jettons,
+      JettonKey.balance,
+      jettonAddress,
+    ],
     async () => {
       const result = await new JettonApi(tonApi).getJettonsBalances({
-        account: wallet.address,
+        account: wallet.active.rawAddress,
       });
 
       const balance = result.balances.find(
@@ -72,15 +86,20 @@ export const useJettonsBalances = () => {
   const client = useQueryClient();
 
   return useQuery<JettonsBalances, Error>(
-    [wallet.address, AppKey.jettons],
+    [wallet.active.rawAddress, AppKey.jettons],
     async () => {
       const result = await new JettonApi(tonApi).getJettonsBalances({
-        account: wallet.address,
+        account: wallet.active.rawAddress,
       });
 
       result.balances.forEach((item) => {
         client.setQueryData(
-          [wallet.address, AppKey.jettons, item.jettonAddress],
+          [
+            wallet.active.rawAddress,
+            AppKey.jettons,
+            JettonKey.balance,
+            item.jettonAddress,
+          ],
           item
         );
       });
@@ -96,15 +115,7 @@ export const useOrderJettonMutation = () => {
   const wallet = useWalletContext();
 
   return useMutation<void, Error, string[]>(async (orderJettons) => {
-    let account = await getAccountState(storage);
-
-    account = updateWallet(account, {
-      ...wallet,
-      revision: wallet.revision + 1,
-      orderJettons,
-    });
-
-    await storage.set(AppKey.account, account);
+    await updateWalletProperty(storage, wallet, { orderJettons });
     await client.invalidateQueries([AppKey.account]);
   });
 };
@@ -115,22 +126,13 @@ export const useToggleJettonMutation = () => {
   const wallet = useWalletContext();
 
   return useMutation<void, Error, string>(async (jettonAddress) => {
-    let account = await getAccountState(storage);
-
     const hiddenJettons = wallet.hiddenJettons ?? [];
-    if (hiddenJettons.includes(jettonAddress)) {
-      account = updateWallet(account, {
-        ...wallet,
-        hiddenJettons: hiddenJettons.filter((item) => item !== jettonAddress),
-      });
-    } else {
-      account = updateWallet(account, {
-        ...wallet,
-        hiddenJettons: hiddenJettons.concat([jettonAddress]),
-      });
-    }
+    const updated = hiddenJettons.includes(jettonAddress)
+      ? hiddenJettons.filter((item) => item !== jettonAddress)
+      : hiddenJettons.concat([jettonAddress]);
 
-    await storage.set(AppKey.account, account);
+    await updateWalletProperty(storage, wallet, { hiddenJettons: updated });
+
     await client.invalidateQueries([AppKey.account]);
   });
 };

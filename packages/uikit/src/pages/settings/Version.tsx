@@ -1,5 +1,8 @@
-import { WalletVersions } from '@tonkeeper/core/dist/entries/wallet';
-import { getAddress } from '@tonkeeper/core/dist/service/walletService';
+import {
+  WalletVersions,
+  walletVersionText,
+} from '@tonkeeper/core/dist/entries/wallet';
+import { getWalletAddress } from '@tonkeeper/core/dist/service/walletService';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
 import React, { useMemo } from 'react';
 import { CheckIcon } from '../../components/Icon';
@@ -22,9 +25,11 @@ export const WalletVersion = () => {
   const items = useMemo<SettingsItem[]>(() => {
     const publicKey = Buffer.from(wallet.publicKey, 'hex');
     return WalletVersions.map((item) => ({
-      name: item,
-      secondary: toShortAddress(getAddress(publicKey, item, false)),
-      icon: wallet.version === item ? <CheckIcon /> : undefined,
+      name: walletVersionText(item),
+      secondary: toShortAddress(
+        getWalletAddress(publicKey, item).friendlyAddress
+      ),
+      icon: wallet.active.version === item ? <CheckIcon /> : undefined,
       action: () => mutate(item),
     }));
   }, [wallet, mutate]);

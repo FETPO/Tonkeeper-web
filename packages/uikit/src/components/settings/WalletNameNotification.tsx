@@ -1,8 +1,5 @@
 import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
-import React, { FC, useCallback, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Address } from 'ton-core';
-import { useAppContext } from '../../hooks/appContext';
+import React, { FC, useCallback, useState } from 'react';
 import { useTranslation } from '../../hooks/translation';
 import { useMutateRenameWallet } from '../../state/wallet';
 import { Button } from '../fields/Button';
@@ -39,7 +36,7 @@ const RenameWalletContent: FC<{
         label={t('Wallet_name')}
       />
       <Input
-        value={Address.parse(wallet.address).toString()}
+        value={wallet.active.friendlyAddress}
         disabled
         label={t('Address')}
       />
@@ -59,36 +56,20 @@ const RenameWalletContent: FC<{
   );
 };
 
-export const RenameWalletNotification = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const { account } = useAppContext();
-
-  const tonkeeperId = useMemo(() => {
-    return searchParams.get('rename');
-  }, [searchParams]);
-
-  const handleClose = useCallback(() => {
-    searchParams.delete('rename');
-    setSearchParams(searchParams);
-  }, [searchParams, setSearchParams]);
-
-  const isOpen = tonkeeperId != null;
-
+export const RenameWalletNotification: FC<{
+  wallet?: WalletState;
+  handleClose: () => void;
+}> = ({ wallet, handleClose }) => {
   const Content = useCallback(
     (afterClose: (action: () => void) => void) => {
-      if (!tonkeeperId) return undefined;
-      const wallet = account.wallets.find(
-        (item) => item.tonkeeperId === tonkeeperId
-      );
       if (!wallet) return undefined;
       return <RenameWalletContent wallet={wallet} afterClose={afterClose} />;
     },
-    [tonkeeperId]
+    [wallet]
   );
 
   return (
-    <Notification isOpen={isOpen} handleClose={handleClose}>
+    <Notification isOpen={wallet != null} handleClose={handleClose}>
       {Content}
     </Notification>
   );

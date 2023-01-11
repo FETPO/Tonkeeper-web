@@ -6,6 +6,7 @@ import {
   AccountRepr,
   Configuration,
 } from '@tonkeeper/core/dist/tonApi';
+import { delay } from '@tonkeeper/core/dist/utils/common';
 import React from 'react';
 import { Action, ActionsRow } from '../../components/home/Actions';
 import { Balance } from '../../components/home/Balance';
@@ -13,6 +14,7 @@ import { BuyAction, SellAction } from '../../components/home/BuyAction';
 import { CompactView } from '../../components/home/CompactView';
 import { SendIcon } from '../../components/home/HomeIcons';
 import { ReceiveAction } from '../../components/home/ReceiveAction';
+import { SkeletonAction, SkeletonList } from '../../components/Sceleton';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { useUserJettonList } from '../../state/jetton';
@@ -24,10 +26,11 @@ import {
 
 const useAccountInfo = (tonApi: Configuration, wallet: WalletState) => {
   return useQuery<AccountRepr, Error>(
-    [wallet.address, AppKey.balance],
+    [wallet.active.rawAddress, AppKey.balance],
     async () => {
+      await delay(5000);
       return await new AccountApi(tonApi).getAccountInfo({
-        account: wallet.address,
+        account: wallet.active.rawAddress,
       });
     }
   );
@@ -50,6 +53,24 @@ export const HomeActions = () => {
     </ActionsRow>
   );
 };
+
+export const HomeSkeleton = () => {
+  const wallet = useWalletContext();
+  const { fiat } = useAppContext();
+  return (
+    <>
+      <Balance address={wallet.active.rawAddress} currency={fiat} />
+      <ActionsRow>
+        <SkeletonAction />
+        <SkeletonAction />
+        <SkeletonAction />
+        <SkeletonAction />
+      </ActionsRow>
+      <SkeletonList size={5} />
+    </>
+  );
+};
+
 export const Home = () => {
   const wallet = useWalletContext();
   const { tonApi, fiat, tonendpoint } = useAppContext();
@@ -59,13 +80,17 @@ export const Home = () => {
   const jettons = useUserJettonList();
   const { data: nfts } = useNftInfo();
 
+  if (!stock || !nfts || !jettons || !info) {
+    return <HomeSkeleton />;
+  }
+
   return (
     <>
       <Balance
-        address={wallet.address}
+        address={wallet.active.rawAddress}
+        currency={fiat}
         info={info}
         error={error}
-        currency={fiat}
         stock={stock}
       />
       <HomeActions />

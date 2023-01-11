@@ -1,4 +1,3 @@
-import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +6,7 @@ import { useAppContext, useWalletContext } from '../hooks/appContext';
 import { useTranslation } from '../hooks/translation';
 import { AppRoute, SettingsRoute } from '../libs/routes';
 import { useMutateActiveWallet } from '../state/account';
+import { useWalletState } from '../state/wallet';
 import { ImportNotification } from './create/ImportNotification';
 import { DropDown } from './DropDown';
 import { CheckIcon, DownIcon, PlusIcon, SettingsIcon } from './Icon';
@@ -66,28 +66,28 @@ const Row = styled.div`
 `;
 
 const WalletRow: FC<{
-  activeWallet?: string;
-  wallet: WalletState;
+  activePublicKey?: string;
+  publicKey: string;
   index: number;
   onClose: () => void;
-}> = ({ activeWallet, wallet, index, onClose }) => {
+}> = ({ activePublicKey, publicKey, index, onClose }) => {
   const { mutate } = useMutateActiveWallet();
   const { t } = useTranslation();
-
+  const { data: wallet } = useWalletState(publicKey);
   return (
     <ListItem
       dropDown
       onClick={() => {
-        mutate(wallet.tonkeeperId);
+        mutate(publicKey);
         onClose();
       }}
     >
       <ListItemPayload>
         <ColumnText
-          text={wallet.name ? wallet.name : `${t('Wallet')} ${index + 1}`}
-          secondary={toShortAddress(wallet.address)}
+          text={wallet?.name ? wallet.name : `${t('Wallet')} ${index + 1}`}
+          secondary={wallet && toShortAddress(wallet.active.friendlyAddress)}
         />
-        {activeWallet === wallet.tonkeeperId ? (
+        {activePublicKey === publicKey ? (
           <Icon>
             <CheckIcon />
           </Icon>
@@ -105,7 +105,7 @@ const DropDownPayload: FC<{ onClose: () => void; onCreate: () => void }> = ({
   const { account } = useAppContext();
   const { t } = useTranslation();
 
-  if (account.wallets.length === 1) {
+  if (account.publicKeys.length === 1) {
     return (
       <Row
         onClick={() => {
@@ -122,11 +122,11 @@ const DropDownPayload: FC<{ onClose: () => void; onCreate: () => void }> = ({
   } else {
     return (
       <>
-        {account.wallets.map((wallet, index) => (
+        {account.publicKeys.map((publicKey, index) => (
           <WalletRow
-            key={wallet.address}
-            wallet={wallet}
-            activeWallet={account.activeWallet}
+            key={publicKey}
+            publicKey={publicKey}
+            activePublicKey={account.activePublicKey}
             index={index}
             onClose={onClose}
           />

@@ -1,14 +1,39 @@
-export const languages = ['en', 'ru'] as const;
+export enum Language {
+  en = 0,
+  ru = 1,
+}
 
-export type Language = typeof languages[number];
+export const defaultLanguage: Language = Language.en;
 
-export const defaultLanguage: Language = 'en';
+export const languages = [Language.en, Language.ru];
 
 export const localizationSecondaryText = (lang: Language): string => {
   switch (lang) {
-    case 'en':
+    case Language.en:
       return 'English';
-    case 'ru':
+    case Language.ru:
       return 'Русский';
+  }
+};
+
+export const localizationText = (lang?: Language) => {
+  switch (lang) {
+    case Language.en:
+      return 'en';
+    case Language.ru:
+      return 'ru';
+    default:
+      return 'en';
+  }
+};
+
+export const localizationFrom = (lang: string) => {
+  switch (lang) {
+    case 'en':
+      return Language.en;
+    case 'ru':
+      return Language.ru;
+    default:
+      return Language.en;
   }
 };

@@ -2,7 +2,6 @@ import { formatTransferUrl } from '@tonkeeper/core/dist/utils/common';
 import React, { useCallback, useState } from 'react';
 import QRCode from 'react-qr-code';
 import styled from 'styled-components';
-import { Address } from 'ton-core';
 import { useWalletContext } from '../../hooks/appContext';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useTranslation } from '../../hooks/translation';
@@ -82,7 +81,6 @@ const ReceiveContent = () => {
   const sdk = useAppSdk();
   const wallet = useWalletContext();
 
-  const address = Address.parse(wallet.address).toString();
   return (
     <NotificationBlock>
       <Icon>
@@ -96,7 +94,7 @@ const ReceiveContent = () => {
         <Background>
           <QRCode
             size={400}
-            value={formatTransferUrl(wallet.address)}
+            value={formatTransferUrl(wallet.active.friendlyAddress)}
             strokeLinecap="round"
             strokeLinejoin="miter"
           />
@@ -105,9 +103,11 @@ const ReceiveContent = () => {
       <CopyBlock>
         <TextBlock>
           <Text>{t('Or_use_wallet_address')}</Text>
-          <AddressText>{address}</AddressText>
+          <AddressText>{wallet.active.friendlyAddress}</AddressText>
         </TextBlock>
-        <CopyButton onClick={() => sdk.copyToClipboard(address)}>
+        <CopyButton
+          onClick={() => sdk.copyToClipboard(wallet.active.friendlyAddress)}
+        >
           <Label2>{t('Copy')}</Label2>
         </CopyButton>
       </CopyBlock>

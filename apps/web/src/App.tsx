@@ -1,8 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AccountState } from '@tonkeeper/core/dist/entries/account';
-import { Language, languages } from '@tonkeeper/core/dist/entries/language';
+import {
+  languages,
+  localizationText,
+} from '@tonkeeper/core/dist/entries/language';
 import { getTonClient } from '@tonkeeper/core/dist/entries/network';
 import { AuthState } from '@tonkeeper/core/dist/entries/password';
+import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { CopyNotification } from '@tonkeeper/uikit/dist/components/CopyNotification';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
@@ -46,6 +49,7 @@ import {
   useTonendpoint,
   useTonenpointConfig,
 } from '@tonkeeper/uikit/dist/state/tonendpoint';
+import { useActiveWallet } from '@tonkeeper/uikit/dist/state/wallet';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
 import React, {
   FC,
@@ -85,8 +89,8 @@ export const App: FC<PropsWithChildren> = () => {
         enable: true,
         reloadResources: i18n.reloadResources,
         changeLanguage: i18n.changeLanguage as any,
-        language: i18n.language as Language,
-        languages: [...languages],
+        language: i18n.language,
+        languages: [...languages].map(localizationText),
       },
     };
     return client;
@@ -150,20 +154,22 @@ export const Loader: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (language && i18n.language !== language) {
+    if (language && i18n.language !== localizationText(language)) {
       i18n
-        .reloadResources([language])
-        .then(() => i18n.changeLanguage(language));
+        .reloadResources([localizationText(language)])
+        .then(() => i18n.changeLanguage(localizationText(language)));
     }
   }, [language, i18n]);
 
+  const { data: activeWallet } = useActiveWallet();
+
   if (
-    !language ||
-    !network ||
-    !auth ||
-    !account ||
-    !fiat ||
-    !config ||
+    language === undefined ||
+    network === undefined ||
+    auth === undefined ||
+    account === undefined ||
+    fiat === undefined ||
+    config === undefined ||
     lock === undefined
   ) {
     return <Loading />;
@@ -184,7 +190,7 @@ export const Loader: FC = () => {
       <AfterImportAction.Provider value={() => navigate(AppRoute.home)}>
         <AppContext.Provider value={context}>
           <Container>
-            <Content account={account} lock={lock} />
+            <Content activeWallet={activeWallet} lock={lock} />
           </Container>
           <CopyNotification />
         </AppContext.Provider>
@@ -193,80 +199,71 @@ export const Loader: FC = () => {
   );
 };
 
-export const Content: FC<{ account: AccountState; lock: boolean }> = ({
-  account,
-  lock,
-}) => {
-  const location = useLocation();
+export const Content: FC<{ activeWallet?: WalletState | null; lock: boolean }> =
+  ({ activeWallet, lock }) => {
+    const location = useLocation();
 
-  const activeWallet = useMemo(() => {
-    const wallet = account.wallets.find(
-      (item) => item.tonkeeperId === account.activeWallet
-    );
-    return wallet;
-  }, [account]);
+    if (lock) {
+      return <Unlock />;
+    }
 
-  if (lock) {
-    return <Unlock />;
-  }
+    if (!activeWallet || location.pathname.startsWith(AppRoute.import)) {
+      return (
+        <InitializeContainer fullHeight={false}>
+          <Routes>
+            <Route path={any(AppRoute.import)} element={<ImportRouter />} />
+            <Route path="*" element={<Initialize />} />
+          </Routes>
+        </InitializeContainer>
+      );
+    }
 
-  if (!activeWallet || location.pathname.startsWith(AppRoute.import)) {
     return (
-      <InitializeContainer fullHeight={false}>
-        <Routes>
-          <Route path={any(AppRoute.import)} element={<ImportRouter />} />
-          <Route path="*" element={<Initialize />} />
-        </Routes>
-      </InitializeContainer>
-    );
-  }
-
-  return (
-    <WalletStateContext.Provider value={activeWallet}>
-      <Suspense fallback={<Loading />}>
-        <Routes>
-          <Route
-            path={AppRoute.activity}
-            element={
-              <>
-                <ActivityHeader />
-                <Activity />
-              </>
-            }
-          />
-          <Route
-            path={any(AppRoute.settings)}
-            element={
-              <Body>
-                <SettingsRouter />
-              </Body>
-            }
-          />
-          <Route path={AppRoute.jettons}>
+      <WalletStateContext.Provider value={activeWallet}>
+        <Suspense fallback={<Loading />}>
+          <Routes>
             <Route
-              path=":jettonAddress"
+              path={AppRoute.activity}
+              element={
+                <>
+                  <ActivityHeader />
+                  <Activity />
+                </>
+              }
+            />
+            <Route
+              path={any(AppRoute.settings)}
               element={
                 <Body>
-                  <Jetton />
+                  <SettingsRouter />
                 </Body>
               }
             />
-          </Route>
-          <Route
-            path="*"
-            element={
-              <>
-                <Header />
-                <Body>
-                  <Home />
-                </Body>
-              </>
-            }
-          />
-        </Routes>
-      </Suspense>
-      <Footer />
-      <NftNotification />
-    </WalletStateContext.Provider>
-  );
-};
+            <Route path={AppRoute.jettons}>
+              <Route
+                path=":jettonAddress"
+                element={
+                  <Body>
+                    <Jetton />
+                  </Body>
+                }
+              />
+            </Route>
+            <Route
+              path="*"
+              element={
+                <>
+                  <Header />
+                  <Body>
+                    <Home />
+                  </Body>
+                </>
+              }
+            />
+          </Routes>
+        </Suspense>
+        <Footer />
+        <NftNotification />
+      </WalletStateContext.Provider>
+    );
+  };

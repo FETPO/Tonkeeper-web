@@ -9,6 +9,7 @@ import { Button } from '../../components/fields/Button';
 import { CheckMarkIcon, GearIcon, WriteIcon } from '../../components/Icon';
 import { IconPage } from '../../components/Layout';
 import { useTranslation } from '../../hooks/translation';
+import { useActiveWallet } from '../../state/wallet';
 import { FinalView, useAddWalletMutation } from './Password';
 
 const Blue = styled.span`
@@ -26,6 +27,8 @@ export const Create = () => {
     isLoading: isConfirmLoading,
     reset,
   } = useAddWalletMutation();
+
+  const { data: wallet } = useActiveWallet();
 
   const [mnemonic, setMnemonic] = useState<string[]>([]);
   const [account, setAccount] = useState<AccountState | undefined>(undefined);
@@ -149,13 +152,13 @@ export const Create = () => {
     );
   }
 
-  if (account && account.wallets.length > 1) {
-    const wallet = account.wallets.find(
-      (item) => item.tonkeeperId === account.activeWallet
-    );
-    if (wallet && wallet.name == null) {
-      return <UpdateWalletName account={account} onUpdate={setAccount} />;
-    }
+  if (
+    account &&
+    account.publicKeys.length > 1 &&
+    wallet &&
+    wallet.name == null
+  ) {
+    return <UpdateWalletName account={account} onUpdate={setAccount} />;
   }
 
   return <FinalView />;

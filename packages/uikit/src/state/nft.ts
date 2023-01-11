@@ -7,10 +7,10 @@ export const useNftInfo = () => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
   return useQuery<NftItemsRepr, Error>(
-    [wallet.address, AppKey.nft],
+    [wallet.active.rawAddress, AppKey.nft],
     async () => {
       const result = await new NFTApi(tonApi).searchNFTItems({
-        owner: wallet.address,
+        owner: wallet.active.rawAddress,
         offset: 0,
         limit: 10,
       });

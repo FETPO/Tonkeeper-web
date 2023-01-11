@@ -1,8 +1,10 @@
-import React, { useMemo } from 'react';
+import { walletVersionText } from '@tonkeeper/core/dist/entries/wallet';
+import React, { useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { relative, SettingsRoute } from '../../libs/routes';
+import { LogOutWalletNotification } from './LogOutNotification';
 import {
   ListOfTokensIcon,
   LogOutIcon,
@@ -16,22 +18,18 @@ import { SettingsItem, SettingsList } from './SettingsList';
 const SingleAccountSettings = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const [logout, setLogout] = useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const wallet = useWalletContext();
 
   const mainItems = useMemo<SettingsItem[]>(() => {
-    let items: SettingsItem[] = [];
-
-    if (wallet.version === 'v4R2') {
-      items.push({
+    let items: SettingsItem[] = [
+      {
         name: t('Subscriptions'),
         icon: <SubscriptionIcon />,
         action: () => navigate(relative(SettingsRoute.subscriptions)),
-      });
-    }
-
-    items = items.concat([
+      },
       {
         name: t('Recovery_phrase'),
         icon: <RecoveryPhraseIcon />,
@@ -39,7 +37,7 @@ const SingleAccountSettings = () => {
       },
       {
         name: t('Active_address'),
-        icon: wallet.version,
+        icon: walletVersionText(wallet.active.version),
         action: () => navigate(relative(SettingsRoute.version)),
       },
       {
@@ -55,18 +53,22 @@ const SingleAccountSettings = () => {
       {
         name: t('Log_out'),
         icon: <LogOutIcon />,
-        action: () => {
-          searchParams.delete('logout');
-          searchParams.append('logout', wallet.tonkeeperId);
-          setSearchParams(searchParams);
-        },
+        action: () => setLogout(true),
       },
-    ]);
+    ];
 
     return items;
   }, [t, navigate, wallet, searchParams, setSearchParams]);
 
-  return <SettingsList items={mainItems} />;
+  return (
+    <>
+      <SettingsList items={mainItems} />
+      <LogOutWalletNotification
+        wallet={logout ? wallet : undefined}
+        handleClose={() => setLogout(false)}
+      />
+    </>
+  );
 };
 
 const MultipleAccountSettings = () => {
@@ -81,15 +83,12 @@ const MultipleAccountSettings = () => {
         icon: <WalletsIcon />,
         action: () => navigate(relative(SettingsRoute.account)),
       },
-    ];
-
-    if (wallet.version === 'v4R2') {
-      items.push({
+      {
         name: t('Subscriptions'),
         icon: <SubscriptionIcon />,
         action: () => navigate(relative(SettingsRoute.subscriptions)),
-      });
-    }
+      },
+    ];
 
     return items;
   }, [wallet, t]);
@@ -103,7 +102,7 @@ const MultipleAccountSettings = () => {
       },
       {
         name: t('Active_address'),
-        icon: wallet.version,
+        icon: walletVersionText(wallet.active.version),
         action: () => navigate(relative(SettingsRoute.version)),
       },
       {
@@ -132,7 +131,7 @@ const MultipleAccountSettings = () => {
 export const AccountSettings = () => {
   const { account } = useAppContext();
 
-  if (account.wallets.length > 1) {
+  if (account.publicKeys.length > 1) {
     return <MultipleAccountSettings />;
   } else {
     return <SingleAccountSettings />;

@@ -4,8 +4,10 @@ import {
   WalletContractV3R2,
   WalletContractV4,
 } from 'ton';
-import { KeyPair, mnemonicToPrivateKey, sha512 } from 'ton-crypto';
-import { WalletState, WalletVersion } from '../entries/wallet';
+import { KeyPair, mnemonicToPrivateKey } from 'ton-crypto';
+import { WalletAddress, WalletState, WalletVersion } from '../entries/wallet';
+import { AppKey } from '../Keys';
+import { IStorage } from '../Storage';
 import { Configuration, WalletApi } from '../tonApi';
 import { encrypt } from './cryptoService';
 
@@ -15,111 +17,146 @@ export const importWallet = async (
   password: string,
   name?: string
 ): Promise<WalletState> => {
-  const tonkeeperId = (await sha512(mnemonic.join(' '))).toString('hex');
-  console.log(tonkeeperId);
-
   const encryptedMnemonic = await encrypt(mnemonic.join(' '), password);
   const keyPair = await mnemonicToPrivateKey(mnemonic);
-  const [version, address] = await findContract(tonApiConfig, keyPair);
+  const active = await findWalletAddress(tonApiConfig, keyPair);
 
   return {
-    name,
-    revision: 0,
-    mnemonic: encryptedMnemonic,
-    address: address.toRawString(),
     publicKey: keyPair.publicKey.toString('hex'),
-    version,
-    tonkeeperId,
+    mnemonic: encryptedMnemonic,
+
+    active,
+
+    revision: 0,
+    name,
   };
 };
 
-const findContract = async (
+const versionMap: Record<string, WalletVersion> = {
+  wallet_v3R1: WalletVersion.v3R1,
+  wallet_v3R2: WalletVersion.v3R2,
+  wallet_v4R2: WalletVersion.v4R2,
+};
+
+const findWalletVersion = (interfaces: string[]): WalletVersion => {
+  for (let value of interfaces) {
+    if (versionMap[value]) {
+      return versionMap[value];
+    }
+  }
+  throw new Error('Unexpected wallet version');
+};
+
+const findWalletAddress = async (
   tonApiConfig: Configuration,
   keyPair: KeyPair
-): Promise<readonly [WalletVersion, Address]> => {
-  const api = new WalletApi(tonApiConfig);
-  const result = await api.findWalletsByPubKey({
+) => {
+  const result = await new WalletApi(tonApiConfig).findWalletsByPubKey({
     publicKey: keyPair.publicKey.toString('hex'),
   });
 
-  const wallet = result.wallets.find(
-    (wallet) => wallet.balance > 0 || wallet.status === 'active'
-  );
-  if (wallet) {
-    const detectedVersion = wallet.interfaces.find((value) =>
-      value.startsWith('wallet')
-    );
+  const activeWallet = result.wallets.find((wallet) => {
     if (
-      detectedVersion &&
-      ['wallet_v3R1', 'wallet_v3R2', 'wallet_v4R2'].includes(detectedVersion)
+      wallet.interfaces.some((value) => Object.keys(versionMap).includes(value))
     ) {
-      const version = detectedVersion.replace('wallet_', '') as WalletVersion;
-      return [version, Address.parse(wallet.address)] as const;
+      return wallet.balance > 0 || wallet.status === 'active';
     }
+    return false;
+  });
+
+  if (activeWallet) {
+    const wallet: WalletAddress = {
+      rawAddress: activeWallet.address,
+      friendlyAddress: Address.parse(activeWallet.address).toString(),
+      version: findWalletVersion(activeWallet.interfaces),
+    };
+
+    return wallet;
   }
 
   const contact = WalletContractV4.create({
     workchain: 0,
     publicKey: keyPair.publicKey,
   });
-  return ['v4R2', contact.address] as const;
+  const wallet: WalletAddress = {
+    rawAddress: contact.address.toRawString(),
+    friendlyAddress: contact.address.toString(),
+    version: WalletVersion.v4R2,
+  };
+
+  return wallet;
 };
 
-export const getAddress = (
+export const getWalletContract = (
   publicKey: Buffer,
-  version: WalletVersion,
-  raw = true
+  version: WalletVersion
 ) => {
   switch (version) {
-    case 'v3R1': {
-      const contact = WalletContractV3R1.create({
+    case WalletVersion.v3R1:
+      return WalletContractV3R1.create({
         workchain: 0,
         publicKey,
       });
-      return raw
-        ? contact.address.toRawString()
-        : contact.address.toString({ urlSafe: true, bounceable: true });
-    }
-    case 'v3R2': {
-      const contact = WalletContractV3R2.create({
+    case WalletVersion.v3R2:
+      return WalletContractV3R2.create({
         workchain: 0,
         publicKey,
       });
-      return raw
-        ? contact.address.toRawString()
-        : contact.address.toString({ urlSafe: true, bounceable: true });
-    }
-    case 'v4R2': {
-      const contact = WalletContractV4.create({
+    case WalletVersion.v4R2:
+      return WalletContractV4.create({
         workchain: 0,
         publicKey,
       });
-      return raw
-        ? contact.address.toRawString()
-        : contact.address.toString({ urlSafe: true, bounceable: true });
-    }
+    default:
+      throw new Error('Unexpected version: ');
   }
 };
-
-export const updateWalletVersion = (
-  wallet: WalletState,
+export const getWalletAddress = (
+  publicKey: Buffer,
   version: WalletVersion
-): WalletState => {
+): WalletAddress => {
+  const { address } = getWalletContract(publicKey, version);
   return {
-    ...wallet,
-    revision: wallet.revision + 1,
-    version: version,
-    address: getAddress(Buffer.from(wallet.publicKey, 'hex'), version),
+    rawAddress: address.toRawString(),
+    friendlyAddress: address.toString(),
+    version,
   };
 };
 
-export const updateWalletName = (
+export const updateWalletVersion = async (
+  storage: IStorage,
   wallet: WalletState,
-  name: string
-): WalletState => {
-  return {
+  version: WalletVersion
+) => {
+  const updated: WalletState = {
     ...wallet,
     revision: wallet.revision + 1,
-    name: name,
+    active: getWalletAddress(Buffer.from(wallet.publicKey, 'hex'), version),
   };
+  await setWalletState(storage, updated);
+};
+
+export const updateWalletProperty = async (
+  storage: IStorage,
+  wallet: WalletState,
+  props: Pick<WalletState, 'name' | 'hiddenJettons' | 'orderJettons' | 'lang'>
+) => {
+  const updated: WalletState = {
+    ...wallet,
+    ...props,
+    revision: wallet.revision + 1,
+  };
+  await setWalletState(storage, updated);
+};
+
+export const getWalletState = (storage: IStorage, publicKey: string) => {
+  return storage.get<WalletState>(`${AppKey.wallet}_${publicKey}`);
+};
+
+export const setWalletState = (storage: IStorage, state: WalletState) => {
+  return storage.set(`${AppKey.wallet}_${state.publicKey}`, state);
+};
+
+export const deleteWalletState = (storage: IStorage, publicKey: string) => {
+  return storage.delete(`${AppKey.wallet}_${publicKey}`);
 };

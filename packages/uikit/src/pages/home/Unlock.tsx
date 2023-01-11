@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { decrypt } from '@tonkeeper/core/dist/service/cryptoService';
+import { getWalletState } from '@tonkeeper/core/dist/service/walletService';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { mnemonicValidate } from 'ton-crypto';
@@ -9,6 +10,7 @@ import { Input } from '../../components/fields/Input';
 import { TonkeeperIcon } from '../../components/Icon';
 import { useAppContext } from '../../hooks/appContext';
 import { useAppSdk } from '../../hooks/appSdk';
+import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
 
 const Block = styled.form`
@@ -35,13 +37,17 @@ const Logo = styled.div`
 const useMutateUnlock = () => {
   const { account } = useAppContext();
   const sdk = useAppSdk();
+  const storage = useStorage();
 
   return useMutation<void, Error, string>(async (password) => {
-    if (account.wallets.length === 0) {
+    if (account.publicKeys.length === 0) {
       throw new Error('Missing wallets');
     }
-    const [wallet] = account.wallets;
-
+    const [publicKey] = account.publicKeys;
+    const wallet = await getWalletState(storage, publicKey);
+    if (!wallet) {
+      throw new Error('Missing wallet');
+    }
     const mnemonic = await decrypt(wallet.mnemonic, password);
     const isValid = await mnemonicValidate(mnemonic.split(' '));
     if (!isValid) {

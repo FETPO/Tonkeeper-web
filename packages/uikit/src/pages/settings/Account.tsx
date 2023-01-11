@@ -1,4 +1,3 @@
-import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
 import React, { FC, useCallback, useMemo, useState } from 'react';
 import {
@@ -15,14 +14,21 @@ import { DropDown } from '../../components/DropDown';
 import { EllipsisIcon, ReorderIcon } from '../../components/Icon';
 import { ColumnText, Divider } from '../../components/Layout';
 import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
+import { SkeletonListPayload } from '../../components/Sceleton';
+import {
+  DeleteWalletNotification,
+  LogOutWalletNotification,
+} from '../../components/settings/LogOutNotification';
 import { SetUpWalletIcon } from '../../components/settings/SettingsIcons';
 import { SettingsList } from '../../components/settings/SettingsList';
+import { RenameWalletNotification } from '../../components/settings/WalletNameNotification';
 import { SubHeader } from '../../components/SubHeader';
 import { Label1 } from '../../components/Text';
 import { useAppContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute, SettingsRoute } from '../../libs/routes';
 import { useMutateAccountState } from '../../state/account';
+import { useWalletState } from '../../state/wallet';
 
 const Row = styled.div`
   display: flex;
@@ -36,89 +42,110 @@ const Icon = styled.span`
 `;
 
 const WalletRow: FC<{
-  wallet: WalletState;
+  publicKey: string;
   dragHandleProps: DraggableProvidedDragHandleProps | null | undefined;
-}> = ({ wallet, dragHandleProps }) => {
+}> = ({ publicKey, dragHandleProps }) => {
   const navigate = useNavigate();
+  const { data: wallet } = useWalletState(publicKey);
   const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation();
 
+  const [rename, setRename] = useState<boolean>(false);
+  const [logout, setLogout] = useState<boolean>(false);
+  const [remove, setRemove] = useState<boolean>(false);
+
+  if (!wallet) {
+    return <SkeletonListPayload />;
+  }
+
   return (
-    <ListItemPayload>
-      <Row>
-        <Icon {...dragHandleProps}>
-          <ReorderIcon />
-        </Icon>
-        <ColumnText
-          text={wallet.name ? wallet.name : t('Wallet')}
-          secondary={toShortAddress(wallet.address)}
-        />
-      </Row>
-      <DropDown
-        payload={(onClose) => (
-          <ListBlock margin={false} dropDown>
-            <ListItem
-              dropDown
-              onClick={() => {
-                searchParams.delete('rename');
-                searchParams.append('rename', wallet.tonkeeperId);
-                setSearchParams(searchParams);
-                onClose();
-              }}
-            >
-              <ListItemPayload>
-                <Label1>{t('Rename')}</Label1>
-              </ListItemPayload>
-            </ListItem>
-            <ListItem
-              dropDown
-              onClick={() => {
-                navigate(
-                  AppRoute.settings +
-                    SettingsRoute.recovery +
-                    `/${wallet.tonkeeperId}`
-                );
-              }}
-            >
-              <ListItemPayload>
-                <Label1>{t('Show_recovery_phrase')}</Label1>
-              </ListItemPayload>
-            </ListItem>
-            <Divider />
-            <ListItem
-              dropDown
-              onClick={() => {
-                searchParams.delete('logout');
-                searchParams.append('logout', wallet.tonkeeperId);
-                setSearchParams(searchParams);
-                onClose();
-              }}
-            >
-              <ListItemPayload>
-                <Label1>{t('Log_out')}</Label1>
-              </ListItemPayload>
-            </ListItem>
-            <ListItem
-              dropDown
-              onClick={() => {
-                searchParams.delete('delete');
-                searchParams.append('delete', wallet.tonkeeperId);
-                setSearchParams(searchParams);
-                onClose();
-              }}
-            >
-              <ListItemPayload>
-                <Label1>{t('Delete_account')}</Label1>
-              </ListItemPayload>
-            </ListItem>
-          </ListBlock>
-        )}
-      >
-        <Icon>
-          <EllipsisIcon />
-        </Icon>
-      </DropDown>
-    </ListItemPayload>
+    <>
+      <ListItemPayload>
+        <Row>
+          <Icon {...dragHandleProps}>
+            <ReorderIcon />
+          </Icon>
+          <ColumnText
+            text={wallet.name ? wallet.name : t('Wallet')}
+            secondary={toShortAddress(wallet.active.friendlyAddress)}
+          />
+        </Row>
+        <DropDown
+          payload={(onClose) => (
+            <ListBlock margin={false} dropDown>
+              <ListItem
+                dropDown
+                onClick={() => {
+                  setRename(true);
+                  onClose();
+                }}
+              >
+                <ListItemPayload>
+                  <Label1>{t('Rename')}</Label1>
+                </ListItemPayload>
+              </ListItem>
+              <ListItem
+                dropDown
+                onClick={() => {
+                  navigate(
+                    AppRoute.settings +
+                      SettingsRoute.recovery +
+                      `/${wallet.publicKey}`
+                  );
+                }}
+              >
+                <ListItemPayload>
+                  <Label1>{t('Show_recovery_phrase')}</Label1>
+                </ListItemPayload>
+              </ListItem>
+              <Divider />
+              <ListItem
+                dropDown
+                onClick={() => {
+                  searchParams.delete('logout');
+                  searchParams.append('logout', wallet.publicKey);
+                  setSearchParams(searchParams);
+                  onClose();
+                }}
+              >
+                <ListItemPayload>
+                  <Label1>{t('Log_out')}</Label1>
+                </ListItemPayload>
+              </ListItem>
+              <ListItem
+                dropDown
+                onClick={() => {
+                  searchParams.delete('delete');
+                  searchParams.append('delete', wallet.publicKey);
+                  setSearchParams(searchParams);
+                  onClose();
+                }}
+              >
+                <ListItemPayload>
+                  <Label1>{t('Delete_account')}</Label1>
+                </ListItemPayload>
+              </ListItem>
+            </ListBlock>
+          )}
+        >
+          <Icon>
+            <EllipsisIcon />
+          </Icon>
+        </DropDown>
+      </ListItemPayload>
+      <RenameWalletNotification
+        wallet={rename ? wallet : undefined}
+        handleClose={() => setRename(false)}
+      />
+      <LogOutWalletNotification
+        wallet={logout ? wallet : undefined}
+        handleClose={() => setLogout(false)}
+      />
+      <DeleteWalletNotification
+        wallet={remove ? wallet : undefined}
+        handleClose={() => setRemove(false)}
+      />
+    </>
   );
 };
 
@@ -142,10 +169,13 @@ export const Account = () => {
   const handleDrop: OnDragEndResponder = useCallback(
     (droppedItem) => {
       if (!droppedItem.destination) return;
-      var updatedList = [...account.wallets];
+      var updatedList = [...account.publicKeys];
       const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
       updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
-      mutate({ activeWallet: account.activeWallet, wallets: updatedList });
+      mutate({
+        activePublicKey: account.activePublicKey,
+        publicKeys: updatedList,
+      });
     },
     [account, mutate]
   );
@@ -157,10 +187,10 @@ export const Account = () => {
         <Droppable droppableId="wallets">
           {(provided) => (
             <ListBlock {...provided.droppableProps} ref={provided.innerRef}>
-              {account.wallets.map((item, index) => (
+              {account.publicKeys.map((publicKey, index) => (
                 <Draggable
-                  key={item.address}
-                  draggableId={item.address}
+                  key={publicKey}
+                  draggableId={publicKey}
                   index={index}
                 >
                   {(provided) => (
@@ -171,7 +201,7 @@ export const Account = () => {
                     >
                       <WalletRow
                         dragHandleProps={provided.dragHandleProps}
-                        wallet={item}
+                        publicKey={publicKey}
                       />
                     </ListItem>
                   )}

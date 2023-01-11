@@ -1,5 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { Language } from '@tonkeeper/core/dist/entries/language';
+import {
+  Language,
+  localizationText,
+} from '@tonkeeper/core/dist/entries/language';
 import { Network } from '@tonkeeper/core/dist/entries/network';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
@@ -19,7 +22,10 @@ export const useTonendpoint = (
   lang?: Language
 ) => {
   return useMemo(() => {
-    return new Tonendpoint({ build, network, lang }, {});
+    return new Tonendpoint(
+      { build, network, lang: localizationText(lang) },
+      {}
+    );
   }, [build, network, lang]);
 };
 

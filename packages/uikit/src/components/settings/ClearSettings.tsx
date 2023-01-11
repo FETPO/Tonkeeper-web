@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
 import { useAppContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { DeleteAllNotification } from './LogOutNotification';
@@ -8,30 +7,26 @@ import { SettingsList } from './SettingsList';
 
 export const ClearSettings = () => {
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { account } = useAppContext();
-  const deleteItems = useMemo(() => {
-    const deleteAll = () => {
-      searchParams.append('notification', 'delete-all');
-      setSearchParams(searchParams);
-    };
 
+  const { account } = useAppContext();
+  const [open, setOpen] = useState(false);
+  const deleteItems = useMemo(() => {
     return [
       {
         name:
-          account.wallets.length > 1
+          account.publicKeys.length > 1
             ? t('Delete_all_accounts_and_logout')
             : t('Delete_account'),
         icon: <DeleteAccountIcon />,
-        action: deleteAll,
+        action: () => setOpen(true),
       },
     ];
-  }, [t, searchParams, setSearchParams]);
+  }, [t, setOpen]);
 
   return (
     <>
       <SettingsList items={deleteItems} />
-      <DeleteAllNotification />
+      <DeleteAllNotification open={open} handleClose={() => setOpen(false)} />
     </>
   );
 };

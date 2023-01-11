@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { AuthState } from '@tonkeeper/core/dist/entries/password';
+import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { decrypt } from '@tonkeeper/core/dist/service/cryptoService';
 import React, { FC } from 'react';
@@ -12,16 +13,17 @@ import { Body1, Body2, H2 } from '../../components/Text';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute } from '../../libs/routes';
+import { useWalletState } from '../../state/wallet';
 
 export const ActiveRecovery = () => {
   const wallet = useWalletContext();
-  return <RecoveryContent tonkeeperId={wallet.tonkeeperId} />;
+  return <RecoveryContent publicKey={wallet.publicKey} />;
 };
 
 export const Recovery = () => {
-  const { tonkeeperId } = useParams();
-  if (tonkeeperId) {
-    return <RecoveryContent tonkeeperId={tonkeeperId} />;
+  const { publicKey } = useParams();
+  if (publicKey) {
+    return <RecoveryContent publicKey={publicKey} />;
   } else {
     return <ActiveRecovery />;
   }
@@ -31,25 +33,31 @@ const getPassword = async (auth: AuthState): Promise<string> => {
   return 'moke';
 };
 
-const useMnemonic = (tonkeeperId: string, auth: AuthState) => {
+const useMnemonic = (
+  wallet: WalletState | null | undefined,
+  auth: AuthState
+) => {
   const { account } = useAppContext();
-  return useQuery([tonkeeperId, AppKey.account], async () => {
-    const wallet = account.wallets.find(
-      (item) => item.tonkeeperId === tonkeeperId
-    );
-    if (!wallet) {
-      throw new Error('Missing wallet');
-    }
 
-    const password = auth.kind === 'none' ? auth.kind : await getPassword(auth);
-    const mnemonic = (await decrypt(wallet.mnemonic, password)).split(' ');
-    const isValid = await mnemonicValidate(mnemonic);
-    if (!isValid) {
-      throw new Error('Wallet mnemonic  not valid');
-    }
+  return useQuery(
+    [wallet?.publicKey, AppKey.account],
+    async () => {
+      if (!wallet) {
+        throw new Error('Missing wallet');
+      }
 
-    return mnemonic;
-  });
+      const password =
+        auth.kind === 'none' ? auth.kind : await getPassword(auth);
+      const mnemonic = (await decrypt(wallet.mnemonic, password)).split(' ');
+      const isValid = await mnemonicValidate(mnemonic);
+      if (!isValid) {
+        throw new Error('Wallet mnemonic  not valid');
+      }
+
+      return mnemonic;
+    },
+    { enabled: wallet != null }
+  );
 };
 
 const BackButton = styled.div`
@@ -111,11 +119,12 @@ const Number = styled.span`
   color: ${(props) => props.theme.textSecondary};
 `;
 
-const RecoveryContent: FC<{ tonkeeperId: string }> = ({ tonkeeperId }) => {
+const RecoveryContent: FC<{ publicKey: string }> = ({ publicKey }) => {
   const { auth } = useAppContext();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { data: mnemonic } = useMnemonic(tonkeeperId, auth);
+  const { data: wallet } = useWalletState(publicKey);
+  const { data: mnemonic } = useMnemonic(wallet, auth);
 
   const onBack = () => {
     navigate(AppRoute.settings);

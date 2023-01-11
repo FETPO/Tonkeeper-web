@@ -2,8 +2,8 @@ import { Configuration } from '../tonApi';
 import { TonendpointConfig } from '../tonkeeperApi/tonendpoint';
 
 export enum Network {
-  MAINNET = '-239',
-  TESTNET = '-3',
+  MAINNET = -239,
+  TESTNET = -3,
 }
 
 export const defaultNetwork = Network.MAINNET;

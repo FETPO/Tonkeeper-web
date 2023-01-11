@@ -4,6 +4,8 @@ import {
   Language,
 } from '@tonkeeper/core/dist/entries/language';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
+import { updateWalletProperty } from '@tonkeeper/core/dist/service/walletService';
+import { useWalletContext } from '../hooks/appContext';
 import { useStorage } from '../hooks/storage';
 
 export const useLanguage = () => {
@@ -17,8 +19,9 @@ export const useLanguage = () => {
 export const useMutateLanguage = () => {
   const storage = useStorage();
   const client = useQueryClient();
-  return useMutation<void, Error, Language>(async (language) => {
-    await storage.set(AppKey.lang, language);
-    await client.invalidateQueries([AppKey.lang]);
+  const wallet = useWalletContext();
+  return useMutation<void, Error, Language>(async (lang) => {
+    await updateWalletProperty(storage, wallet, { lang });
+    await client.invalidateQueries([AppKey.account]);
   });
 };

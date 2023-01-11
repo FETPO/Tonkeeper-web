@@ -5,7 +5,6 @@ import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
 import BigNumber from 'bignumber.js';
 import React, { FC, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
-import { Address } from 'ton-core';
 import { useWalletContext } from '../../hooks/appContext';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useFormattedPrice } from '../../hooks/balance';
@@ -47,7 +46,7 @@ export const Balance: FC<{
   const balance = useFormattedPrice(currency, total);
 
   const onClick = useCallback(() => {
-    sdk.copyToClipboard(Address.parse(wallet.address).toString());
+    sdk.copyToClipboard(wallet.active.friendlyAddress);
   }, [sdk, wallet]);
   return (
     <Block>

@@ -1,7 +1,7 @@
 import {
   defaultLanguage,
-  Language,
   languages,
+  localizationText,
 } from '@tonkeeper/core/dist/entries/language';
 import React, { useContext } from 'react';
 
@@ -9,10 +9,10 @@ export type Translation = (text: string) => string;
 
 export interface I18nClient {
   enable: boolean;
-  reloadResources: (langs: Language[]) => Promise<void>;
-  changeLanguage: (lang: Language) => Promise<void>;
-  language: Language;
-  languages: Language[];
+  reloadResources: (langs: string[]) => Promise<void>;
+  changeLanguage: (lang: string) => Promise<void>;
+  language: string;
+  languages: string[];
 }
 
 export interface I18nContext {
@@ -26,8 +26,8 @@ export const TranslationContext = React.createContext<I18nContext>({
     enable: false,
     reloadResources: async () => {},
     changeLanguage: async () => {},
-    language: defaultLanguage,
-    languages: [...languages],
+    language: localizationText(defaultLanguage),
+    languages: [...languages].map(localizationText),
   },
 });
 

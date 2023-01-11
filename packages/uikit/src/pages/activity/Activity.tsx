@@ -20,16 +20,26 @@ const List = styled(ListBlock)`
   margin: 0.5rem 0;
 `;
 
+export const ActivitySkeleton = () => {
+  return (
+    <Body>
+      <SkeletonList size={1} />
+      <SkeletonList size={3} />
+      <SkeletonList size={2} />
+    </Body>
+  );
+};
+
 export const Activity: FC = () => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
 
   const { fetchNextPage, hasNextPage, isFetchingNextPage, data, ...result } =
     useInfiniteQuery({
-      queryKey: [wallet.tonkeeperId, AppKey.activity],
+      queryKey: [wallet.active.rawAddress, AppKey.activity],
       queryFn: ({ pageParam = undefined }) =>
         new EventApi(tonApi).accountEvents({
-          account: wallet.address,
+          account: wallet.active.rawAddress,
           limit: 10,
           beforeLt: pageParam,
         }),
@@ -37,13 +47,7 @@ export const Activity: FC = () => {
     });
 
   if (!data) {
-    return (
-      <Body>
-        <SkeletonList size={1} />
-        <SkeletonList size={3} />
-        <SkeletonList size={2} />
-      </Body>
-    );
+    return <ActivitySkeleton />;
   }
 
   return (

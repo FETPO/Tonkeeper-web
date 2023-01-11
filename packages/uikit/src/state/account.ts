@@ -1,25 +1,37 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  AccountState,
-  defaultAccountState,
-} from '@tonkeeper/core/dist/entries/account';
+import { AccountState } from '@tonkeeper/core/dist/entries/account';
 import { WalletVersion } from '@tonkeeper/core/dist/entries/wallet';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
-import { updateWallet } from '@tonkeeper/core/dist/service/accountService';
-import { updateWalletVersion } from '@tonkeeper/core/dist/service/walletService';
-import { IStorage } from '@tonkeeper/core/dist/Storage';
+import {
+  accountSelectWallet,
+  getAccountState,
+} from '@tonkeeper/core/dist/service/accountService';
+import {
+  getWalletState,
+  updateWalletVersion,
+} from '@tonkeeper/core/dist/service/walletService';
 import { useWalletContext } from '../hooks/appContext';
 import { useStorage } from '../hooks/storage';
 
-export const getAccountState = async (storage: IStorage) => {
-  console.log('load account');
-  const state = await storage.get<AccountState>(AppKey.account);
-  return state ?? defaultAccountState;
-};
-
 export const useAccountState = () => {
   const storage = useStorage();
-  return useQuery([AppKey.account], () => getAccountState(storage));
+  const client = useQueryClient();
+  return useQuery([AppKey.account], async () => {
+    const account = await getAccountState(storage);
+    await Promise.all(
+      account.publicKeys.map((key) =>
+        getWalletState(storage, key).then((wallet) => {
+          if (wallet) {
+            client.setQueryData(
+              [AppKey.account, AppKey.wallet, wallet.publicKey],
+              wallet
+            );
+          }
+        })
+      )
+    );
+    return account;
+  });
 };
 
 export const useMutateAccountState = () => {
@@ -34,23 +46,17 @@ export const useMutateAccountState = () => {
 export const useMutateActiveWallet = () => {
   const storage = useStorage();
   const client = useQueryClient();
-  return useMutation<void, Error, string>(async (activeWallet) => {
-    let account = await getAccountState(storage);
-
-    account = { ...account, activeWallet };
-
-    await storage.set(AppKey.account, account);
+  return useMutation<void, Error, string>(async (publicKey) => {
+    await accountSelectWallet(storage, publicKey);
     await client.invalidateQueries([AppKey.account]);
   });
 };
 
 export const useMutateDeleteAll = () => {
   const storage = useStorage();
-  const client = useQueryClient();
   return useMutation<void, Error, void>(async () => {
     // TODO: clean remote storage by api
     await storage.clear();
-    //await client.invalidateQueries();
   });
 };
 
@@ -59,11 +65,7 @@ export const useMutateWalletVersion = () => {
   const client = useQueryClient();
   const wallet = useWalletContext();
   return useMutation<void, Error, WalletVersion>(async (version) => {
-    let account = await getAccountState(storage);
-
-    account = updateWallet(account, updateWalletVersion(wallet, version));
-
-    await storage.set(AppKey.account, account);
+    await updateWalletVersion(storage, wallet, version);
     await client.invalidateQueries([AppKey.account]);
   });
 };

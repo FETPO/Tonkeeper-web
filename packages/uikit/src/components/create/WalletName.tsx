@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AccountState } from '@tonkeeper/core/dist/entries/account';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
-import { updateWallet } from '@tonkeeper/core/dist/service/accountService';
-import { updateWalletName } from '@tonkeeper/core/dist/service/walletService';
+import {
+  getWalletState,
+  updateWalletProperty,
+} from '@tonkeeper/core/dist/service/walletService';
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { useStorage } from '../../hooks/storage';
@@ -31,17 +33,18 @@ const useUpdateNameMutation = (account: AccountState) => {
     if (name.length < 3) {
       throw new Error('Missing name');
     }
-    const wallet = account.wallets.find(
-      (item) => item.tonkeeperId === account.activeWallet
-    );
+
+    if (!account.activePublicKey) {
+      throw new Error('Missing activePublicKey');
+    }
+    const wallet = await getWalletState(storage, account.activePublicKey);
     if (!wallet) {
       throw new Error('Missing wallet');
     }
-    const update = updateWallet(account, updateWalletName(wallet, name));
 
-    await storage.set(AppKey.account, update);
+    await updateWalletProperty(storage, wallet, { name });
     await client.invalidateQueries([AppKey.account]);
-    return update;
+    return account;
   });
 };
 

@@ -8,7 +8,6 @@ import {
 } from '@tonkeeper/core/dist/tonkeeperApi/tonendpoint';
 import React, { FC, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { Address } from 'ton-core';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useStorage } from '../../hooks/storage';
@@ -137,7 +136,7 @@ const replacePlaceholders = (
   fiat: FiatCurrencies
 ) => {
   return url
-    .replace('{ADDRESS}', Address.parse(wallet.address).toString())
+    .replace('{ADDRESS}', wallet.active.friendlyAddress)
     .replace('{CUR_FROM}', fiat)
     .replace('{CUR_TO}', 'TON')
     .replaceAll('{TX_ID}', config.mercuryoSecret ?? '');

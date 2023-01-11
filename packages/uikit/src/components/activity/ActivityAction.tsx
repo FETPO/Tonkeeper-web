@@ -88,7 +88,7 @@ const TonTransferAction: FC<{ action: Action; date: string }> = ({
     return <ErrorAction />;
   }
 
-  if (tonTransfer.recipient.address === wallet.address) {
+  if (tonTransfer.recipient.address === wallet.active.rawAddress) {
     return (
       <ListItemPayload>
         <Row>
@@ -144,7 +144,7 @@ const JettonTransferAction: FC<{ action: Action; date: string }> = ({
     return <ErrorAction />;
   }
 
-  if (jettonTransfer.sender?.address === wallet.address) {
+  if (jettonTransfer.sender?.address === wallet.active.rawAddress) {
     return (
       <ListItemPayload>
         <Row>
