@@ -35,7 +35,7 @@ export const BackButton = styled.div`
 `;
 
 export interface SubHeaderProps {
-  title: string;
+  title: React.ReactNode;
 }
 
 export const SubHeader: FC<SubHeaderProps> = ({ title }) => {

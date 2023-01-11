@@ -2,11 +2,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { updateWallet } from '@tonkeeper/core/dist/service/accountService';
 import {
+  AccountEvents,
   JettonApi,
   JettonBalance,
   JettonInfo,
   JettonsBalances,
 } from '@tonkeeper/core/dist/tonApi';
+import { delay } from '@tonkeeper/core/dist/utils/common';
 import { useMemo } from 'react';
 import { useAppContext, useWalletContext } from '../hooks/appContext';
 import { useStorage } from '../hooks/storage';
@@ -18,6 +20,8 @@ export const useJettonInfo = (jettonAddress: string) => {
   return useQuery<JettonInfo, Error>(
     [wallet.address, jettonAddress, AppKey.jettons],
     async () => {
+      await delay(1000);
+
       const result = await new JettonApi(tonApi).getJettonInfo({
         account: jettonAddress,
       });
@@ -26,9 +30,47 @@ export const useJettonInfo = (jettonAddress: string) => {
   );
 };
 
+export const useJettonHistory = (walletAddress: string) => {
+  const wallet = useWalletContext();
+  const { tonApi } = useAppContext();
+  return useQuery<AccountEvents, Error>(
+    [wallet.address, AppKey.jettons, walletAddress],
+    async () => {
+      const result = await new JettonApi(tonApi).getJettonHistory({
+        account: walletAddress,
+        limit: 100,
+      });
+      return result;
+    }
+  );
+};
+
+export const useJettonBalance = (jettonAddress: string) => {
+  const wallet = useWalletContext();
+  const { tonApi } = useAppContext();
+  return useQuery<JettonBalance, Error>(
+    [wallet.address, AppKey.jettons, jettonAddress],
+    async () => {
+      const result = await new JettonApi(tonApi).getJettonsBalances({
+        account: wallet.address,
+      });
+
+      const balance = result.balances.find(
+        (item) => item.jettonAddress === jettonAddress
+      );
+      if (!balance) {
+        throw new Error('Missing jetton balance');
+      }
+      return balance;
+    }
+  );
+};
+
 export const useJettonsBalances = () => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
+  const client = useQueryClient();
+
   return useQuery<JettonsBalances, Error>(
     [wallet.address, AppKey.jettons],
     async () => {
@@ -36,11 +78,14 @@ export const useJettonsBalances = () => {
         account: wallet.address,
       });
 
-      return {
-        balances: result.balances.filter(
-          (item) => item.verification === 'whitelist'
-        ),
-      };
+      result.balances.forEach((item) => {
+        client.setQueryData(
+          [wallet.address, AppKey.jettons, item.jettonAddress],
+          item
+        );
+      });
+
+      return result;
     }
   );
 };
