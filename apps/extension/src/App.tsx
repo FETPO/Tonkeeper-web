@@ -35,6 +35,7 @@ import {
   Initialize,
   InitializeContainer,
 } from '@tonkeeper/uikit/dist/pages/import/Initialize';
+import { Jetton } from '@tonkeeper/uikit/dist/pages/jetton/Jetton';
 import SettingsRouter from '@tonkeeper/uikit/dist/pages/settings';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
@@ -253,6 +254,9 @@ export const Content: FC<{ account: AccountState; lock: boolean }> = ({
             }
           />
           <Route path={any(AppRoute.settings)} element={<SettingsRouter />} />
+          <Route path={AppRoute.jettons}>
+            <Route path=":jettonAddress" element={<Jetton />} />
+          </Route>
           <Route
             path="*"
             element={

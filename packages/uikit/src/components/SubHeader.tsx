@@ -42,7 +42,7 @@ export const SubHeader: FC<SubHeaderProps> = ({ title }) => {
   const navigate = useNavigate();
   return (
     <Block>
-      <BackButton onClick={() => navigate('../')}>
+      <BackButton onClick={() => navigate(-1)}>
         <ChevronLeftIcon />
       </BackButton>
       <H3>{title}</H3>

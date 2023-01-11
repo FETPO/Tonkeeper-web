@@ -16,6 +16,7 @@ import { Assets } from './Jettons';
 const ButtonRow = styled.div`
   display: flex;
   justify-content: center;
+  margin-top: -1rem;
 `;
 
 const EditButton = styled(Label2)`

@@ -10,11 +10,13 @@ import {
 import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import BigNumber from 'bignumber.js';
 import React, { FC, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { useAppContext } from '../../hooks/appContext';
 import { formatAmountValue, useFormattedPrice } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { getCoinPrice } from '../../hooks/useFiatRate';
+import { AppRoute } from '../../libs/routes';
 import { ToncoinIcon } from '../Icon';
 import { ColumnText } from '../Layout';
 import { ListBlock, ListItem, ListItemPayload } from '../List';
@@ -165,6 +167,8 @@ const Logo = styled.img`
 
 export const JettonAsset: FC<{ jetton: JettonBalance }> = ({ jetton }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
   const { fiat } = useAppContext();
 
   const format = useFormatCoinValue();
@@ -174,7 +178,13 @@ export const JettonAsset: FC<{ jetton: JettonBalance }> = ({ jetton }) => {
     : '-';
 
   return (
-    <ListItem>
+    <ListItem
+      onClick={() =>
+        navigate(
+          AppRoute.jettons + `/${encodeURIComponent(jetton.jettonAddress)}`
+        )
+      }
+    >
       <ListItemPayload>
         <Description>
           <Logo src={jetton.metadata?.image} />

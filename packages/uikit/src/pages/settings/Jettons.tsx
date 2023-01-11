@@ -19,7 +19,7 @@ import { useCoinBalance } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import {
   sortJettons,
-  useJettonsInfo,
+  useJettonsBalances,
   useOrderJettonMutation,
   useToggleJettonMutation,
 } from '../../state/jetton';
@@ -85,7 +85,7 @@ const JettonRow: FC<{
 
 export const JettonsSettings = () => {
   const { t } = useTranslation();
-  const { data } = useJettonsInfo();
+  const { data } = useJettonsBalances();
   const wallet = useWalletContext();
 
   const jettons = useMemo(() => {

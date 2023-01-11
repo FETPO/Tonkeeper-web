@@ -35,6 +35,7 @@ import {
   Initialize,
   InitializeContainer,
 } from '@tonkeeper/uikit/dist/pages/import/Initialize';
+import { Jetton } from '@tonkeeper/uikit/dist/pages/jetton/Jetton';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
 import { useFiatCurrency } from '@tonkeeper/uikit/dist/state/fiat';
@@ -241,6 +242,16 @@ export const Content: FC<{ account: AccountState; lock: boolean }> = ({
               </Body>
             }
           />
+          <Route path={AppRoute.jettons}>
+            <Route
+              path=":jettonAddress"
+              element={
+                <Body>
+                  <Jetton />
+                </Body>
+              }
+            />
+          </Route>
           <Route
             path="*"
             element={

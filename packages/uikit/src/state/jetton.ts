@@ -4,6 +4,7 @@ import { updateWallet } from '@tonkeeper/core/dist/service/accountService';
 import {
   JettonApi,
   JettonBalance,
+  JettonInfo,
   JettonsBalances,
 } from '@tonkeeper/core/dist/tonApi';
 import { useMemo } from 'react';
@@ -11,7 +12,21 @@ import { useAppContext, useWalletContext } from '../hooks/appContext';
 import { useStorage } from '../hooks/storage';
 import { getAccountState } from './account';
 
-export const useJettonsInfo = () => {
+export const useJettonInfo = (jettonAddress: string) => {
+  const wallet = useWalletContext();
+  const { tonApi } = useAppContext();
+  return useQuery<JettonInfo, Error>(
+    [wallet.address, jettonAddress, AppKey.jettons],
+    async () => {
+      const result = await new JettonApi(tonApi).getJettonInfo({
+        account: jettonAddress,
+      });
+      return result;
+    }
+  );
+};
+
+export const useJettonsBalances = () => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
   return useQuery<JettonsBalances, Error>(
@@ -96,7 +111,7 @@ export const hideJettons = (
 };
 
 export const useUserJettonList = () => {
-  const { data: jettons } = useJettonsInfo();
+  const { data: jettons } = useJettonsBalances();
   const { hiddenJettons, orderJettons } = useWalletContext();
 
   return useMemo(() => {
