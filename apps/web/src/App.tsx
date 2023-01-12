@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
 import {
   languages,
   localizationText,
@@ -41,8 +42,6 @@ import {
 import { Jetton } from '@tonkeeper/uikit/dist/pages/jetton/Jetton';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
-import { useFiatCurrency } from '@tonkeeper/uikit/dist/state/fiat';
-import { useLanguage } from '@tonkeeper/uikit/dist/state/language';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
 import {
@@ -141,34 +140,35 @@ const useLock = () => {
 };
 
 export const Loader: FC = () => {
+  const { data: activeWallet } = useActiveWallet();
+
   const lock = useLock();
   const { i18n } = useTranslation();
   const { data: network } = useNetwork();
-  const { data: language } = useLanguage();
   const { data: account } = useAccountState();
   const { data: auth } = useAuthState();
-  const { data: fiat } = useFiatCurrency();
-  const tonendpoint = useTonendpoint(sdk.version, network, language);
+
+  const tonendpoint = useTonendpoint(sdk.version, network, activeWallet?.lang);
   const { data: config } = useTonenpointConfig(tonendpoint);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (language && i18n.language !== localizationText(language)) {
+    if (
+      activeWallet &&
+      activeWallet.lang &&
+      i18n.language !== localizationText(activeWallet.lang)
+    ) {
       i18n
-        .reloadResources([localizationText(language)])
-        .then(() => i18n.changeLanguage(localizationText(language)));
+        .reloadResources([localizationText(activeWallet.lang)])
+        .then(() => i18n.changeLanguage(localizationText(activeWallet.lang)));
     }
-  }, [language, i18n]);
-
-  const { data: activeWallet } = useActiveWallet();
+  }, [activeWallet, i18n]);
 
   if (
-    language === undefined ||
     network === undefined ||
     auth === undefined ||
     account === undefined ||
-    fiat === undefined ||
     config === undefined ||
     lock === undefined
   ) {
@@ -179,8 +179,8 @@ export const Loader: FC = () => {
     tonApi: getTonClient(config, network),
     network,
     auth,
+    fiat: activeWallet?.fiat ?? FiatCurrencies.USD,
     account,
-    fiat,
     config,
     tonendpoint,
   };

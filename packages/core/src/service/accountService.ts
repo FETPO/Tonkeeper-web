@@ -2,7 +2,6 @@ import { AccountState, defaultAccountState } from '../entries/account';
 import { AppKey } from '../Keys';
 import { IStorage } from '../Storage';
 import { Configuration } from '../tonApi';
-import { deleteWalletBackup } from './backupService';
 import { deleteWalletState } from './walletService';
 
 export const getAccountState = async (storage: IStorage) => {
@@ -42,7 +41,7 @@ export const accountLogOutWallet = async (
   removeRemove: boolean = false
 ) => {
   if (removeRemove) {
-    await deleteWalletBackup(tonApi, publicKey);
+    //await deleteWalletBackup(tonApi, publicKey);
   }
 
   let account = await getAccountState(storage);

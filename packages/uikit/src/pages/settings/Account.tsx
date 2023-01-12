@@ -7,7 +7,7 @@ import {
   Droppable,
   OnDragEndResponder,
 } from 'react-beautiful-dnd';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { ImportNotification } from '../../components/create/ImportNotification';
 import { DropDown } from '../../components/DropDown';
@@ -47,7 +47,6 @@ const WalletRow: FC<{
 }> = ({ publicKey, dragHandleProps }) => {
   const navigate = useNavigate();
   const { data: wallet } = useWalletState(publicKey);
-  const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation();
 
   const [rename, setRename] = useState<boolean>(false);
@@ -102,9 +101,7 @@ const WalletRow: FC<{
               <ListItem
                 dropDown
                 onClick={() => {
-                  searchParams.delete('logout');
-                  searchParams.append('logout', wallet.publicKey);
-                  setSearchParams(searchParams);
+                  setLogout(true);
                   onClose();
                 }}
               >
@@ -115,9 +112,7 @@ const WalletRow: FC<{
               <ListItem
                 dropDown
                 onClick={() => {
-                  searchParams.delete('delete');
-                  searchParams.append('delete', wallet.publicKey);
-                  setSearchParams(searchParams);
+                  setRemove(true);
                   onClose();
                 }}
               >

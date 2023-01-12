@@ -109,29 +109,20 @@ export const useJettonsBalances = () => {
   );
 };
 
-export const useOrderJettonMutation = () => {
-  const storage = useStorage();
-  const client = useQueryClient();
-  const wallet = useWalletContext();
-
-  return useMutation<void, Error, string[]>(async (orderJettons) => {
-    await updateWalletProperty(storage, wallet, { orderJettons });
-    await client.invalidateQueries([AppKey.account]);
-  });
-};
-
 export const useToggleJettonMutation = () => {
   const storage = useStorage();
   const client = useQueryClient();
   const wallet = useWalletContext();
-
+  const { tonApi } = useAppContext();
   return useMutation<void, Error, string>(async (jettonAddress) => {
     const hiddenJettons = wallet.hiddenJettons ?? [];
     const updated = hiddenJettons.includes(jettonAddress)
       ? hiddenJettons.filter((item) => item !== jettonAddress)
       : hiddenJettons.concat([jettonAddress]);
 
-    await updateWalletProperty(storage, wallet, { hiddenJettons: updated });
+    await updateWalletProperty(tonApi, storage, wallet, {
+      hiddenJettons: updated,
+    });
 
     await client.invalidateQueries([AppKey.account]);
   });
