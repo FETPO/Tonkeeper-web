@@ -38,7 +38,9 @@ export interface WalletAddress {
 export interface WalletVoucher {
   secretKey: string;
   publicKey: string;
+  voucher: string;
 }
+
 export interface WalletState {
   publicKey: string;
   mnemonic: string;

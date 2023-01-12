@@ -92,8 +92,10 @@ const Green = styled.span`
 export const FinalView = () => {
   const { t } = useTranslation();
   const afterImport = useAfterImportAction();
+  const client = useQueryClient();
 
   useEffect(() => {
+    client.invalidateQueries([]);
     setTimeout(afterImport, 3000);
   }, []);
 

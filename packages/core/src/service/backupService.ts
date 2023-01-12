@@ -5,49 +5,28 @@ import { Network } from '../entries/network';
 import { WalletProxy } from '../entries/proxy';
 import { WalletState, WalletVersion, WalletVoucher } from '../entries/wallet';
 import { BackupApi, Configuration } from '../tonApi';
+import { createExpireTimestamp } from './voucherService';
 
 const tenMin = 10 * 60;
-
-const createExpireTimestamp = () => {
-  const timestamp = Math.round(Date.now() / 1000) + tenMin;
-  const timestampBuffer = Buffer.allocUnsafe(8);
-  timestampBuffer.writeBigInt64LE(BigInt(timestamp));
-
-  return timestampBuffer;
-};
-
-const createVoucher = async (keyPair: WalletVoucher) => {
-  const voucherBody = Buffer.concat([
-    createExpireTimestamp(),
-    Buffer.from(keyPair.publicKey, 'hex'),
-  ]);
-
-  const voucher = Buffer.concat([
-    sign(voucherBody, Buffer.from(keyPair.secretKey, 'hex')),
-    voucherBody,
-  ]);
-
-  return voucher;
-};
-
+/**
+ * backup.send sign:int512 primaryPublicKey:int256 voucher:backup.Voucher request_expire:int64 payload:bytes = backup.Send
+ * backup.get sign:int512 primaryPublicKey:int256 voucher:backup.Voucher request_expire:int64 = backup.Get
+ * backup.delete sign:int512 primaryPublicKey:int256 voucher:backup.Voucher request_expire:int64 = backup.Delete
+ */
 const createBody = async (
-  publicKey: string,
-  keyPair: WalletVoucher,
+  primaryPublicKey: string,
+  voucher: WalletVoucher,
   payload = Buffer.alloc(0)
 ) => {
-  const primaryPublicKey = Buffer.from(publicKey, 'hex');
-
-  const voucher = await createVoucher(keyPair);
-
   const requestBody = Buffer.concat([
-    primaryPublicKey,
-    voucher,
-    createExpireTimestamp(),
+    Buffer.from(primaryPublicKey, 'hex'),
+    Buffer.from(voucher.voucher, 'hex'),
+    createExpireTimestamp(tenMin),
     payload,
   ]);
 
   const body = Buffer.concat([
-    sign(requestBody, Buffer.from(keyPair.secretKey, 'hex')),
+    sign(requestBody, Buffer.from(voucher.secretKey, 'hex')),
     requestBody,
   ]);
 
