@@ -9,6 +9,10 @@ body {
   background-color: ${(props) => props.theme.backgroundPage};
   color:  ${(props) => props.theme.textPrimary};
 }
+
+:root {
+  --app-height: 100vh;
+ } 
 `;
 
 export const Container = styled.div`
@@ -17,7 +21,7 @@ export const Container = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: var(--app-height);
   padding: 0 1rem;
 `;
 

@@ -40,10 +40,16 @@ const CloseButton = styled.div`
   }
 `;
 
+const Overlay = styled.div`
+  position: fixed;
+  inset: 0;
+  top: var(--app-height);
+  transform: scale(0.8);
+  transition: all 0.3s ease-in-out;
+`;
 const Splash = styled.div`
   position: fixed;
   inset: 0;
-  top: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
@@ -55,9 +61,13 @@ const Splash = styled.div`
   padding: 0;
   opacity: 0;
   pointer-events: none;
-  transform: scale(0.8);
 
   &.enter-done {
+    opacity: 1;
+    pointer-events: auto;
+    overflow: auto;
+  }
+  &.enter-done ${Overlay} {
     top: 0;
     opacity: 1;
     pointer-events: auto;
@@ -66,7 +76,10 @@ const Splash = styled.div`
   }
 
   &.exit {
-    top: 100vh;
+    opacity: 0;
+  }
+  &.exit ${Overlay} {
+    top: var(--app-height);
     opacity: 0;
     transform: scale(0.8);
   }
@@ -124,20 +137,22 @@ export const Notification: FC<{
         nodeRef={nodeRef}
       >
         <Splash ref={nodeRef}>
-          <Wrapper>
-            <Padding />
-            <Gap />
-            <Content>
-              {handleClose && (
-                <ButtonContainer>
-                  <CloseButton onClick={handleClose}>
-                    <CloseIcon />
-                  </CloseButton>
-                </ButtonContainer>
-              )}
-              {Child}
-            </Content>
-          </Wrapper>
+          <Overlay>
+            <Wrapper>
+              <Padding />
+              <Gap />
+              <Content>
+                {handleClose && (
+                  <ButtonContainer>
+                    <CloseButton onClick={handleClose}>
+                      <CloseIcon />
+                    </CloseButton>
+                  </ButtonContainer>
+                )}
+                {Child}
+              </Content>
+            </Wrapper>
+          </Overlay>
         </Splash>
       </CSSTransition>
     </ReactPortal>

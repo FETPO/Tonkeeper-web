@@ -67,6 +67,7 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import { BrowserAppSdk } from './libs/appSdk';
+import { useAppHeight } from './libs/hooks';
 import { BrowserStorage } from './libs/storage';
 
 const SettingsRouter = React.lazy(
@@ -158,6 +159,7 @@ export const Loader: FC = () => {
   const { data: config } = useTonenpointConfig(tonendpoint);
 
   const navigate = useNavigate();
+  useAppHeight();
 
   useEffect(() => {
     if (

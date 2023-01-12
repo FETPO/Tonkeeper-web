@@ -19,6 +19,7 @@ const Block = styled.div<{ top: boolean; center?: boolean }>`
 
   position: sticky;
   top: 0;
+  z-index: 1;
   padding: 1rem 0;
 
   display: flex;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { TonkeeperIcon } from './Icon';
 
 const Block = styled.div`
-  height: 100vh;
+  height: var(— app-height);
 
   display: flex;
   justify-content: center;
