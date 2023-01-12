@@ -10,15 +10,17 @@ import {
   updateWalletProperty,
 } from '@tonkeeper/core/dist/service/walletService';
 import {
-  AccountApi,
   AccountRepr,
-  JettonApi,
-  JettonBalance,
   JettonsBalances,
-  WalletApi,
+  NFTApi,
+  NftItemsRepr,
 } from '@tonkeeper/core/dist/tonApi';
+import {
+  getActiveWalletJetton,
+  getWalletActiveAccountInfo,
+  getWalletActiveAddresses,
+} from '@tonkeeper/core/dist/tonApiExtended/walletApi';
 import { delay } from '@tonkeeper/core/dist/utils/common';
-import BigNumber from 'bignumber.js';
 import { useAppContext, useWalletContext } from '../hooks/appContext';
 import { useStorage } from '../hooks/storage';
 import { JettonKey, QueryKey } from '../libs/queryKey';
@@ -88,22 +90,8 @@ export const useMutateWalletProperty = () => {
 export const useWalletAddresses = () => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
-  return useQuery<string[], Error>(
-    [wallet.publicKey, QueryKey.addresses],
-    async () => {
-      const { wallets } = await new WalletApi(tonApi).findWalletsByPubKey({
-        publicKey: wallet.publicKey,
-      });
-      const result = wallets
-        .filter((item) => item.balance > 0 || item.status === 'active')
-        .map((wallet) => wallet.address);
-
-      if (result.length > 0) {
-        return result;
-      } else {
-        return [wallet.active.rawAddress];
-      }
-    }
+  return useQuery<string[], Error>([wallet.publicKey, QueryKey.addresses], () =>
+    getWalletActiveAddresses(tonApi, wallet)
   );
 };
 
@@ -115,28 +103,7 @@ export const useWalletAccountInfo = (addresses?: string[]) => {
     async () => {
       await delay(1000);
 
-      const { accounts } = await new AccountApi(tonApi).getBulkAccountInfo({
-        addresses: addresses!,
-      });
-
-      const active = accounts.find(
-        (item) => item.address.raw === wallet.active.rawAddress
-      );
-
-      if (!active) {
-        return await new AccountApi(tonApi).getAccountInfo({
-          account: wallet.active.rawAddress,
-        });
-      }
-
-      return accounts.reduce((acc, item) => {
-        if (acc !== item) {
-          acc.balance = new BigNumber(acc.balance)
-            .plus(item.balance)
-            .toNumber();
-        }
-        return acc;
-      }, active);
+      return getWalletActiveAccountInfo(tonApi, wallet, addresses);
     },
     { enabled: addresses != undefined }
   );
@@ -149,31 +116,9 @@ export const useWalletJettonList = (addresses?: string[]) => {
   return useQuery<JettonsBalances, Error>(
     [wallet.publicKey, QueryKey.jettons],
     async () => {
-      const all = await Promise.all(
-        (addresses ?? []).map((account) =>
-          new JettonApi(tonApi).getJettonsBalances({
-            account,
-          })
-        )
-      );
+      const result = await getActiveWalletJetton(tonApi, wallet, addresses);
 
-      const balances = all.reduce((acc, item) => {
-        item.balances.forEach((jetton) => {
-          const index = acc.findIndex(
-            (j) => j.jettonAddress === jetton.jettonAddress
-          );
-          if (index == -1) {
-            acc.push(jetton);
-          } else {
-            acc[index].balance = new BigNumber(acc[index].balance)
-              .plus(jetton.balance)
-              .toString();
-          }
-        });
-        return acc;
-      }, [] as JettonBalance[]);
-
-      balances.forEach((item) => {
+      result.balances.forEach((item) => {
         client.setQueryData(
           [
             wallet.publicKey,
@@ -185,8 +130,32 @@ export const useWalletJettonList = (addresses?: string[]) => {
         );
       });
 
-      return { balances };
+      return result;
     },
     { enabled: addresses != undefined }
+  );
+};
+
+export const useWalletNftList = (addresses?: string[]) => {
+  const wallet = useWalletContext();
+  const { tonApi } = useAppContext();
+
+  return useQuery<NftItemsRepr, Error>(
+    [wallet.publicKey, QueryKey.nft],
+    async () => {
+      const items = await Promise.all(
+        (addresses ?? []).map(async (address) => {
+          const result = await new NFTApi(tonApi).searchNFTItems({
+            owner: address,
+            offset: 0,
+            limit: 1000,
+          });
+          return result.nftItems;
+        })
+      );
+
+      return { nftItems: items.flat() };
+    },
+    { enabled: addresses != null }
   );
 };

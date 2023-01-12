@@ -9,7 +9,6 @@ import { SkeletonAction, SkeletonList } from '../../components/Sceleton';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { useUserJettonList } from '../../state/jetton';
-import { useNftInfo } from '../../state/nft';
 import {
   useTonenpointFiatMethods,
   useTonenpointStock,
@@ -18,6 +17,7 @@ import {
   useWalletAccountInfo,
   useWalletAddresses,
   useWalletJettonList,
+  useWalletNftList,
 } from '../../state/wallet';
 
 export const HomeActions = () => {
@@ -43,7 +43,7 @@ export const HomeSkeleton = () => {
   const { fiat } = useAppContext();
   return (
     <>
-      <Balance address={wallet.active.rawAddress} currency={fiat} />
+      <Balance address={wallet.active.friendlyAddress} currency={fiat} />
       <ActionsRow>
         <SkeletonAction />
         <SkeletonAction />
@@ -62,10 +62,10 @@ export const Home = () => {
 
   const { data: addresses } = useWalletAddresses();
   const { data: stock } = useTonenpointStock(tonendpoint);
+
   const { data: info, error } = useWalletAccountInfo(addresses);
   const { data: jettons } = useWalletJettonList(addresses);
-
-  const { data: nfts } = useNftInfo();
+  const { data: nfts } = useWalletNftList(addresses);
 
   const filtered = useUserJettonList(jettons);
 

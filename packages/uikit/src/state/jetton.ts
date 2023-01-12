@@ -8,6 +8,7 @@ import {
   JettonInfo,
   JettonsBalances,
 } from '@tonkeeper/core/dist/tonApi';
+import { getActiveWalletJetton } from '@tonkeeper/core/dist/tonApiExtended/walletApi';
 import { delay } from '@tonkeeper/core/dist/utils/common';
 import { useMemo } from 'react';
 import { useAppContext, useWalletContext } from '../hooks/appContext';
@@ -56,9 +57,7 @@ export const useJettonBalance = (jettonAddress: string) => {
   return useQuery<JettonBalance, Error>(
     [wallet.publicKey, QueryKey.jettons, JettonKey.balance, jettonAddress],
     async () => {
-      const result = await new JettonApi(tonApi).getJettonsBalances({
-        account: wallet.active.rawAddress,
-      });
+      const result = await getActiveWalletJetton(tonApi, wallet);
 
       const balance = result.balances.find(
         (item) => item.jettonAddress === jettonAddress
