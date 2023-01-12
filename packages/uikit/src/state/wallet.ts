@@ -9,7 +9,7 @@ import {
   getWalletState,
   updateWalletProperty,
 } from '@tonkeeper/core/dist/service/walletService';
-import { useAppContext } from '../hooks/appContext';
+import { useAppContext, useWalletContext } from '../hooks/appContext';
 import { useStorage } from '../hooks/storage';
 
 export const useActiveWallet = () => {
@@ -45,12 +45,31 @@ export const useMutateLogOut = (publicKey: string, remove = false) => {
 export const useMutateRenameWallet = (wallet: WalletState) => {
   const storage = useStorage();
   const client = useQueryClient();
+  const { tonApi } = useAppContext();
   return useMutation<void, Error, string>(async (name) => {
     if (name.length <= 0) {
       throw new Error('Missing name');
     }
 
-    await updateWalletProperty(storage, wallet, { name });
+    await updateWalletProperty(tonApi, storage, wallet, { name });
+    await client.invalidateQueries([AppKey.account]);
+  });
+};
+
+export const useMutateWalletProperty = () => {
+  const storage = useStorage();
+  const wallet = useWalletContext();
+  const client = useQueryClient();
+  const { tonApi } = useAppContext();
+  return useMutation<
+    void,
+    Error,
+    Pick<
+      WalletState,
+      'name' | 'hiddenJettons' | 'orderJettons' | 'lang' | 'fiat'
+    >
+  >(async (props) => {
+    await updateWalletProperty(tonApi, storage, wallet, props);
     await client.invalidateQueries([AppKey.account]);
   });
 };

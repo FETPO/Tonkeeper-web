@@ -9,6 +9,11 @@ import { WalletAddress, WalletState, WalletVersion } from '../entries/wallet';
 import { AppKey } from '../Keys';
 import { IStorage } from '../Storage';
 import { Configuration, WalletApi } from '../tonApi';
+import {
+  createWalletBackup,
+  getWalletBackup,
+  putWalletBackup,
+} from './backupService';
 import { encrypt } from './cryptoService';
 
 export const importWallet = async (
@@ -21,8 +26,17 @@ export const importWallet = async (
   const keyPair = await mnemonicToPrivateKey(mnemonic);
   const active = await findWalletAddress(tonApiConfig, keyPair);
 
+  const publicKey = keyPair.publicKey.toString('hex');
+  console.log(publicKey);
+  try {
+    const backup = await getWalletBackup(tonApiConfig, publicKey);
+    console.log(backup);
+  } catch (e) {
+    console.log(e);
+  }
+
   return {
-    publicKey: keyPair.publicKey.toString('hex'),
+    publicKey,
     mnemonic: encryptedMnemonic,
 
     active,
@@ -137,9 +151,13 @@ export const updateWalletVersion = async (
 };
 
 export const updateWalletProperty = async (
+  tonApi: Configuration,
   storage: IStorage,
   wallet: WalletState,
-  props: Pick<WalletState, 'name' | 'hiddenJettons' | 'orderJettons' | 'lang'>
+  props: Pick<
+    WalletState,
+    'name' | 'hiddenJettons' | 'orderJettons' | 'lang' | 'fiat'
+  >
 ) => {
   const updated: WalletState = {
     ...wallet,
@@ -147,6 +165,8 @@ export const updateWalletProperty = async (
     revision: wallet.revision + 1,
   };
   await setWalletState(storage, updated);
+
+  putWalletBackup(tonApi, updated.publicKey, createWalletBackup(updated));
 };
 
 export const getWalletState = (storage: IStorage, publicKey: string) => {

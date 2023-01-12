@@ -7,6 +7,7 @@ import {
 } from '@tonkeeper/core/dist/service/walletService';
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
+import { useAppContext } from '../../hooks/appContext';
 import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
 import { Button } from '../fields/Button';
@@ -28,7 +29,7 @@ const Body = styled(Body2)`
 const useUpdateNameMutation = (account: AccountState) => {
   const storage = useStorage();
   const client = useQueryClient();
-
+  const { tonApi } = useAppContext();
   return useMutation<AccountState, Error, string>(async (name) => {
     if (name.length < 3) {
       throw new Error('Missing name');
@@ -42,7 +43,7 @@ const useUpdateNameMutation = (account: AccountState) => {
       throw new Error('Missing wallet');
     }
 
-    await updateWalletProperty(storage, wallet, { name });
+    await updateWalletProperty(tonApi, storage, wallet, { name });
     await client.invalidateQueries([AppKey.account]);
     return account;
   });

@@ -20,9 +20,9 @@ import { useTranslation } from '../../hooks/translation';
 import {
   sortJettons,
   useJettonsBalances,
-  useOrderJettonMutation,
   useToggleJettonMutation,
 } from '../../state/jetton';
+import { useMutateWalletProperty } from '../../state/wallet';
 
 const Row = styled.div`
   display: flex;
@@ -92,14 +92,14 @@ export const JettonsSettings = () => {
     return sortJettons(wallet.orderJettons, data?.balances ?? []);
   }, [data, wallet.orderJettons]);
 
-  const { mutate } = useOrderJettonMutation();
+  const { mutate } = useMutateWalletProperty();
   const handleDrop: OnDragEndResponder = useCallback(
     (droppedItem) => {
       if (!droppedItem.destination) return;
       var updatedList = [...jettons];
       const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
       updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
-      mutate(updatedList.map((item) => item.jettonAddress));
+      mutate({ orderJettons: updatedList.map((item) => item.jettonAddress) });
     },
     [jettons, mutate]
   );
