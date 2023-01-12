@@ -1,12 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
-import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
-import { AppKey } from '@tonkeeper/core/dist/Keys';
-import {
-  AccountApi,
-  AccountRepr,
-  Configuration,
-} from '@tonkeeper/core/dist/tonApi';
-import { delay } from '@tonkeeper/core/dist/utils/common';
 import React from 'react';
 import { Action, ActionsRow } from '../../components/home/Actions';
 import { Balance } from '../../components/home/Balance';
@@ -23,18 +14,11 @@ import {
   useTonenpointFiatMethods,
   useTonenpointStock,
 } from '../../state/tonendpoint';
-
-const useAccountInfo = (tonApi: Configuration, wallet: WalletState) => {
-  return useQuery<AccountRepr, Error>(
-    [wallet.active.rawAddress, AppKey.balance],
-    async () => {
-      await delay(1000);
-      return await new AccountApi(tonApi).getAccountInfo({
-        account: wallet.active.rawAddress,
-      });
-    }
-  );
-};
+import {
+  useWalletAccountInfo,
+  useWalletAddresses,
+  useWalletJettonList,
+} from '../../state/wallet';
 
 export const HomeActions = () => {
   const { t } = useTranslation();
@@ -73,12 +57,17 @@ export const HomeSkeleton = () => {
 
 export const Home = () => {
   const wallet = useWalletContext();
-  const { tonApi, fiat, tonendpoint } = useAppContext();
 
+  const { fiat, tonendpoint } = useAppContext();
+
+  const { data: addresses } = useWalletAddresses();
   const { data: stock } = useTonenpointStock(tonendpoint);
-  const { data: info, error } = useAccountInfo(tonApi, wallet);
-  const jettons = useUserJettonList();
+  const { data: info, error } = useWalletAccountInfo(addresses);
+  const { data: jettons } = useWalletJettonList(addresses);
+
   const { data: nfts } = useNftInfo();
+
+  const filtered = useUserJettonList(jettons);
 
   if (!stock || !nfts || !jettons || !info) {
     return <HomeSkeleton />;
@@ -87,7 +76,7 @@ export const Home = () => {
   return (
     <>
       <Balance
-        address={wallet.active.rawAddress}
+        address={wallet.active.friendlyAddress}
         currency={fiat}
         info={info}
         error={error}

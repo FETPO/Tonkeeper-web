@@ -12,17 +12,13 @@ import { delay } from '@tonkeeper/core/dist/utils/common';
 import { useMemo } from 'react';
 import { useAppContext, useWalletContext } from '../hooks/appContext';
 import { useStorage } from '../hooks/storage';
+import { JettonKey, QueryKey } from '../libs/queryKey';
 
-enum JettonKey {
-  info,
-  history,
-  balance,
-}
 export const useJettonInfo = (jettonAddress: string) => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
   return useQuery<JettonInfo, Error>(
-    [wallet.active.rawAddress, AppKey.jettons, JettonKey.info, jettonAddress],
+    [wallet.active.rawAddress, QueryKey.jettons, JettonKey.info, jettonAddress],
     async () => {
       await delay(1000);
 
@@ -40,7 +36,7 @@ export const useJettonHistory = (walletAddress: string) => {
   return useQuery<AccountEvents, Error>(
     [
       wallet.active.rawAddress,
-      AppKey.jettons,
+      QueryKey.jettons,
       JettonKey.history,
       walletAddress,
     ],
@@ -58,12 +54,7 @@ export const useJettonBalance = (jettonAddress: string) => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
   return useQuery<JettonBalance, Error>(
-    [
-      wallet.active.rawAddress,
-      AppKey.jettons,
-      JettonKey.balance,
-      jettonAddress,
-    ],
+    [wallet.publicKey, QueryKey.jettons, JettonKey.balance, jettonAddress],
     async () => {
       const result = await new JettonApi(tonApi).getJettonsBalances({
         account: wallet.active.rawAddress,
@@ -76,35 +67,6 @@ export const useJettonBalance = (jettonAddress: string) => {
         throw new Error('Missing jetton balance');
       }
       return balance;
-    }
-  );
-};
-
-export const useJettonsBalances = () => {
-  const wallet = useWalletContext();
-  const { tonApi } = useAppContext();
-  const client = useQueryClient();
-
-  return useQuery<JettonsBalances, Error>(
-    [wallet.active.rawAddress, AppKey.jettons],
-    async () => {
-      const result = await new JettonApi(tonApi).getJettonsBalances({
-        account: wallet.active.rawAddress,
-      });
-
-      result.balances.forEach((item) => {
-        client.setQueryData(
-          [
-            wallet.active.rawAddress,
-            AppKey.jettons,
-            JettonKey.balance,
-            item.jettonAddress,
-          ],
-          item
-        );
-      });
-
-      return result;
     }
   );
 };
@@ -148,8 +110,7 @@ export const hideJettons = (
   return jettons.filter((item) => !hiddenJettons.includes(item.jettonAddress));
 };
 
-export const useUserJettonList = () => {
-  const { data: jettons } = useJettonsBalances();
+export const useUserJettonList = (jettons: JettonsBalances | undefined) => {
   const { hiddenJettons, orderJettons } = useWalletContext();
 
   return useMemo(() => {

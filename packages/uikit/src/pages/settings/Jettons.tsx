@@ -17,12 +17,12 @@ import { SubHeader } from '../../components/SubHeader';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useCoinBalance } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
+import { sortJettons, useToggleJettonMutation } from '../../state/jetton';
 import {
-  sortJettons,
-  useJettonsBalances,
-  useToggleJettonMutation,
-} from '../../state/jetton';
-import { useMutateWalletProperty } from '../../state/wallet';
+  useMutateWalletProperty,
+  useWalletAddresses,
+  useWalletJettonList,
+} from '../../state/wallet';
 
 const Row = styled.div`
   display: flex;
@@ -85,8 +85,9 @@ const JettonRow: FC<{
 
 export const JettonsSettings = () => {
   const { t } = useTranslation();
-  const { data } = useJettonsBalances();
   const wallet = useWalletContext();
+  const { data: addresses } = useWalletAddresses();
+  const { data } = useWalletJettonList(addresses);
 
   const jettons = useMemo(() => {
     return sortJettons(wallet.orderJettons, data?.balances ?? []);
