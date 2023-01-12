@@ -164,7 +164,7 @@ export const updateWalletProperty = async (
   wallet: WalletState,
   props: Pick<
     WalletState,
-    'name' | 'hiddenJettons' | 'orderJettons' | 'lang' | 'fiat'
+    'name' | 'hiddenJettons' | 'shownJettons' | 'shownJettons' | 'lang' | 'fiat'
   >
 ) => {
   const updated: WalletState = {
