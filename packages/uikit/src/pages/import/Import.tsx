@@ -3,12 +3,15 @@ import React, { useState } from 'react';
 import { CreateAuthState } from '../../components/create/CreateAuth';
 import { UpdateWalletName } from '../../components/create/WalletName';
 import { ImportWords } from '../../components/create/Words';
+import { useActiveWallet } from '../../state/wallet';
 import { FinalView, useAddWalletMutation } from './Password';
 
 export const Import = () => {
   const [mnemonic, setMnemonic] = useState<string[]>([]);
   const [account, setAccount] = useState<AccountState | undefined>(undefined);
   const [hasPassword, setHasPassword] = useState(false);
+
+  const { data: wallet } = useActiveWallet();
 
   const {
     mutateAsync: checkPasswordAndCreateWalletAsync,
@@ -52,7 +55,12 @@ export const Import = () => {
     );
   }
 
-  if (account && account.publicKeys.length > 1) {
+  if (
+    account &&
+    account.publicKeys.length > 1 &&
+    wallet &&
+    wallet.name == null
+  ) {
     return <UpdateWalletName account={account} onUpdate={setAccount} />;
   }
 

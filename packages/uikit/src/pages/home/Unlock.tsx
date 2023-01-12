@@ -16,7 +16,7 @@ import { useTranslation } from '../../hooks/translation';
 const Block = styled.form`
   display: flex;
   flex-direction: column;
-  min-height: var(— app-height);
+  min-height: var(--app-height);
   padding: 2rem 0;
   box-sizing: border-box;
 
