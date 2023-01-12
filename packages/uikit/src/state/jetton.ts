@@ -103,20 +103,26 @@ export const sortJettons = (
 
 export const hideJettons = (
   hiddenJettons: string[] | undefined,
+  shownJettons: string[] | undefined,
   jettons: JettonBalance[]
 ) => {
-  if (!hiddenJettons || hiddenJettons.length === 0) return jettons;
-  return jettons.filter((item) => !hiddenJettons.includes(item.jettonAddress));
+  return jettons.filter((jetton) => {
+    if (jetton.verification == 'whitelist') {
+      return hiddenJettons
+        ? !hiddenJettons.includes(jetton.jettonAddress)
+        : true;
+    } else {
+      return shownJettons ? shownJettons.includes(jetton.jettonAddress) : false;
+    }
+  });
 };
 
-export const useUserJettonList = (jettons: JettonsBalances | undefined) => {
-  const { hiddenJettons, orderJettons } = useWalletContext();
+export const useUserJettonList = (jettons: JettonsBalances) => {
+  const { hiddenJettons, orderJettons, shownJettons } = useWalletContext();
 
   return useMemo(() => {
-    if (!jettons) return jettons;
-
     const order = sortJettons(orderJettons, jettons.balances);
-    const hide = hideJettons(hiddenJettons, order);
+    const hide = hideJettons(hiddenJettons, shownJettons, order);
 
     return {
       balances: hide,

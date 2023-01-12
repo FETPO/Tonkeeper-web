@@ -53,6 +53,7 @@ export interface WalletState {
   name?: string;
 
   hiddenJettons?: string[];
+  shownJettons?: string[];
   orderJettons?: string[];
 
   network?: Network;

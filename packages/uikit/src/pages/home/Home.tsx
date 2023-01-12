@@ -1,10 +1,17 @@
-import React from 'react';
+import {
+  AccountRepr,
+  JettonsBalances,
+  NftItemsRepr,
+} from '@tonkeeper/core/dist/tonApi';
+import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
+import React, { FC } from 'react';
 import { Action, ActionsRow } from '../../components/home/Actions';
 import { Balance } from '../../components/home/Balance';
 import { BuyAction, SellAction } from '../../components/home/BuyAction';
 import { CompactView } from '../../components/home/CompactView';
 import { SendIcon } from '../../components/home/HomeIcons';
 import { ReceiveAction } from '../../components/home/ReceiveAction';
+import { TabsView } from '../../components/home/TabsView';
 import { SkeletonAction, SkeletonList } from '../../components/Sceleton';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
@@ -55,6 +62,25 @@ export const HomeSkeleton = () => {
   );
 };
 
+const HomeAssets: FC<{
+  stock: TonendpointStock;
+  jettons: JettonsBalances;
+  info: AccountRepr;
+  nfts: NftItemsRepr;
+}> = ({ stock, jettons, info, nfts }) => {
+  const filtered = useUserJettonList(jettons);
+
+  if (filtered.balances.length + nfts.nftItems.length < 10) {
+    return (
+      <CompactView info={info} jettons={filtered} nfts={nfts} stock={stock} />
+    );
+  } else {
+    return (
+      <TabsView info={info} jettons={filtered} nfts={nfts} stock={stock} />
+    );
+  }
+};
+
 export const Home = () => {
   const wallet = useWalletContext();
 
@@ -66,8 +92,6 @@ export const Home = () => {
   const { data: info, error } = useWalletAccountInfo(addresses);
   const { data: jettons } = useWalletJettonList(addresses);
   const { data: nfts } = useWalletNftList(addresses);
-
-  const filtered = useUserJettonList(jettons);
 
   if (!stock || !nfts || !jettons || !info) {
     return <HomeSkeleton />;
@@ -83,7 +107,7 @@ export const Home = () => {
         stock={stock}
       />
       <HomeActions />
-      <CompactView info={info} jettons={jettons} nfts={nfts} stock={stock} />
+      <HomeAssets info={info} jettons={jettons} nfts={nfts} stock={stock} />
     </>
   );
 };

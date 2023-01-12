@@ -16,16 +16,16 @@ import { useAppContext } from '../../hooks/appContext';
 import { formatAmountValue, useFormattedPrice } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { getCoinPrice } from '../../hooks/useFiatRate';
-import { AppRoute } from '../../libs/routes';
+import { AppRoute, SettingsRoute } from '../../libs/routes';
 import { ToncoinIcon } from '../Icon';
 import { ColumnText } from '../Layout';
 import { ListBlock, ListItem, ListItemPayload } from '../List';
-import { Body2, Label1 } from '../Text';
+import { Body2, Label1, Label2 } from '../Text';
 
 export interface AssetProps {
-  stock: TonendpointStock | undefined;
-  info: AccountRepr | undefined;
-  jettons: JettonsBalances | undefined;
+  stock: TonendpointStock;
+  info: AccountRepr;
+  jettons: JettonsBalances;
 }
 
 const Description = styled.div`
@@ -199,13 +199,50 @@ export const JettonAsset: FC<{ jetton: JettonBalance }> = ({ jetton }) => {
   );
 };
 
-export const Assets: FC<AssetProps> = ({ info, jettons, stock }) => {
+const ButtonRow = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: -1rem;
+  margin-bottom: 2rem;
+`;
+
+const EditButton = styled(Label2)`
+  padding: 0.5rem 1rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-radius: ${(props) => props.theme.cornerMedium};
+  color: ${(props) => props.theme.textPrimary};
+  background: ${(props) => props.theme.backgroundContent};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background: ${(props) => props.theme.backgroundContentTint};
+  }
+`;
+
+export const JettonList: FC<AssetProps> = ({ info, jettons, stock }) => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
   return (
-    <ListBlock>
-      <TonAsset info={info} stock={stock} />
-      {(jettons?.balances ?? []).map((jetton) => (
-        <JettonAsset key={jetton.jettonAddress} jetton={jetton} />
-      ))}
-    </ListBlock>
+    <>
+      <ListBlock>
+        <TonAsset info={info} stock={stock} />
+        {jettons.balances.map((jetton) => (
+          <JettonAsset key={jetton.jettonAddress} jetton={jetton} />
+        ))}
+      </ListBlock>
+      {jettons.balances.length > 0 && (
+        <ButtonRow>
+          <EditButton
+            onClick={() => navigate(AppRoute.settings + SettingsRoute.jettons)}
+          >
+            {t('Edit')}
+          </EditButton>
+        </ButtonRow>
+      )}
+    </>
   );
 };

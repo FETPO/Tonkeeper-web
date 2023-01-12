@@ -56,4 +56,5 @@ export const ActionsRow = styled.div`
   align-items: center;
   justify-content: center;
   gap: 2rem;
+  margin-bottom: 3rem;
 `;
