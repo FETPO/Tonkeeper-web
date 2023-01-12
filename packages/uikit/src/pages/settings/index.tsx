@@ -8,7 +8,6 @@ import { JettonsSettings } from './Jettons';
 import { Legal } from './Legal';
 import { Localization } from './Localization';
 import { ActiveRecovery, Recovery } from './Recovery';
-import { Settings } from './Settings';
 import { UserTheme } from './Theme';
 import { WalletVersion } from './Version';
 
@@ -26,7 +25,6 @@ const SettingsRouter = () => {
       </Route>
       <Route path={SettingsRoute.version} element={<WalletVersion />} />
       <Route path={SettingsRoute.jettons} element={<JettonsSettings />} />
-      <Route path="*" element={<Settings />} />
     </Routes>
   );
 };

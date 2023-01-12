@@ -10,6 +10,7 @@ import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import {
   ActivityHeader,
   Header,
+  SettingsHeader,
 } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
 import { NftNotification } from '@tonkeeper/uikit/dist/components/nft/NftNotification';
@@ -37,7 +38,6 @@ import {
   InitializeContainer,
 } from '@tonkeeper/uikit/dist/pages/import/Initialize';
 import { Jetton } from '@tonkeeper/uikit/dist/pages/jetton/Jetton';
-import SettingsRouter from '@tonkeeper/uikit/dist/pages/settings';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
 import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
@@ -51,6 +51,7 @@ import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
 import React, {
   FC,
   PropsWithChildren,
+  Suspense,
   useEffect,
   useMemo,
   useState,
@@ -66,6 +67,13 @@ import styled from 'styled-components';
 import browser from 'webextension-polyfill';
 import { ExtensionAppSdk } from './libs/appSdk';
 import { ExtensionStorage } from './libs/storage';
+
+const Settings = React.lazy(
+  () => import('@tonkeeper/uikit/dist/pages/settings/Settings')
+);
+const SettingsRouter = React.lazy(
+  () => import('@tonkeeper/uikit/dist/pages/settings')
+);
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -202,39 +210,42 @@ const InitialRedirect: FC<PropsWithChildren> = ({ children }) => {
   return <>{children}</>;
 };
 
-export const Content: FC<{ activeWallet?: WalletState | null; lock: boolean }> =
-  ({ activeWallet, lock }) => {
-    const location = useLocation();
+export const Content: FC<{
+  activeWallet?: WalletState | null;
+  lock: boolean;
+}> = ({ activeWallet, lock }) => {
+  const location = useLocation();
 
-    if (lock) {
-      return <Unlock />;
-    }
+  if (lock) {
+    return <Unlock />;
+  }
 
-    if (!activeWallet || location.pathname.startsWith(AppRoute.import)) {
-      return (
-        <Routes>
-          <Route
-            path={any(AppRoute.import)}
-            element={
-              <InitializeContainer fullHeight={false}>
-                <ImportRouter />
-              </InitializeContainer>
-            }
-          />
-          <Route
-            path="*"
-            element={
-              <InitializeContainer>
-                <Initialize />
-              </InitializeContainer>
-            }
-          />
-        </Routes>
-      );
-    }
-
+  if (!activeWallet || location.pathname.startsWith(AppRoute.import)) {
     return (
-      <WalletStateContext.Provider value={activeWallet}>
+      <Routes>
+        <Route
+          path={any(AppRoute.import)}
+          element={
+            <InitializeContainer fullHeight={false}>
+              <ImportRouter />
+            </InitializeContainer>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <InitializeContainer>
+              <Initialize />
+            </InitializeContainer>
+          }
+        />
+      </Routes>
+    );
+  }
+
+  return (
+    <WalletStateContext.Provider value={activeWallet}>
+      <Suspense fallback={<Loading />}>
         <Body>
           <Routes>
             <Route
@@ -243,6 +254,15 @@ export const Content: FC<{ activeWallet?: WalletState | null; lock: boolean }> =
                 <>
                   <ActivityHeader />
                   <Activity />
+                </>
+              }
+            />
+            <Route
+              path={AppRoute.settings}
+              element={
+                <>
+                  <SettingsHeader />
+                  <Settings />
                 </>
               }
             />
@@ -261,8 +281,9 @@ export const Content: FC<{ activeWallet?: WalletState | null; lock: boolean }> =
             />
           </Routes>
         </Body>
-        <Footer />
-        <NftNotification />
-      </WalletStateContext.Provider>
-    );
-  };
+      </Suspense>
+      <Footer />
+      <NftNotification />
+    </WalletStateContext.Provider>
+  );
+};

@@ -207,3 +207,14 @@ export const ActivityHeader = () => {
     </Block>
   );
 };
+
+export const SettingsHeader = () => {
+  const top = useIsScrollTop();
+  const { t } = useTranslation();
+
+  return (
+    <Block top={top}>
+      <H1>{t('Settings')}</H1>
+    </Block>
+  );
+};

@@ -13,6 +13,7 @@ import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import {
   ActivityHeader,
   Header,
+  SettingsHeader,
 } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
 import { NftNotification } from '@tonkeeper/uikit/dist/components/nft/NftNotification';
@@ -69,6 +70,9 @@ import { BrowserAppSdk } from './libs/appSdk';
 import { useAppHeight } from './libs/hooks';
 import { BrowserStorage } from './libs/storage';
 
+const Settings = React.lazy(
+  () => import('@tonkeeper/uikit/dist/pages/settings/Settings')
+);
 const SettingsRouter = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/settings')
 );
@@ -240,6 +244,17 @@ export const Content: FC<{
               <>
                 <ActivityHeader />
                 <Activity />
+              </>
+            }
+          />
+          <Route
+            path={AppRoute.settings}
+            element={
+              <>
+                <SettingsHeader />
+                <Body>
+                  <Settings />
+                </Body>
               </>
             }
           />
