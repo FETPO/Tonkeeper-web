@@ -73,7 +73,13 @@ const SettingsRouter = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/settings')
 );
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 const storage = new BrowserStorage();
 const sdk = new BrowserAppSdk();
 console.log('recreate sdk');

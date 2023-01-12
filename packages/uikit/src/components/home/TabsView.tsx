@@ -4,7 +4,7 @@ import {
   NftItemsRepr,
 } from '@tonkeeper/core/dist/tonApi';
 import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useTranslation } from '../../hooks/translation';
 import { NftsList } from '../nft/Nfts';
@@ -32,8 +32,14 @@ const TabsButton = styled.div<{ active?: boolean }>`
         `}
 `;
 
-const Line = styled.span`
+const Line = styled.div`
   position: absolute;
+  height: 3px;
+  width: 0px;
+  bottom: -0.5rem;
+  border-radius: ${(props) => props.theme.cornerExtraExtraSmall};
+  background: ${(props) => props.theme.accentBlue};
+  transition: all 0.3s ease-in-out;
 `;
 
 enum HomeTabs {
@@ -46,9 +52,17 @@ const Tabs: FC<{ tab: HomeTabs; onTab: (value: HomeTabs) => void }> = ({
   onTab,
 }) => {
   const { t } = useTranslation();
-  const blockRef = useRef(null);
-  const lineRef = useRef(null);
+  const blockRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (blockRef.current && lineRef.current) {
+      const active = blockRef.current.childNodes[tab] as HTMLElement;
+
+      lineRef.current.style.width = active.clientWidth + 'px';
+      lineRef.current.style.left = active.offsetLeft + 'px';
+    }
+  }, [blockRef, lineRef, tab]);
   return (
     <TabsBlock ref={blockRef}>
       <TabsButton
