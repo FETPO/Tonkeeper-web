@@ -12,18 +12,19 @@ import {
 } from '@tonkeeper/core/dist/service/walletService';
 import { useWalletContext } from '../hooks/appContext';
 import { useStorage } from '../hooks/storage';
+import { QueryKey } from '../libs/queryKey';
 
 export const useAccountState = () => {
   const storage = useStorage();
   const client = useQueryClient();
-  return useQuery([AppKey.account], async () => {
+  return useQuery<AccountState, Error>([QueryKey.account], async () => {
     const account = await getAccountState(storage);
     await Promise.all(
       account.publicKeys.map((key) =>
         getWalletState(storage, key).then((wallet) => {
           if (wallet) {
             client.setQueryData(
-              [AppKey.account, AppKey.wallet, wallet.publicKey],
+              [QueryKey.account, QueryKey.wallet, wallet.publicKey],
               wallet
             );
           }
@@ -39,7 +40,7 @@ export const useMutateAccountState = () => {
   const client = useQueryClient();
   return useMutation<void, Error, AccountState>(async (state) => {
     await storage.set(AppKey.account, state);
-    await client.invalidateQueries([AppKey.account]);
+    await client.invalidateQueries([QueryKey.account]);
   });
 };
 
@@ -48,7 +49,7 @@ export const useMutateActiveWallet = () => {
   const client = useQueryClient();
   return useMutation<void, Error, string>(async (publicKey) => {
     await accountSelectWallet(storage, publicKey);
-    await client.invalidateQueries([AppKey.account]);
+    await client.invalidateQueries([QueryKey.account]);
   });
 };
 
@@ -66,6 +67,6 @@ export const useMutateWalletVersion = () => {
   const wallet = useWalletContext();
   return useMutation<void, Error, WalletVersion>(async (version) => {
     await updateWalletVersion(storage, wallet, version);
-    await client.invalidateQueries([AppKey.account]);
+    await client.invalidateQueries([QueryKey.account]);
   });
 };

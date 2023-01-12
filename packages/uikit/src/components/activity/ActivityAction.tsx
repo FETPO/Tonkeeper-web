@@ -12,7 +12,7 @@ import { ColumnText } from '../../components/Layout';
 import { ListItemPayload } from '../../components/List';
 import { Label1 } from '../../components/Text';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
-import { formatAmountValue } from '../../hooks/balance';
+import { formatDecimals } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 
 const Row = styled.div`
@@ -39,7 +39,7 @@ export const useFormatCoinValue = () => {
 
   return useCallback(
     (amount: number | string, decimals: number = 9) => {
-      const value = formatAmountValue(String(amount), decimals);
+      const value = formatDecimals(String(amount), decimals);
 
       const formatted = commonFormat.format(value);
       if (formatted != '0') {

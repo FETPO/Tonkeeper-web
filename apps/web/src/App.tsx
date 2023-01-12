@@ -4,7 +4,7 @@ import {
   languages,
   localizationText,
 } from '@tonkeeper/core/dist/entries/language';
-import { getTonClient } from '@tonkeeper/core/dist/entries/network';
+import { getTonClient, Network } from '@tonkeeper/core/dist/entries/network';
 import { AuthState } from '@tonkeeper/core/dist/entries/password';
 import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
@@ -42,7 +42,6 @@ import {
 import { Jetton } from '@tonkeeper/uikit/dist/pages/jetton/Jetton';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
-import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
 import {
   useTonendpoint,
@@ -151,11 +150,14 @@ export const Loader: FC = () => {
 
   const lock = useLock();
   const { i18n } = useTranslation();
-  const { data: network } = useNetwork();
   const { data: account } = useAccountState();
   const { data: auth } = useAuthState();
 
-  const tonendpoint = useTonendpoint(sdk.version, network, activeWallet?.lang);
+  const tonendpoint = useTonendpoint(
+    sdk.version,
+    activeWallet?.network,
+    activeWallet?.lang
+  );
   const { data: config } = useTonenpointConfig(tonendpoint);
 
   const navigate = useNavigate();
@@ -174,7 +176,6 @@ export const Loader: FC = () => {
   }, [activeWallet, i18n]);
 
   if (
-    network === undefined ||
     auth === undefined ||
     account === undefined ||
     config === undefined ||
@@ -183,11 +184,12 @@ export const Loader: FC = () => {
     return <Loading />;
   }
 
+  const network = activeWallet?.network ?? Network.MAINNET;
+  const fiat = activeWallet?.fiat ?? FiatCurrencies.USD;
   const context = {
     tonApi: getTonClient(config, network),
-    network,
     auth,
-    fiat: activeWallet?.fiat ?? FiatCurrencies.USD,
+    fiat,
     account,
     config,
     tonendpoint,
@@ -207,71 +209,73 @@ export const Loader: FC = () => {
   );
 };
 
-export const Content: FC<{ activeWallet?: WalletState | null; lock: boolean }> =
-  ({ activeWallet, lock }) => {
-    const location = useLocation();
+export const Content: FC<{
+  activeWallet?: WalletState | null;
+  lock: boolean;
+}> = ({ activeWallet, lock }) => {
+  const location = useLocation();
 
-    if (lock) {
-      return <Unlock />;
-    }
+  if (lock) {
+    return <Unlock />;
+  }
 
-    if (!activeWallet || location.pathname.startsWith(AppRoute.import)) {
-      return (
-        <InitializeContainer fullHeight={false}>
-          <Routes>
-            <Route path={any(AppRoute.import)} element={<ImportRouter />} />
-            <Route path="*" element={<Initialize />} />
-          </Routes>
-        </InitializeContainer>
-      );
-    }
-
+  if (!activeWallet || location.pathname.startsWith(AppRoute.import)) {
     return (
-      <WalletStateContext.Provider value={activeWallet}>
-        <Suspense fallback={<Loading />}>
-          <Routes>
+      <InitializeContainer fullHeight={false}>
+        <Routes>
+          <Route path={any(AppRoute.import)} element={<ImportRouter />} />
+          <Route path="*" element={<Initialize />} />
+        </Routes>
+      </InitializeContainer>
+    );
+  }
+
+  return (
+    <WalletStateContext.Provider value={activeWallet}>
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route
+            path={AppRoute.activity}
+            element={
+              <>
+                <ActivityHeader />
+                <Activity />
+              </>
+            }
+          />
+          <Route
+            path={any(AppRoute.settings)}
+            element={
+              <Body>
+                <SettingsRouter />
+              </Body>
+            }
+          />
+          <Route path={AppRoute.jettons}>
             <Route
-              path={AppRoute.activity}
-              element={
-                <>
-                  <ActivityHeader />
-                  <Activity />
-                </>
-              }
-            />
-            <Route
-              path={any(AppRoute.settings)}
+              path=":jettonAddress"
               element={
                 <Body>
-                  <SettingsRouter />
+                  <Jetton />
                 </Body>
               }
             />
-            <Route path={AppRoute.jettons}>
-              <Route
-                path=":jettonAddress"
-                element={
-                  <Body>
-                    <Jetton />
-                  </Body>
-                }
-              />
-            </Route>
-            <Route
-              path="*"
-              element={
-                <>
-                  <Header />
-                  <Body>
-                    <Home />
-                  </Body>
-                </>
-              }
-            />
-          </Routes>
-        </Suspense>
-        <Footer />
-        <NftNotification />
-      </WalletStateContext.Provider>
-    );
-  };
+          </Route>
+          <Route
+            path="*"
+            element={
+              <>
+                <Header />
+                <Body>
+                  <Home />
+                </Body>
+              </>
+            }
+          />
+        </Routes>
+      </Suspense>
+      <Footer />
+      <NftNotification />
+    </WalletStateContext.Provider>
+  );
+};

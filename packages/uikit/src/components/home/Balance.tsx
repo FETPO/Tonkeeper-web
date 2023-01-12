@@ -8,8 +8,8 @@ import styled from 'styled-components';
 import { useWalletContext } from '../../hooks/appContext';
 import { useAppSdk } from '../../hooks/appSdk';
 import {
-  formatAmountValue,
-  formatFiatPrice,
+  formatDecimals,
+  formatFiatCurrency,
   getJettonStockAmount,
   getTonCoinStockPrice,
 } from '../../hooks/balance';
@@ -39,11 +39,11 @@ const useBalanceValue = (
 ) => {
   return useMemo(() => {
     if (!info || !stock) {
-      return formatFiatPrice(currency, 0);
+      return formatFiatCurrency(currency, 0);
     }
 
     const ton = new BigNumber(info.balance).multipliedBy(
-      formatAmountValue(getTonCoinStockPrice(stock.today, currency))
+      formatDecimals(getTonCoinStockPrice(stock.today, currency))
     );
 
     const all = jettons.balances.reduce((total, jetton) => {
@@ -55,7 +55,7 @@ const useBalanceValue = (
       }
     }, ton);
 
-    return formatFiatPrice(currency, all);
+    return formatFiatCurrency(currency, all);
   }, [info, stock, jettons, currency]);
 };
 

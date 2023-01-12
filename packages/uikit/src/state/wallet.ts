@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
-import { AppKey } from '@tonkeeper/core/dist/Keys';
 import {
   accountLogOutWallet,
   getAccountState,
@@ -28,7 +27,7 @@ import { JettonKey, QueryKey } from '../libs/queryKey';
 export const useActiveWallet = () => {
   const storage = useStorage();
   return useQuery<WalletState | null, Error>(
-    [AppKey.account, AppKey.wallet],
+    [QueryKey.account, QueryKey.wallet],
     async () => {
       const account = await getAccountState(storage);
       if (!account.activePublicKey) return null;
@@ -40,7 +39,7 @@ export const useActiveWallet = () => {
 export const useWalletState = (publicKey: string) => {
   const storage = useStorage();
   return useQuery<WalletState | null, Error>(
-    [AppKey.account, AppKey.wallet, publicKey],
+    [QueryKey.account, QueryKey.wallet, publicKey],
     () => getWalletState(storage, publicKey)
   );
 };
@@ -51,7 +50,7 @@ export const useMutateLogOut = (publicKey: string, remove = false) => {
   const { tonApi } = useAppContext();
   return useMutation<void, Error, void>(async () => {
     await accountLogOutWallet(storage, tonApi, publicKey, remove);
-    await client.invalidateQueries([AppKey.account]);
+    await client.invalidateQueries([QueryKey.account]);
   });
 };
 
@@ -65,7 +64,7 @@ export const useMutateRenameWallet = (wallet: WalletState) => {
     }
 
     await updateWalletProperty(tonApi, storage, wallet, { name });
-    await client.invalidateQueries([AppKey.account]);
+    await client.invalidateQueries([QueryKey.account]);
   });
 };
 
@@ -79,11 +78,11 @@ export const useMutateWalletProperty = () => {
     Error,
     Pick<
       WalletState,
-      'name' | 'hiddenJettons' | 'orderJettons' | 'lang' | 'fiat'
+      'name' | 'hiddenJettons' | 'orderJettons' | 'lang' | 'fiat' | 'network'
     >
   >(async (props) => {
     await updateWalletProperty(tonApi, storage, wallet, props);
-    await client.invalidateQueries([AppKey.account]);
+    await client.invalidateQueries([QueryKey.account]);
   });
 };
 

@@ -7,7 +7,7 @@ import BigNumber from 'bignumber.js';
 import { useCallback, useMemo } from 'react';
 import { useAppContext } from './appContext';
 
-export const formatAmountValue = (
+export const formatDecimals = (
   amount: BigNumber.Value,
   decimals: number = 9
 ): number => {
@@ -16,21 +16,19 @@ export const formatAmountValue = (
 
 export const useCoinFullBalance = (
   currency: FiatCurrencies,
-  balance?: number | string,
-  decimals?: number
+  balance: number | string,
+  decimals: number = 9
 ) => {
   return useMemo(() => {
+    if (!balance) return '0';
+
     const config = FiatCurrencySymbolsConfig[currency];
     const balanceFormat = new Intl.NumberFormat(config.numberFormat, {
       minimumFractionDigits: 0,
-      maximumFractionDigits: decimals ?? 9,
+      maximumFractionDigits: decimals,
     });
 
-    if (!balance) return '0';
-
-    return balanceFormat.format(
-      new BigNumber(balance).div(Math.pow(10, decimals ?? 9)).toNumber()
-    );
+    return balanceFormat.format(formatDecimals(balance, decimals));
   }, [currency, balance, decimals]);
 };
 
@@ -55,7 +53,7 @@ export const useFormatCoinValue = () => {
     (amount: number | string, decimals?: number) => {
       if (amount == 0) return '0';
 
-      const value = formatAmountValue(amount, decimals);
+      const value = formatDecimals(amount, decimals);
       const [common, secondary] = formats;
       let formatted = common.format(value);
       if (formatted != '0' && formatted != '0.01') {
@@ -92,8 +90,10 @@ export const getJettonStockAmount = (
   if (!jetton.metadata?.symbol) return null;
   const price = getStockPrice(jetton.metadata?.symbol, rates, currency);
   if (!price) return null;
-  const balance = formatAmountValue(jetton.balance, jetton.metadata?.decimals);
-  return price.multipliedBy(balance);
+  return formatDecimals(
+    price.multipliedBy(jetton.balance),
+    jetton.metadata?.decimals
+  );
 };
 
 export const getStockPrice = (
@@ -119,22 +119,10 @@ const toFiatCurrencyFormat = (currency: FiatCurrencies) => {
   });
 };
 
-export const formatFiatPrice = (
+export const formatFiatCurrency = (
   currency: FiatCurrencies,
   balance: BigNumber.Value
 ) => {
   const balanceFormat = toFiatCurrencyFormat(currency);
   return balanceFormat.format(new BigNumber(balance).toNumber());
-};
-
-export const useFormattedPrice = (
-  currency: FiatCurrencies,
-  balance?: number | string,
-  decimals?: number
-) => {
-  return useMemo(() => {
-    if (!balance) return '0';
-    const balanceFormat = toFiatCurrencyFormat(currency);
-    return balanceFormat.format(formatAmountValue(balance, decimals));
-  }, [currency, balance, decimals]);
 };

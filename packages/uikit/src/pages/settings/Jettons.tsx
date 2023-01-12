@@ -69,7 +69,7 @@ const JettonRow: FC<{
 
   const balance = useCoinFullBalance(
     fiat,
-    jetton?.balance,
+    jetton.balance,
     jetton.metadata?.decimals
   );
 

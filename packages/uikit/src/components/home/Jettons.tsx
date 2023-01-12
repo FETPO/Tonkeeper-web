@@ -1,4 +1,3 @@
-import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
 import {
   AccountRepr,
   JettonBalance,
@@ -11,11 +10,11 @@ import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { useAppContext } from '../../hooks/appContext';
 import {
-  formatFiatPrice,
+  formatDecimals,
+  formatFiatCurrency,
   getJettonStockAmount,
   getTonCoinStockPrice,
   useFormatCoinValue,
-  useFormattedPrice,
 } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute, SettingsRoute } from '../../libs/routes';
@@ -55,8 +54,8 @@ const DeltaColor = styled.span<{ positive: boolean }>`
 
 export const Delta: FC<{ stock: TonendpointStock }> = ({ stock }) => {
   const [positive, delta] = useMemo(() => {
-    const today = new BigNumber(stock.today[FiatCurrencies.USD]);
-    const yesterday = new BigNumber(stock.yesterday[FiatCurrencies.USD]);
+    const today = new BigNumber(stock.today['TON']);
+    const yesterday = new BigNumber(stock.yesterday['TON']);
     const delta = today.minus(yesterday);
 
     const value = delta.div(yesterday).multipliedBy(100).toFixed(2);
@@ -79,19 +78,17 @@ export const TonAsset: FC<{
   }, [stock]);
 
   const format = useFormatCoinValue();
+  const balance = format(info.balance);
 
-  const balance = (info?.balance && String(format(info?.balance))) || '-';
-
-  const fiatPrice = useFormattedPrice(
-    fiat,
-    price.multipliedBy(1000).toFixed(0),
-    3
-  );
-
-  const fiatAmount = useFormattedPrice(
-    fiat,
-    price.multipliedBy(info?.balance ?? 0).toFixed(0)
-  );
+  const [fiatPrice, fiatAmount] = useMemo(() => {
+    return [
+      formatFiatCurrency(fiat, price),
+      formatFiatCurrency(
+        fiat,
+        formatDecimals(price.multipliedBy(info.balance))
+      ),
+    ] as const;
+  }, [fiat, price, info.balance]);
 
   return (
     <ListItem>
@@ -102,7 +99,7 @@ export const TonAsset: FC<{
             text={t('Toncoin')}
             secondary={
               <>
-                {fiatPrice} {stock && <Delta stock={stock} />}
+                {fiatPrice} <Delta stock={stock} />
               </>
             }
           />
@@ -129,7 +126,7 @@ export const JettonAsset: FC<{
 
   const fiatAmount = useMemo(() => {
     const amount = getJettonStockAmount(jetton, stock.today, fiat);
-    return amount ? formatFiatPrice(fiat, amount) : null;
+    return amount ? formatFiatCurrency(fiat, amount) : null;
   }, [jetton, stock, fiat]);
 
   const format = useFormatCoinValue();
