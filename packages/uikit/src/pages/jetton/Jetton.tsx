@@ -5,10 +5,10 @@ import styled from 'styled-components';
 import {
   ActivityAction,
   formatDate,
+  useFormatCoinValue,
 } from '../../components/activity/ActivityAction';
 import { Action, ActionsRow } from '../../components/home/Actions';
 import { SendIcon } from '../../components/home/HomeIcons';
-import { useFormatCoinValue } from '../../components/home/Jettons';
 import { ReceiveAction } from '../../components/home/ReceiveAction';
 import { ListBlock, ListItem } from '../../components/List';
 import {

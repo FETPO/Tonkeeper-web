@@ -75,15 +75,28 @@ export const useToggleJettonMutation = () => {
   const client = useQueryClient();
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
-  return useMutation<void, Error, string>(async (jettonAddress) => {
-    const hiddenJettons = wallet.hiddenJettons ?? [];
-    const updated = hiddenJettons.includes(jettonAddress)
-      ? hiddenJettons.filter((item) => item !== jettonAddress)
-      : hiddenJettons.concat([jettonAddress]);
+  return useMutation<void, Error, JettonBalance>(async (jetton) => {
+    if (jetton.verification == 'whitelist') {
+      const hiddenJettons = wallet.hiddenJettons ?? [];
 
-    await updateWalletProperty(tonApi, storage, wallet, {
-      hiddenJettons: updated,
-    });
+      const updated = hiddenJettons.includes(jetton.jettonAddress)
+        ? hiddenJettons.filter((item) => item !== jetton.jettonAddress)
+        : hiddenJettons.concat([jetton.jettonAddress]);
+
+      await updateWalletProperty(tonApi, storage, wallet, {
+        hiddenJettons: updated,
+      });
+    } else {
+      const shownJettons = wallet.shownJettons ?? [];
+
+      const updated = shownJettons.includes(jetton.jettonAddress)
+        ? shownJettons.filter((item) => item !== jetton.jettonAddress)
+        : shownJettons.concat([jetton.jettonAddress]);
+
+      await updateWalletProperty(tonApi, storage, wallet, {
+        shownJettons: updated,
+      });
+    }
 
     await client.invalidateQueries([AppKey.account]);
   });

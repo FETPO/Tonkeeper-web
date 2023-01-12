@@ -17,6 +17,7 @@ export interface CurrencyState {
   numberFormat: string;
   symbol: string;
   side: 'start' | 'end';
+  maximumFractionDigits: number;
 }
 
 export const FiatCurrencySymbolsConfig: Record<FiatCurrency, CurrencyState> = {
@@ -24,50 +25,60 @@ export const FiatCurrencySymbolsConfig: Record<FiatCurrency, CurrencyState> = {
     numberFormat: 'en-US',
     symbol: '$',
     side: 'start',
+    maximumFractionDigits: 2,
   },
   [FiatCurrencies.EUR]: {
     numberFormat: 'de-DE',
     symbol: '€',
     side: 'start',
+    maximumFractionDigits: 2,
   },
   [FiatCurrencies.RUB]: {
     numberFormat: 'en-US',
     symbol: '₽',
     side: 'end',
+    maximumFractionDigits: 2,
   },
   [FiatCurrencies.GBP]: {
     numberFormat: 'en-GB',
     symbol: '£',
     side: 'start',
+    maximumFractionDigits: 2,
   },
   [FiatCurrencies.CHF]: {
     numberFormat: 'en-US',
     symbol: '₣',
     side: 'start',
+    maximumFractionDigits: 2,
   },
   [FiatCurrencies.CNY]: {
     numberFormat: 'en-US',
     symbol: '¥',
     side: 'start',
+    maximumFractionDigits: 2,
   },
   [FiatCurrencies.KRW]: {
     numberFormat: 'en-US',
     symbol: '₩',
     side: 'start',
+    maximumFractionDigits: 0,
   },
   [FiatCurrencies.IDR]: {
     numberFormat: 'en-US',
     symbol: 'Rp',
     side: 'end',
+    maximumFractionDigits: 2,
   },
   [FiatCurrencies.INR]: {
     numberFormat: 'en-US',
     symbol: '₹',
     side: 'start',
+    maximumFractionDigits: 2,
   },
   [FiatCurrencies.JPY]: {
     numberFormat: 'ja-JP',
     symbol: '¥',
     side: 'start',
+    maximumFractionDigits: 2,
   },
 };

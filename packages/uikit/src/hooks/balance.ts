@@ -2,63 +2,18 @@ import {
   FiatCurrencies,
   FiatCurrencySymbolsConfig,
 } from '@tonkeeper/core/dist/entries/fiat';
-import BN from 'bn.js';
-import { useMemo } from 'react';
-const ethunit = require('ethjs-unit');
-
-const map: Record<string, string> = {
-  '1': 'wei',
-  '1000': 'kwei',
-  '1000000': 'mwei',
-  '1000000000': 'gwei',
-  '1000000000000': 'szabo',
-  '1000000000000000': 'finney',
-  '1000000000000000000': 'ether',
-  '1000000000000000000000': 'kether',
-  '1000000000000000000000000': 'mether',
-  '1000000000000000000000000000': 'gether',
-  '1000000000000000000000000000000': 'tether',
-};
+import BigNumber from 'bignumber.js';
+import { useCallback, useMemo } from 'react';
+import { useAppContext } from './appContext';
 
 export const formatAmountValue = (
-  amount: BN | string,
-  decimals: number | string = 9
+  amount: BigNumber.Value,
+  decimals: number = 9
 ): number => {
-  if (!BN.isBN(amount) && !(typeof amount === 'string')) {
-    throw new Error(
-      'Please pass numbers as strings or BN objects to avoid precision errors.'
-    );
-  }
-
-  const format = map[Math.pow(10, parseInt(String(decimals))).toString()];
-  if (!format) {
-    throw new Error('Unexpected format');
-  }
-
-  return parseFloat(ethunit.fromWei(amount, format));
+  return new BigNumber(amount).div(Math.pow(10, decimals)).toNumber();
 };
 
-export const parseCoinValue = (
-  amount: string | BN,
-  decimals: number | string = 9
-): BN => {
-  if (!BN.isBN(amount) && !(typeof amount === 'string')) {
-    throw new Error(
-      'Please pass numbers as strings or BN objects to avoid precision errors.'
-    );
-  }
-
-  const format = map[Math.pow(10, parseInt(String(decimals))).toString()];
-  if (!format) {
-    throw new Error('Unexpected format');
-  }
-  if (!BN.isBN(amount) && !(typeof amount === 'string')) {
-    throw new Error('Unexpected format');
-  }
-  return ethunit.toWei(amount, format);
-};
-
-export const useCoinBalance = (
+export const useCoinFullBalance = (
   currency: FiatCurrencies,
   balance?: number | string,
   decimals?: number
@@ -70,46 +25,92 @@ export const useCoinBalance = (
       maximumFractionDigits: decimals ?? 9,
     });
 
-    return balance !== undefined
-      ? balanceFormat.format(formatAmountValue(String(balance), decimals))
-      : '-';
+    if (!balance) return '0';
+
+    return balanceFormat.format(
+      new BigNumber(balance).div(Math.pow(10, decimals ?? 9)).toNumber()
+    );
   }, [currency, balance, decimals]);
 };
 
-export const useFormattedBalance = (
-  currency: FiatCurrencies,
-  balance?: number | string,
-  decimals?: number | string
-) => {
-  return useMemo(() => {
-    const config = FiatCurrencySymbolsConfig[currency];
-    const balanceFormat = new Intl.NumberFormat(config.numberFormat, {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-    });
+export const useFormatCoinValue = () => {
+  const { fiat } = useAppContext();
 
-    return balance !== undefined
-      ? balanceFormat.format(formatAmountValue(String(balance), decimals))
-      : '-';
-  }, [currency, balance, decimals]);
+  const formats = useMemo(
+    () => [
+      new Intl.NumberFormat(FiatCurrencySymbolsConfig[fiat].numberFormat, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      }),
+      new Intl.NumberFormat(FiatCurrencySymbolsConfig[fiat].numberFormat, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 4,
+      }),
+    ],
+    [fiat]
+  );
+
+  return useCallback(
+    (amount: number | string, decimals?: number) => {
+      if (amount == 0) return '0';
+
+      const value = formatAmountValue(amount, decimals);
+      const [common, secondary] = formats;
+      let formatted = common.format(value);
+      if (formatted != '0' && formatted != '0.01') {
+        return formatted;
+      }
+
+      formatted = secondary.format(value);
+      if (formatted != '0') {
+        return formatted;
+      }
+
+      return '<0.0001';
+    },
+    [fiat, formats]
+  );
+};
+
+export const getStockPrice = (
+  coin: string,
+  rates: { [key: string]: string },
+  currency: FiatCurrencies
+): BigNumber | null => {
+  const btcPrice = rates[coin];
+  const btcInFiat = rates[currency];
+
+  if (!btcPrice || !btcInFiat) return null;
+
+  return new BigNumber(btcInFiat).div(new BigNumber(btcPrice));
+};
+
+const toFiatCurrencyFormat = (currency: FiatCurrencies) => {
+  const config = FiatCurrencySymbolsConfig[currency];
+  return new Intl.NumberFormat(config.numberFormat, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: config.maximumFractionDigits,
+    style: 'currency',
+    currency: currency,
+  });
+};
+
+export const formatFiatPrice = (
+  currency: FiatCurrencies,
+  balance: BigNumber.Value
+) => {
+  const balanceFormat = toFiatCurrencyFormat(currency);
+  return balanceFormat.format(new BigNumber(balance).toNumber());
 };
 
 export const useFormattedPrice = (
   currency: FiatCurrencies,
   balance?: number | string,
-  decimals?: number | string
+  decimals?: number
 ) => {
   return useMemo(() => {
-    const config = FiatCurrencySymbolsConfig[currency];
-    const balanceFormat = new Intl.NumberFormat(config.numberFormat, {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-      style: 'currency',
-      currency: currency,
-    });
-
-    return balance !== undefined
-      ? balanceFormat.format(formatAmountValue(String(balance), decimals))
-      : '-';
+    if (!balance) return '0';
+    const balanceFormat = toFiatCurrencyFormat(currency);
+    return balanceFormat.format(formatAmountValue(balance, decimals));
   }, [currency, balance, decimals]);
 };

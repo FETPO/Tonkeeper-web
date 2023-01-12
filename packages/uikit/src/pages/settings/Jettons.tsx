@@ -13,9 +13,10 @@ import { ReorderIcon } from '../../components/Icon';
 import { ColumnText } from '../../components/Layout';
 
 import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
+import { SkeletonList } from '../../components/Sceleton';
 import { SubHeader } from '../../components/SubHeader';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
-import { useCoinBalance } from '../../hooks/balance';
+import { useCoinFullBalance } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { sortJettons, useToggleJettonMutation } from '../../state/jetton';
 import {
@@ -51,16 +52,22 @@ const JettonRow: FC<{
 
   const onChange = useCallback(() => {
     reset();
-    mutate(jetton.jettonAddress);
-  }, [jetton.jettonAddress]);
+    mutate(jetton);
+  }, [jetton]);
 
   const checked = useMemo(() => {
-    return (wallet.hiddenJettons ?? []).every(
-      (item) => item !== jetton.jettonAddress
-    );
-  }, [wallet]);
+    if (jetton.verification == 'whitelist') {
+      return (wallet.hiddenJettons ?? []).every(
+        (item) => item !== jetton.jettonAddress
+      );
+    } else {
+      return (wallet.shownJettons ?? []).some(
+        (item) => item === jetton.jettonAddress
+      );
+    }
+  }, [wallet.hiddenJettons, wallet.shownJettons]);
 
-  const balance = useCoinBalance(
+  const balance = useCoinFullBalance(
     fiat,
     jetton?.balance,
     jetton.metadata?.decimals
@@ -83,6 +90,16 @@ const JettonRow: FC<{
   );
 };
 
+const JettonSkeleton = () => {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      <SubHeader title={t('List_of_tokens')} />
+      <SkeletonList size={5} />
+    </>
+  );
+};
 export const JettonsSettings = () => {
   const { t } = useTranslation();
   const wallet = useWalletContext();
@@ -105,6 +122,10 @@ export const JettonsSettings = () => {
     [jettons, mutate]
   );
 
+  if (!data) {
+    return <JettonSkeleton />;
+  }
+
   return (
     <>
       <SubHeader title={t('List_of_tokens')} />
@@ -112,7 +133,7 @@ export const JettonsSettings = () => {
         <Droppable droppableId="jettons">
           {(provided) => (
             <ListBlock {...provided.droppableProps} ref={provided.innerRef}>
-              {(data?.balances ?? []).map((jetton, index) => (
+              {jettons.map((jetton, index) => (
                 <Draggable
                   key={jetton.jettonAddress}
                   draggableId={jetton.jettonAddress}
