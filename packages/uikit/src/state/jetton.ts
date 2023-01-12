@@ -130,10 +130,11 @@ export const hideJettons = (
   });
 };
 
-export const useUserJettonList = (jettons: JettonsBalances) => {
+export const useUserJettonList = (jettons?: JettonsBalances) => {
   const { hiddenJettons, orderJettons, shownJettons } = useWalletContext();
 
   return useMemo(() => {
+    if (!jettons) return { balances: [] };
     const order = sortJettons(orderJettons, jettons.balances);
     const hide = hideJettons(hiddenJettons, shownJettons, order);
 

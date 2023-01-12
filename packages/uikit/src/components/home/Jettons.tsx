@@ -11,14 +11,13 @@ import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { useAppContext } from '../../hooks/appContext';
 import {
-  formatAmountValue,
   formatFiatPrice,
-  getStockPrice,
+  getJettonStockAmount,
+  getTonCoinStockPrice,
   useFormatCoinValue,
   useFormattedPrice,
 } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
-import { getCoinPrice } from '../../hooks/useFiatRate';
 import { AppRoute, SettingsRoute } from '../../libs/routes';
 import { ToncoinIcon } from '../Icon';
 import { ColumnText } from '../Layout';
@@ -76,7 +75,7 @@ export const TonAsset: FC<{
   const { fiat } = useAppContext();
 
   const price = useMemo(() => {
-    return getCoinPrice(stock.today, fiat);
+    return getTonCoinStockPrice(stock.today, fiat);
   }, [stock]);
 
   const format = useFormatCoinValue();
@@ -129,15 +128,8 @@ export const JettonAsset: FC<{
   const { fiat } = useAppContext();
 
   const fiatAmount = useMemo(() => {
-    if (jetton.verification !== 'whitelist') return null;
-    if (!jetton.metadata?.symbol) return null;
-    const price = getStockPrice(jetton.metadata?.symbol, stock.today, fiat);
-    if (!price) return null;
-    const balance = formatAmountValue(
-      jetton.balance,
-      jetton.metadata?.decimals
-    );
-    return formatFiatPrice(fiat, price.multipliedBy(balance));
+    const amount = getJettonStockAmount(jetton, stock.today, fiat);
+    return amount ? formatFiatPrice(fiat, amount) : null;
   }, [jetton, stock, fiat]);
 
   const format = useFormatCoinValue();

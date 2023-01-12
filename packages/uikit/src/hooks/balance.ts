@@ -2,6 +2,7 @@ import {
   FiatCurrencies,
   FiatCurrencySymbolsConfig,
 } from '@tonkeeper/core/dist/entries/fiat';
+import { JettonBalance } from '@tonkeeper/core/dist/tonApi';
 import BigNumber from 'bignumber.js';
 import { useCallback, useMemo } from 'react';
 import { useAppContext } from './appContext';
@@ -70,6 +71,29 @@ export const useFormatCoinValue = () => {
     },
     [fiat, formats]
   );
+};
+
+export const getTonCoinStockPrice = (
+  rates: { [key: string]: string },
+  currency: FiatCurrencies
+): BigNumber => {
+  const btcPrice = rates['TON'];
+  const btcInFiat = rates[currency] ?? rates[FiatCurrencies.USD];
+
+  return new BigNumber(btcInFiat).div(new BigNumber(btcPrice));
+};
+
+export const getJettonStockAmount = (
+  jetton: JettonBalance,
+  rates: { [key: string]: string },
+  currency: FiatCurrencies
+) => {
+  if (jetton.verification !== 'whitelist') return null;
+  if (!jetton.metadata?.symbol) return null;
+  const price = getStockPrice(jetton.metadata?.symbol, rates, currency);
+  if (!price) return null;
+  const balance = formatAmountValue(jetton.balance, jetton.metadata?.decimals);
+  return price.multipliedBy(balance);
 };
 
 export const getStockPrice = (

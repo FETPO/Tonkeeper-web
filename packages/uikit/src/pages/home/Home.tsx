@@ -105,6 +105,7 @@ export const Home = () => {
         info={info}
         error={error}
         stock={stock}
+        jettons={jettons}
       />
       <HomeActions />
       <HomeAssets info={info} jettons={jettons} nfts={nfts} stock={stock} />
