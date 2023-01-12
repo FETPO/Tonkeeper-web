@@ -1,9 +1,9 @@
-import { getSecureRandomBytes, keyPairFromSeed, sign } from 'ton-crypto';
+import { sign } from 'ton-crypto';
 import { FiatCurrencies } from '../entries/fiat';
 import { Language } from '../entries/language';
 import { Network } from '../entries/network';
 import { WalletProxy } from '../entries/proxy';
-import { WalletState, WalletVersion } from '../entries/wallet';
+import { WalletState, WalletVersion, WalletVoucher } from '../entries/wallet';
 import { BackupApi, Configuration } from '../tonApi';
 
 const tenMin = 10 * 60;
@@ -16,27 +16,28 @@ const createExpireTimestamp = () => {
   return timestampBuffer;
 };
 
-const createVoucher = async () => {
-  const voucherSeed = await getSecureRandomBytes(32);
-  const voucherKeypair = keyPairFromSeed(voucherSeed);
-
+const createVoucher = async (keyPair: WalletVoucher) => {
   const voucherBody = Buffer.concat([
     createExpireTimestamp(),
-    voucherKeypair.publicKey,
+    Buffer.from(keyPair.publicKey, 'hex'),
   ]);
 
   const voucher = Buffer.concat([
-    sign(voucherBody, voucherKeypair.secretKey),
+    sign(voucherBody, Buffer.from(keyPair.secretKey, 'hex')),
     voucherBody,
   ]);
 
-  return [voucherKeypair, voucher] as const;
+  return voucher;
 };
 
-const createBody = async (publicKey: string, payload = Buffer.alloc(0)) => {
+const createBody = async (
+  publicKey: string,
+  keyPair: WalletVoucher,
+  payload = Buffer.alloc(0)
+) => {
   const primaryPublicKey = Buffer.from(publicKey, 'hex');
 
-  const [voucherKeypair, voucher] = await createVoucher();
+  const voucher = await createVoucher(keyPair);
 
   const requestBody = Buffer.concat([
     primaryPublicKey,
@@ -46,7 +47,7 @@ const createBody = async (publicKey: string, payload = Buffer.alloc(0)) => {
   ]);
 
   const body = Buffer.concat([
-    sign(requestBody, voucherKeypair.secretKey),
+    sign(requestBody, Buffer.from(keyPair.secretKey, 'hex')),
     requestBody,
   ]);
 
@@ -55,26 +56,29 @@ const createBody = async (publicKey: string, payload = Buffer.alloc(0)) => {
 
 export const deleteWalletBackup = async (
   tonApi: Configuration,
-  publicKey: string
+  publicKey: string,
+  voucher: WalletVoucher
 ) => {
-  const body = await createBody(publicKey);
+  const body = await createBody(publicKey, voucher);
   await new BackupApi(tonApi).deleteWalletConfig({ body });
 };
 
 export const getWalletBackup = async (
   tonApi: Configuration,
-  publicKey: string
+  publicKey: string,
+  voucher: WalletVoucher
 ) => {
-  const body = await createBody(publicKey);
+  const body = await createBody(publicKey, voucher);
   return new BackupApi(tonApi).getWalletConfig({ body });
 };
 
 export const putWalletBackup = async (
   tonApi: Configuration,
   publicKey: string,
+  voucher: WalletVoucher,
   payload: Buffer
 ) => {
-  const body = await createBody(publicKey, payload);
+  const body = await createBody(publicKey, voucher, payload);
   await new BackupApi(tonApi).putWalletConfig({ body });
 };
 

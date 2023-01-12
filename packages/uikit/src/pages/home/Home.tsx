@@ -28,7 +28,7 @@ const useAccountInfo = (tonApi: Configuration, wallet: WalletState) => {
   return useQuery<AccountRepr, Error>(
     [wallet.active.rawAddress, AppKey.balance],
     async () => {
-      await delay(5000);
+      await delay(1000);
       return await new AccountApi(tonApi).getAccountInfo({
         account: wallet.active.rawAddress,
       });

@@ -4,8 +4,13 @@ import {
   WalletContractV3R2,
   WalletContractV4,
 } from 'ton';
-import { KeyPair, mnemonicToPrivateKey } from 'ton-crypto';
-import { WalletAddress, WalletState, WalletVersion } from '../entries/wallet';
+import { KeyPair, keyPairFromSeed, mnemonicToPrivateKey } from 'ton-crypto';
+import {
+  WalletAddress,
+  WalletState,
+  WalletVersion,
+  WalletVoucher,
+} from '../entries/wallet';
 import { AppKey } from '../Keys';
 import { IStorage } from '../Storage';
 import { Configuration, WalletApi } from '../tonApi';
@@ -24,12 +29,27 @@ export const importWallet = async (
 ): Promise<WalletState> => {
   const encryptedMnemonic = await encrypt(mnemonic.join(' '), password);
   const keyPair = await mnemonicToPrivateKey(mnemonic);
+
+  const voucherKeyPair = keyPairFromSeed(keyPair.secretKey.subarray(32));
+
+  const voucher: WalletVoucher = {
+    secretKey: voucherKeyPair.secretKey.toString('hex'),
+    publicKey: voucherKeyPair.publicKey.toString('hex'),
+  };
   const active = await findWalletAddress(tonApiConfig, keyPair);
 
   const publicKey = keyPair.publicKey.toString('hex');
-  console.log(publicKey);
+
+  console.log('publicKey', publicKey);
+  console.log('voucher.secretKey', voucher.secretKey);
+  console.log('voucher.publicKey', voucher.publicKey);
+
+  if (publicKey === voucher.publicKey) {
+    throw new Error('publicKey is the same');
+  }
+
   try {
-    const backup = await getWalletBackup(tonApiConfig, publicKey);
+    const backup = await getWalletBackup(tonApiConfig, publicKey, voucher);
     console.log(backup);
   } catch (e) {
     console.log(e);
@@ -38,6 +58,7 @@ export const importWallet = async (
   return {
     publicKey,
     mnemonic: encryptedMnemonic,
+    voucher,
 
     active,
 
@@ -166,7 +187,12 @@ export const updateWalletProperty = async (
   };
   await setWalletState(storage, updated);
 
-  putWalletBackup(tonApi, updated.publicKey, createWalletBackup(updated));
+  putWalletBackup(
+    tonApi,
+    updated.publicKey,
+    updated.voucher,
+    createWalletBackup(updated)
+  );
 };
 
 export const getWalletState = (storage: IStorage, publicKey: string) => {

@@ -35,10 +35,16 @@ export interface WalletAddress {
   version: WalletVersion;
 }
 
+export interface WalletVoucher {
+  secretKey: string;
+  publicKey: string;
+}
 export interface WalletState {
   publicKey: string;
   mnemonic: string;
   revision: number;
+
+  voucher: WalletVoucher;
 
   active: WalletAddress;
 
