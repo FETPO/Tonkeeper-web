@@ -47,6 +47,10 @@
     "message": "Security",
     "description": "Security settings button"
   },
+  "Lock_screen": {
+    "message": "Lock screen",
+    "description": "Lock screen option label"
+  },
   "Theme": {
     "message": "Theme",
     "description": "Theme settings button"

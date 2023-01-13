@@ -8,6 +8,7 @@ export enum AppKey {
   theme = 'theme',
 
   password = 'password',
+  lock = 'lock',
 
   balance = 'balance',
   jettons = 'jettons',
