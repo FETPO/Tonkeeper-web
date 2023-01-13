@@ -1,11 +1,10 @@
-import { sign } from 'ton-crypto';
 import { FiatCurrencies } from '../entries/fiat';
 import { Language } from '../entries/language';
 import { Network } from '../entries/network';
 import { WalletProxy } from '../entries/proxy';
 import { WalletState, WalletVersion, WalletVoucher } from '../entries/wallet';
 import { BackupApi, Configuration } from '../tonApi';
-import { createExpireTimestamp } from './voucherService';
+import { createExpireTimestamp, sign } from './voucherService';
 
 const tenMin = 10 * 60;
 /**

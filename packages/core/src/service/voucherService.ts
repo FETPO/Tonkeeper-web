@@ -1,10 +1,12 @@
-import {
-  getSecureRandomBytes,
-  KeyPair,
-  keyPairFromSeed,
-  sign,
-} from 'ton-crypto';
+import { getSecureRandomBytes, KeyPair, keyPairFromSeed } from 'ton-crypto';
+import nacl from 'tweetnacl';
 import { WalletVoucher } from '../entries/wallet';
+
+export const sign = (message: Buffer, secretKey: Buffer) => {
+  return Buffer.from(
+    nacl.sign(new Uint8Array(message), new Uint8Array(secretKey))
+  );
+};
 
 const hundredYears = 100 * 355 * 24 * 60 * 60;
 
