@@ -1,4 +1,5 @@
 import { AccountState, defaultAccountState } from '../entries/account';
+import { AuthState } from '../entries/password';
 import { AppKey } from '../Keys';
 import { IStorage } from '../Storage';
 import { Configuration } from '../tonApi';
@@ -23,6 +24,7 @@ export const accountSetUpWalletState = async (
   storage: IStorage,
   tonApi: Configuration,
   mnemonic: string[],
+  auth: AuthState,
   password: string
 ) => {
   const [encryptedMnemonic, state] = await importWallet(
@@ -33,6 +35,7 @@ export const accountSetUpWalletState = async (
   const account = await accountAppendWallet(storage, state.publicKey);
   await storage.setBatch({
     [AppKey.account]: account,
+    [AppKey.password]: auth,
     [`${AppKey.wallet}_${state.publicKey}`]: state,
     [`${AppKey.mnemonic}_${state.publicKey}`]: encryptedMnemonic,
   });

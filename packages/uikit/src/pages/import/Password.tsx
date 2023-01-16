@@ -36,7 +36,7 @@ const createWallet = async (
   if (!key) {
     throw new Error('Missing encrypt password key');
   }
-  await accountSetUpWalletState(storage, tonApi, mnemonic, key);
+  await accountSetUpWalletState(storage, tonApi, mnemonic, auth, key);
 
   await client.invalidateQueries([QueryKey.account]);
   return await getAccountState(storage);
