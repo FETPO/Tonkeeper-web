@@ -9,7 +9,7 @@ export interface SwitchProps {
 
 const Wrapper = styled.div<{ disabled?: boolean }>`
   position: relative;
-  margin-right: 10px;
+  margin: -5px 0 -5px 0;
   width: 51px;
   display: inline-block;
   vertical-align: middle;

@@ -3,7 +3,12 @@ import { AuthState } from '../entries/password';
 import { AppKey } from '../Keys';
 import { IStorage } from '../Storage';
 import { Configuration } from '../tonApi';
-import { deleteWalletMnemonic } from './menmonicService';
+import { encrypt } from './cryptoService';
+import {
+  deleteWalletMnemonic,
+  getWalletMnemonic,
+  validateWalletMnemonic,
+} from './menmonicService';
 import { deleteWalletState, importWallet } from './walletService';
 
 export const getAccountState = async (storage: IStorage) => {
@@ -77,4 +82,44 @@ export const accountLogOutWallet = async (
     await storage.delete(AppKey.password);
   }
   await storage.set(AppKey.account, account);
+};
+
+export const accountChangePassword = async (
+  storage: IStorage,
+  options: { old: string; password: string; confirm: string }
+) => {
+  let account = await getAccountState(storage);
+
+  const isValid = await validateWalletMnemonic(
+    storage,
+    account.publicKeys[0],
+    options.old
+  );
+  if (!isValid) {
+    return 'invalid-old';
+  }
+  const error = accountValidatePassword(options.password, options.confirm);
+  if (error) {
+    return error;
+  }
+
+  const updated = {} as Record<string, string>;
+  for (const publicKey of account.publicKeys) {
+    const mnemonic = await getWalletMnemonic(storage, publicKey, options.old);
+    updated[`${AppKey.mnemonic}_${publicKey}`] = await encrypt(
+      mnemonic.join(' '),
+      options.password
+    );
+  }
+  await storage.setBatch(updated);
+};
+
+export const accountValidatePassword = (password: string, confirm: string) => {
+  if (password.length < 5) {
+    return 'invalid-password';
+  }
+  if (password !== confirm) {
+    return 'invalid-confirm';
+  }
+  return undefined;
 };

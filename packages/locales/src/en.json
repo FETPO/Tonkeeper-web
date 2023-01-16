@@ -231,6 +231,18 @@
     "message": "Create password",
     "description": "Initialize screen Create password title"
   },
+  "Change_password": {
+    "message": "Change password",
+    "description": "Settings Change password title"
+  },
+  "Old_password": {
+    "message": "Old password",
+    "description": "Settings Old password label"
+  },
+  "Change": {
+    "message": "Change",
+    "description": "Settings Change button label"
+  },
   "USD_full": {
     "message": "United States Dollar",
     "description": "USD fill name"

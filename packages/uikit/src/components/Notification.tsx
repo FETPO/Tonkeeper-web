@@ -124,7 +124,7 @@ export const NotificationCancelButton: FC<{ handleClose: () => void }> = ({
 export const Notification: FC<{
   isOpen: boolean;
   handleClose?: () => void;
-  children: (afterClose: (action: () => void) => void) => React.ReactNode;
+  children: (afterClose: (action?: () => void) => void) => React.ReactNode;
 }> = React.memo(({ children, isOpen, handleClose }) => {
   const nodeRef = useRef(null);
   useEffect(() => {
