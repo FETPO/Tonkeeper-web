@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useMemo, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 import { Container } from '../styles/globalStyle';
@@ -136,10 +136,13 @@ export const Notification: FC<{
     };
   }, [handleClose]);
 
-  const Child = children((afterClose: () => void) => {
-    setTimeout(() => afterClose(), 300);
-    handleClose && handleClose();
-  });
+  const Child = useMemo(() => {
+    if (!isOpen) return undefined;
+    return children((afterClose?: () => void) => {
+      setTimeout(() => afterClose && afterClose(), 300);
+      handleClose && handleClose();
+    });
+  }, [isOpen, children, handleClose]);
 
   return (
     <ReactPortal wrapperId="react-portal-modal-container">
