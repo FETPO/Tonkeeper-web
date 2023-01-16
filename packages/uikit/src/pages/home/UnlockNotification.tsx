@@ -22,7 +22,6 @@ export const getPasswordByNotification = async (
   auth: AuthState
 ): Promise<string> => {
   const id = Date.now();
-  console.log('getPasswordByNotification', id);
   return new Promise<string>((resolve, reject) => {
     sdk.uiEvents.emit('getPassword', {
       method: 'getPassword',
@@ -183,6 +182,7 @@ export const UnlockNotification = () => {
   }, [sdk]);
 
   const Content = useCallback(() => {
+    console.log('auth', auth, 'requestId', requestId);
     if (!auth || !requestId) return undefined;
     return (
       <PasswordUnlock
@@ -195,5 +195,5 @@ export const UnlockNotification = () => {
     );
   }, [auth, requestId]);
 
-  return <Notification isOpen={auth !== undefined}>{Content}</Notification>;
+  return <Notification isOpen={auth != undefined}>{Content}</Notification>;
 };
