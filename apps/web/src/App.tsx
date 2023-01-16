@@ -15,7 +15,6 @@ import {
   SettingsHeader,
 } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
-import { NftNotification } from '@tonkeeper/uikit/dist/components/nft/NftNotification';
 import {
   AppContext,
   WalletStateContext,
@@ -285,7 +284,6 @@ export const Content: FC<{
         </Routes>
       </Suspense>
       <Footer />
-      <NftNotification />
     </WalletStateContext.Provider>
   );
 };

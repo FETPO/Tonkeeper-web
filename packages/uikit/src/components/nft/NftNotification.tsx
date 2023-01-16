@@ -1,8 +1,6 @@
 import { NftItemRepr } from '@tonkeeper/core/dist/tonApi';
-import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { FC, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { useNftInfo } from '../../state/nft';
 import {
   Notification,
   NotificationBlock,
@@ -12,7 +10,6 @@ import { Body3, Label2 } from '../Text';
 import { NftAction } from './NftAction';
 import { NftDetails } from './NftDetails';
 import { Image, NftBlock } from './Nfts';
-import { NftTransferNotification } from './NftTransferNotification';
 
 const Text = styled.div`
   display: flex;
@@ -65,41 +62,20 @@ const NftPreview: FC<{
     </NotificationBlock>
   );
 };
-export const NftNotification = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { data: items } = useNftInfo();
-  const address = useMemo(() => {
-    const nft = searchParams.get('nft');
-    return nft ? decodeURIComponent(nft) : undefined;
-  }, [searchParams.get('nft')]);
-
-  const handleClose = useCallback(() => {
-    searchParams.delete('nft');
-    setSearchParams(searchParams);
-  }, [searchParams, setSearchParams]);
-
-  const nftItem = useMemo(() => {
-    if (!address || !items) return undefined;
-    return items.nftItems.find((item) => item.address === address);
-  }, [address, items]);
-
-  const isOpen = nftItem != undefined;
-
+export const NftNotification: FC<{
+  nftItem: NftItemRepr | undefined;
+  handleClose: () => void;
+}> = ({ nftItem, handleClose }) => {
   const Content = useCallback(
     (afterClose: (action: () => void) => void) => {
       if (!nftItem) return undefined;
-      return (
-        <>
-          <NftPreview afterClose={afterClose} nftItem={nftItem} />
-          <NftTransferNotification nftItem={nftItem} />
-        </>
-      );
+      return <NftPreview afterClose={afterClose} nftItem={nftItem} />;
     },
     [nftItem]
   );
 
   return (
-    <Notification isOpen={isOpen} handleClose={handleClose}>
+    <Notification isOpen={nftItem != undefined} handleClose={handleClose}>
       {Content}
     </Notification>
   );

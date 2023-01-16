@@ -1,11 +1,11 @@
 import { NftItemRepr } from '@tonkeeper/core/dist/tonApi';
-import React, { FC, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { FC, useState } from 'react';
 import { Address } from 'ton-core';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useTranslation } from '../../hooks/translation';
 import { Action, ActionsRow } from '../home/Actions';
 import { GlobalIcon, SendIcon } from '../home/HomeIcons';
+import { NftTransferNotification } from './NftTransferNotification';
 
 const getMarketplaceUrl = (nftItem: NftItemRepr) => {
   const { marketplace } = nftItem.metadata;
@@ -20,17 +20,30 @@ const getMarketplaceUrl = (nftItem: NftItemRepr) => {
   }
 };
 
+const ActionTransfer: FC<{
+  nftItem: NftItemRepr;
+}> = ({ nftItem }) => {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Action
+        icon={<SendIcon />}
+        title={t('Transfer_token')}
+        action={() => setOpen(true)}
+      />
+      <NftTransferNotification
+        nftItem={open ? nftItem : undefined}
+        handleClose={() => setOpen(false)}
+      />
+    </>
+  );
+};
 export const NftAction: FC<{
   kind: 'token' | 'telegram.name' | 'telegram.number' | 'ton.dns';
   nftItem: NftItemRepr;
 }> = ({ kind, nftItem }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const setTransfer = useCallback(() => {
-    searchParams.append('transfer', '');
-    setSearchParams(searchParams);
-  }, [searchParams, setSearchParams]);
-
   const { t } = useTranslation();
   const sdk = useAppSdk();
 
@@ -38,11 +51,7 @@ export const NftAction: FC<{
     case 'token': {
       return (
         <ActionsRow>
-          <Action
-            icon={<SendIcon />}
-            title={t('Transfer_token')}
-            action={setTransfer}
-          />
+          <ActionTransfer nftItem={nftItem} />
           <Action
             icon={<GlobalIcon />}
             title={t('View_on_market')}
@@ -54,11 +63,7 @@ export const NftAction: FC<{
     case 'ton.dns': {
       return (
         <ActionsRow>
-          <Action
-            icon={<SendIcon />}
-            title={t('Transfer_DNS')}
-            action={setTransfer}
-          />
+          <ActionTransfer nftItem={nftItem} />
           <Action
             icon={<GlobalIcon />}
             title={t('View_on_market')}
@@ -70,11 +75,7 @@ export const NftAction: FC<{
     case 'telegram.number': {
       return (
         <ActionsRow>
-          <Action
-            icon={<SendIcon />}
-            title={t('Transfer_number')}
-            action={setTransfer}
-          />
+          <ActionTransfer nftItem={nftItem} />
           <Action
             icon={<GlobalIcon />}
             title={t('View_on_market')}
@@ -86,11 +87,7 @@ export const NftAction: FC<{
     case 'telegram.name': {
       return (
         <ActionsRow>
-          <Action
-            icon={<SendIcon />}
-            title={t('Transfer_name')}
-            action={setTransfer}
-          />
+          <ActionTransfer nftItem={nftItem} />
           <Action
             icon={<GlobalIcon />}
             title={t('View_on_market')}

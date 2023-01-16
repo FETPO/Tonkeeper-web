@@ -1,8 +1,8 @@
 import { NftItemRepr, NftItemsRepr } from '@tonkeeper/core/dist/tonApi';
-import React, { FC, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { FC, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Body3, Label2 } from '../Text';
+import { NftNotification } from './NftNotification';
 
 const Grid = styled.div`
   display: grid;
@@ -59,24 +59,26 @@ const Body = styled(Body3)`
 
 export const NftItem: FC<{ nft: NftItemRepr; resolution: string }> = React.memo(
   ({ nft, resolution }) => {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [open, setOpen] = useState(false);
 
     const image = nft.previews?.find((item) => item.resolution === resolution);
 
     const { name, description } = nft.metadata;
 
-    const onClick = useCallback(() => {
-      setSearchParams({ nft: encodeURIComponent(nft.address) });
-    }, [setSearchParams]);
-
     return (
-      <NftBlock hover onClick={onClick}>
-        {image && <Image src={image.url} />}
-        <Text>
-          {name && <Header>{name}</Header>}
-          {description && <Body>{description}</Body>}
-        </Text>
-      </NftBlock>
+      <>
+        <NftBlock hover onClick={() => setOpen(true)}>
+          {image && <Image src={image.url} />}
+          <Text>
+            {name && <Header>{name}</Header>}
+            {description && <Body>{description}</Body>}
+          </Text>
+        </NftBlock>
+        <NftNotification
+          nftItem={open ? nft : undefined}
+          handleClose={() => setOpen(false)}
+        />
+      </>
     );
   }
 );

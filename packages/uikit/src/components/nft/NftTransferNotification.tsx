@@ -1,6 +1,5 @@
 import { NftItemRepr } from '@tonkeeper/core/dist/tonApi';
-import React, { FC, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { FC, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { Address } from 'ton-core';
 import { useTranslation } from '../../hooks/translation';
@@ -53,9 +52,8 @@ const isValidAddress = (value: string): boolean => {
 
 const NftTransferContent: FC<{
   nftItem: NftItemRepr;
-  transfer: string;
-  setTransfer: (value: string) => void;
-}> = ({ nftItem, transfer, setTransfer }) => {
+}> = ({ nftItem }) => {
+  const [transfer, setTransfer] = useState('');
   const { t } = useTranslation();
 
   const isValid = isValidAddress(transfer);
@@ -77,41 +75,19 @@ const NftTransferContent: FC<{
   );
 };
 
-export const NftTransferNotification: FC<{ nftItem: NftItemRepr }> = ({
-  nftItem,
-}) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const transfer = searchParams.get('transfer');
-
-  const handleClose = useCallback(() => {
-    searchParams.delete('transfer');
-    setSearchParams(searchParams);
-  }, [searchParams, setSearchParams]);
-
-  const setTransfer = useCallback(
-    (value: string) => {
-      searchParams.delete('transfer');
-      searchParams.append('transfer', value);
-      setSearchParams(searchParams);
-    },
-    [searchParams, setSearchParams]
-  );
+export const NftTransferNotification: FC<{
+  nftItem: NftItemRepr | undefined;
+  handleClose: () => void;
+}> = ({ nftItem, handleClose }) => {
   const Content = useCallback(
     (afterClose: (action: () => void) => void) => {
-      if (transfer === null) return;
-      return (
-        <NftTransferContent
-          nftItem={nftItem}
-          transfer={transfer}
-          setTransfer={setTransfer}
-        />
-      );
+      if (nftItem == null) return;
+      return <NftTransferContent nftItem={nftItem} />;
     },
-    [transfer, setTransfer, nftItem]
+    [nftItem, nftItem]
   );
 
-  const isOpen = transfer !== null;
+  const isOpen = nftItem != null;
 
   return (
     <Notification isOpen={isOpen} handleClose={handleClose}>

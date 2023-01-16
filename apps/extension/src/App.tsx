@@ -9,32 +9,32 @@ import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import {
   ActivityHeader,
   Header,
-  SettingsHeader,
+  SettingsHeader
 } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
-import { NftNotification } from '@tonkeeper/uikit/dist/components/nft/NftNotification';
 import {
   AppContext,
-  WalletStateContext,
+  WalletStateContext
 } from '@tonkeeper/uikit/dist/hooks/appContext';
 import {
   AfterImportAction,
   AppSdkContext,
-  OnImportAction,
+  OnImportAction
 } from '@tonkeeper/uikit/dist/hooks/appSdk';
 import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
 import {
   I18nContext,
-  TranslationContext,
+  TranslationContext
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
 import { Activity } from '@tonkeeper/uikit/dist/pages/activity/Activity';
 import { Home } from '@tonkeeper/uikit/dist/pages/home/Home';
 import { Unlock } from '@tonkeeper/uikit/dist/pages/home/Unlock';
+import { UnlockNotification } from "@tonkeeper/uikit/dist/pages/home/UnlockNotification";
 import ImportRouter from '@tonkeeper/uikit/dist/pages/import';
 import {
   Initialize,
-  InitializeContainer,
+  InitializeContainer
 } from '@tonkeeper/uikit/dist/pages/import/Initialize';
 import { Jetton } from '@tonkeeper/uikit/dist/pages/jetton/Jetton';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
@@ -43,7 +43,7 @@ import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
 import {
   useTonendpoint,
-  useTonenpointConfig,
+  useTonenpointConfig
 } from '@tonkeeper/uikit/dist/state/tonendpoint';
 import { useActiveWallet } from '@tonkeeper/uikit/dist/state/wallet';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
@@ -53,14 +53,14 @@ import React, {
   Suspense,
   useEffect,
   useMemo,
-  useState,
+  useState
 } from 'react';
 import {
   MemoryRouter,
   Route,
   Routes,
   useLocation,
-  useNavigate,
+  useNavigate
 } from 'react-router-dom';
 import styled from 'styled-components';
 import browser from 'webextension-polyfill';
@@ -110,6 +110,7 @@ export const App: FC = () => {
               <TranslationContext.Provider value={translation}>
                 <UserThemeProvider>
                   <Loader />
+                  <UnlockNotification sdk={sdk} />
                 </UserThemeProvider>
               </TranslationContext.Provider>
             </StorageContext.Provider>
@@ -276,7 +277,6 @@ export const Content: FC<{
         </Body>
       </Suspense>
       <Footer />
-      <NftNotification />
     </WalletStateContext.Provider>
   );
 };
