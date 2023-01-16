@@ -10,6 +10,7 @@ import {
 import { SubHeader } from '../../components/SubHeader';
 import { Switch } from '../../components/Switch';
 import { Label1 } from '../../components/Text';
+import { useAppContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute, SettingsRoute } from '../../libs/routes';
 import { useLookScreen, useMutateLookScreen } from '../../state/password';
@@ -36,6 +37,7 @@ const ChangePassword = () => {
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
 
+  const { auth } = useAppContext();
   const items = useMemo(() => {
     const items: SettingsItem[] = [
       {
@@ -47,15 +49,19 @@ const ChangePassword = () => {
     return items;
   }, []);
 
-  return (
-    <>
-      <SettingsList items={items} />
-      <ChangePasswordNotification
-        isOpen={isOpen}
-        handleClose={() => setOpen(false)}
-      />
-    </>
-  );
+  if (auth.kind === 'password') {
+    return (
+      <>
+        <SettingsList items={items} />
+        <ChangePasswordNotification
+          isOpen={isOpen}
+          handleClose={() => setOpen(false)}
+        />
+      </>
+    );
+  } else {
+    return undefined;
+  }
 };
 
 const ShowPhrases = () => {
