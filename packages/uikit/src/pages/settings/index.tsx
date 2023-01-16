@@ -21,8 +21,9 @@ const SettingsRouter = () => {
       <Route path={SettingsRoute.dev} element={<DevSettings />} />
       <Route path={SettingsRoute.fiat} element={<FiatCurrency />} />
       <Route path={SettingsRoute.account} element={<Account />} />
-      <Route path={SettingsRoute.recovery} element={<ActiveRecovery />}>
+      <Route path={SettingsRoute.recovery}>
         <Route path=":publicKey" element={<Recovery />} />
+        <Route index element={<ActiveRecovery />} />
       </Route>
       <Route path={SettingsRoute.version} element={<WalletVersion />} />
       <Route path={SettingsRoute.jettons} element={<JettonsSettings />} />

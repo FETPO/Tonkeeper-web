@@ -1,5 +1,4 @@
 import { AuthState } from '@tonkeeper/core/dist/entries/password';
-import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { getWalletMnemonic } from '@tonkeeper/core/dist/service/menmonicService';
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -12,7 +11,6 @@ import { useAppSdk } from '../../hooks/appSdk';
 import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute } from '../../libs/routes';
-import { useWalletState } from '../../state/wallet';
 import { getPasswordByNotification } from '../home/UnlockNotification';
 
 export const ActiveRecovery = () => {
@@ -29,28 +27,21 @@ export const Recovery = () => {
   }
 };
 
-const useMnemonic = (
-  wallet: WalletState | null | undefined,
-  auth: AuthState
-) => {
+const useMnemonic = (publicKey: string, auth: AuthState) => {
   const [mnemonic, setMnemonic] = useState<string[] | undefined>(undefined);
   const storage = useStorage();
   const sdk = useAppSdk();
 
   useEffect(() => {
-    if (wallet?.publicKey) {
-      (async () => {
-        const password =
-          auth.kind === 'none'
-            ? auth.kind
-            : await getPasswordByNotification(sdk, auth);
+    (async () => {
+      const password =
+        auth.kind === 'none'
+          ? auth.kind
+          : await getPasswordByNotification(sdk, auth);
 
-        setMnemonic(
-          await getWalletMnemonic(storage, wallet.publicKey, password)
-        );
-      })();
-    }
-  }, [wallet?.publicKey]);
+      setMnemonic(await getWalletMnemonic(storage, publicKey, password));
+    })();
+  }, [publicKey]);
 
   return mnemonic;
 };
@@ -118,8 +109,7 @@ const RecoveryContent: FC<{ publicKey: string }> = ({ publicKey }) => {
   const { auth } = useAppContext();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { data: wallet } = useWalletState(publicKey);
-  const mnemonic = useMnemonic(wallet, auth);
+  const mnemonic = useMnemonic(publicKey, auth);
 
   const onBack = () => {
     navigate(AppRoute.settings);
