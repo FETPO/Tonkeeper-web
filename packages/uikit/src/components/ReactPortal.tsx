@@ -24,11 +24,13 @@ const ReactPortal: FC<PropsWithChildren<{ wrapperId?: string }>> = ({
       systemCreated = true;
       element = createWrapperAndAppendToBody(wrapperId);
     }
+    console.log('create', wrapperId);
     setWrapperElement(element);
 
     return () => {
       // delete the programatically created element
       if (systemCreated && element && element.parentNode) {
+        console.log('remove', wrapperId);
         element.parentNode.removeChild(element);
       }
     };

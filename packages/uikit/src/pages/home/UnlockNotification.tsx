@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { IAppSdk } from '@tonkeeper/core/dist/AppSdk';
 import { AuthState } from '@tonkeeper/core/dist/entries/password';
+import { getAccountState } from '@tonkeeper/core/dist/service/accountService';
 import { validateWalletMnemonic } from '@tonkeeper/core/dist/service/menmonicService';
 import { getWalletState } from '@tonkeeper/core/dist/service/walletService';
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
@@ -12,8 +13,6 @@ import {
   Notification,
   NotificationCancelButton,
 } from '../../components/Notification';
-import { useAppContext } from '../../hooks/appContext';
-import { useAppSdk } from '../../hooks/appSdk';
 import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
 
@@ -71,12 +70,11 @@ const Logo = styled.div`
   margin-bottom: 2rem;
 `;
 
-const useMutateUnlock = (requestId: number) => {
-  const { account } = useAppContext();
-  const sdk = useAppSdk();
+const useMutateUnlock = (sdk: IAppSdk, requestId: number) => {
   const storage = useStorage();
 
   return useMutation<void, Error, string>(async (password) => {
+    const account = await getAccountState(storage);
     if (account.publicKeys.length === 0) {
       throw new Error('Missing wallets');
     }
@@ -100,14 +98,17 @@ const useMutateUnlock = (requestId: number) => {
 };
 
 const PasswordUnlock: FC<{
+  sdk: IAppSdk;
   onClose: () => void;
   requestId: number;
-}> = ({ onClose, requestId }) => {
+}> = ({ sdk, onClose, requestId }) => {
   const { t } = useTranslation();
-  const sdk = useAppSdk();
 
   const ref = useRef<HTMLInputElement | null>(null);
-  const { mutateAsync, isLoading, isError, reset } = useMutateUnlock(requestId);
+  const { mutateAsync, isLoading, isError, reset } = useMutateUnlock(
+    sdk,
+    requestId
+  );
   const [password, setPassword] = useState('');
 
   useEffect(() => {
@@ -160,11 +161,10 @@ const PasswordUnlock: FC<{
   );
 };
 
-export const UnlockNotification = () => {
+export const UnlockNotification: FC<{ sdk: IAppSdk }> = ({ sdk }) => {
   const [auth, setAuth] = useState<AuthState | undefined>(undefined);
   const [requestId, setId] = useState<number | undefined>(undefined);
 
-  const sdk = useAppSdk();
   useEffect(() => {
     const handler = (options: {
       method: 'getPassword';
@@ -186,6 +186,7 @@ export const UnlockNotification = () => {
     if (!auth || !requestId) return undefined;
     return (
       <PasswordUnlock
+        sdk={sdk}
         onClose={() => {
           setAuth(undefined);
           setId(undefined);
