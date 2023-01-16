@@ -66,8 +66,9 @@ export const useAddWalletMutation = () => {
       return await createWallet(client, tonApi, storage, mnemonic, auth);
     }
 
-    const passwordKey =
-      password || (await getPasswordByNotification(sdk, auth));
+    if (!password) {
+      password = await getPasswordByNotification(sdk, auth);
+    }
 
     return await createWallet(
       client,
@@ -75,7 +76,7 @@ export const useAddWalletMutation = () => {
       storage,
       mnemonic,
       auth,
-      passwordKey
+      password
     );
   });
 };

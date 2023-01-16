@@ -22,6 +22,7 @@ export const getPasswordByNotification = async (
   auth: AuthState
 ): Promise<string> => {
   const id = Date.now();
+  console.log('getPasswordByNotification', id);
   return new Promise<string>((resolve, reject) => {
     sdk.uiEvents.emit('getPassword', {
       method: 'getPassword',

@@ -2,6 +2,7 @@ import { AccountState, defaultAccountState } from '../entries/account';
 import { AppKey } from '../Keys';
 import { IStorage } from '../Storage';
 import { Configuration } from '../tonApi';
+import { deleteWalletMnemonic } from './menmonicService';
 import { deleteWalletState, importWallet } from './walletService';
 
 export const getAccountState = async (storage: IStorage) => {
@@ -68,6 +69,9 @@ export const accountLogOutWallet = async (
   };
 
   await deleteWalletState(storage, publicKey);
-
+  await deleteWalletMnemonic(storage, publicKey);
+  if (account.publicKeys.length === 0) {
+    await storage.delete(AppKey.password);
+  }
   await storage.set(AppKey.account, account);
 };
