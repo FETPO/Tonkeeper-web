@@ -1,19 +1,19 @@
-import { useQuery } from '@tanstack/react-query';
 import { AuthState } from '@tonkeeper/core/dist/entries/password';
 import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
-import { AppKey } from '@tonkeeper/core/dist/Keys';
-import { decrypt } from '@tonkeeper/core/dist/service/cryptoService';
-import React, { FC } from 'react';
+import { getWalletMnemonic } from '@tonkeeper/core/dist/service/menmonicService';
+import React, { FC, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { mnemonicValidate } from 'ton-crypto';
 import { ChevronLeftIcon } from '../../components/Icon';
 import { Loading } from '../../components/Loading';
 import { Body1, Body2, H2 } from '../../components/Text';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
+import { useAppSdk } from '../../hooks/appSdk';
+import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute } from '../../libs/routes';
 import { useWalletState } from '../../state/wallet';
+import { getPasswordByNotification } from '../home/UnlockNotification';
 
 export const ActiveRecovery = () => {
   const wallet = useWalletContext();
@@ -29,35 +29,30 @@ export const Recovery = () => {
   }
 };
 
-const getPassword = async (auth: AuthState): Promise<string> => {
-  return 'moke';
-};
-
 const useMnemonic = (
   wallet: WalletState | null | undefined,
   auth: AuthState
 ) => {
-  const { account } = useAppContext();
+  const [mnemonic, setMnemonic] = useState<string[] | undefined>(undefined);
+  const storage = useStorage();
+  const sdk = useAppSdk();
 
-  return useQuery(
-    [wallet?.publicKey, AppKey.account],
-    async () => {
-      if (!wallet) {
-        throw new Error('Missing wallet');
-      }
+  useEffect(() => {
+    if (wallet?.publicKey) {
+      (async () => {
+        const password =
+          auth.kind === 'none'
+            ? auth.kind
+            : await getPasswordByNotification(sdk, auth);
 
-      const password =
-        auth.kind === 'none' ? auth.kind : await getPassword(auth);
-      const mnemonic = (await decrypt(wallet.mnemonic, password)).split(' ');
-      const isValid = await mnemonicValidate(mnemonic);
-      if (!isValid) {
-        throw new Error('Wallet mnemonic  not valid');
-      }
+        setMnemonic(
+          await getWalletMnemonic(storage, wallet.publicKey, password)
+        );
+      })();
+    }
+  }, [wallet?.publicKey]);
 
-      return mnemonic;
-    },
-    { enabled: wallet != null }
-  );
+  return mnemonic;
 };
 
 const BackButton = styled.div`
@@ -124,7 +119,7 @@ const RecoveryContent: FC<{ publicKey: string }> = ({ publicKey }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: wallet } = useWalletState(publicKey);
-  const { data: mnemonic } = useMnemonic(wallet, auth);
+  const mnemonic = useMnemonic(wallet, auth);
 
   const onBack = () => {
     navigate(AppRoute.settings);

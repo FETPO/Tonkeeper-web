@@ -1,6 +1,5 @@
 import { IAppSdk } from '@tonkeeper/core/dist/AppSdk';
 import { EventEmitter } from '@tonkeeper/core/dist/entries/eventEmitter';
-import { MemoryStorage } from '@tonkeeper/core/dist/Storage';
 import copyToClipboard from 'copy-to-clipboard';
 import browser from 'webextension-polyfill';
 import packageJson from '../../package.json';
@@ -23,8 +22,6 @@ export class ExtensionAppSdk implements IAppSdk {
     });
   };
 
-  // TODO: move to background script
-  memoryStore = new MemoryStorage();
   uiEvents = new EventEmitter();
   version = packageJson.version ?? 'Unknown';
 

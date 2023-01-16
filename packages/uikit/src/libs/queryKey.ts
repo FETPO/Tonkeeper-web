@@ -7,10 +7,17 @@ export enum QueryKey {
   info = 'info',
   jettons = 'jettons',
   nft = 'nft',
+  activity = 'activity',
+  tonkeeperApi = 'tonkeeperApi',
 }
 
 export enum JettonKey {
   info,
   history,
   balance,
+}
+
+export enum TonkeeperApiKey {
+  config,
+  stock,
 }

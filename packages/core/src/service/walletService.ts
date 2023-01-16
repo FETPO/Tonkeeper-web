@@ -22,7 +22,7 @@ export const importWallet = async (
   mnemonic: string[],
   password: string,
   name?: string
-): Promise<WalletState> => {
+): Promise<readonly [string, WalletState]> => {
   const encryptedMnemonic = await encrypt(mnemonic.join(' '), password);
   const keyPair = await mnemonicToPrivateKey(mnemonic);
 
@@ -42,9 +42,8 @@ export const importWallet = async (
     console.log(e);
   }
 
-  return {
+  const state: WalletState = {
     publicKey,
-    mnemonic: encryptedMnemonic,
     voucher,
 
     active,
@@ -52,6 +51,7 @@ export const importWallet = async (
     revision: 0,
     name,
   };
+  return [encryptedMnemonic, state] as const;
 };
 
 const versionMap: Record<string, WalletVersion> = {

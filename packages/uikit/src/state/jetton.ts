@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { updateWalletProperty } from '@tonkeeper/core/dist/service/walletService';
 import {
   AccountEvents,
@@ -98,7 +97,7 @@ export const useToggleJettonMutation = () => {
       });
     }
 
-    await client.invalidateQueries([AppKey.account]);
+    await client.invalidateQueries([QueryKey.account]);
   });
 };
 

@@ -7,7 +7,6 @@ import {
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
-import { useAppSdk } from '../../hooks/appSdk';
 import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
 import { Button } from '../fields/Button';
@@ -63,7 +62,6 @@ const SelectAuthType: FC<{
 
 const useCreatePassword = () => {
   const storage = useStorage();
-  const sdk = useAppSdk();
 
   return useMutation<
     string | undefined,
@@ -77,18 +75,15 @@ const useCreatePassword = () => {
       return 'confirm';
     }
 
-    await sdk.memoryStore.set(AppKey.password, password);
     const state: AuthPassword = {
       kind: 'password',
     };
     await storage.set(AppKey.password, state);
-
-    return undefined;
   });
 };
 
 const FillPassword: FC<{
-  afterCreate: () => void;
+  afterCreate: (password: string) => void;
   isLoading?: boolean;
 }> = ({ afterCreate, isLoading }) => {
   const { t } = useTranslation();
@@ -104,7 +99,7 @@ const FillPassword: FC<{
     reset();
     const result = await mutateAsync({ password, confirm });
     if (result === undefined) {
-      return afterCreate();
+      return afterCreate(password);
     } else {
       setError(result);
     }
@@ -153,7 +148,7 @@ const FillPassword: FC<{
 };
 
 export const CreateAuthState: FC<{
-  afterCreate: () => void;
+  afterCreate: (password?: string) => void;
   isLoading?: boolean;
 }> = ({ afterCreate, isLoading }) => {
   const [authType, setAuthType] =

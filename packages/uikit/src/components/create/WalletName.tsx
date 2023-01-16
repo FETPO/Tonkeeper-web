@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AccountState } from '@tonkeeper/core/dist/entries/account';
-import { AppKey } from '@tonkeeper/core/dist/Keys';
 import {
   getWalletState,
   updateWalletProperty,
@@ -10,6 +9,7 @@ import styled from 'styled-components';
 import { useAppContext } from '../../hooks/appContext';
 import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
+import { QueryKey } from '../../libs/queryKey';
 import { Button } from '../fields/Button';
 import { Input } from '../fields/Input';
 import { Body2, H2 } from '../Text';
@@ -44,7 +44,7 @@ const useUpdateNameMutation = (account: AccountState) => {
     }
 
     await updateWalletProperty(tonApi, storage, wallet, { name });
-    await client.invalidateQueries([AppKey.account]);
+    await client.invalidateQueries([QueryKey.account]);
     return account;
   });
 };

@@ -1,5 +1,4 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { EventApi } from '@tonkeeper/core/dist/tonApi';
 import React, { FC } from 'react';
 import styled from 'styled-components';
@@ -11,6 +10,7 @@ import { Button } from '../../components/fields/Button';
 import { ListBlock, ListItem } from '../../components/List';
 import { SkeletonList } from '../../components/Sceleton';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
+import { QueryKey } from '../../libs/queryKey';
 
 const Body = styled.div`
   flex-grow: 1;
@@ -36,7 +36,7 @@ export const Activity: FC = () => {
 
   const { fetchNextPage, hasNextPage, isFetchingNextPage, data, ...result } =
     useInfiniteQuery({
-      queryKey: [wallet.active.rawAddress, AppKey.activity],
+      queryKey: [wallet.active.rawAddress, QueryKey.activity],
       queryFn: ({ pageParam = undefined }) =>
         new EventApi(tonApi).accountEvents({
           account: wallet.active.rawAddress,

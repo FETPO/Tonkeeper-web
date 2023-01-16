@@ -41,14 +41,16 @@ export const Import = () => {
   if (!hasPassword) {
     return (
       <CreateAuthState
-        afterCreate={() => {
+        afterCreate={(password?: string) => {
           reset();
-          checkPasswordAndCreateWalletAsync({ mnemonic }).then((state) => {
-            if (state !== false) {
-              setHasPassword(true);
-              setAccount(state);
+          checkPasswordAndCreateWalletAsync({ mnemonic, password }).then(
+            (state) => {
+              if (state !== false) {
+                setHasPassword(true);
+                setAccount(state);
+              }
             }
-          });
+          );
         }}
         isLoading={isConfirmLoading}
       />

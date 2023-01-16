@@ -1,10 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { AppKey } from '@tonkeeper/core/dist/Keys';
-import { decrypt } from '@tonkeeper/core/dist/service/cryptoService';
+import { validateWalletMnemonic } from '@tonkeeper/core/dist/service/menmonicService';
 import { getWalletState } from '@tonkeeper/core/dist/service/walletService';
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import { mnemonicValidate } from 'ton-crypto';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import styled, { css } from 'styled-components';
 import { Button } from '../../components/fields/Button';
 import { Input } from '../../components/fields/Input';
 import { TonkeeperIcon } from '../../components/Icon';
@@ -13,10 +11,14 @@ import { useAppSdk } from '../../hooks/appSdk';
 import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
 
-const Block = styled.form`
+const Block = styled.form<{ minHeight?: string }>`
   display: flex;
   flex-direction: column;
-  min-height: var(--app-height);
+  ${(props) =>
+    css`
+      min-height: ${props.minHeight ?? 'var(--app-height)'};
+    `}
+
   padding: 2rem 0;
   box-sizing: border-box;
 
@@ -48,18 +50,16 @@ const useMutateUnlock = () => {
     if (!wallet) {
       throw new Error('Missing wallet');
     }
-    const mnemonic = await decrypt(wallet.mnemonic, password);
-    const isValid = await mnemonicValidate(mnemonic.split(' '));
-    if (!isValid) {
-      throw new Error('Invalid password');
-    }
 
-    await sdk.memoryStore.set(AppKey.password, password);
+    const isValid = await validateWalletMnemonic(storage, publicKey, password);
+    if (!isValid) {
+      throw new Error('Mnemonic not valid');
+    }
     sdk.uiEvents.emit('unlock');
   });
 };
 
-export const PasswordUnlock = () => {
+export const PasswordUnlock: FC<{ minHeight?: string }> = ({ minHeight }) => {
   const { t } = useTranslation();
 
   const ref = useRef<HTMLInputElement | null>(null);
@@ -83,7 +83,7 @@ export const PasswordUnlock = () => {
   };
 
   return (
-    <Block onSubmit={onSubmit}>
+    <Block minHeight={minHeight} onSubmit={onSubmit}>
       <Logo>
         <TonkeeperIcon />
       </Logo>
@@ -102,6 +102,7 @@ export const PasswordUnlock = () => {
     </Block>
   );
 };
+
 export const Unlock = () => {
   const { auth } = useAppContext();
 

@@ -43,7 +43,6 @@ export interface WalletVoucher {
 
 export interface WalletState {
   publicKey: string;
-  mnemonic: string;
   revision: number;
 
   voucher: WalletVoucher;

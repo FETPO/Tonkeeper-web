@@ -4,7 +4,6 @@ import {
   localizationText,
 } from '@tonkeeper/core/dist/entries/language';
 import { Network } from '@tonkeeper/core/dist/entries/network';
-import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import {
   getFiatMethods,
@@ -15,6 +14,7 @@ import {
   TonendpointConfig,
 } from '@tonkeeper/core/dist/tonkeeperApi/tonendpoint';
 import { useMemo } from 'react';
+import { QueryKey, TonkeeperApiKey } from '../libs/queryKey';
 
 export const useTonendpoint = (
   build: string,
@@ -31,7 +31,7 @@ export const useTonendpoint = (
 
 export const useTonenpointConfig = (tonendpoint: Tonendpoint) => {
   return useQuery<TonendpointConfig, Error>(
-    [AppKey.tonkeeperApi, 'config'],
+    [QueryKey.tonkeeperApi, TonkeeperApiKey.config],
     async () => {
       return getServerConfig(tonendpoint);
     }
@@ -40,7 +40,7 @@ export const useTonenpointConfig = (tonendpoint: Tonendpoint) => {
 
 export const useTonenpointStock = (tonendpoint: Tonendpoint) => {
   return useQuery<TonendpointStock, Error>(
-    [AppKey.tonkeeperApi, 'stock'],
+    [QueryKey.tonkeeperApi, TonkeeperApiKey.stock],
     async () => {
       return getStock(tonendpoint);
     }
@@ -49,7 +49,7 @@ export const useTonenpointStock = (tonendpoint: Tonendpoint) => {
 
 export const useTonenpointFiatMethods = (tonendpoint: Tonendpoint) => {
   return useQuery<TonendpoinFiatMethods, Error>(
-    [AppKey.tonkeeperApi, 'stock', tonendpoint.params.lang],
+    [QueryKey.tonkeeperApi, TonkeeperApiKey.stock, tonendpoint.params.lang],
     async () => {
       return getFiatMethods(tonendpoint);
     }

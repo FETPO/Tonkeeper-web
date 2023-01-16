@@ -34,6 +34,7 @@ import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
 import { Activity } from '@tonkeeper/uikit/dist/pages/activity/Activity';
 import { Home } from '@tonkeeper/uikit/dist/pages/home/Home';
 import { Unlock } from '@tonkeeper/uikit/dist/pages/home/Unlock';
+import { UnlockNotification } from '@tonkeeper/uikit/dist/pages/home/UnlockNotification';
 import ImportRouter from '@tonkeeper/uikit/dist/pages/import';
 import {
   Initialize,
@@ -200,6 +201,7 @@ export const Loader: FC = () => {
             <Content activeWallet={activeWallet} lock={lock} />
           </Container>
           <CopyNotification />
+          <UnlockNotification />
         </AppContext.Provider>
       </AfterImportAction.Provider>
     </OnImportAction.Provider>

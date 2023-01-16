@@ -2,7 +2,7 @@ import { AccountState, defaultAccountState } from '../entries/account';
 import { AppKey } from '../Keys';
 import { IStorage } from '../Storage';
 import { Configuration } from '../tonApi';
-import { deleteWalletState } from './walletService';
+import { deleteWalletState, importWallet } from './walletService';
 
 export const getAccountState = async (storage: IStorage) => {
   console.log('load account');
@@ -10,16 +10,31 @@ export const getAccountState = async (storage: IStorage) => {
   return state ?? defaultAccountState;
 };
 
-export const accountAppendWallet = async (
-  storage: IStorage,
-  publicKey: string
-) => {
+const accountAppendWallet = async (storage: IStorage, publicKey: string) => {
   const account = await getAccountState(storage);
-  const updated = {
+  return {
     publicKeys: account.publicKeys.concat([publicKey]),
     activePublicKey: publicKey,
   };
-  await storage.set(AppKey.account, updated);
+};
+
+export const accountSetUpWalletState = async (
+  storage: IStorage,
+  tonApi: Configuration,
+  mnemonic: string[],
+  password: string
+) => {
+  const [encryptedMnemonic, state] = await importWallet(
+    tonApi,
+    mnemonic,
+    password
+  );
+  const account = await accountAppendWallet(storage, state.publicKey);
+  await storage.setBatch({
+    [AppKey.account]: account,
+    [`${AppKey.wallet}_${state.publicKey}`]: state,
+    [`${AppKey.mnemonic}_${state.publicKey}`]: encryptedMnemonic,
+  });
 };
 
 export const accountSelectWallet = async (

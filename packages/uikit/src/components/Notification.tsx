@@ -14,6 +14,7 @@ const Wrapper = styled(Container)`
 
 const ButtonContainer = styled.div`
   position: relative;
+  width: 100%;
 `;
 
 const Padding = styled.div`
@@ -108,6 +109,17 @@ export const NotificationBlock = styled.form`
   align-items: center;
 `;
 
+export const NotificationCancelButton: FC<{ handleClose: () => void }> = ({
+  handleClose,
+}) => {
+  return (
+    <ButtonContainer>
+      <CloseButton onClick={handleClose}>
+        <CloseIcon />
+      </CloseButton>
+    </ButtonContainer>
+  );
+};
 export const Notification: FC<{
   isOpen: boolean;
   handleClose?: () => void;
@@ -143,11 +155,7 @@ export const Notification: FC<{
               <Gap />
               <Content>
                 {handleClose && (
-                  <ButtonContainer>
-                    <CloseButton onClick={handleClose}>
-                      <CloseIcon />
-                    </CloseButton>
-                  </ButtonContainer>
+                  <NotificationCancelButton handleClose={handleClose} />
                 )}
                 {Child}
               </Content>
