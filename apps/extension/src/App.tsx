@@ -2,7 +2,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
 import { localizationFrom } from '@tonkeeper/core/dist/entries/language';
 import { getTonClient } from '@tonkeeper/core/dist/entries/network';
-import { AuthState } from '@tonkeeper/core/dist/entries/password';
 import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { CopyNotification } from '@tonkeeper/uikit/dist/components/CopyNotification';
@@ -128,15 +127,9 @@ const Wrapper = styled(Container)`
 const useLock = () => {
   const [lock, setLock] = useState<boolean | undefined>(undefined);
   useEffect(() => {
-    storage.get<AuthState>(AppKey.password).then((item) => {
-      if (!item || item.kind === 'none') {
-        setLock(false);
-      } else {
-        sdk.memoryStore.get<string>(AppKey.password).then((pass) => {
-          setTimeout(() => setLock(pass === null), 100);
-        });
-      }
-    });
+    storage
+      .get<boolean>(AppKey.lock)
+      .then((useLock) => setLock(useLock === true));
 
     const unlock = () => {
       setLock(false);
