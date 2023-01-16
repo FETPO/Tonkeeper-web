@@ -120,6 +120,7 @@ export const NotificationCancelButton: FC<{ handleClose: () => void }> = ({
     </ButtonContainer>
   );
 };
+
 export const Notification: FC<{
   isOpen: boolean;
   handleClose?: () => void;

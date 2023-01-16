@@ -195,5 +195,5 @@ export const UnlockNotification = () => {
     );
   }, [auth, requestId]);
 
-  return <Notification isOpen={auth != undefined}>{Content}</Notification>;
+  return <Notification isOpen={auth != null}>{Content}</Notification>;
 };

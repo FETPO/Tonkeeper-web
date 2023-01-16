@@ -201,7 +201,6 @@ export const Loader: FC = () => {
             <Content activeWallet={activeWallet} lock={lock} />
           </Container>
           <CopyNotification />
-          <UnlockNotification />
         </AppContext.Provider>
       </AfterImportAction.Provider>
     </OnImportAction.Provider>
@@ -225,6 +224,7 @@ export const Content: FC<{
           <Route path={any(AppRoute.import)} element={<ImportRouter />} />
           <Route path="*" element={<Initialize />} />
         </Routes>
+        <UnlockNotification />
       </InitializeContainer>
     );
   }
@@ -286,6 +286,7 @@ export const Content: FC<{
       </Suspense>
       <Footer />
       <NftNotification />
+      <UnlockNotification />
     </WalletStateContext.Provider>
   );
 };
