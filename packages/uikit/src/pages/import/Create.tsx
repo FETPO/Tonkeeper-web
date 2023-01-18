@@ -93,7 +93,7 @@ export const Create = () => {
             size="large"
             fullWith
             primary
-            bottom
+            marginTop
             onClick={() => setOpen(true)}
           >
             {t('Continue')}

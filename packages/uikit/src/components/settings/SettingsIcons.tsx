@@ -4,8 +4,8 @@ export const WalletsIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 28"
       fill="none"
     >
@@ -28,8 +28,8 @@ export const SubscriptionIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 28"
       fill="none"
     >
@@ -52,8 +52,8 @@ export const RecoveryPhraseIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 28"
       fill="none"
     >
@@ -76,8 +76,8 @@ export const LocalizationIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 28"
       fill="none"
     >
@@ -104,8 +104,8 @@ export const ListOfTokensIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 29"
       fill="none"
     >
@@ -128,8 +128,8 @@ export const SecurityIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 29"
       fill="none"
     >
@@ -154,8 +154,8 @@ export const ThemeIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 29"
       fill="none"
     >
@@ -180,8 +180,8 @@ export const LogOutIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 29"
       fill="none"
     >
@@ -206,8 +206,8 @@ export const RateThisAppIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 29"
       fill="none"
     >
@@ -228,8 +228,8 @@ export const ContactSupportIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 29"
       fill="none"
     >
@@ -250,8 +250,8 @@ export const TelegramIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 29"
       fill="none"
     >
@@ -272,8 +272,8 @@ export const LegalDocumentsIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 29"
       fill="none"
     >
@@ -305,8 +305,8 @@ export const DeleteAccountIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 29"
       fill="none"
     >
@@ -338,8 +338,8 @@ export const SetUpWalletIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 28"
       fill="none"
     >
@@ -377,8 +377,8 @@ export const LockIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 28"
       fill="none"
     >
@@ -408,8 +408,8 @@ export const KeyIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 28"
       fill="none"
     >

@@ -28,9 +28,10 @@ const Block = styled.div`
   text-align: center;
   gap: 1rem;
   flex-direction: column;
+  margin-bottom: 1rem;
 `;
 
-const Body = styled(Body2)`
+const Body = styled(Body1)`
   text-align: center;
   color: ${(props) => props.theme.textSecondary};
 `;
@@ -40,14 +41,16 @@ const Grid = styled.div`
   grid-template-rows: repeat(12, minmax(0, 1fr));
   grid-auto-flow: column;
   gap: 0.5rem;
-  place-content: space-around;
+  place-content: space-evenly;
+  margin: 1rem 0;
 `;
 
 const World = styled(Body1)``;
 
-const Number = styled.span`
+const Number = styled(Body2)`
   display: inline-block;
-  width: 30px;
+  width: 24px;
+  line-height: 24px;
   color: ${(props) => props.theme.textSecondary};
 `;
 
@@ -63,8 +66,10 @@ export const Worlds: FC<{
         <BackButton onClick={onBack}>
           <ChevronLeftIcon />
         </BackButton>
-        <H2>{t('Your_recovery_phrase')}</H2>
-        <Body>{t('Your_recovery_phrase_description')}</Body>
+        <div>
+          <H2>{t('Your_recovery_phrase')}</H2>
+          <Body>{t('Your_recovery_phrase_description')}</Body>
+        </div>
       </Block>
 
       <Grid>
@@ -75,7 +80,7 @@ export const Worlds: FC<{
         ))}
       </Grid>
 
-      <Button size="large" fullWith primary onClick={onCheck}>
+      <Button size="large" fullWith primary marginTop onClick={onCheck}>
         {t('Continue')}
       </Button>
     </>

@@ -32,8 +32,8 @@ export const ChevronLeftIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
+      width="1rem"
+      height="1rem"
       viewBox="0 0 16 16"
       fill="none"
     >
@@ -49,8 +49,8 @@ export const ChevronRightIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
+      width="1rem"
+      height="1rem"
       viewBox="0 0 16 16"
       fill="none"
     >
@@ -66,8 +66,8 @@ export const CheckIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 28"
       fill="none"
     >
@@ -83,8 +83,8 @@ export const CloseIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
+      width="1rem"
+      height="1rem"
       viewBox="0 0 16 16"
       fill="none"
     >
@@ -325,8 +325,8 @@ export const ReorderIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 28"
       fill="none"
     >

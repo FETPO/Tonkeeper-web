@@ -60,6 +60,10 @@ export const ListItem = styled.div<{ hover?: boolean; dropDown?: boolean }>`
           cursor: pointer;
           &:hover {
             background: ${props.theme.backgroundContentTint};
+
+            ${ListItemPayload} {
+              border-top-color: ${props.theme.backgroundContentTint};
+            }
           }
         `
       : undefined}
