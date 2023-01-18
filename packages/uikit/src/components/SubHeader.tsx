@@ -38,6 +38,10 @@ export interface SubHeaderProps {
   title: React.ReactNode;
 }
 
+const Title = styled(H3)`
+  margin-bottom: 3px;
+`;
+
 export const SubHeader: FC<SubHeaderProps> = ({ title }) => {
   const navigate = useNavigate();
   return (
@@ -45,7 +49,7 @@ export const SubHeader: FC<SubHeaderProps> = ({ title }) => {
       <BackButton onClick={() => navigate(-1)}>
         <ChevronLeftIcon />
       </BackButton>
-      <H3>{title}</H3>
+      <Title>{title}</Title>
     </Block>
   );
 };

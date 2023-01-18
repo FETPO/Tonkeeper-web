@@ -27,6 +27,10 @@ const Secondary = styled(Body1)`
   color: ${(props) => props.theme.textSecondary};
 `;
 
+const Text = styled.span`
+  display: flex;
+`;
+
 export const SettingsList: FC<SettingsListProps> = React.memo(
   ({ items, loading }) => {
     // TODO handle loading
@@ -35,10 +39,10 @@ export const SettingsList: FC<SettingsListProps> = React.memo(
         {items.map((item) => (
           <ListItem key={item.name} onClick={() => item.action(item)}>
             <ListItemPayload>
-              <span>
+              <Text>
                 <Label1>{item.name}</Label1>
                 {item.secondary && <Secondary>{item.secondary}</Secondary>}
-              </span>
+              </Text>
               <Icon color={item.iconColor}>{item.icon}</Icon>
             </ListItemPayload>
           </ListItem>
