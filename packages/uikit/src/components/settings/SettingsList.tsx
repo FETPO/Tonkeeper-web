@@ -18,6 +18,7 @@ export interface SettingsListProps {
 
 const Icon = styled(Label1)`
   display: flex;
+  margin: -3px 0;
   color: ${(props) => props.theme.accentBlue};
 `;
 

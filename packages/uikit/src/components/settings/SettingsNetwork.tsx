@@ -11,11 +11,7 @@ const Block = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 1rem;
-`;
-
-const Logo = styled.span`
-  font-size: 150%;
+  margin: 1rem 0 1.563rem;
 `;
 
 export interface SettingsNetworkProps {
@@ -23,7 +19,12 @@ export interface SettingsNetworkProps {
 }
 
 const Version = styled(Body3)`
+  margin-top: 0.125rem;
   color: ${(props) => props.theme.textSecondary};
+`;
+
+const Icon = styled.span`
+  margin-bottom: 0.25rem;
 `;
 
 export const SettingsNetwork: FC = () => {
@@ -42,10 +43,10 @@ export const SettingsNetwork: FC = () => {
 
   return (
     <Block onClick={onChange}>
-      <Logo>
-        <TonkeeperIcon />
-      </Logo>
-      <Label2>Tonkeeper</Label2>
+      <Icon>
+        <TonkeeperIcon width="33" height="33" />
+      </Icon>
+      <Label2>Tonkeeper Beta</Label2>
       <Version>
         {t('Version')} {version}
       </Version>

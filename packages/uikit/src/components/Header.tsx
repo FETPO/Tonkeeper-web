@@ -14,15 +14,20 @@ import { ColumnText, Divider } from './Layout';
 import { ListItem, ListItemPayload } from './List';
 import { H1, H3, Label1 } from './Text';
 
-const Block = styled.div<{ top: boolean; center?: boolean }>`
+const Block = styled.div<{ top: boolean; center?: boolean; second?: boolean }>`
   flex-shrink: 0;
 
   position: sticky;
   top: 0;
   z-index: 1;
-  padding: 1rem 0;
+
+  ${(props) =>
+    css`
+      padding: ${props.second ? '0.75rem 0' : '1rem 0'};
+    `}
 
   display: flex;
+  box-sizing: border-box;
 
   ${(props) =>
     props.center &&
@@ -202,7 +207,7 @@ export const ActivityHeader = () => {
   const { t } = useTranslation();
 
   return (
-    <Block top={top}>
+    <Block top={top} second>
       <H1>{t('Activity')}</H1>
     </Block>
   );
@@ -213,7 +218,7 @@ export const SettingsHeader = () => {
   const { t } = useTranslation();
 
   return (
-    <Block top={top}>
+    <Block top={top} second>
       <H1>{t('Settings')}</H1>
     </Block>
   );

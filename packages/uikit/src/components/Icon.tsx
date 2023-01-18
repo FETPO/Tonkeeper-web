@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 
-export const TonkeeperIcon = () => {
+export const TonkeeperIcon: FC<{ width?: string; height?: string }> = ({
+  width = '128',
+  height = '128',
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="128px"
-      height="128px"
+      width={width}
+      height={height}
       viewBox="0 0 34 34"
       fill="none"
     >

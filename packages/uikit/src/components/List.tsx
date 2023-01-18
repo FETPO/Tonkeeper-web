@@ -18,7 +18,7 @@ export const ListBlock = styled.div<{ margin?: boolean; dropDown?: boolean }>`
   ${(props) =>
     props.margin !== false
       ? css`
-          margin: 1rem 0 2rem;
+          margin: 0 0 2rem;
         `
       : undefined}
 
@@ -40,7 +40,9 @@ export const ListItemPayload = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1rem 1rem 0;
+  box-sizing: border-box;
 `;
+
 export const ListItem = styled.div<{ hover?: boolean; dropDown?: boolean }>`
   display: flex;
   padding: 0 0 0 1rem;
@@ -62,7 +64,7 @@ export const ListItem = styled.div<{ hover?: boolean; dropDown?: boolean }>`
             background: ${props.theme.backgroundContentTint};
 
             ${ListItemPayload} {
-              border-top-color: ${props.theme.backgroundContentTint};
+              border-top-color: ${props.theme.backgroundContentTint} !important;
             }
           }
         `
@@ -70,5 +72,6 @@ export const ListItem = styled.div<{ hover?: boolean; dropDown?: boolean }>`
 
   & + & ${ListItemPayload} {
     border-top: 1px solid ${(props) => props.theme.separatorCommon};
+    padding-top: 15px;
   }
 `;

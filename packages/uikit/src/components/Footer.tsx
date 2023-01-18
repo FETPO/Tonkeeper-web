@@ -121,7 +121,10 @@ const useIsScrollBottom = () => {
   const [isBottom, setBottom] = useState(false);
   useEffect(() => {
     const handler = () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 3
+      ) {
         setBottom(true);
       } else {
         setBottom(false);
