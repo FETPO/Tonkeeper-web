@@ -137,6 +137,7 @@ const FillPassword: FC<{
         size="large"
         fullWith
         primary
+        marginTop
         loading={isLoading || isCreating}
         disabled={isCreating || error != null}
         onClick={onCreate}
@@ -152,7 +153,7 @@ export const CreateAuthState: FC<{
   isLoading?: boolean;
 }> = ({ afterCreate, isLoading }) => {
   const [authType, setAuthType] =
-    useState<AuthState['kind'] | undefined>(undefined);
+    useState<AuthState['kind'] | undefined>('password');
 
   const { mutateAsync: setNoneAuth, isLoading: isNoneLoading } =
     useSetNoneAuthMutation();

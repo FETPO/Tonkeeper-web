@@ -9,8 +9,8 @@ import { Body1, Body2, H2 } from '../Text';
 
 const BackButton = styled.div`
   cursor: pointer;
-  width: 28px;
-  height: 28px;
+  width: 2rem;
+  height: 2rem;
   border-radius: ${(props) => props.theme.cornerFull};
   color: ${(props) => props.theme.textPrimary};
   background: ${(props) => props.theme.backgroundContent};
@@ -29,6 +29,10 @@ const Block = styled.div`
   gap: 1rem;
   flex-direction: column;
   margin-bottom: 1rem;
+
+  & + & {
+    margin-top: 1rem;
+  }
 `;
 
 const Body = styled(Body1)`
@@ -51,6 +55,13 @@ const Number = styled(Body2)`
   display: inline-block;
   width: 24px;
   line-height: 24px;
+  color: ${(props) => props.theme.textSecondary};
+`;
+
+const Number1 = styled(Body1)`
+  display: inline-block;
+  width: 26px;
+  text-align: right;
   color: ${(props) => props.theme.textSecondary};
 `;
 
@@ -89,11 +100,11 @@ export const Worlds: FC<{
 
 const InputBlock = styled.label<{ active: boolean; valid: boolean }>`
   width: 100%;
-  line-height: 56px;
+  line-height: 54px;
   border-radius: ${(props) => props.theme.cornerSmall};
   display: flex;
   padding: 0 1rem;
-  gap: 0.5rem;
+  gap: 0.35rem;
   box-sizing: border-box;
 
   ${(props) =>
@@ -111,6 +122,10 @@ const InputBlock = styled.label<{ active: boolean; valid: boolean }>`
           border: 1px solid ${props.theme.fieldBackground};
           background: ${props.theme.fieldBackground};
         `}
+
+  ${Number1} {
+    line-height: 54px;
+  }
 `;
 
 const Input = styled.input`
@@ -118,8 +133,8 @@ const Input = styled.input`
   border: none;
   background: transparent;
   flex-grow: 1;
-  font-weight: 500;
-  font-size: 16px;
+  font-weight: 600;
+  font-size: 14px;
 
   color: ${(props) => props.theme.textPrimary};
 `;
@@ -135,7 +150,7 @@ const WordInput: FC<{
   const isValid = value === '' || (value === valid && active === false);
   return (
     <InputBlock active={active} valid={isValid}>
-      <Number>{test}.</Number>
+      <Number1>{test}:</Number1>
       <Input
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -184,8 +199,10 @@ export const Check: FC<{
         <BackButton onClick={onBack}>
           <ChevronLeftIcon />
         </BackButton>
-        <H2>{t('So_let_s_check')}</H2>
-        <Body>{description}</Body>
+        <div>
+          <H2>{t('So_let_s_check')}</H2>
+          <Body>{description}</Body>
+        </div>
       </Block>
 
       <Block>
