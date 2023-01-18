@@ -8,7 +8,7 @@ import {
 import { Description } from '../../components/create/Description';
 import { ImportNotification } from '../../components/create/ImportNotification';
 import { Button } from '../../components/fields/Button';
-import { Title } from '../../components/Text';
+import { H1 } from '../../components/Text';
 import { useTranslation } from '../../hooks/translation';
 
 const Block = styled.div<{ fullHeight: boolean }>`
@@ -25,7 +25,6 @@ const Block = styled.div<{ fullHeight: boolean }>`
         `
       : css`
           justify-content: center;
-          gap: 3rem;
         `}
 `;
 
@@ -37,6 +36,10 @@ export const InitializeContainer: FC<
 
 const Accent = styled.span`
   color: ${(props) => props.theme.accentBlue};
+`;
+
+const Title = styled(H1)`
+  margin-bottom: 2rem;
 `;
 
 export const Initialize: FC = () => {
@@ -69,7 +72,7 @@ export const Initialize: FC = () => {
         size="large"
         fullWith
         primary
-        bottom
+        marginTop
         onClick={() => setOpen(true)}
       >
         {t('Get_started')}

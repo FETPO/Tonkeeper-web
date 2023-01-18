@@ -4,8 +4,8 @@ export const RocketIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 28"
       fill="none"
     >
@@ -30,8 +30,8 @@ export const ShieldIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 28"
       fill="none"
     >
@@ -56,8 +56,8 @@ export const TicketIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.5em"
-      height="1.5em"
+      width="1.75rem"
+      height="1.75rem"
       viewBox="0 0 28 28"
       fill="none"
     >

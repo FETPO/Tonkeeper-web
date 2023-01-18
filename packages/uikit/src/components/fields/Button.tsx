@@ -11,6 +11,7 @@ export interface ButtonProps {
   disabled?: boolean;
   fullWith?: boolean;
   bottom?: boolean;
+  marginTop?: boolean;
 
   type?: 'button' | 'submit' | 'reset' | undefined;
 }
@@ -37,6 +38,13 @@ export const ButtonElement = styled.button<Omit<ButtonProps, 'loading'>>`
     props.bottom
       ? css`
           margin-bottom: 1rem;
+        `
+      : undefined}
+
+  ${(props) =>
+    props.marginTop
+      ? css`
+          margin-top: 1rem;
         `
       : undefined}
 

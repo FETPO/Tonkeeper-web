@@ -11,19 +11,19 @@ interface DescriptionProps {
 const Block = styled.div`
   display: flex;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 `;
 
 const Icon = styled.div`
   flex-shrink: 0;
   color: ${(props) => props.theme.accentBlue};
-  font-size: 135%;
 `;
+
 const Text = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
 `;
 
 const Title = styled(Label1)`

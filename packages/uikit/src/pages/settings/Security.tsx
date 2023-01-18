@@ -60,7 +60,7 @@ const ChangePassword = () => {
       </>
     );
   } else {
-    return undefined;
+    return <></>;
   }
 };
 
