@@ -13,8 +13,9 @@ const Wrapper = styled(Container)`
 `;
 
 const ButtonContainer = styled.div`
-  position: relative;
   width: 100%;
+  display: flex;
+  justify-content: end;
 `;
 
 const Padding = styled.div`
@@ -23,12 +24,9 @@ const Padding = styled.div`
 `;
 
 const CloseButton = styled.div`
-  position: absolute;
-  right: 0;
-  ton: 0;
   cursor: pointer;
-  width: 28px;
-  height: 28px;
+  width: 2rem;
+  height: 2rem;
   border-radius: ${(props) => props.theme.cornerFull};
   color: ${(props) => props.theme.textPrimary};
   background: ${(props) => props.theme.backgroundContent};
@@ -45,7 +43,6 @@ const Overlay = styled.div`
   position: fixed;
   inset: 0;
   top: var(--app-height);
-  transform: scale(0.8);
   transition: all 0.3s ease-in-out;
 `;
 const Splash = styled.div`
@@ -70,9 +67,7 @@ const Splash = styled.div`
   }
   &.enter-done ${Overlay} {
     top: 0;
-    opacity: 1;
     pointer-events: auto;
-    transform: scale(1);
     overflow: auto;
   }
 
@@ -81,8 +76,6 @@ const Splash = styled.div`
   }
   &.exit ${Overlay} {
     top: var(--app-height);
-    opacity: 0;
-    transform: scale(0.8);
   }
 `;
 
@@ -107,6 +100,13 @@ export const NotificationBlock = styled.form`
   gap: 1.5rem;
   flex-direction: column;
   align-items: center;
+`;
+
+export const NotificationIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.75rem;
 `;
 
 export const NotificationCancelButton: FC<{ handleClose: () => void }> = ({

@@ -5,8 +5,8 @@ export const TonkeeperIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="2.1em"
-      height="2.1em"
+      width="128px"
+      height="128px"
       viewBox="0 0 34 34"
       fill="none"
     >

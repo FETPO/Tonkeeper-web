@@ -5,16 +5,8 @@ import { useTranslation } from '../../hooks/translation';
 import { AppRoute, ImportRoute } from '../../libs/routes';
 import { Button } from '../fields/Button';
 import { TonkeeperIcon } from '../Icon';
-import { Notification } from '../Notification';
+import { Notification, NotificationIcon } from '../Notification';
 import { Body1, H2 } from '../Text';
-
-const IconBlock = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  font-size: 300%;
-`;
 
 const BodyText = styled(Body1)`
   color: ${(props) => props.theme.textSecondary};
@@ -35,9 +27,9 @@ export const ImportNotification: FC<{
     <Notification isOpen={isOpen} handleClose={() => setOpen(false)}>
       {(onClose) => (
         <div>
-          <IconBlock>
+          <NotificationIcon>
             <TonkeeperIcon />
-          </IconBlock>
+          </NotificationIcon>
           <TextBlock>
             <H2>{t('Let_s_set_up_your_wallet')}</H2>
             <BodyText>{t('Let_s_set_up_your_wallet_description')}</BodyText>

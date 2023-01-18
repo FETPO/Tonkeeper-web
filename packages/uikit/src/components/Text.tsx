@@ -17,7 +17,7 @@ export const H2 = styled.h2`
   font-weight: 700;
   font-size: 24px;
   line-height: 32px;
-  margin: 0;
+  margin: 0 0 0.25rem;
 `;
 
 export const H3 = styled.h3`
@@ -25,7 +25,7 @@ export const H3 = styled.h3`
   font-weight: 700;
   font-size: 20px;
   line-height: 28px;
-  margin: 0;
+  margin: 0 0 0.25rem;
 `;
 
 export const Label1 = styled.span`
