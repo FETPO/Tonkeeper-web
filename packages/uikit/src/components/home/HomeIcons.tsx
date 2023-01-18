@@ -4,13 +4,13 @@ export const BuyIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.52em"
-      height="1.52em"
-      viewBox="0 0 18 18"
+      width="28"
+      height="28"
+      viewBox="0 0 28 28"
       fill="none"
     >
       <path
-        d="M9 16.5V9M9 9V1.5M9 9H16.5M9 9H1.5"
+        d="M14 21.5V14M14 14V6.5M14 14H21.5M14 14H6.5"
         stroke="currentColor"
         strokeWidth="3"
         strokeLinecap="round"
@@ -24,8 +24,8 @@ export const SendIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="2em"
-      height="2em"
+      width="28"
+      height="28"
       viewBox="0 0 28 28"
       fill="none"
     >
@@ -44,8 +44,8 @@ export const ReceiveIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="2em"
-      height="2em"
+      width="28"
+      height="28"
       viewBox="0 0 28 28"
       fill="none"
     >

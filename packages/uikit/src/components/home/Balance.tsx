@@ -11,24 +11,28 @@ import {
   formatDecimals,
   formatFiatCurrency,
   getJettonStockAmount,
-  getTonCoinStockPrice,
+  getTonCoinStockPrice
 } from '../../hooks/balance';
 import { useUserJettonList } from '../../state/jetton';
-import { Body2, Title } from '../Text';
+import { Label2, Num2 } from '../Text';
 
 const Block = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 30px;
+  padding-bottom: 32px;
 `;
 
-const Body = styled(Body2)`
+const Body = styled(Label2)`
   color: ${(props) => props.theme.textSecondary};
   cursor: pointer;
 `;
+
+const Amount = styled(Num2)`
+  margin-bottom: 0.5rem;
+`;
 const Error = styled.div`
-  height: 30px;
+  height: 26px;
 `;
 
 const useBalanceValue = (
@@ -80,7 +84,7 @@ export const Balance: FC<{
   return (
     <Block>
       <Error>{error && error.message}</Error>
-      <Title onClick={onClick}>{total}</Title>
+      <Amount onClick={onClick}>{total}</Amount>
       <Body onClick={onClick}>{toShortAddress(address)}</Body>
     </Block>
   );

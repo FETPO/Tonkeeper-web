@@ -55,6 +55,6 @@ export const ActionsRow = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
-  margin-bottom: 3rem;
+  gap: 1rem;
+  margin-bottom: 2rem;
 `;

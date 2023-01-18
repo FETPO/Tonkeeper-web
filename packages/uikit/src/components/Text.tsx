@@ -70,3 +70,10 @@ export const Body3 = styled.span`
   font-size: 12px;
   letter-spacing: -0.01rem;
 `;
+
+export const Num2 = styled.span`
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 36px;
+`;
