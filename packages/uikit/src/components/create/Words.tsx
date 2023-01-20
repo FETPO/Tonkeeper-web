@@ -288,10 +288,12 @@ export const ImportWords: FC<{
         <BackButton onClick={() => navigate(AppRoute.home)}>
           <ChevronLeftIcon />
         </BackButton>
-        <H2>{t('Enter_your_recovery_phrase')}</H2>
-        <Body>{t('Enter_your_recovery_phrase_description')}</Body>
+        <div>
+          <H2>{t('Enter_your_recovery_phrase')}</H2>
+          <Body>{t('Enter_your_recovery_phrase_description')}</Body>
+        </div>
       </Block>
-
+    <Block>
       <Inputs>
         {mnemonic.map((item, index) => (
           <WordInput
@@ -313,6 +315,7 @@ export const ImportWords: FC<{
       >
         {t('Continue')}
       </Button>
+      </Block>
     </>
   );
 };

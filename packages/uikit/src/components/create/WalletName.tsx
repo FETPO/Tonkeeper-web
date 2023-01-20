@@ -4,7 +4,7 @@ import {
   getWalletState,
   updateWalletProperty,
 } from '@tonkeeper/core/dist/service/walletService';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useAppContext } from '../../hooks/appContext';
 import { useStorage } from '../../hooks/storage';
@@ -14,7 +14,7 @@ import { Button } from '../fields/Button';
 import { Input } from '../fields/Input';
 import { Body2, H2 } from '../Text';
 
-const Block = styled.div`
+const Block = styled.form`
   display: flex;
   text-align: center;
   gap: 1rem;
@@ -55,12 +55,21 @@ export const UpdateWalletName: FC<{
 }> = ({ account, onUpdate }) => {
   const { t } = useTranslation();
 
+  const ref = useRef<HTMLInputElement | null>(null);
+
   const { mutateAsync, isError, isLoading, reset } =
     useUpdateNameMutation(account);
 
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.focus();
+    }
+  }, [ref.current]);
+
   const [name, setName] = useState('');
 
-  const onSubmit = async () => {
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
     onUpdate(await mutateAsync(name));
   };
 
@@ -70,13 +79,14 @@ export const UpdateWalletName: FC<{
   };
 
   return (
-    <>
-      <Block>
+    <Block onSubmit={onSubmit}>
+      <div>
         <H2>{t('Name_your_wallet')}</H2>
         <Body>{t('Name_your_wallet_description')}</Body>
-      </Block>
+      </div>
 
       <Input
+        ref={ref}
         value={name}
         onChange={onChange}
         label={t('Wallet_name')}
@@ -90,10 +100,10 @@ export const UpdateWalletName: FC<{
         primary
         loading={isLoading}
         disabled={isLoading}
-        onClick={onSubmit}
+        type="submit"
       >
         {t('Save')}
       </Button>
-    </>
+    </Block>
   );
 };
