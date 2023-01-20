@@ -13,6 +13,7 @@ import {
   formatDecimals,
   formatFiatCurrency,
   getJettonStockAmount,
+  getJettonStockPrice,
   getTonCoinStockPrice,
   useFormatCoinValue,
 } from '../../hooks/balance';
@@ -124,13 +125,26 @@ export const JettonAsset: FC<{
   const navigate = useNavigate();
   const { fiat } = useAppContext();
 
-  const fiatAmount = useMemo(() => {
-    const amount = getJettonStockAmount(jetton, stock.today, fiat);
-    return amount ? formatFiatCurrency(fiat, amount) : null;
+  const [price, total] = useMemo(() => {
+    if (!stock || !jetton) return [undefined, undefined] as const;
+    const price = getJettonStockPrice(jetton, stock.today, fiat);
+    if (price === null) return [undefined, undefined] as const;
+    const amount = getJettonStockAmount(jetton, price);
+    return [
+      formatFiatCurrency(fiat, price),
+      amount ? formatFiatCurrency(fiat, amount) : undefined,
+    ];
   }, [jetton, stock, fiat]);
 
   const format = useFormatCoinValue();
   const formattedBalance = format(jetton.balance, jetton.metadata?.decimals);
+
+  const title = (
+    <>
+      {jetton.metadata?.name ?? t('Unknown_COIN')}{' '}
+      <Symbol>{jetton.metadata?.symbol}</Symbol>
+    </>
+  );
 
   return (
     <ListItem
@@ -143,13 +157,14 @@ export const JettonAsset: FC<{
       <ListItemPayload>
         <Description>
           <Logo src={jetton.metadata?.image} />
-          <Label1>
-            {jetton.metadata?.name ?? t('Unknown_COIN')}{' '}
-            <Symbol>{jetton.metadata?.symbol}</Symbol>
-          </Label1>
+          {price ? (
+            <ColumnText text={title} secondary={price} />
+          ) : (
+            <Label1>{title}</Label1>
+          )}
         </Description>
-        {fiatAmount ? (
-          <ColumnText text={formattedBalance} secondary={fiatAmount} right />
+        {total ? (
+          <ColumnText text={formattedBalance} secondary={total} right />
         ) : (
           <Label1>{formattedBalance}</Label1>
         )}

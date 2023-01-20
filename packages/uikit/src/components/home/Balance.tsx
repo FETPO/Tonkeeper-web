@@ -11,7 +11,8 @@ import {
   formatDecimals,
   formatFiatCurrency,
   getJettonStockAmount,
-  getTonCoinStockPrice
+  getJettonStockPrice,
+  getTonCoinStockPrice,
 } from '../../hooks/balance';
 import { useUserJettonList } from '../../state/jetton';
 import { Label2, Num2 } from '../Text';
@@ -51,7 +52,9 @@ const useBalanceValue = (
     );
 
     const all = jettons.balances.reduce((total, jetton) => {
-      const amount = getJettonStockAmount(jetton, stock.today, currency);
+      const price = getJettonStockPrice(jetton, stock.today, currency);
+      if (!price) return total;
+      const amount = getJettonStockAmount(jetton, price);
       if (amount) {
         return total.plus(amount);
       } else {

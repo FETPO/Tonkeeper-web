@@ -81,14 +81,19 @@ export const getTonCoinStockPrice = (
   return new BigNumber(btcInFiat).div(new BigNumber(btcPrice));
 };
 
-export const getJettonStockAmount = (
+export const getJettonStockPrice = (
   jetton: JettonBalance,
   rates: { [key: string]: string },
   currency: FiatCurrencies
 ) => {
   if (jetton.verification !== 'whitelist') return null;
   if (!jetton.metadata?.symbol) return null;
-  const price = getStockPrice(jetton.metadata?.symbol, rates, currency);
+  return getStockPrice(jetton.metadata?.symbol, rates, currency);
+};
+export const getJettonStockAmount = (
+  jetton: JettonBalance,
+  price: BigNumber | null
+) => {
   if (!price) return null;
   return formatDecimals(
     price.multipliedBy(jetton.balance),
