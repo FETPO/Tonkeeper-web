@@ -1,5 +1,5 @@
 import { JettonBalance, JettonInfo } from '@tonkeeper/core/dist/tonApi';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import {
@@ -20,6 +20,8 @@ import {
 } from '../../components/Sceleton';
 import { SubHeader } from '../../components/SubHeader';
 import { H2 } from '../../components/Text';
+import { useAppContext } from '../../hooks/appContext';
+import { formatFiatCurrency, getJettonStockAmount } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute } from '../../libs/routes';
 import {
@@ -27,6 +29,7 @@ import {
   useJettonHistory,
   useJettonInfo,
 } from '../../state/jetton';
+import { useTonenpointStock } from '../../state/tonendpoint';
 
 const HistoryBlock = styled.div`
   margin-top: 3rem;
@@ -90,13 +93,20 @@ const JettonHistory: FC<{ info: JettonInfo; balance: JettonBalance }> = ({
 };
 const JettonContent: FC<{ jettonAddress: string }> = ({ jettonAddress }) => {
   const { t } = useTranslation();
-
+  const { tonendpoint, fiat } = useAppContext();
   const { data: info } = useJettonInfo(jettonAddress);
   const { data: balance } = useJettonBalance(jettonAddress);
+  const { data: stock } = useTonenpointStock(tonendpoint);
 
   const format = useFormatCoinValue();
 
-  if (!info || !balance) {
+  const total = useMemo(() => {
+    if (!stock || !balance) return undefined;
+    const amount = getJettonStockAmount(balance, stock.today, fiat);
+    return amount ? formatFiatCurrency(fiat, amount) : undefined;
+  }, [balance, stock, fiat]);
+
+  if (!info || !balance || !stock) {
     return <JettonSkeleton />;
   }
 
@@ -114,6 +124,7 @@ const JettonContent: FC<{ jettonAddress: string }> = ({ jettonAddress }) => {
       <CoinInfo
         amount={amount}
         symbol={info.metadata.symbol}
+        price={total}
         description={description}
         image={image}
       />
