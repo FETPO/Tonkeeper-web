@@ -40,6 +40,7 @@ import {
   InitializeContainer,
 } from '@tonkeeper/uikit/dist/pages/import/Initialize';
 import { Jetton } from '@tonkeeper/uikit/dist/pages/jetton/Jetton';
+import { TonPage } from '@tonkeeper/uikit/dist/pages/jetton/Ton';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
@@ -270,6 +271,14 @@ export const Content: FC<{
               }
             />
           </Route>
+          <Route
+            path={AppRoute.ton}
+            element={
+              <Body>
+                <TonPage />
+              </Body>
+            }
+          />
           <Route
             path="*"
             element={

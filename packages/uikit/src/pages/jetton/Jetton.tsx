@@ -10,16 +10,16 @@ import {
 import { Action, ActionsRow } from '../../components/home/Actions';
 import { SendIcon } from '../../components/home/HomeIcons';
 import { ReceiveAction } from '../../components/home/ReceiveAction';
+import { CoinInfo, CoinInfoSkeleton } from '../../components/jettons/Info';
 import { ListBlock, ListItem } from '../../components/List';
 import {
   SkeletonAction,
-  SkeletonImage,
   SkeletonList,
   SkeletonSubHeader,
   SkeletonText,
 } from '../../components/Sceleton';
 import { SubHeader } from '../../components/SubHeader';
-import { Body2, H2 } from '../../components/Text';
+import { H2 } from '../../components/Text';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute } from '../../libs/routes';
 import {
@@ -27,27 +27,6 @@ import {
   useJettonHistory,
   useJettonInfo,
 } from '../../state/jetton';
-
-const Block = styled.div`
-  display: flex;
-  gap: 1rem;
-  margin: 1rem 0 3rem;
-  width: 100%;
-`;
-
-const Text = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  flex-grow: 1;
-`;
-
-const Image = styled.img`
-  width: 60px;
-  height: 60px;
-  flex-shrink: 0;
-  border-radius: 100%;
-`;
 
 const HistoryBlock = styled.div`
   margin-top: 3rem;
@@ -68,16 +47,7 @@ const JettonSkeleton = () => {
   return (
     <div>
       <SkeletonSubHeader />
-      <Block>
-        <Text>
-          <H2>
-            <SkeletonText size="large" />
-          </H2>
-          <SkeletonText />
-          <SkeletonText width="80%" />
-        </Text>
-        <SkeletonImage width="60px" />
-      </Block>
+      <CoinInfoSkeleton />
       <ActionsRow>
         <SkeletonAction />
         <SkeletonAction />
@@ -141,15 +111,12 @@ const JettonContent: FC<{ jettonAddress: string }> = ({ jettonAddress }) => {
   return (
     <div>
       <SubHeader title={name} />
-      <Block>
-        <Text>
-          <H2>
-            {amount} {info.metadata.symbol}
-          </H2>
-          {description && <Body2>{description}</Body2>}
-        </Text>
-        <Image src={image} />
-      </Block>
+      <CoinInfo
+        amount={amount}
+        symbol={info.metadata.symbol}
+        description={description}
+        image={image}
+      />
       <ActionsRow>
         <Action icon={<SendIcon />} title={t('Send')} action={() => null} />
         <ReceiveAction />

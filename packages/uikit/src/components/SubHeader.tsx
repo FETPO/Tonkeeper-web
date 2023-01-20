@@ -18,10 +18,10 @@ export const BackButton = styled.div`
   cursor: pointer;
   position: absolute;
   top: 50%;
-  margin-top: -14px;
+  margin-top: -16px;
   left: 0;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: ${(props) => props.theme.cornerFull};
   color: ${(props) => props.theme.textPrimary};
   background: ${(props) => props.theme.backgroundContent};
@@ -39,7 +39,8 @@ export interface SubHeaderProps {
 }
 
 const Title = styled(H3)`
-  margin-bottom: 3px;
+  margin-top: 1px;
+  margin-bottom: 2px;
 `;
 
 export const SubHeader: FC<SubHeaderProps> = ({ title }) => {

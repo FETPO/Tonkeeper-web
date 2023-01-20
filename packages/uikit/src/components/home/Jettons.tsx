@@ -72,7 +72,7 @@ export const TonAsset: FC<{
 }> = ({ info, stock }) => {
   const { t } = useTranslation();
   const { fiat } = useAppContext();
-
+  const navigate = useNavigate();
   const price = useMemo(() => {
     return getTonCoinStockPrice(stock.today, fiat);
   }, [stock]);
@@ -91,7 +91,7 @@ export const TonAsset: FC<{
   }, [fiat, price, info.balance]);
 
   return (
-    <ListItem>
+    <ListItem onClick={() => navigate(AppRoute.ton)}>
       <ListItemPayload>
         <Description>
           <ToncoinIcon />

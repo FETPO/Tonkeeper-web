@@ -9,16 +9,14 @@ import {
   updateWalletProperty,
 } from '@tonkeeper/core/dist/service/walletService';
 import {
+  AccountApi,
   AccountRepr,
+  JettonApi,
   JettonsBalances,
   NFTApi,
   NftItemsRepr,
 } from '@tonkeeper/core/dist/tonApi';
-import {
-  getActiveWalletJetton,
-  getWalletActiveAccountInfo,
-  getWalletActiveAddresses,
-} from '@tonkeeper/core/dist/tonApiExtended/walletApi';
+import { getWalletActiveAddresses } from '@tonkeeper/core/dist/tonApiExtended/walletApi';
 import { delay } from '@tonkeeper/core/dist/utils/common';
 import { useAppContext, useWalletContext } from '../hooks/appContext';
 import { useStorage } from '../hooks/storage';
@@ -94,28 +92,30 @@ export const useWalletAddresses = () => {
   );
 };
 
-export const useWalletAccountInfo = (addresses?: string[]) => {
+export const useWalletAccountInfo = () => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
   return useQuery<AccountRepr, Error>(
     [wallet.publicKey, QueryKey.info],
     async () => {
       await delay(1000);
-
-      return getWalletActiveAccountInfo(tonApi, wallet, addresses);
-    },
-    { enabled: addresses != undefined }
+      return await new AccountApi(tonApi).getAccountInfo({
+        account: wallet.active.rawAddress,
+      });
+    }
   );
 };
 
-export const useWalletJettonList = (addresses?: string[]) => {
+export const useWalletJettonList = () => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
   const client = useQueryClient();
   return useQuery<JettonsBalances, Error>(
     [wallet.publicKey, QueryKey.jettons],
     async () => {
-      const result = await getActiveWalletJetton(tonApi, wallet, addresses);
+      const result = await new JettonApi(tonApi).getJettonsBalances({
+        account: wallet.active.rawAddress,
+      });
 
       result.balances.forEach((item) => {
         client.setQueryData(
@@ -130,31 +130,24 @@ export const useWalletJettonList = (addresses?: string[]) => {
       });
 
       return result;
-    },
-    { enabled: addresses != undefined }
+    }
   );
 };
 
-export const useWalletNftList = (addresses?: string[]) => {
+export const useWalletNftList = () => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
 
   return useQuery<NftItemsRepr, Error>(
     [wallet.publicKey, QueryKey.nft],
     async () => {
-      const items = await Promise.all(
-        (addresses ?? []).map(async (address) => {
-          const result = await new NFTApi(tonApi).searchNFTItems({
-            owner: address,
-            offset: 0,
-            limit: 1000,
-          });
-          return result.nftItems;
-        })
-      );
+      const items = await new NFTApi(tonApi).searchNFTItems({
+        owner: wallet.active.rawAddress,
+        offset: 0,
+        limit: 1000,
+      });
 
-      return { nftItems: items.flat() };
-    },
-    { enabled: addresses != null }
+      return items;
+    }
   );
 };

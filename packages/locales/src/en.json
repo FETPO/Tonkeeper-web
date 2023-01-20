@@ -526,5 +526,13 @@
   "Or_use_wallet_address": {
     "message": "Or use wallet address",
     "description": "Or use wallet address activity"
+  },
+  "Ton_page_description": {
+    "message": "TON is a fully decentralized layer-1 blockchain designed by Telegram to onboard billions of users. It boasts ultra-fast transactions, tiny fees, easy-to-use apps, and is environmentally friendly.",
+    "description": "The description of the ton coin"
+  },
+  "More": {
+    "message": "More",
+    "description": "expand text content button"
   }
 }
