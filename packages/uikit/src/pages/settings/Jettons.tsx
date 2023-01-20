@@ -21,7 +21,6 @@ import { useTranslation } from '../../hooks/translation';
 import { sortJettons, useToggleJettonMutation } from '../../state/jetton';
 import {
   useMutateWalletProperty,
-  useWalletAddresses,
   useWalletJettonList,
 } from '../../state/wallet';
 
@@ -103,8 +102,7 @@ const JettonSkeleton = () => {
 export const JettonsSettings = () => {
   const { t } = useTranslation();
   const wallet = useWalletContext();
-  const { data: addresses } = useWalletAddresses();
-  const { data } = useWalletJettonList(addresses);
+  const { data } = useWalletJettonList();
 
   const jettons = useMemo(() => {
     return sortJettons(wallet.orderJettons, data?.balances ?? []);

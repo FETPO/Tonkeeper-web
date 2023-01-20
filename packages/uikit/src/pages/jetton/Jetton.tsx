@@ -21,7 +21,11 @@ import {
 import { SubHeader } from '../../components/SubHeader';
 import { H2 } from '../../components/Text';
 import { useAppContext } from '../../hooks/appContext';
-import { formatFiatCurrency, getJettonStockAmount } from '../../hooks/balance';
+import {
+  formatFiatCurrency,
+  getJettonStockAmount,
+  getJettonStockPrice,
+} from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute } from '../../libs/routes';
 import {
@@ -100,10 +104,15 @@ const JettonContent: FC<{ jettonAddress: string }> = ({ jettonAddress }) => {
 
   const format = useFormatCoinValue();
 
-  const total = useMemo(() => {
-    if (!stock || !balance) return undefined;
-    const amount = getJettonStockAmount(balance, stock.today, fiat);
-    return amount ? formatFiatCurrency(fiat, amount) : undefined;
+  const [price, total] = useMemo(() => {
+    if (!stock || !balance) return [undefined, undefined] as const;
+    const price = getJettonStockPrice(balance, stock.today, fiat);
+    if (!price) return [undefined, undefined] as const;
+    const amount = getJettonStockAmount(balance, price);
+    return [
+      formatFiatCurrency(fiat, price),
+      amount ? formatFiatCurrency(fiat, amount) : undefined,
+    ];
   }, [balance, stock, fiat]);
 
   if (!info || !balance || !stock) {
