@@ -1,5 +1,5 @@
 import { formatTransferUrl } from '@tonkeeper/core/dist/utils/common';
-import React, { useCallback, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import QRCode from 'react-qr-code';
 import styled from 'styled-components';
 import { useWalletContext } from '../../hooks/appContext';
@@ -109,14 +109,25 @@ const ReceiveContent = () => {
   );
 };
 
-export const ReceiveAction = () => {
-  const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
-
+export const ReceiveNotification: FC<{
+  open: boolean;
+  handleClose: () => void;
+}> = ({ open, handleClose }) => {
   const Content = useCallback(() => {
     if (!open) return undefined;
     return <ReceiveContent />;
   }, [open]);
+
+  return (
+    <Notification isOpen={open} handleClose={handleClose}>
+      {Content}
+    </Notification>
+  );
+};
+
+export const ReceiveAction = () => {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -125,9 +136,7 @@ export const ReceiveAction = () => {
         title={t('Receive')}
         action={() => setOpen(true)}
       />
-      <Notification isOpen={open} handleClose={() => setOpen(false)}>
-        {Content}
-      </Notification>
+      <ReceiveNotification open={open} handleClose={() => setOpen(false)} />
     </>
   );
 };

@@ -109,5 +109,13 @@ export const NftNotification: FC<{
     return <NftPreview onClose={handleClose} nftItem={nftItem} />;
   }, [nftItem, handleClose]);
 
-  return <Notification isOpen={nftItem != undefined}>{Content}</Notification>;
+  return (
+    <Notification
+      isOpen={nftItem != undefined}
+      hideButton
+      handleClose={handleClose}
+    >
+      {Content}
+    </Notification>
+  );
 };

@@ -10,7 +10,6 @@ import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { CopyNotification } from '@tonkeeper/uikit/dist/components/CopyNotification';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import {
-  ActivityHeader,
   Header,
   SettingsHeader,
 } from '@tonkeeper/uikit/dist/components/Header';
@@ -30,7 +29,6 @@ import {
   TranslationContext,
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
-import { Activity } from '@tonkeeper/uikit/dist/pages/activity/Activity';
 import { Home } from '@tonkeeper/uikit/dist/pages/home/Home';
 import { Unlock } from '@tonkeeper/uikit/dist/pages/home/Unlock';
 import { UnlockNotification } from '@tonkeeper/uikit/dist/pages/home/UnlockNotification';
@@ -75,6 +73,10 @@ const Settings = React.lazy(
 );
 const SettingsRouter = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/settings')
+);
+
+const Activity = React.lazy(
+  () => import('@tonkeeper/uikit/dist/pages/activity/Activity')
 );
 
 const queryClient = new QueryClient({
@@ -231,67 +233,64 @@ export const Content: FC<{
 
   return (
     <WalletStateContext.Provider value={activeWallet}>
-      <Suspense fallback={<Loading />}>
-        <Routes>
+      <Routes>
+        <Route
+          path={AppRoute.activity}
+          element={
+            <Suspense fallback={<Loading />}>
+              <Activity />
+            </Suspense>
+          }
+        />
+        <Route
+          path={AppRoute.settings}
+          element={
+            <>
+              <SettingsHeader />
+              <Body>
+                <Settings />
+              </Body>
+            </>
+          }
+        />
+        <Route
+          path={any(AppRoute.settings)}
+          element={
+            <Body>
+              <SettingsRouter />
+            </Body>
+          }
+        />
+        <Route path={AppRoute.jettons}>
           <Route
-            path={AppRoute.activity}
-            element={
-              <>
-                <ActivityHeader />
-                <Activity />
-              </>
-            }
-          />
-          <Route
-            path={AppRoute.settings}
-            element={
-              <>
-                <SettingsHeader />
-                <Body>
-                  <Settings />
-                </Body>
-              </>
-            }
-          />
-          <Route
-            path={any(AppRoute.settings)}
+            path=":jettonAddress"
             element={
               <Body>
-                <SettingsRouter />
+                <Jetton />
               </Body>
             }
           />
-          <Route path={AppRoute.jettons}>
-            <Route
-              path=":jettonAddress"
-              element={
-                <Body>
-                  <Jetton />
-                </Body>
-              }
-            />
-          </Route>
-          <Route
-            path={AppRoute.ton}
-            element={
+        </Route>
+        <Route
+          path={AppRoute.ton}
+          element={
+            <Body>
+              <TonPage />
+            </Body>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <>
+              <Header />
               <Body>
-                <TonPage />
+                <Home />
               </Body>
-            }
-          />
-          <Route
-            path="*"
-            element={
-              <>
-                <Header />
-                <Body>
-                  <Home />
-                </Body>
-              </>
-            }
-          />
-        </Routes>
-      </Suspense>
+            </>
+          }
+        />
+      </Routes>
       <Footer />
     </WalletStateContext.Provider>
   );

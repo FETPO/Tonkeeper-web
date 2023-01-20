@@ -128,13 +128,14 @@ export const NotificationCancelButton: FC<{ handleClose: () => void }> = ({
 
 export const Notification: FC<{
   isOpen: boolean;
-  handleClose?: () => void;
+  handleClose: () => void;
+  hideButton?: boolean;
   children: (afterClose: (action?: () => void) => void) => React.ReactNode;
-}> = React.memo(({ children, isOpen, handleClose }) => {
+}> = React.memo(({ children, isOpen, hideButton, handleClose }) => {
   const nodeRef = useRef(null);
   useEffect(() => {
     const closeOnEscapeKey = (e: KeyboardEvent) =>
-      e.key === 'Escape' ? handleClose && handleClose() : null;
+      e.key === 'Escape' ? handleClose() : null;
     document.body.addEventListener('keydown', closeOnEscapeKey);
     return () => {
       document.body.removeEventListener('keydown', closeOnEscapeKey);
@@ -145,7 +146,7 @@ export const Notification: FC<{
     if (!isOpen) return undefined;
     return children((afterClose?: () => void) => {
       setTimeout(() => afterClose && afterClose(), 300);
-      handleClose && handleClose();
+      handleClose();
     });
   }, [isOpen, children, handleClose]);
 
@@ -164,7 +165,7 @@ export const Notification: FC<{
                 <Padding />
                 <Gap />
                 <Content>
-                  {handleClose && (
+                  {!hideButton && (
                     <ButtonContainer>
                       <NotificationCancelButton handleClose={handleClose} />
                     </ButtonContainer>

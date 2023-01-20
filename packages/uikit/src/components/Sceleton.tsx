@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import styled, { css } from 'styled-components';
+import { ActivityHeader } from './Header';
 import { ColumnText } from './Layout';
 import { ListBlock, ListItem, ListItemPayload } from './List';
 import { SubHeader } from './SubHeader';
@@ -136,3 +137,20 @@ export const SkeletonList: FC<{ size?: number }> = React.memo(
     );
   }
 );
+
+const Body = styled.div`
+  flex-grow: 1;
+`;
+
+export const ActivitySkeleton = () => {
+  return (
+    <>
+      <ActivityHeader />
+      <Body>
+        <SkeletonList size={1} />
+        <SkeletonList size={3} />
+        <SkeletonList size={2} />
+      </Body>
+    </>
+  );
+};

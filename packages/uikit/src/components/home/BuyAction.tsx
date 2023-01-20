@@ -58,16 +58,29 @@ const OtherLink = styled(Label2)`
   color: ${(props) => props.theme.textSecondary};
 `;
 
+export const BuyNotification: FC<{
+  buy: TonendpoinFiatCategory | undefined;
+  open: boolean;
+  handleClose: () => void;
+}> = ({ buy, open, handleClose }) => {
+  const Content = useCallback(() => {
+    if (!open || !buy) return undefined;
+    return <ActionNotification item={buy} kind="buy" />;
+  }, [open, buy]);
+
+  return (
+    <Notification isOpen={open && buy != null} handleClose={handleClose}>
+      {Content}
+    </Notification>
+  );
+};
+
 export const BuyAction: FC<{ buy: TonendpoinFiatCategory | undefined }> = ({
   buy,
 }) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
 
-  const Content = useCallback(() => {
-    if (!open || !buy) return undefined;
-    return <ActionNotification item={buy} kind="buy" />;
-  }, [open, buy]);
   return (
     <>
       <Action
@@ -75,12 +88,11 @@ export const BuyAction: FC<{ buy: TonendpoinFiatCategory | undefined }> = ({
         title={t('Buy')}
         action={() => setOpen(true)}
       />
-      <Notification
-        isOpen={open && buy != null}
+      <BuyNotification
+        buy={buy}
+        open={open}
         handleClose={() => setOpen(false)}
-      >
-        {Content}
-      </Notification>
+      />
     </>
   );
 };

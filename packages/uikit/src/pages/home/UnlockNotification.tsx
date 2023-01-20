@@ -184,20 +184,20 @@ export const UnlockNotification: FC<{ sdk: IAppSdk }> = ({ sdk }) => {
     };
   }, [sdk]);
 
+  const close = useCallback(() => {
+    setAuth(undefined);
+    setId(undefined);
+  }, []);
+
   const Content = useCallback(() => {
     console.log('auth', auth, 'requestId', requestId);
     if (!auth || !requestId) return undefined;
-    return (
-      <PasswordUnlock
-        sdk={sdk}
-        onClose={() => {
-          setAuth(undefined);
-          setId(undefined);
-        }}
-        requestId={requestId}
-      />
-    );
+    return <PasswordUnlock sdk={sdk} onClose={close} requestId={requestId} />;
   }, [auth, requestId]);
 
-  return <Notification isOpen={auth != null}>{Content}</Notification>;
+  return (
+    <Notification isOpen={auth != null} hideButton handleClose={close}>
+      {Content}
+    </Notification>
+  );
 };

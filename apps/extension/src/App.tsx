@@ -1,49 +1,47 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
 import { localizationFrom } from '@tonkeeper/core/dist/entries/language';
-import { getTonClient } from '@tonkeeper/core/dist/entries/network';
+import { getTonClient, Network } from '@tonkeeper/core/dist/entries/network';
 import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { CopyNotification } from '@tonkeeper/uikit/dist/components/CopyNotification';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import {
-  ActivityHeader,
   Header,
-  SettingsHeader
+  SettingsHeader,
 } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
+import { ActivitySkeleton } from '@tonkeeper/uikit/dist/components/Sceleton';
 import {
   AppContext,
-  WalletStateContext
+  WalletStateContext,
 } from '@tonkeeper/uikit/dist/hooks/appContext';
 import {
   AfterImportAction,
   AppSdkContext,
-  OnImportAction
+  OnImportAction,
 } from '@tonkeeper/uikit/dist/hooks/appSdk';
 import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
 import {
   I18nContext,
-  TranslationContext
+  TranslationContext,
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
-import { Activity } from '@tonkeeper/uikit/dist/pages/activity/Activity';
 import { Home } from '@tonkeeper/uikit/dist/pages/home/Home';
 import { Unlock } from '@tonkeeper/uikit/dist/pages/home/Unlock';
-import { UnlockNotification } from "@tonkeeper/uikit/dist/pages/home/UnlockNotification";
+import { UnlockNotification } from '@tonkeeper/uikit/dist/pages/home/UnlockNotification';
 import ImportRouter from '@tonkeeper/uikit/dist/pages/import';
 import {
   Initialize,
-  InitializeContainer
+  InitializeContainer,
 } from '@tonkeeper/uikit/dist/pages/import/Initialize';
 import { Jetton } from '@tonkeeper/uikit/dist/pages/jetton/Jetton';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
-import { useNetwork } from '@tonkeeper/uikit/dist/state/network';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
 import {
   useTonendpoint,
-  useTonenpointConfig
+  useTonenpointConfig,
 } from '@tonkeeper/uikit/dist/state/tonendpoint';
 import { useActiveWallet } from '@tonkeeper/uikit/dist/state/wallet';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
@@ -53,14 +51,14 @@ import React, {
   Suspense,
   useEffect,
   useMemo,
-  useState
+  useState,
 } from 'react';
 import {
   MemoryRouter,
   Route,
   Routes,
   useLocation,
-  useNavigate
+  useNavigate,
 } from 'react-router-dom';
 import styled from 'styled-components';
 import browser from 'webextension-polyfill';
@@ -72,6 +70,9 @@ const Settings = React.lazy(
 );
 const SettingsRouter = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/settings')
+);
+const Activity = React.lazy(
+  () => import('@tonkeeper/uikit/dist/pages/activity/Activity')
 );
 
 const queryClient = new QueryClient({
@@ -148,19 +149,18 @@ export const Loader: FC = React.memo(() => {
   const { data: activeWallet } = useActiveWallet();
 
   const lock = useLock();
-  const { data: network } = useNetwork();
   const { data: account } = useAccountState();
   const { data: auth } = useAuthState();
   const tonendpoint = useTonendpoint(
     sdk.version,
-    network,
+    activeWallet?.network,
     localizationFrom(browser.i18n.getUILanguage())
   );
   const { data: config } = useTonenpointConfig(tonendpoint);
 
-  console.log('Loader', network, account, auth);
+  console.log('Loader', account, auth);
 
-  if (!network || !account || !auth || !config || lock === undefined) {
+  if (!account || !auth || !config || lock === undefined) {
     return (
       <Wrapper>
         <Loading />
@@ -168,12 +168,14 @@ export const Loader: FC = React.memo(() => {
     );
   }
 
+  const network = activeWallet?.network ?? Network.MAINNET;
+  const fiat = activeWallet?.fiat ?? FiatCurrencies.USD;
+
   const context = {
     tonApi: getTonClient(config, network),
-    network,
     account,
     auth,
-    fiat: activeWallet?.fiat ?? FiatCurrencies.USD,
+    fiat,
     config,
     tonendpoint,
   };
@@ -239,43 +241,40 @@ export const Content: FC<{
 
   return (
     <WalletStateContext.Provider value={activeWallet}>
-      <Suspense fallback={<Loading />}>
-        <Body>
-          <Routes>
-            <Route
-              path={AppRoute.activity}
-              element={
-                <>
-                  <ActivityHeader />
-                  <Activity />
-                </>
-              }
-            />
-            <Route
-              path={AppRoute.settings}
-              element={
-                <>
-                  <SettingsHeader />
-                  <Settings />
-                </>
-              }
-            />
-            <Route path={any(AppRoute.settings)} element={<SettingsRouter />} />
-            <Route path={AppRoute.jettons}>
-              <Route path=":jettonAddress" element={<Jetton />} />
-            </Route>
-            <Route
-              path="*"
-              element={
-                <>
-                  <Header />
-                  <Home />
-                </>
-              }
-            />
-          </Routes>
-        </Body>
-      </Suspense>
+      <Body>
+        <Routes>
+          <Route
+            path={AppRoute.activity}
+            element={
+              <Suspense fallback={<ActivitySkeleton />}>
+                <Activity />
+              </Suspense>
+            }
+          />
+          <Route
+            path={AppRoute.settings}
+            element={
+              <>
+                <SettingsHeader />
+                <Settings />
+              </>
+            }
+          />
+          <Route path={any(AppRoute.settings)} element={<SettingsRouter />} />
+          <Route path={AppRoute.jettons}>
+            <Route path=":jettonAddress" element={<Jetton />} />
+          </Route>
+          <Route
+            path="*"
+            element={
+              <>
+                <Header />
+                <Home />
+              </>
+            }
+          />
+        </Routes>
+      </Body>
       <Footer />
     </WalletStateContext.Provider>
   );

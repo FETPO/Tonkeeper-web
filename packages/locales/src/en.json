@@ -332,7 +332,7 @@
     "description": "Do not show again checkbox label"
   },
   "Buy_TON": {
-    "message": "Buy TON",
+    "message": "Buy Toncoin",
     "description": "Buy TON title"
   },
   "Sell_TON": {
@@ -538,5 +538,25 @@
   "About_collection": {
     "message": "About collection",
     "description": "About collection nft preview title"
+  },
+  "Your_activity_will_be_shown_here": {
+    "message": "Your activity will be shown here",
+    "description": "Empty activity title"
+  },
+  "Make_your_first_transaction": {
+    "message": "Make your first transaction!",
+    "description": "Empty activity call to action"
+  },
+  "Today": {
+    "message": "Today",
+    "description": "Today activity title"
+  },
+  "Yesterday": {
+    "message": "Yesterday",
+    "description": "Yesterday activity title"
+  },
+  "This_Month": {
+    "message": "This Month",
+    "description": "This_Month activity title"
   }
 }
