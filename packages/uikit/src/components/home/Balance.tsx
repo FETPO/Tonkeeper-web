@@ -15,6 +15,7 @@ import {
   getTonCoinStockPrice,
 } from '../../hooks/balance';
 import { useUserJettonList } from '../../state/jetton';
+import { SkeletonText } from '../Sceleton';
 import { Label2, Num2 } from '../Text';
 
 const Block = styled.div`
@@ -64,6 +65,20 @@ const useBalanceValue = (
 
     return formatFiatCurrency(currency, all);
   }, [info, stock, jettons, currency]);
+};
+
+export const BalanceSkeleton = () => {
+  return (
+    <Block>
+      <Error></Error>
+      <Amount>
+        <SkeletonText size="large" width="120px" />
+      </Amount>
+      <Body>
+        <SkeletonText size="small" width="60px" />
+      </Body>
+    </Block>
+  );
 };
 
 export const Balance: FC<{

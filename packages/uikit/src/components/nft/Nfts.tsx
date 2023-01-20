@@ -6,13 +6,13 @@ import { NftNotification } from './NftNotification';
 
 const Grid = styled.div`
   display: grid;
-  margin: 2rem 0;
+  margin: 0 0 2rem 0;
   gap: 0.5rem;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 `;
 
 export const NftBlock = styled.div<{ hover?: boolean }>`
-width: 100%:
+  width: 100%;
   display: flex;
   flex-direction: column;
 
@@ -34,15 +34,21 @@ width: 100%:
       : undefined}
 `;
 
-export const Image = styled.img`
+export const Image = styled.div<{ url: string }>`
   width: 100%;
+  padding-bottom: 100%;
+
+  ${(props) =>
+    css`
+      background-image: url('${props.url}');
+    `}
+  background-size: cover;
 `;
 
 const Text = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0.75rem;
-  gap: 0.25rem;
+  padding: 0.25rem 0.75rem 0.5rem;
   white-space: nowrap;
 `;
 
@@ -68,7 +74,7 @@ export const NftItem: FC<{ nft: NftItemRepr; resolution: string }> = React.memo(
     return (
       <>
         <NftBlock hover onClick={() => setOpen(true)}>
-          {image && <Image src={image.url} />}
+          {image && <Image url={image.url} />}
           <Text>
             {name && <Header>{name}</Header>}
             {description && <Body>{description}</Body>}

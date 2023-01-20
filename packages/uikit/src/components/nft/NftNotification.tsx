@@ -1,40 +1,51 @@
 import { NftItemRepr } from '@tonkeeper/core/dist/tonApi';
-import React, { FC, useCallback, useEffect, useRef } from 'react';
+import React, { FC, useCallback, useRef } from 'react';
 import styled from 'styled-components';
-import {
-  Notification,
-  NotificationBlock,
-  NotificationTitle,
-} from '../Notification';
-import { Body3, Label2 } from '../Text';
+import { useTranslation } from '../../hooks/translation';
+import { useNftCollectionData } from '../../state/wallet';
+import { ChevronLeftIcon, EllipsisIcon } from '../Icon';
+import { Body, CroppedBodyText } from '../jettons/CroppedText';
+import { CloseButton, Notification, NotificationBlock } from '../Notification';
+import { H2, H3, Label1 } from '../Text';
 import { NftAction } from './NftAction';
 import { NftDetails } from './NftDetails';
 import { Image, NftBlock } from './Nfts';
 
+const TitleBlock = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  gap: 1rem;
+`;
+
 const Text = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0.75rem;
-  gap: 0.5rem;
+  padding: 0.875rem 1rem;
 `;
 
-const Body = styled(Body3)`
-  color: ${(props) => props.theme.textSecondary};
+const Delimiter = styled.div`
+  border-top: 1px solid ${(props) => props.theme.separatorCommon};
+`;
+
+const DelimiterExtra = styled.div`
+  margin: 0 -1rem;
+  width: 100%;
+  border-top: 1px solid ${(props) => props.theme.separatorCommon};
+`;
+
+const CollectionTitle = styled(Label1)`
+  margin-bottom: 0.5rem;
 `;
 
 const NftPreview: FC<{
-  afterClose: (action: () => void) => void;
+  onClose: () => void;
   nftItem: NftItemRepr;
-}> = ({ afterClose, nftItem }) => {
+}> = ({ onClose, nftItem }) => {
   const ref = useRef<HTMLImageElement | null>(null);
-
-  useEffect(() => {
-    if (ref.current && ref.current.parentNode!.parentNode) {
-      ref.current.style.minHeight =
-        (ref.current.parentNode!.parentNode as HTMLElement).offsetWidth + 'px';
-      console.log(ref.current.style.minHeight);
-    }
-  }, [ref.current]);
+  const { t } = useTranslation();
+  const { data: collection } = useNftCollectionData(nftItem);
 
   const { name, description } = nftItem.metadata;
 
@@ -46,17 +57,43 @@ const NftPreview: FC<{
 
   return (
     <NotificationBlock>
-      {name && <NotificationTitle>{name}</NotificationTitle>}
+      <TitleBlock>
+        <CloseButton onClick={onClose}>
+          <ChevronLeftIcon />
+        </CloseButton>
+        {name && <H3>{name}</H3>}
+        <CloseButton>
+          <EllipsisIcon />
+        </CloseButton>
+      </TitleBlock>
       <NftBlock>
-        {image && <Image ref={ref} src={image.url} />}
+        {image && <Image ref={ref} url={image.url} />}
         <Text>
-          {name && <Label2>{name}</Label2>}
-          {collectionName && <Body>{collectionName}</Body>}
-          {description && <Body>{description}</Body>}
+          {name && <H2>{name}</H2>}
+          {collectionName && (
+            <Body open margin="small">
+              {collectionName}
+            </Body>
+          )}
+          {description && (
+            <CroppedBodyText text={description} margin="last" contentColor />
+          )}
         </Text>
+        {collection && collection.metadata.description && (
+          <>
+            <Delimiter />
+            <Text>
+              <CollectionTitle>{t('About_collection')}</CollectionTitle>
+              <Body open margin="last">
+                {collection.metadata.description}
+              </Body>
+            </Text>
+          </>
+        )}
       </NftBlock>
 
       <NftAction nftItem={nftItem} kind="token" />
+      <DelimiterExtra />
 
       <NftDetails nftItem={nftItem} />
     </NotificationBlock>
@@ -66,17 +103,11 @@ export const NftNotification: FC<{
   nftItem: NftItemRepr | undefined;
   handleClose: () => void;
 }> = ({ nftItem, handleClose }) => {
-  const Content = useCallback(
-    (afterClose: (action: () => void) => void) => {
-      if (!nftItem) return undefined;
-      return <NftPreview afterClose={afterClose} nftItem={nftItem} />;
-    },
-    [nftItem]
-  );
+  const Content = useCallback(() => {
+    if (!nftItem) return undefined;
+    console.log('nftItem', nftItem);
+    return <NftPreview onClose={handleClose} nftItem={nftItem} />;
+  }, [nftItem, handleClose]);
 
-  return (
-    <Notification isOpen={nftItem != undefined} handleClose={handleClose}>
-      {Content}
-    </Notification>
-  );
+  return <Notification isOpen={nftItem != undefined}>{Content}</Notification>;
 };

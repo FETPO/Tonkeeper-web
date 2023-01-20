@@ -7,12 +7,18 @@ import { Gap } from './Layout';
 import ReactPortal from './ReactPortal';
 import { H2 } from './Text';
 
-const Wrapper = styled(Container)`
-  width: 100%;
-  padding: 0;
+const NotificationContainer = styled(Container)`
+  background: transparent;
+`;
+const Wrapper = styled.div`
+  margin: 0 -1rem;
+  display: flex;
+  display: flex;
+  flex-direction: column;
+  min-height: var(--app-height);
 `;
 
-const ButtonContainer = styled.div`
+export const ButtonContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: end;
@@ -23,7 +29,7 @@ const Padding = styled.div`
   height: 2rem;
 `;
 
-const CloseButton = styled.div`
+export const CloseButton = styled.div`
   cursor: pointer;
   width: 2rem;
   height: 2rem;
@@ -33,6 +39,7 @@ const CloseButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
 
   &:hover {
     background: ${(props) => props.theme.backgroundContentTint};
@@ -97,7 +104,7 @@ export const NotificationTitle = styled(H2)`
 
 export const NotificationBlock = styled.form`
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
   flex-direction: column;
   align-items: center;
 `;
@@ -113,11 +120,9 @@ export const NotificationCancelButton: FC<{ handleClose: () => void }> = ({
   handleClose,
 }) => {
   return (
-    <ButtonContainer>
-      <CloseButton onClick={handleClose}>
-        <CloseIcon />
-      </CloseButton>
-    </ButtonContainer>
+    <CloseButton onClick={handleClose}>
+      <CloseIcon />
+    </CloseButton>
   );
 };
 
@@ -154,16 +159,20 @@ export const Notification: FC<{
       >
         <Splash ref={nodeRef}>
           <Overlay>
-            <Wrapper>
-              <Padding />
-              <Gap />
-              <Content>
-                {handleClose && (
-                  <NotificationCancelButton handleClose={handleClose} />
-                )}
-                {Child}
-              </Content>
-            </Wrapper>
+            <NotificationContainer>
+              <Wrapper>
+                <Padding />
+                <Gap />
+                <Content>
+                  {handleClose && (
+                    <ButtonContainer>
+                      <NotificationCancelButton handleClose={handleClose} />
+                    </ButtonContainer>
+                  )}
+                  {Child}
+                </Content>
+              </Wrapper>
+            </NotificationContainer>
           </Overlay>
         </Splash>
       </CSSTransition>

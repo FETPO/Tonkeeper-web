@@ -1,5 +1,6 @@
 import { NftItemRepr } from '@tonkeeper/core/dist/tonApi';
 import React, { FC, useState } from 'react';
+import styled from 'styled-components';
 import { Address } from 'ton-core';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useTranslation } from '../../hooks/translation';
@@ -40,6 +41,11 @@ const ActionTransfer: FC<{
     </>
   );
 };
+
+const Row = styled(ActionsRow)`
+  margin: 1rem 0 0.563rem;
+`;
+
 export const NftAction: FC<{
   kind: 'token' | 'telegram.name' | 'telegram.number' | 'ton.dns';
   nftItem: NftItemRepr;
@@ -50,50 +56,50 @@ export const NftAction: FC<{
   switch (kind) {
     case 'token': {
       return (
-        <ActionsRow>
+        <Row>
           <ActionTransfer nftItem={nftItem} />
           <Action
             icon={<GlobalIcon />}
             title={t('View_on_market')}
             action={() => sdk.openPage(getMarketplaceUrl(nftItem))}
           />
-        </ActionsRow>
+        </Row>
       );
     }
     case 'ton.dns': {
       return (
-        <ActionsRow>
+        <Row>
           <ActionTransfer nftItem={nftItem} />
           <Action
             icon={<GlobalIcon />}
             title={t('View_on_market')}
             action={() => null}
           />
-        </ActionsRow>
+        </Row>
       );
     }
     case 'telegram.number': {
       return (
-        <ActionsRow>
+        <Row>
           <ActionTransfer nftItem={nftItem} />
           <Action
             icon={<GlobalIcon />}
             title={t('View_on_market')}
             action={() => null}
           />
-        </ActionsRow>
+        </Row>
       );
     }
     case 'telegram.name': {
       return (
-        <ActionsRow>
+        <Row>
           <ActionTransfer nftItem={nftItem} />
           <Action
             icon={<GlobalIcon />}
             title={t('View_on_market')}
             action={() => null}
           />
-        </ActionsRow>
+        </Row>
       );
     }
   }

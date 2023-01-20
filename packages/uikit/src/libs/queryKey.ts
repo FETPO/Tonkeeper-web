@@ -7,6 +7,7 @@ export enum QueryKey {
   info = 'info',
   jettons = 'jettons',
   nft = 'nft',
+  nftCollection = 'nftCollection',
   activity = 'activity',
   tonkeeperApi = 'tonkeeperApi',
 }

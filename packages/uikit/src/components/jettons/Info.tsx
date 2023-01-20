@@ -1,8 +1,8 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import styled, { css } from 'styled-components';
-import { useTranslation } from '../../hooks/translation';
+import React, { FC } from 'react';
+import styled from 'styled-components';
 import { SkeletonImage, SkeletonText } from '../Sceleton';
-import { Body2, H2 } from '../Text';
+import { H2 } from '../Text';
+import { Body, CroppedBodyText } from './CroppedText';
 
 const Block = styled.div`
   display: flex;
@@ -47,62 +47,9 @@ export const CoinInfoSkeleton = () => {
   );
 };
 
-const Body = styled(Body2)<{ open: boolean }>`
-  color: ${(props) => props.theme.textSecondary};
-  margin-bottom: 0.75rem;
-
-  ${(props) =>
-    !props.open &&
-    css`
-      max-height: 40px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      position: relative;
-    `}
-`;
-
 const Title = styled(H2)`
   margin-bottom: 2px;
 `;
-
-const Less = styled.div`
-  cursor: pointer;
-  margin-top: 4px;
-  text-align: right;
-  color: ${(props) => props.theme.textAccent};
-`;
-
-const More = styled.span`
-  cursor: pointer;
-  color: ${(props) => props.theme.textAccent};
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding-left: 2rem;
-  background: linear-gradient(90deg, rgba(16, 22, 31, 0) 0%, #10161f 20%);
-`;
-
-const CroppedBodyText: FC<{ text: string }> = ({ text }) => {
-  const [open, setOpen] = useState(false);
-  const { t } = useTranslation();
-
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (ref.current) {
-      if (ref.current.scrollHeight === ref.current.clientHeight) {
-        setOpen(true);
-      }
-    }
-  }, [ref]);
-  return (
-    <Body ref={ref} onClick={() => setOpen(true)} open={open}>
-      {text}
-      {open ? undefined : <More>{t('More')}</More>}
-    </Body>
-  );
-};
 
 export const CoinInfo: FC<CoinProps> = ({
   amount,

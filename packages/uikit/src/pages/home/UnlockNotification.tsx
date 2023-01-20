@@ -10,6 +10,7 @@ import { Button } from '../../components/fields/Button';
 import { Input } from '../../components/fields/Input';
 import { TonkeeperIcon } from '../../components/Icon';
 import {
+  ButtonContainer,
   Notification,
   NotificationCancelButton,
 } from '../../components/Notification';
@@ -139,7 +140,9 @@ const PasswordUnlock: FC<{
 
   return (
     <>
-      <NotificationCancelButton handleClose={onCancel} />
+      <ButtonContainer>
+        <NotificationCancelButton handleClose={onCancel} />
+      </ButtonContainer>
       <Block onSubmit={onSubmit}>
         <Logo>
           <TonkeeperIcon />

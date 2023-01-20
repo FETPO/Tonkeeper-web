@@ -14,6 +14,8 @@ import {
   JettonApi,
   JettonsBalances,
   NFTApi,
+  NftCollection,
+  NftItemRepr,
   NftItemsRepr,
 } from '@tonkeeper/core/dist/tonApi';
 import { getWalletActiveAddresses } from '@tonkeeper/core/dist/tonApiExtended/walletApi';
@@ -149,5 +151,22 @@ export const useWalletNftList = () => {
 
       return items;
     }
+  );
+};
+
+export const useNftCollectionData = (nft: NftItemRepr) => {
+  const { tonApi } = useAppContext();
+
+  return useQuery<NftCollection | null, Error>(
+    [nft?.address, QueryKey.nftCollection],
+    async () => {
+      const { collection } = nft!;
+      if (!collection) return null;
+
+      return await new NFTApi(tonApi).getNftCollection({
+        account: collection.address,
+      });
+    },
+    { enabled: nft.collection != null }
   );
 };

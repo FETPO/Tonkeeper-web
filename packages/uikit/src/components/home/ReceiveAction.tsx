@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { useWalletContext } from '../../hooks/appContext';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useTranslation } from '../../hooks/translation';
-import { ToncoinIcon } from '../Icon';
 import { Notification, NotificationBlock } from '../Notification';
 import { H2, Label2 } from '../Text';
 import { Action } from './Actions';
@@ -83,12 +82,7 @@ const ReceiveContent = () => {
 
   return (
     <NotificationBlock>
-      <Icon>
-        <ToncoinIcon />
-      </Icon>
-
       <Title>{t('Receive_TON_and_other_tokens')}</Title>
-
       <Block>
         <Text>{t('Show_QR_code_to_receive')}</Text>
         <Background>

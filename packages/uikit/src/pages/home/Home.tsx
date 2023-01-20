@@ -6,7 +6,7 @@ import {
 import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import React, { FC } from 'react';
 import { ActionsRow } from '../../components/home/Actions';
-import { Balance } from '../../components/home/Balance';
+import { Balance, BalanceSkeleton } from '../../components/home/Balance';
 import { CompactView } from '../../components/home/CompactView';
 import { TabsView } from '../../components/home/TabsView';
 import { HomeActions } from '../../components/home/TonActions';
@@ -21,11 +21,9 @@ import {
 } from '../../state/wallet';
 
 export const HomeSkeleton = () => {
-  const wallet = useWalletContext();
-  const { fiat } = useAppContext();
   return (
     <>
-      <Balance address={wallet.active.friendlyAddress} currency={fiat} />
+      <BalanceSkeleton />
       <ActionsRow>
         <SkeletonAction />
         <SkeletonAction />

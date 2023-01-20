@@ -534,5 +534,9 @@
   "More": {
     "message": "More",
     "description": "expand text content button"
+  },
+  "About_collection": {
+    "message": "About collection",
+    "description": "About collection nft preview title"
   }
 }

@@ -6,7 +6,7 @@ import { Address } from 'ton';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useTranslation } from '../../hooks/translation';
 import { ListBlock, ListItem, ListItemPayload } from '../List';
-import { H3, Label1, Label2 } from '../Text';
+import { Body1, H3, Label1 } from '../Text';
 
 const Block = styled.div`
   width: 100%;
@@ -16,6 +16,7 @@ const Row = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 0.625rem;
 `;
 
 const Link = styled(Label1)`
@@ -23,7 +24,7 @@ const Link = styled(Label1)`
   color: ${(props) => props.theme.textAccent};
 `;
 
-const RightText = styled(Label2)`
+const RightText = styled(Body1)`
   color: ${(props) => props.theme.textSecondary};
 `;
 
@@ -46,19 +47,23 @@ export const NftDetails: FC<{ nftItem: NftItemRepr }> = React.memo(
         </Row>
         <ListBlock>
           {owner && (
-            <ListItem hover={false}>
+            <ListItem
+              onClick={() =>
+                sdk.copyToClipboard(Address.parse(owner).toString())
+              }
+            >
               <ListItemPayload>
                 <RightText>{t('Owner')}</RightText>
-                <Label2>
+                <Label1>
                   {toShortAddress(Address.parse(owner).toString())}
-                </Label2>
+                </Label1>
               </ListItemPayload>
             </ListItem>
           )}
-          <ListItem hover={false}>
+          <ListItem onClick={() => sdk.copyToClipboard(address)}>
             <ListItemPayload>
               <RightText>{t('Contract_address')}</RightText>
-              <Label2>{toShortAddress(address)}</Label2>
+              <Label1>{toShortAddress(address)}</Label1>
             </ListItemPayload>
           </ListItem>
         </ListBlock>

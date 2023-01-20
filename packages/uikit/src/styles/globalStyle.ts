@@ -6,7 +6,7 @@ body {
   font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: ${(props) => props.theme.backgroundPage};
+  background-color: ${(props) => props.theme.backgroundContent};
   color:  ${(props) => props.theme.textPrimary};
 }
 
@@ -23,6 +23,7 @@ export const Container = styled.div`
   flex-direction: column;
   min-height: var(--app-height);
   padding: 0 1rem;
+  background-color: ${(props) => props.theme.backgroundPage};
 `;
 
 export const Body = styled.div`

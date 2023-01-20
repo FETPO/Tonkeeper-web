@@ -13,10 +13,11 @@ import { JettonList } from './Jettons';
 
 const TabsBlock = styled.div`
   display: flex;
-  margin-bottom: 2rem;
+  padding-top: 1rem;
+  margin-bottom: 1.5rem;
   position: relative;
   justify-content: center;
-  gap: 3rem;
+  gap: 2.25rem;
 `;
 
 const TabsButton = styled.div<{ active?: boolean }>`
