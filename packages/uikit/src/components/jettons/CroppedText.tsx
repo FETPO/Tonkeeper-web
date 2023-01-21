@@ -7,6 +7,8 @@ export const Body = styled(Body2)<{ open: boolean; margin?: 'small' | 'last' }>`
   color: ${(props) => props.theme.textSecondary};
   margin-bottom: 0.75rem;
 
+  word-break: break-word;
+
   ${(props) => {
     switch (props.margin) {
       case 'small':
