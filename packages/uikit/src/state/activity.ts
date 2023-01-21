@@ -1,6 +1,7 @@
 import { InfiniteData } from '@tanstack/react-query';
 import {
   AccountEvent,
+  AccountEvents,
   AccountEvents200Response,
 } from '@tonkeeper/core/dist/tonApi';
 
@@ -76,6 +77,9 @@ export interface ActivityItem {
 
 export type ActivityGroup = [string, ActivityItem[]];
 
+export const groupJettonEvents = (data: AccountEvents) => {
+  data.nextFrom;
+};
 export const groupActivity = (data: InfiniteData<AccountEvents200Response>) => {
   const list = [] as ActivityItem[];
 

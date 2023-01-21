@@ -1,17 +1,19 @@
-import { JettonBalance, JettonInfo } from '@tonkeeper/core/dist/tonApi';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import {
+  JettonApi,
+  JettonBalance,
+  JettonInfo,
+} from '@tonkeeper/core/dist/tonApi';
 import React, { FC, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import {
-  ActivityAction,
-  formatDate,
-  useFormatCoinValue,
-} from '../../components/activity/ActivityAction';
+import { useFormatCoinValue } from '../../components/activity/ActivityAction';
+import { ActivityGroupRaw } from '../../components/activity/ActivityGroup';
 import { Action, ActionsRow } from '../../components/home/Actions';
 import { SendIcon } from '../../components/home/HomeIcons';
 import { ReceiveAction } from '../../components/home/ReceiveAction';
 import { CoinInfo, CoinInfoSkeleton } from '../../components/jettons/Info';
-import { ListBlock, ListItem } from '../../components/List';
+import { ListBlock } from '../../components/List';
 import {
   SkeletonAction,
   SkeletonList,
@@ -27,19 +29,17 @@ import {
   getJettonStockPrice,
 } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
+import { JettonKey, QueryKey } from '../../libs/queryKey';
 import { AppRoute } from '../../libs/routes';
-import {
-  useJettonBalance,
-  useJettonHistory,
-  useJettonInfo,
-} from '../../state/jetton';
+import { ActivityGroup, groupActivity } from '../../state/activity';
+import { useJettonBalance, useJettonInfo } from '../../state/jetton';
 import { useTonenpointStock } from '../../state/tonendpoint';
 
-const HistoryBlock = styled.div`
+export const HistoryBlock = styled.div`
   margin-top: 3rem;
 `;
 
-const JettonHistorySkeleton = () => {
+export const JettonHistorySkeleton = () => {
   return (
     <HistoryBlock>
       <H2>
@@ -72,29 +72,39 @@ const List = styled(ListBlock)`
 const JettonHistory: FC<{ info: JettonInfo; balance: JettonBalance }> = ({
   balance,
 }) => {
-  const { data: events } = useJettonHistory(balance.walletAddress.address);
+  const { tonApi } = useAppContext();
 
-  if (!events) {
+  const { fetchNextPage, hasNextPage, isFetchingNextPage, data, ...result } =
+    useInfiniteQuery({
+      queryKey: [
+        balance.walletAddress.address,
+        QueryKey.activity,
+        JettonKey.history,
+      ],
+      queryFn: ({ pageParam = undefined }) =>
+        new JettonApi(tonApi).getJettonHistory({
+          account: balance.walletAddress.address,
+          limit: 100,
+          // TODO Api do not handle "nextFrom" param
+        }),
+      getNextPageParam: (lastPage) => lastPage.nextFrom,
+    });
+
+  const items = useMemo<ActivityGroup[]>(() => {
+    return data ? groupActivity(data) : [];
+  }, [data]);
+
+  if (items.length === 0) {
     return <JettonHistorySkeleton />;
   }
 
   return (
     <HistoryBlock>
-      {events.events.map((event) => {
-        const date = formatDate(event.timestamp);
-        return (
-          <List key={event.eventId}>
-            {event.actions.map((action, index) => (
-              <ListItem key={index}>
-                <ActivityAction action={action} date={date} />
-              </ListItem>
-            ))}
-          </List>
-        );
-      })}
+      <ActivityGroupRaw items={items} />
     </HistoryBlock>
   );
 };
+
 const JettonContent: FC<{ jettonAddress: string }> = ({ jettonAddress }) => {
   const { t } = useTranslation();
   const { tonendpoint, fiat } = useAppContext();

@@ -1,14 +1,21 @@
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
-import { AccountRepr } from '@tonkeeper/core/dist/tonApi';
+import { AccountRepr, EventApi } from '@tonkeeper/core/dist/tonApi';
 import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
+import { throttle } from '@tonkeeper/core/dist/utils/common';
 import BigNumber from 'bignumber.js';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { ActivityGroupRaw } from '../../components/activity/ActivityGroup';
 import { ActionsRow } from '../../components/home/Actions';
 import { HomeActions } from '../../components/home/TonActions';
 import { CoinInfo, CoinInfoSkeleton } from '../../components/jettons/Info';
-import { SkeletonAction, SkeletonSubHeader } from '../../components/Sceleton';
+import {
+  SkeletonAction,
+  SkeletonList,
+  SkeletonSubHeader,
+} from '../../components/Sceleton';
 import { SubHeader } from '../../components/SubHeader';
-import { useAppContext } from '../../hooks/appContext';
+import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import {
   formatDecimals,
   formatFiatCurrency,
@@ -16,8 +23,11 @@ import {
   useFormatCoinValue,
 } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
+import { QueryKey } from '../../libs/queryKey';
+import { ActivityGroup, groupActivity } from '../../state/activity';
 import { useTonenpointStock } from '../../state/tonendpoint';
 import { useWalletAccountInfo } from '../../state/wallet';
+import { HistoryBlock, JettonHistorySkeleton } from './Jetton';
 
 export const TonPageSkeleton = () => {
   return (
@@ -30,6 +40,7 @@ export const TonPageSkeleton = () => {
         <SkeletonAction />
         <SkeletonAction />
       </ActionsRow>
+      <TonActivity />
     </div>
   );
 };
@@ -51,6 +62,59 @@ const useBalanceValue = (
   }, [info, stock]);
 };
 
+export const TonActivity = () => {
+  const { tonApi } = useAppContext();
+  const wallet = useWalletContext();
+
+  const { fetchNextPage, hasNextPage, isFetchingNextPage, data, ...result } =
+    useInfiniteQuery({
+      queryKey: [wallet.active.rawAddress, QueryKey.activity],
+      queryFn: ({ pageParam = undefined }) =>
+        new EventApi(tonApi).accountEvents({
+          account: wallet.active.rawAddress,
+          limit: 20,
+          beforeLt: pageParam,
+        }),
+      getNextPageParam: (lastPage) => lastPage.nextFrom,
+    });
+
+  useEffect(() => {
+    if (!hasNextPage) return () => {};
+
+    const handler = throttle(() => {
+      if (isFetchingNextPage) return;
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 500
+      ) {
+        fetchNextPage();
+      }
+    }, 50);
+
+    window.addEventListener('scroll', handler);
+
+    handler();
+
+    return () => {
+      window.removeEventListener('scroll', handler);
+    };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  const items = useMemo<ActivityGroup[]>(() => {
+    return data ? groupActivity(data) : [];
+  }, [data]);
+
+  if (items.length === 0) {
+    return <JettonHistorySkeleton />;
+  }
+
+  return (
+    <HistoryBlock>
+      <ActivityGroupRaw items={items} />
+      {isFetchingNextPage && <SkeletonList size={3} />}
+    </HistoryBlock>
+  );
+};
 export const TonPage = () => {
   const { fiat, tonendpoint } = useAppContext();
   const { data: stock } = useTonenpointStock(tonendpoint);
@@ -78,6 +142,8 @@ export const TonPage = () => {
         image="/img/toncoin.svg"
       />
       <HomeActions />
+
+      <TonActivity />
     </div>
   );
 };
