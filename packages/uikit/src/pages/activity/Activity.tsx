@@ -1,13 +1,13 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { EventApi } from '@tonkeeper/core/dist/tonApi';
-import React, { FC, useMemo } from 'react';
+import { throttle } from '@tonkeeper/core/dist/utils/common';
+import React, { FC, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { ActivityAction } from '../../components/activity/ActivityAction';
 import { EmptyActivity } from '../../components/activity/EmptyActivity';
-import { Button } from '../../components/fields/Button';
 import { ActivityHeader } from '../../components/Header';
 import { ListBlock, ListItem } from '../../components/List';
-import { ActivitySkeleton } from '../../components/Sceleton';
+import { ActivitySkeleton, SkeletonList } from '../../components/Sceleton';
 import { H3 } from '../../components/Text';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
@@ -27,6 +27,10 @@ const List = styled(ListBlock)`
   margin: 0.5rem 0;
 `;
 
+const Title = styled(H3)`
+  margin: 1.875rem 0 0.875rem;
+`;
+
 const Activity: FC = () => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
@@ -37,11 +41,33 @@ const Activity: FC = () => {
       queryFn: ({ pageParam = undefined }) =>
         new EventApi(tonApi).accountEvents({
           account: wallet.active.rawAddress,
-          limit: 10,
+          limit: 20,
           beforeLt: pageParam,
         }),
       getNextPageParam: (lastPage) => lastPage.nextFrom,
     });
+
+  useEffect(() => {
+    if (!hasNextPage) return () => {};
+
+    const handler = throttle(() => {
+      if (isFetchingNextPage) return;
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 500
+      ) {
+        fetchNextPage();
+      }
+    }, 50);
+
+    window.addEventListener('scroll', handler);
+
+    handler();
+
+    return () => {
+      window.removeEventListener('scroll', handler);
+    };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   const items = useMemo<ActivityGroup[]>(() => {
     return data ? groupActivity(data) : [];
@@ -62,7 +88,7 @@ const Activity: FC = () => {
         {items.map(([key, events]) => {
           return (
             <div key={key}>
-              <H3>{getActivityTitle(key, t)}</H3>
+              <Title>{getActivityTitle(key, t)}</Title>
               {events.map(({ timestamp, event }) => {
                 const date = formatActivityDate(key, timestamp);
                 return (
@@ -78,12 +104,7 @@ const Activity: FC = () => {
             </div>
           );
         })}
-
-        {hasNextPage && (
-          <Button onClick={() => fetchNextPage()} loading={isFetchingNextPage}>
-            Next
-          </Button>
-        )}
+        {isFetchingNextPage && <SkeletonList size={3} />}
       </Body>
     </>
   );

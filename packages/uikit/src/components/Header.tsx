@@ -1,4 +1,4 @@
-import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
+import { throttle, toShortAddress } from '@tonkeeper/core/dist/utils/common';
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -157,13 +157,13 @@ const DropDownPayload: FC<{ onClose: () => void; onCreate: () => void }> = ({
 const useIsScrollTop = () => {
   const [isTop, setTop] = useState(true);
   useEffect(() => {
-    const handler = () => {
+    const handler = throttle(() => {
       if (window.scrollY > 20) {
         setTop(false);
       } else {
         setTop(true);
       }
-    };
+    }, 50);
 
     window.addEventListener('scroll', handler);
 

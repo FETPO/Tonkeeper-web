@@ -50,29 +50,45 @@ const Text = styled.div<{ right?: boolean }>`
       : undefined}
 `;
 
-const Label = styled(Label1)<{ green?: boolean }>`
+const Label = styled(Label1)<{ green?: boolean; noWrap?: boolean }>`
   ${(props) =>
     props.green
       ? css`
           color: ${props.theme.accentGreen};
         `
       : undefined}
+
+  ${(props) =>
+    props.noWrap
+      ? css`
+          white-space: nowrap;
+        `
+      : undefined}
 `;
 
-const Secondary = styled(Body2)`
+const Secondary = styled(Body2)<{ noWrap?: boolean }>`
   color: ${(props) => props.theme.textSecondary};
+  ${(props) =>
+    props.noWrap
+      ? css`
+          white-space: nowrap;
+        `
+      : undefined}
 `;
 
 export const ColumnText: FC<{
   green?: boolean;
   right?: boolean;
+  noWrap?: boolean;
   text: React.ReactNode;
   secondary: React.ReactNode;
-}> = ({ green, text, secondary, right }) => {
+}> = ({ green, text, secondary, right, noWrap }) => {
   return (
     <Text right={right}>
-      <Label green={green}>{text}</Label>
-      <Secondary>{secondary}</Secondary>
+      <Label green={green} noWrap={noWrap}>
+        {text}
+      </Label>
+      <Secondary noWrap={noWrap}>{secondary}</Secondary>
     </Text>
   );
 };

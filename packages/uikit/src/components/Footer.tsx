@@ -1,3 +1,4 @@
+import { throttle } from '@tonkeeper/core/dist/utils/common';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -120,7 +121,7 @@ const Block = styled.div<{ bottom: boolean }>`
 const useIsScrollBottom = () => {
   const [isBottom, setBottom] = useState(false);
   useEffect(() => {
-    const handler = () => {
+    const handler = throttle(() => {
       if (
         window.innerHeight + window.scrollY >=
         document.body.offsetHeight - 3
@@ -129,7 +130,7 @@ const useIsScrollBottom = () => {
       } else {
         setBottom(false);
       }
-    };
+    }, 50);
 
     window.addEventListener('scroll', handler);
 

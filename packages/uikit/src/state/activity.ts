@@ -9,9 +9,7 @@ export const formatActivityDate = (key: string, timestamp: number): string => {
   if (key === 'today' || key === 'yesterday') {
     return `${date.getHours()}:${('0' + date.getMinutes()).slice(-2)}`;
   } else {
-    return `${('0' + date.getDay()).slice(-2)}.${('0' + date.getMonth()).slice(
-      -2
-    )}`;
+    return date.toLocaleDateString();
   }
 };
 
@@ -21,6 +19,8 @@ export const getActivityTitle = (key: string, t: (value: string) => string) => {
       return t('Today');
     case 'yesterday':
       return t('Yesterday');
+    case 'week':
+      return t('This_Week');
     case 'month':
       return t('This_Month');
     default: {
@@ -28,6 +28,17 @@ export const getActivityTitle = (key: string, t: (value: string) => string) => {
       return `${t('month_' + month)} ${year}`;
     }
   }
+};
+
+const getWeek = (date: Date) => {
+  var onejan = new Date(date.getFullYear(), 0, 1).getTime();
+  var today = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  ).getTime();
+  var dayOfYear = (today - onejan + 86400000) / 86400000;
+  return Math.ceil(dayOfYear / 7);
 };
 
 const getEventGroup = (
@@ -44,12 +55,18 @@ const getEventGroup = (
     return 'yesterday';
   }
   if (
+    getWeek(today) === getWeek(date) &&
+    today.getFullYear() === date.getFullYear()
+  ) {
+    return 'week';
+  }
+  if (
     today.getMonth() === date.getMonth() &&
     today.getFullYear() === date.getFullYear()
   ) {
     return 'month';
   }
-  return `${date.getFullYear()}-${date.getMonth()}`;
+  return `${date.getFullYear()}-${date.getMonth() + 1}`;
 };
 
 export interface ActivityItem {
@@ -77,15 +94,18 @@ export const groupActivity = (data: InfiniteData<AccountEvents200Response>) => {
   const yesterdayDate = new Date();
   yesterdayDate.setDate(yesterdayDate.getDate() - 1);
 
-  const { today, yesterday, month, ...rest } = list.reduce((acc, item) => {
-    const group = getEventGroup(item.timestamp, todayDate, yesterdayDate);
-    if (acc[group]) {
-      acc[group].push(item);
-    } else {
-      acc[group] = [item];
-    }
-    return acc;
-  }, {} as Record<string, ActivityItem[]>);
+  const { today, yesterday, week, month, ...rest } = list.reduce(
+    (acc, item) => {
+      const group = getEventGroup(item.timestamp, todayDate, yesterdayDate);
+      if (acc[group]) {
+        acc[group].push(item);
+      } else {
+        acc[group] = [item];
+      }
+      return acc;
+    },
+    {} as Record<string, ActivityItem[]>
+  );
 
   const result = [] as [] as ActivityGroup[];
   if (today) {
@@ -93,6 +113,9 @@ export const groupActivity = (data: InfiniteData<AccountEvents200Response>) => {
   }
   if (yesterday) {
     result.push(['yesterday', yesterday]);
+  }
+  if (week) {
+    result.push(['week', week]);
   }
   if (month) {
     result.push(['month', month]);

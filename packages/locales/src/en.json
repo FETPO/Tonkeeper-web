@@ -555,8 +555,60 @@
     "message": "Yesterday",
     "description": "Yesterday activity title"
   },
+  "This_Week": {
+    "message": "This Week",
+    "description": "This Week activity title"
+  },
   "This_Month": {
     "message": "This Month",
     "description": "This_Month activity title"
+  },
+  "month_12": {
+    "message": "December",
+    "description": "December activity title"
+  },
+  "month_11": {
+    "message": "November",
+    "description": "November activity title"
+  },
+  "month_10": {
+    "message": "October",
+    "description": "October activity title"
+  },
+  "month_9": {
+    "message": "September",
+    "description": "September activity title"
+  },
+  "month_8": {
+    "message": "August",
+    "description": "August activity title"
+  },
+  "month_7": {
+    "message": "July",
+    "description": "July activity title"
+  },
+  "month_6": {
+    "message": "June",
+    "description": "June activity title"
+  },
+  "month_5": {
+    "message": "May",
+    "description": "May activity title"
+  },
+  "month_4": {
+    "message": "April",
+    "description": "April activity title"
+  },
+  "month_3": {
+    "message": "March",
+    "description": "March activity title"
+  },
+  "month_2": {
+    "message": "February",
+    "description": "February activity title"
+  },
+  "month_1": {
+    "message": "January",
+    "description": "January activity title"
   }
 }

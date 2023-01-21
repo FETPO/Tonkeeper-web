@@ -63,14 +63,14 @@ export const ListItem = styled.div<{ hover?: boolean; dropDown?: boolean }>`
           &:hover {
             background: ${props.theme.backgroundContentTint};
 
-            ${ListItemPayload} {
+            > div {
               border-top-color: ${props.theme.backgroundContentTint} !important;
             }
           }
         `
       : undefined}
 
-  & + & ${ListItemPayload} {
+  & + & > div {
     border-top: 1px solid ${(props) => props.theme.separatorCommon};
     padding-top: 15px;
   }

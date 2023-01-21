@@ -170,3 +170,17 @@ export const useNftCollectionData = (nft: NftItemRepr) => {
     { enabled: nft.collection != null }
   );
 };
+
+export const useNftItemData = (address: string) => {
+  const { tonApi } = useAppContext();
+
+  return useQuery<NftItemRepr, Error>([address, QueryKey.nft], async () => {
+    const result = await new NFTApi(tonApi).getNFTItems({
+      addresses: [address],
+    });
+    if (!result.nftItems.length) {
+      throw new Error('missing nft data');
+    }
+    return result.nftItems[0];
+  });
+};
