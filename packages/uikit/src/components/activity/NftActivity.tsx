@@ -18,6 +18,7 @@ const NftBlock = styled.div`
   display: inline-flex;
   cursor: pointer;
   min-width: 50%;
+  max-width: 100%;
 `;
 
 const NftText = styled.div`
@@ -38,6 +39,10 @@ const BodySecondary = styled(Body2)`
   overflow: hidden;
 `;
 
+const Wrapper = styled.div`
+  grid-column: 2 / 4;
+`;
+
 export const NftComment: FC<{ address: string }> = ({ address }) => {
   const { data } = useNftItemData(address);
 
@@ -52,7 +57,7 @@ export const NftComment: FC<{ address: string }> = ({ address }) => {
           handleClose={() => setOpen(false)}
         />
       </div>
-      <div>
+      <Wrapper>
         <NftBlock onClick={() => setOpen(true)}>
           {preview && <img height="64" width="64" src={preview.url} />}
           <NftText>
@@ -62,7 +67,7 @@ export const NftComment: FC<{ address: string }> = ({ address }) => {
             </BodySecondary>
           </NftText>
         </NftBlock>
-      </div>
+      </Wrapper>
     </>
   );
 };

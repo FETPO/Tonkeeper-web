@@ -24,15 +24,16 @@ const CommentMessage = styled(Body2)`
   display: inline-flex;
 `;
 
+const Wrapper = styled.div`
+  grid-column: 2 / 4;
+`;
+
 export const Comment: FC<{ comment?: string }> = ({ comment }) => {
   if (!comment) return <></>;
   return (
-    <>
-      <div></div>
-      <div>
-        <CommentMessage>{comment}</CommentMessage>
-      </div>
-    </>
+    <Wrapper>
+      <CommentMessage>{comment}</CommentMessage>
+    </Wrapper>
   );
 };
 
