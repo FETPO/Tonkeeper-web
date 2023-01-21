@@ -1,9 +1,12 @@
 import React, { FC } from 'react';
 import styled, { css } from 'styled-components';
 import { ActivityHeader } from './Header';
+import { ActionsRow } from './home/Actions';
+import { CoinInfoSkeleton } from './jettons/Info';
 import { ColumnText } from './Layout';
 import { ListBlock, ListItem, ListItemPayload } from './List';
 import { SubHeader } from './SubHeader';
+import { H2 } from './Text';
 
 function randomIntFromInterval(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -152,5 +155,38 @@ export const ActivitySkeleton = () => {
         <SkeletonList size={2} />
       </Body>
     </>
+  );
+};
+
+export const HistoryBlock = styled.div`
+  margin-top: 3rem;
+`;
+
+export const CoinHistorySkeleton = () => {
+  return (
+    <HistoryBlock>
+      <H2>
+        <SkeletonText size="large" />
+      </H2>
+      <SkeletonList size={3} />
+    </HistoryBlock>
+  );
+};
+
+export const CoinSkeleton: FC<{ activity?: number }> = ({ activity = 2 }) => {
+  return (
+    <div>
+      <SkeletonSubHeader />
+      <CoinInfoSkeleton />
+      <ActionsRow>
+        {Array(activity)
+          .fill(null)
+          .map((item, index) => (
+            <SkeletonAction key={index} />
+          ))}
+      </ActionsRow>
+
+      <CoinHistorySkeleton />
+    </div>
   );
 };

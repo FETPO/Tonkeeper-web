@@ -11,7 +11,10 @@ import {
   SettingsHeader,
 } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
-import { ActivitySkeleton } from '@tonkeeper/uikit/dist/components/Sceleton';
+import {
+  ActivitySkeleton,
+  CoinSkeleton,
+} from '@tonkeeper/uikit/dist/components/Sceleton';
 import {
   AppContext,
   WalletStateContext,
@@ -35,7 +38,6 @@ import {
   Initialize,
   InitializeContainer,
 } from '@tonkeeper/uikit/dist/pages/import/Initialize';
-import { Jetton } from '@tonkeeper/uikit/dist/pages/jetton/Jetton';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
@@ -74,6 +76,7 @@ const SettingsRouter = React.lazy(
 const Activity = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/activity/Activity')
 );
+const Coin = React.lazy(() => import('@tonkeeper/uikit/dist/pages/coin/Coin'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -261,8 +264,15 @@ export const Content: FC<{
             }
           />
           <Route path={any(AppRoute.settings)} element={<SettingsRouter />} />
-          <Route path={AppRoute.jettons}>
-            <Route path=":jettonAddress" element={<Jetton />} />
+          <Route path={AppRoute.coins}>
+            <Route
+              path=":name"
+              element={
+                <Suspense fallback={<CoinSkeleton />}>
+                  <Coin />
+                </Suspense>
+              }
+            />
           </Route>
           <Route
             path="*"

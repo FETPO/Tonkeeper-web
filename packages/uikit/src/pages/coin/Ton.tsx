@@ -6,13 +6,13 @@ import { throttle } from '@tonkeeper/core/dist/utils/common';
 import BigNumber from 'bignumber.js';
 import React, { useEffect, useMemo } from 'react';
 import { ActivityGroupRaw } from '../../components/activity/ActivityGroup';
-import { ActionsRow } from '../../components/home/Actions';
 import { HomeActions } from '../../components/home/TonActions';
-import { CoinInfo, CoinInfoSkeleton } from '../../components/jettons/Info';
+import { CoinInfo } from '../../components/jettons/Info';
 import {
-  SkeletonAction,
+  CoinHistorySkeleton,
+  CoinSkeleton,
+  HistoryBlock,
   SkeletonList,
-  SkeletonSubHeader,
 } from '../../components/Sceleton';
 import { SubHeader } from '../../components/SubHeader';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
@@ -27,23 +27,6 @@ import { QueryKey } from '../../libs/queryKey';
 import { ActivityGroup, groupActivity } from '../../state/activity';
 import { useTonenpointStock } from '../../state/tonendpoint';
 import { useWalletAccountInfo } from '../../state/wallet';
-import { HistoryBlock, JettonHistorySkeleton } from './Jetton';
-
-export const TonPageSkeleton = () => {
-  return (
-    <div>
-      <SkeletonSubHeader />
-      <CoinInfoSkeleton />
-      <ActionsRow>
-        <SkeletonAction />
-        <SkeletonAction />
-        <SkeletonAction />
-        <SkeletonAction />
-      </ActionsRow>
-      <TonActivity />
-    </div>
-  );
-};
 
 const useBalanceValue = (
   info: AccountRepr | undefined,
@@ -105,7 +88,7 @@ export const TonActivity = () => {
   }, [data]);
 
   if (items.length === 0) {
-    return <JettonHistorySkeleton />;
+    return <CoinHistorySkeleton />;
   }
 
   return (
@@ -128,7 +111,7 @@ export const TonPage = () => {
   const { t } = useTranslation();
 
   if (!stock || !info) {
-    return <TonPageSkeleton />;
+    return <CoinSkeleton activity={4} />;
   }
 
   return (

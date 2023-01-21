@@ -2,8 +2,7 @@ export enum AppRoute {
   import = '/import',
   settings = '/settings',
   activity = '/activity',
-  jettons = '/jettons',
-  ton = '/ton',
+  coins = '/coins',
   home = '/',
 }
 

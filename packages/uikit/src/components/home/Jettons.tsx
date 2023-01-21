@@ -91,13 +91,19 @@ export const TonAsset: FC<{
     ] as const;
   }, [fiat, price, info.balance]);
 
+  const title = (
+    <>
+      {t('Toncoin')} <Symbol>TON</Symbol>
+    </>
+  );
+
   return (
-    <ListItem onClick={() => navigate(AppRoute.ton)}>
+    <ListItem onClick={() => navigate(AppRoute.coins + '/ton')}>
       <ListItemPayload>
         <Description>
           <ToncoinIcon />
           <ColumnText
-            text={t('Toncoin')}
+            text={title}
             secondary={
               <>
                 {fiatPrice} <Delta stock={stock} />
@@ -150,7 +156,7 @@ export const JettonAsset: FC<{
     <ListItem
       onClick={() =>
         navigate(
-          AppRoute.jettons + `/${encodeURIComponent(jetton.jettonAddress)}`
+          AppRoute.coins + `/${encodeURIComponent(jetton.jettonAddress)}`
         )
       }
     >

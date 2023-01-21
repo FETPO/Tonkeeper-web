@@ -4,24 +4,19 @@ import {
   JettonBalance,
   JettonInfo,
 } from '@tonkeeper/core/dist/tonApi';
-import React, { FC, useEffect, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
+import React, { FC, useMemo } from 'react';
 import { useFormatCoinValue } from '../../components/activity/ActivityAction';
 import { ActivityGroupRaw } from '../../components/activity/ActivityGroup';
 import { Action, ActionsRow } from '../../components/home/Actions';
 import { SendIcon } from '../../components/home/HomeIcons';
 import { ReceiveAction } from '../../components/home/ReceiveAction';
-import { CoinInfo, CoinInfoSkeleton } from '../../components/jettons/Info';
-import { ListBlock } from '../../components/List';
+import { CoinInfo } from '../../components/jettons/Info';
 import {
-  SkeletonAction,
-  SkeletonList,
-  SkeletonSubHeader,
-  SkeletonText,
+  CoinHistorySkeleton,
+  CoinSkeleton,
+  HistoryBlock,
 } from '../../components/Sceleton';
 import { SubHeader } from '../../components/SubHeader';
-import { H2 } from '../../components/Text';
 import { useAppContext } from '../../hooks/appContext';
 import {
   formatFiatCurrency,
@@ -30,44 +25,9 @@ import {
 } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { JettonKey, QueryKey } from '../../libs/queryKey';
-import { AppRoute } from '../../libs/routes';
 import { ActivityGroup, groupActivity } from '../../state/activity';
 import { useJettonBalance, useJettonInfo } from '../../state/jetton';
 import { useTonenpointStock } from '../../state/tonendpoint';
-
-export const HistoryBlock = styled.div`
-  margin-top: 3rem;
-`;
-
-export const JettonHistorySkeleton = () => {
-  return (
-    <HistoryBlock>
-      <H2>
-        <SkeletonText size="large" />
-      </H2>
-      <SkeletonList size={3} />
-    </HistoryBlock>
-  );
-};
-
-const JettonSkeleton = () => {
-  return (
-    <div>
-      <SkeletonSubHeader />
-      <CoinInfoSkeleton />
-      <ActionsRow>
-        <SkeletonAction />
-        <SkeletonAction />
-      </ActionsRow>
-
-      <JettonHistorySkeleton />
-    </div>
-  );
-};
-
-const List = styled(ListBlock)`
-  margin: 0.5rem 0;
-`;
 
 const JettonHistory: FC<{ info: JettonInfo; balance: JettonBalance }> = ({
   balance,
@@ -95,7 +55,7 @@ const JettonHistory: FC<{ info: JettonInfo; balance: JettonBalance }> = ({
   }, [data]);
 
   if (items.length === 0) {
-    return <JettonHistorySkeleton />;
+    return <CoinHistorySkeleton />;
   }
 
   return (
@@ -105,7 +65,9 @@ const JettonHistory: FC<{ info: JettonInfo; balance: JettonBalance }> = ({
   );
 };
 
-const JettonContent: FC<{ jettonAddress: string }> = ({ jettonAddress }) => {
+export const JettonContent: FC<{ jettonAddress: string }> = ({
+  jettonAddress,
+}) => {
   const { t } = useTranslation();
   const { tonendpoint, fiat } = useAppContext();
   const { data: info } = useJettonInfo(jettonAddress);
@@ -126,7 +88,7 @@ const JettonContent: FC<{ jettonAddress: string }> = ({ jettonAddress }) => {
   }, [balance, stock, fiat]);
 
   if (!info || !balance || !stock) {
-    return <JettonSkeleton />;
+    return <CoinSkeleton />;
   }
 
   const amount = balance?.balance
@@ -155,19 +117,4 @@ const JettonContent: FC<{ jettonAddress: string }> = ({ jettonAddress }) => {
       <JettonHistory info={info} balance={balance} />
     </div>
   );
-};
-
-export const Jetton = () => {
-  const navigate = useNavigate();
-  const { jettonAddress } = useParams();
-
-  if (!jettonAddress) return null;
-
-  useEffect(() => {
-    if (!jettonAddress) {
-      navigate(AppRoute.home);
-    }
-  }, [jettonAddress]);
-
-  return <JettonContent jettonAddress={decodeURIComponent(jettonAddress)} />;
 };

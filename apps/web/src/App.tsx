@@ -15,6 +15,10 @@ import {
 } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
 import {
+  ActivitySkeleton,
+  CoinSkeleton,
+} from '@tonkeeper/uikit/dist/components/Sceleton';
+import {
   AppContext,
   WalletStateContext,
 } from '@tonkeeper/uikit/dist/hooks/appContext';
@@ -37,8 +41,6 @@ import {
   Initialize,
   InitializeContainer,
 } from '@tonkeeper/uikit/dist/pages/import/Initialize';
-import { Jetton } from '@tonkeeper/uikit/dist/pages/jetton/Jetton';
-import { TonPage } from '@tonkeeper/uikit/dist/pages/jetton/Ton';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
@@ -78,6 +80,8 @@ const SettingsRouter = React.lazy(
 const Activity = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/activity/Activity')
 );
+
+const Coin = React.lazy(() => import('@tonkeeper/uikit/dist/pages/coin/Coin'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -237,7 +241,7 @@ export const Content: FC<{
         <Route
           path={AppRoute.activity}
           element={
-            <Suspense fallback={<Loading />}>
+            <Suspense fallback={<ActivitySkeleton />}>
               <Activity />
             </Suspense>
           }
@@ -261,24 +265,18 @@ export const Content: FC<{
             </Body>
           }
         />
-        <Route path={AppRoute.jettons}>
+        <Route path={AppRoute.coins}>
           <Route
-            path=":jettonAddress"
+            path=":name"
             element={
               <Body>
-                <Jetton />
+                <Suspense fallback={<CoinSkeleton />}>
+                  <Coin />
+                </Suspense>
               </Body>
             }
           />
         </Route>
-        <Route
-          path={AppRoute.ton}
-          element={
-            <Body>
-              <TonPage />
-            </Body>
-          }
-        />
         <Route
           path="*"
           element={
