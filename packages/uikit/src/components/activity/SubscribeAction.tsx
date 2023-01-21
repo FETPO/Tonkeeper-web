@@ -3,6 +3,7 @@ import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
 import React, { FC } from 'react';
 import {
   ActivityIcon,
+  SubscribeIcon,
   UnsubscribeIcon,
 } from '../../components/activity/ActivityIcons';
 import { ColumnText } from '../../components/Layout';
@@ -51,7 +52,7 @@ export const SubscribeAction: FC<{ action: Action; date: string }> = ({
   return (
     <ListItemGrid>
       <ActivityIcon>
-        <UnsubscribeIcon />
+        <SubscribeIcon />
       </ActivityIcon>
       <ColumnText
         text={t('Subscribed')}
