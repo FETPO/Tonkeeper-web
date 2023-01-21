@@ -610,5 +610,33 @@
   "month_1": {
     "message": "January",
     "description": "January activity title"
+  },
+  "NFT_creation": {
+    "message": "NFT creation",
+    "description": "NFT_creation activity title"
+  },
+  "Contract_Deploy": {
+    "message": "Contract Deploy",
+    "description": "Contract_Deploy activity title"
+  },
+  "Wallet_initialized": {
+    "message": "Wallet initialized",
+    "description": "Wallet_initialized activity title"
+  },
+  "Span": {
+    "message": "Span",
+    "description": "Span activity title"
+  },
+  "Bid": {
+    "message": "Bid",
+    "description": "Bid activity title"
+  },
+  "Subscribed": {
+    "message": "Subscribed",
+    "description": "Subscribed activity title"
+  },
+  "Unsubscribed": {
+    "message": "Unsubscribed",
+    "description": "Unsubscribed activity title"
   }
 }

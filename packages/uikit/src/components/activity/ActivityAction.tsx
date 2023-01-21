@@ -1,8 +1,8 @@
 import { FiatCurrencySymbolsConfig } from '@tonkeeper/core/dist/entries/fiat';
 import { Action } from '@tonkeeper/core/dist/tonApi';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
-import React, { FC, PropsWithChildren, useCallback, useMemo } from 'react';
-import styled from 'styled-components';
+import React, { FC, useCallback, useMemo } from 'react';
+import styled, { css } from 'styled-components';
 import {
   ActivityIcon,
   ReceiveIcon,
@@ -10,18 +10,13 @@ import {
 } from '../../components/activity/ActivityIcons';
 import { ColumnText } from '../../components/Layout';
 import { ListItemPayload } from '../../components/List';
-import { Body2, Label1 } from '../../components/Text';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { formatDecimals } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
-import { useNftItemData } from '../../state/wallet';
-
-const ListItemGrid = styled(ListItemPayload)`
-  display: grid;
-  grid-template-columns: min-content 1fr min-content;
-  column-gap: 1rem;
-  row-gap: 0.5rem;
-`;
+import { Comment, ErrorAction, ListItemGrid } from './CommonAction';
+import { ContractDeployAction } from './ContractDeployAction';
+import { NftComment, NftItemTransferAction } from './NftActivity';
+import { SubscribeAction, UnSubscribeAction } from './SubscribeAction';
 
 export const formatDate = (timestamp: number): string => {
   const date = new Date(timestamp * 1000);
@@ -63,80 +58,16 @@ export const useFormatCoinValue = () => {
   );
 };
 
-const NftBlock = styled.div`
-  background: ${(props) => props.theme.backgroundContentTint};
-  border-radius: ${(props) => props.theme.cornerMedium};
-  overflow: hidden;
-  display: flex;
-  overflow: hidden;
+const ReceivedText = styled.span<{ isScam?: boolean }>`
+  ${(props) =>
+    props.isScam
+      ? css`
+          color: ${props.theme.textTertiary};
+        `
+      : css`
+          color: ${props.theme.accentGreen};
+        `}
 `;
-const NftText = styled.div`
-  padding: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  white-space: nowrap;
-  overflow: hidden;
-`;
-
-const Body = styled(Body2)`
-  text-overflow: ellipsis;
-  overflow: hidden;
-`;
-const BodySecondary = styled(Body2)`
-  color: ${(props) => props.theme.textSecondary};
-  text-overflow: ellipsis;
-  overflow: hidden;
-`;
-const NftComment: FC<{ address: string }> = ({ address }) => {
-  const { data } = useNftItemData(address);
-  if (!data) return <></>;
-  console.log(data);
-  return (
-    <>
-      <div></div>
-      <NftBlock>
-        {data.metadata.image && (
-          <img height="64" width="64" src={data.metadata.image} />
-        )}
-        <NftText>
-          <Body>{data.dns ? 'TON DNS Domains' : data.metadata.name}</Body>
-          <BodySecondary>{data.dns ?? data.metadata.description}</BodySecondary>
-        </NftText>
-      </NftBlock>
-    </>
-  );
-};
-
-const CommentMessage = styled(Body2)`
-  padding: 0.5rem 0.75rem;
-  background: ${(props) => props.theme.backgroundContentTint};
-  border-radius: ${(props) => props.theme.cornerMedium};
-  line-break: anywhere;
-  display: inline-flex;
-`;
-
-const Comment: FC<{ comment?: string }> = ({ comment }) => {
-  if (!comment) return <></>;
-  return (
-    <>
-      <div></div>
-      <div>
-        <CommentMessage>{comment}</CommentMessage>
-      </div>
-    </>
-  );
-};
-const ErrorAction: FC<PropsWithChildren> = ({ children }) => {
-  const { t } = useTranslation();
-  return (
-    <ListItemGrid>
-      <ActivityIcon>
-        <ReceiveIcon />
-      </ActivityIcon>
-      <Label1>{children ?? t('Error')}</Label1>
-    </ListItemGrid>
-  );
-};
 
 const TonTransferAction: FC<{ action: Action; date: string }> = ({
   action,
@@ -159,14 +90,20 @@ const TonTransferAction: FC<{ action: Action; date: string }> = ({
           <ReceiveIcon />
         </ActivityIcon>
         <ColumnText
-          text={t('Received')}
-          secondary={toShortAddress(tonTransfer.sender.address)}
+          text={tonTransfer.sender.isScam ? t('Span') : t('Received')}
+          secondary={
+            tonTransfer.sender.name ??
+            toShortAddress(tonTransfer.sender.address)
+          }
         />
         <ColumnText
           right
-          green
           noWrap
-          text={`+ ${format(tonTransfer.amount)} TON`}
+          text={
+            <ReceivedText isScam={tonTransfer.sender.isScam}>{`+ ${format(
+              tonTransfer.amount
+            )} TON`}</ReceivedText>
+          }
           secondary={date}
         />
         <Comment comment={tonTransfer.comment} />
@@ -180,7 +117,10 @@ const TonTransferAction: FC<{ action: Action; date: string }> = ({
       </ActivityIcon>
       <ColumnText
         text={t('Sent')}
-        secondary={toShortAddress(tonTransfer.recipient.address)}
+        secondary={
+          tonTransfer.recipient.name ??
+          toShortAddress(tonTransfer.recipient.address)
+        }
       />
       <ColumnText
         right
@@ -215,9 +155,12 @@ const JettonTransferAction: FC<{ action: Action; date: string }> = ({
         </ActivityIcon>
         <ColumnText
           text={t('Sent')}
-          secondary={toShortAddress(
-            jettonTransfer.sender?.address ?? jettonTransfer.sendersWallet
-          )}
+          secondary={
+            jettonTransfer.sender.name ??
+            toShortAddress(
+              jettonTransfer.sender?.address ?? jettonTransfer.sendersWallet
+            )
+          }
         />
         <ColumnText
           right
@@ -239,70 +182,64 @@ const JettonTransferAction: FC<{ action: Action; date: string }> = ({
       </ActivityIcon>
       <ColumnText
         text={t('Received')}
-        secondary={toShortAddress(jettonTransfer.recipientsWallet)}
+        secondary={
+          jettonTransfer.recipient?.name ??
+          toShortAddress(jettonTransfer.recipientsWallet)
+        }
       />
 
       <ColumnText
         right
-        green
         noWrap
-        text={`+ ${format(
-          jettonTransfer.amount,
-          jettonTransfer.jetton.decimals
-        )} ${jettonTransfer.jetton.symbol}`}
+        text={
+          <ReceivedText isScam={jettonTransfer.sender?.isScam}>{`+ ${format(
+            jettonTransfer.amount,
+            jettonTransfer.jetton.decimals
+          )} ${jettonTransfer.jetton.symbol}`}</ReceivedText>
+        }
         secondary={date}
       />
     </ListItemGrid>
   );
 };
 
-const NftItemTransferAction: FC<{ action: Action; date: string }> = ({
+export const AuctionBidAction: FC<{ action: Action; date: string }> = ({
   action,
   date,
 }) => {
   const { t } = useTranslation();
-  const wallet = useWalletContext();
-  const { nftItemTransfer } = action;
-  if (!nftItemTransfer) {
-    return <ErrorAction />;
-  }
+  const { auctionBid } = action;
 
-  if (nftItemTransfer.sender?.address === wallet.active.rawAddress) {
-    return (
-      <ListItemGrid>
-        <ActivityIcon>
-          <SentIcon />
-        </ActivityIcon>
-        <ColumnText
-          text={t('Sent')}
-          secondary={toShortAddress(
-            nftItemTransfer.sender?.address ?? nftItemTransfer.nft
-          )}
-        />
-        <ColumnText right noWrap text={`NFT`} secondary={date} />
-        <NftComment address={nftItemTransfer.nft} />
-      </ListItemGrid>
-    );
+  const format = useFormatCoinValue();
+
+  if (!auctionBid) {
+    return <ErrorAction />;
   }
 
   return (
     <ListItemGrid>
       <ActivityIcon>
-        <ReceiveIcon />
+        <SentIcon />
       </ActivityIcon>
       <ColumnText
-        text={t('Received')}
-        secondary={toShortAddress(
-          nftItemTransfer.recipient?.address ?? nftItemTransfer.nft
-        )}
+        text={t('Bid')}
+        secondary={
+          auctionBid.auctionType ??
+          toShortAddress(auctionBid.beneficiary.address)
+        }
       />
-
-      <ColumnText right noWrap text={`NFT`} secondary={date} />
-      <NftComment address={nftItemTransfer.nft} />
+      <ColumnText
+        right
+        noWrap
+        text={`- ${format(auctionBid.amount.value)} ${
+          auctionBid.amount.tokenName
+        }`}
+        secondary={date}
+      />
+      {auctionBid.nft && <NftComment address={auctionBid.nft.address} />}
     </ListItemGrid>
   );
 };
-
 export const ActivityAction: FC<{ action: Action; date: string }> = ({
   action,
   date,
@@ -316,6 +253,14 @@ export const ActivityAction: FC<{ action: Action; date: string }> = ({
       return <JettonTransferAction action={action} date={date} />;
     case 'NftItemTransfer':
       return <NftItemTransferAction action={action} date={date} />;
+    case 'ContractDeploy':
+      return <ContractDeployAction action={action} date={date} />;
+    case 'UnSubscribe':
+      return <UnSubscribeAction action={action} date={date} />;
+    case 'Subscribe':
+      return <SubscribeAction action={action} date={date} />;
+    case 'AuctionBid':
+      return <AuctionBidAction action={action} date={date} />;
     case 'Unknown':
       return <ErrorAction>{t('Unknown')}</ErrorAction>;
     default: {

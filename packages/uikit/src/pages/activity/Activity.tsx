@@ -94,7 +94,7 @@ const Activity: FC = () => {
                 return (
                   <List key={event.eventId}>
                     {event.actions.map((action, index) => (
-                      <ListItem key={index}>
+                      <ListItem key={index} hover={false}>
                         <ActivityAction action={action} date={date} />
                       </ListItem>
                     ))}
