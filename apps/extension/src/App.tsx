@@ -6,14 +6,12 @@ import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { CopyNotification } from '@tonkeeper/uikit/dist/components/CopyNotification';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
-import {
-  Header,
-  SettingsHeader,
-} from '@tonkeeper/uikit/dist/components/Header';
+import { Header } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
 import {
   ActivitySkeleton,
   CoinSkeleton,
+  SettingsSkeleton,
 } from '@tonkeeper/uikit/dist/components/Sceleton';
 import {
   AppContext,
@@ -244,47 +242,47 @@ export const Content: FC<{
 
   return (
     <WalletStateContext.Provider value={activeWallet}>
-      <Body>
-        <Routes>
+      <Routes>
+        <Route
+          path={AppRoute.activity}
+          element={
+            <Suspense fallback={<ActivitySkeleton />}>
+              <Activity />
+            </Suspense>
+          }
+        />
+        <Route
+          path={any(AppRoute.settings)}
+          element={
+            <Suspense fallback={<SettingsSkeleton />}>
+              <Settings />
+            </Suspense>
+          }
+        />
+        <Route path={AppRoute.coins}>
           <Route
-            path={AppRoute.activity}
+            path=":name"
             element={
-              <Suspense fallback={<ActivitySkeleton />}>
-                <Activity />
-              </Suspense>
-            }
-          />
-          <Route
-            path={AppRoute.settings}
-            element={
-              <>
-                <SettingsHeader />
-                <Settings />
-              </>
-            }
-          />
-          <Route path={any(AppRoute.settings)} element={<SettingsRouter />} />
-          <Route path={AppRoute.coins}>
-            <Route
-              path=":name"
-              element={
+              <Body>
                 <Suspense fallback={<CoinSkeleton />}>
                   <Coin />
                 </Suspense>
-              }
-            />
-          </Route>
-          <Route
-            path="*"
-            element={
-              <>
-                <Header />
-                <Home />
-              </>
+              </Body>
             }
           />
-        </Routes>
-      </Body>
+        </Route>
+        <Route
+          path="*"
+          element={
+            <>
+              <Header />
+              <Body>
+                <Home />
+              </Body>
+            </>
+          }
+        />
+      </Routes>
       <Footer />
     </WalletStateContext.Provider>
   );

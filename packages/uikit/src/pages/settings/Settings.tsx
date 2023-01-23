@@ -5,7 +5,7 @@ import { SettingsNetwork } from '../../components/settings/SettingsNetwork';
 import { SettingsSocialList } from '../../components/settings/SettingsSocialList';
 import { ThemeSettings } from '../../components/settings/ThemeSettings';
 
-const Settings: FC = () => {
+export const Settings: FC = () => {
   return (
     <>
       <AccountSettings />
@@ -16,5 +16,3 @@ const Settings: FC = () => {
     </>
   );
 };
-
-export default Settings;

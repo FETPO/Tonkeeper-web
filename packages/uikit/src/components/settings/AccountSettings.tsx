@@ -1,9 +1,10 @@
 import { walletVersionText } from '@tonkeeper/core/dist/entries/wallet';
 import React, { useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { relative, SettingsRoute } from '../../libs/routes';
+import { useWalletJettonList } from '../../state/wallet';
 import { LogOutWalletNotification } from './LogOutNotification';
 import {
   ListOfTokensIcon,
@@ -16,12 +17,11 @@ import {
 import { SettingsItem, SettingsList } from './SettingsList';
 
 const SingleAccountSettings = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
   const [logout, setLogout] = useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const wallet = useWalletContext();
+  const { data: jettons } = useWalletJettonList();
 
   const mainItems = useMemo<SettingsItem[]>(() => {
     let items: SettingsItem[] = [
@@ -40,25 +40,28 @@ const SingleAccountSettings = () => {
         icon: walletVersionText(wallet.active.version),
         action: () => navigate(relative(SettingsRoute.version)),
       },
-      {
+    ];
+    if (jettons?.balances.length) {
+      items.push({
         name: t('List_of_tokens'),
         icon: <ListOfTokensIcon />,
         action: () => navigate(relative(SettingsRoute.jettons)),
-      },
-      {
-        name: t('Security'),
-        icon: <SecurityIcon />,
-        action: () => navigate(relative(SettingsRoute.security)),
-      },
-      {
-        name: t('Log_out'),
-        icon: <LogOutIcon />,
-        action: () => setLogout(true),
-      },
-    ];
+      });
+    }
+
+    items.push({
+      name: t('Security'),
+      icon: <SecurityIcon />,
+      action: () => navigate(relative(SettingsRoute.security)),
+    });
+    items.push({
+      name: t('Log_out'),
+      icon: <LogOutIcon />,
+      action: () => setLogout(true),
+    });
 
     return items;
-  }, [t, navigate, wallet, searchParams, setSearchParams]);
+  }, [t, navigate, wallet, jettons]);
 
   return (
     <>
@@ -76,6 +79,7 @@ const MultipleAccountSettings = () => {
   const navigate = useNavigate();
   const wallet = useWalletContext();
 
+  const { data: jettons } = useWalletJettonList();
   const accountItems = useMemo(() => {
     const items: SettingsItem[] = [
       {
@@ -83,11 +87,11 @@ const MultipleAccountSettings = () => {
         icon: <WalletsIcon />,
         action: () => navigate(relative(SettingsRoute.account)),
       },
-      {
-        name: t('Subscriptions'),
-        icon: <SubscriptionIcon />,
-        action: () => navigate(relative(SettingsRoute.subscriptions)),
-      },
+      // {
+      //   name: t('Subscriptions'),
+      //   icon: <SubscriptionIcon />,
+      //   action: () => navigate(relative(SettingsRoute.subscriptions)),
+      // },
     ];
 
     return items;
@@ -105,20 +109,21 @@ const MultipleAccountSettings = () => {
         icon: walletVersionText(wallet.active.version),
         action: () => navigate(relative(SettingsRoute.version)),
       },
-      {
+    ];
+    if (jettons?.balances.length) {
+      items.push({
         name: t('List_of_tokens'),
         icon: <ListOfTokensIcon />,
         action: () => navigate(relative(SettingsRoute.jettons)),
-      },
-      {
-        name: t('Security'),
-        icon: <SecurityIcon />,
-        action: () => navigate(relative(SettingsRoute.security)),
-      },
-    ];
-
+      });
+    }
+    items.push({
+      name: t('Security'),
+      icon: <SecurityIcon />,
+      action: () => navigate(relative(SettingsRoute.security)),
+    });
     return items;
-  }, [t, navigate, wallet]);
+  }, [t, navigate, wallet, jettons]);
 
   return (
     <>

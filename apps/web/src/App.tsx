@@ -9,14 +9,12 @@ import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import { AppKey } from '@tonkeeper/core/dist/Keys';
 import { CopyNotification } from '@tonkeeper/uikit/dist/components/CopyNotification';
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
-import {
-  Header,
-  SettingsHeader,
-} from '@tonkeeper/uikit/dist/components/Header';
+import { Header } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
 import {
   ActivitySkeleton,
   CoinSkeleton,
+  SettingsSkeleton,
 } from '@tonkeeper/uikit/dist/components/Sceleton';
 import {
   AppContext,
@@ -72,12 +70,8 @@ import { useAppHeight } from './libs/hooks';
 import { BrowserStorage } from './libs/storage';
 
 const Settings = React.lazy(
-  () => import('@tonkeeper/uikit/dist/pages/settings/Settings')
-);
-const SettingsRouter = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/settings')
 );
-
 const Activity = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/activity/Activity')
 );
@@ -253,22 +247,11 @@ export const Content: FC<{
           }
         />
         <Route
-          path={AppRoute.settings}
-          element={
-            <>
-              <SettingsHeader />
-              <Body>
-                <Settings />
-              </Body>
-            </>
-          }
-        />
-        <Route
           path={any(AppRoute.settings)}
           element={
-            <Body>
-              <SettingsRouter />
-            </Body>
+            <Suspense fallback={<SettingsSkeleton />}>
+              <Settings />
+            </Suspense>
           }
         />
         <Route path={AppRoute.coins}>

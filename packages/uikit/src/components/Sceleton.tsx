@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styled, { css } from 'styled-components';
-import { ActivityHeader } from './Header';
+import { ActivityHeader, SettingsHeader } from './Header';
 import { ActionsRow } from './home/Actions';
 import { CoinInfoSkeleton } from './jettons/Info';
 import { ColumnText } from './Layout';
@@ -125,10 +125,10 @@ export const SkeletonListPayload = React.memo(() => {
   );
 });
 
-export const SkeletonList: FC<{ size?: number }> = React.memo(
-  ({ size = 1 }) => {
+export const SkeletonList: FC<{ size?: number; margin?: boolean }> = React.memo(
+  ({ size = 1, margin }) => {
     return (
-      <ListBlock>
+      <ListBlock margin={margin}>
         {Array(size)
           .fill(null)
           .map((item, index) => (
@@ -141,8 +141,33 @@ export const SkeletonList: FC<{ size?: number }> = React.memo(
   }
 );
 
+const SkeletonSettingsList: FC<{ size?: number }> = React.memo(
+  ({ size = 1 }) => {
+    return (
+      <ListBlock>
+        {Array(size)
+          .fill(null)
+          .map((item, index) => (
+            <ListItem key={index} hover={false}>
+              <ListItemPayload>
+                <SkeletonText
+                  size="large"
+                  width={randomIntFromInterval(30, 300) + 'px'}
+                />
+                <SkeletonText size="large" width="30px" />
+              </ListItemPayload>
+            </ListItem>
+          ))}
+      </ListBlock>
+    );
+  }
+);
+
 const Body = styled.div`
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 `;
 
 export const ActivitySkeleton = () => {
@@ -150,9 +175,23 @@ export const ActivitySkeleton = () => {
     <>
       <ActivityHeader />
       <Body>
-        <SkeletonList size={1} />
-        <SkeletonList size={3} />
-        <SkeletonList size={2} />
+        <SkeletonList size={1} margin={false} />
+        <SkeletonList size={3} margin={false} />
+        <SkeletonList size={2} margin={false} />
+      </Body>
+    </>
+  );
+};
+
+export const SettingsSkeleton = () => {
+  return (
+    <>
+      <SettingsHeader />
+      <Body>
+        <SkeletonSettingsList size={2} />
+        <SkeletonSettingsList size={4} />
+        <SkeletonSettingsList size={3} />
+        <SkeletonSettingsList size={6} />
       </Body>
     </>
   );
