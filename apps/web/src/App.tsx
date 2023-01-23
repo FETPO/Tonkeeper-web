@@ -66,6 +66,7 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
+import styled from 'styled-components';
 import { BrowserAppSdk } from './libs/appSdk';
 import { useAppHeight } from './libs/hooks';
 import { BrowserStorage } from './libs/storage';
@@ -150,6 +151,11 @@ const useLock = () => {
   return lock;
 };
 
+const Wrapper = styled(Container)`
+  border-left: 1px solid ${(props) => props.theme.backgroundContent};
+  border-right: 1px solid ${(props) => props.theme.backgroundContent};
+`;
+
 export const Loader: FC = () => {
   const { data: activeWallet } = useActiveWallet();
 
@@ -204,9 +210,9 @@ export const Loader: FC = () => {
     <OnImportAction.Provider value={navigate}>
       <AfterImportAction.Provider value={() => navigate(AppRoute.home)}>
         <AppContext.Provider value={context}>
-          <Container>
+          <Wrapper>
             <Content activeWallet={activeWallet} lock={lock} />
-          </Container>
+          </Wrapper>
           <CopyNotification />
         </AppContext.Provider>
       </AfterImportAction.Provider>
