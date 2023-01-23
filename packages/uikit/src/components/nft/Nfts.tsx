@@ -34,11 +34,12 @@ export const NftBlock = styled.div<{ hover?: boolean }>`
       : undefined}
 `;
 
-export const Image = styled.div<{ url: string }>`
+export const Image = styled.div<{ url?: string }>`
   width: 100%;
   padding-bottom: 100%;
 
   ${(props) =>
+    props.url &&
     css`
       background-image: url('${props.url}');
     `}
@@ -68,16 +69,13 @@ export const NftItem: FC<{ nft: NftItemRepr; resolution: string }> = React.memo(
     const [open, setOpen] = useState(false);
 
     const image = nft.previews?.find((item) => item.resolution === resolution);
-
-    const { name, description } = nft.metadata;
-
     return (
       <>
         <NftBlock hover onClick={() => setOpen(true)}>
-          {image && <Image url={image.url} />}
+          <Image url={image?.url} />
           <Text>
-            {name && <Header>{name}</Header>}
-            {description && <Body>{description}</Body>}
+            <Header>{nft.dns ?? nft.metadata.name}</Header>
+            <Body>{nft.collection?.name ?? nft.metadata.description}</Body>
           </Text>
         </NftBlock>
         <NftNotification
