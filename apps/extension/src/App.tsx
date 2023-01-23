@@ -66,9 +66,6 @@ import { ExtensionAppSdk } from './libs/appSdk';
 import { ExtensionStorage } from './libs/storage';
 
 const Settings = React.lazy(
-  () => import('@tonkeeper/uikit/dist/pages/settings/Settings')
-);
-const SettingsRouter = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/settings')
 );
 const Activity = React.lazy(
