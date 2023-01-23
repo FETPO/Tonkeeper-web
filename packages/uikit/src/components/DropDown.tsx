@@ -28,7 +28,7 @@ const DropDownListContainer = styled.div<{ center?: boolean }>`
         `
       : css`
           right: 0;
-          top: 0.25rem;
+          top: -0.25rem;
         `}}
 
   z-index: 1;
