@@ -6,7 +6,7 @@ import { CoinInfoSkeleton } from './jettons/Info';
 import { ColumnText } from './Layout';
 import { ListBlock, ListItem, ListItemPayload } from './List';
 import { SubHeader } from './SubHeader';
-import { H2 } from './Text';
+import { H3 } from './Text';
 
 function randomIntFromInterval(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -170,20 +170,28 @@ const Body = styled.div`
   gap: 0.25rem;
 `;
 
-export const ActivitySkeleton = () => {
+const Title = styled(H3)`
+  margin: 1.875rem 0 0.875rem;
+`;
+
+export const ActivitySkeleton = React.memo(() => {
   return (
     <>
       <ActivityHeader />
+      <Title>
+        <SkeletonText size="large" />
+      </Title>
       <Body>
         <SkeletonList size={1} margin={false} />
         <SkeletonList size={3} margin={false} />
         <SkeletonList size={2} margin={false} />
+        <SkeletonList size={4} margin={false} />
       </Body>
     </>
   );
-};
+});
 
-export const SettingsSkeleton = () => {
+export const SettingsSkeleton = React.memo(() => {
   return (
     <>
       <SettingsHeader />
@@ -195,22 +203,22 @@ export const SettingsSkeleton = () => {
       </Body>
     </>
   );
-};
+});
 
 export const HistoryBlock = styled.div`
   margin-top: 3rem;
 `;
 
-export const CoinHistorySkeleton = () => {
+export const CoinHistorySkeleton = React.memo(() => {
   return (
     <HistoryBlock>
-      <H2>
+      <Title>
         <SkeletonText size="large" />
-      </H2>
+      </Title>
       <SkeletonList size={3} />
     </HistoryBlock>
   );
-};
+});
 
 export const CoinSkeleton: FC<{ activity?: number }> = ({ activity = 2 }) => {
   return (

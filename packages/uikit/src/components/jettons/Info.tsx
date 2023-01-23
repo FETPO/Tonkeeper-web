@@ -39,10 +39,15 @@ export const CoinInfoSkeleton = () => {
         <H2>
           <SkeletonText size="large" />
         </H2>
+        <Body open>
+          <SkeletonText width="40px" />
+        </Body>
+        <Body open margin="small">
+          <SkeletonText width="80%" />
+        </Body>
         <SkeletonText />
-        <SkeletonText width="80%" />
       </Text>
-      <SkeletonImage width="60px" />
+      <SkeletonImage width="64px" />
     </Block>
   );
 };
