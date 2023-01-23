@@ -10,15 +10,20 @@ import { useMutateLogOut } from '../../state/wallet';
 import { Button } from '../fields/Button';
 import { Checkbox } from '../fields/Checkbox';
 import { DisclaimerBlock } from '../home/BuyItemNotification';
-import { Notification, NotificationBlock } from '../Notification';
+import { Notification } from '../Notification';
 import { Body1, H2, Label2 } from '../Text';
+
+const NotificationBlock = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const BodyText = styled(Body1)`
   color: ${(props) => props.theme.textSecondary};
 `;
 const TextBlock = styled.div`
   text-align: center;
-  margin-bottom: 1rem;
 `;
 
 const DisclaimerText = styled(Label2)`
