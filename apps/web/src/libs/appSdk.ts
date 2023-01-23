@@ -1,8 +1,10 @@
 import { IAppSdk } from '@tonkeeper/core/dist/AppSdk';
 import { EventEmitter } from '@tonkeeper/core/dist/entries/eventEmitter';
+import copyToClipboard from 'copy-to-clipboard';
 
 export class BrowserAppSdk implements IAppSdk {
   copyToClipboard = (value: string) => {
+    copyToClipboard(value);
     this.uiEvents.emit('copy', {});
   };
   openPage = async (url: string) => {
