@@ -1,7 +1,7 @@
 import React, { FC, PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 import { CheckboxIcon } from '../Icon';
-import { Label2 } from '../Text';
+import { Body1 } from '../Text';
 
 export interface CheckboxProps {
   checked: boolean;
@@ -11,8 +11,7 @@ export interface CheckboxProps {
 
 const Wrapper = styled.div`
   display: inline-flex;
-  gap: 0.5rem;
-  gap: 0.75rem;
+  gap: 11px;
   align-items: center;
 
   cursor: pointer;
@@ -49,7 +48,7 @@ const CheckboxItem = styled(IconBase)`
   width: 22px;
   height: 22px;
 
-  border-radius: ${(props) => props.theme.cornerExtraExtraSmall};
+  border-radius: 6px;
 `;
 
 const RadioItem = styled(IconBase)`
@@ -59,7 +58,7 @@ const RadioItem = styled(IconBase)`
   border-radius: ${(props) => props.theme.cornerFull};
 `;
 
-const Text = styled(Label2)`
+const Text = styled(Body1)`
   color: ${(props) => props.theme.textSecondary};
 `;
 

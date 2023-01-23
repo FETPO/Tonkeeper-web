@@ -17,21 +17,22 @@ import { Checkbox } from '../fields/Checkbox';
 import { ChevronRightIcon } from '../Icon';
 import { ListItem, ListItemPayload } from '../List';
 import { Notification } from '../Notification';
-import { Body2, H2, Label1, Label2 } from '../Text';
+import { Body1, H3, Label1 } from '../Text';
 
 const Logo = styled.img<{ large?: boolean }>`
   ${(props) =>
     props.large
       ? css`
-          width: 60px;
-          height: 60px;
+          width: 72px;
+          height: 72px;
+          margin-bottom: 20px;
+          border-radius: ${(props) => props.theme.cornerSmall};
         `
       : css`
-          width: 40px;
-          height: 40px;
+          width: 44px;
+          height: 44px;
+          border-radius: ${(props) => props.theme.cornerExtraSmall};
         `}
-
-  border-radius: ${(props) => props.theme.cornerFull};
 `;
 
 const Description = styled.div`
@@ -42,10 +43,9 @@ const Description = styled.div`
 const Text = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
 `;
 
-const Body = styled(Body2)`
+const Body = styled(Body1)`
   color: ${(props) => props.theme.textSecondary};
 `;
 
@@ -56,17 +56,17 @@ const Icon = styled.div`
 
 const NotificationBlock = styled.div`
   display: flex;
-  gap: 1.5rem;
   flex-direction: column;
   align-items: center;
 `;
 
 const CheckboxBlock = styled.span`
-  margin: 1rem 0;
+  margin: 28px 0 1rem;
   display: flex;
 `;
 export const DisclaimerBlock = styled.div`
-  padding: 1rem;
+  margin: 2rem 0;
+  padding: 14px 1rem;
   box-sizing: border-box;
   display: flex;
   gap: 0.5rem;
@@ -77,14 +77,14 @@ export const DisclaimerBlock = styled.div`
   border-radius: ${(props) => props.theme.cornerSmall};
 `;
 
-export const DisclaimerText = styled(Label2)`
+const DisclaimerText = styled(Body1)`
   display: block;
 `;
 
-const DisclaimerLink = styled(Label2)`
+const DisclaimerLink = styled(Body1)`
   cursor: pointer;
   color: ${(props) => props.theme.textSecondary};
-  margin-right: 1rem;
+  margin-right: 0.75rem;
 `;
 
 const Disclaimer: FC<{
@@ -142,6 +142,10 @@ const replacePlaceholders = (
     .replaceAll('{TX_ID}', config.mercuryoSecret ?? '');
 };
 
+const Title = styled(Label1)`
+  margin-bottom: 6px;
+`;
+
 export const BuyItemNotification: FC<{
   item: TonendpoinFiatItem;
   kind: 'buy' | 'sell';
@@ -189,7 +193,7 @@ export const BuyItemNotification: FC<{
         {() => (
           <NotificationBlock>
             <Logo large src={item.icon_url} />
-            <H2>{item.title}</H2>
+            <H3>{item.title}</H3>
             <Body>{item.description}</Body>
             <Disclaimer buttons={item.info_buttons} />
             <Button size="large" fullWith primary onClick={onForceOpen}>

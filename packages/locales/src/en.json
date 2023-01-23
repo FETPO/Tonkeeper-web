@@ -339,9 +339,13 @@
     "message": "Sell TON",
     "description": "Sell TON title"
   },
-  "Other_ways_to_buy_or_sell_TON": {
-    "message": "Other ways to buy or sell TON",
-    "description": "Other ways to buy or sell TON link"
+  "Other_ways_to_buy_TON": {
+    "message": "Other ways to buy",
+    "description": "Other ways to buy TON link"
+  },
+  "Other_ways_to_sell_TON": {
+    "message": "Other ways to sell",
+    "description": "Other ways to sell TON link"
   },
   "Mercuryo_description": {
     "message": "Instantly buy with a credit card",

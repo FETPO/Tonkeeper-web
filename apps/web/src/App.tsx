@@ -152,8 +152,8 @@ const useLock = () => {
 };
 
 const Wrapper = styled(Container)`
-  border-left: 1px solid ${(props) => props.theme.backgroundContent};
-  border-right: 1px solid ${(props) => props.theme.backgroundContent};
+  border-left: 1px solid ${(props) => props.theme.backgroundContentTint};
+  border-right: 1px solid ${(props) => props.theme.backgroundContentTint};
 `;
 
 export const Loader: FC = () => {

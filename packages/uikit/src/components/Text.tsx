@@ -51,24 +51,23 @@ export const Label3 = styled.span`
 
 export const Body1 = styled.span`
   font-style: normal;
-  font-weight: 600;
-  font-size: 15px;
+  font-weight: 500;
+  font-size: 16px;
   line-height: 24px;
 `;
 
 export const Body2 = styled.span`
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
   line-height: 20px;
-  letter-spacing: -0.01rem;
 `;
 
 export const Body3 = styled.span`
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 12px;
-  letter-spacing: -0.01rem;
+  line-height: 16px;
 `;
 
 export const Num2 = styled.span`
