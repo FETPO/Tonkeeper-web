@@ -26,7 +26,7 @@ import {
 
 const Row = styled.div`
   display: flex;
-  gap: 0.75rem;
+  gap: 1rem;
 `;
 const Logo = styled.img`
   width: 44px;
@@ -37,6 +37,11 @@ const Logo = styled.img`
 const Icon = styled.span`
   display: flex;
   color: ${(props) => props.theme.iconSecondary};
+`;
+
+const RadioWrapper = styled.span`
+  margin: 2px;
+  display: flex;
 `;
 
 const JettonRow: FC<{
@@ -75,7 +80,10 @@ const JettonRow: FC<{
   return (
     <ListItemPayload>
       <Row>
-        <Radio checked={checked} onChange={onChange} />
+        <RadioWrapper>
+          <Radio checked={checked} onChange={onChange} />
+        </RadioWrapper>
+
         <Logo src={jetton.metadata?.image} />
         <ColumnText
           text={jetton.metadata?.name ?? t('Unknown_COIN')}
