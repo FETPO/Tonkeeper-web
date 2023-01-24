@@ -123,6 +123,30 @@ const Logo = styled.img`
   border-radius: ${(props) => props.theme.cornerFull};
 `;
 
+const JettonTitle = styled.div`
+  width: 100%;
+  display: inline-flex;
+  flex-wrap: nowrap;
+`;
+const JettonTitleName = styled.div`
+  flex: 0 1 content;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
+const JettonTitleSymbol = styled.div`
+  flex: 1 0 content;
+  white-space: nowrap;
+`;
+
+// {
+//   /* <div style="width:100%;border:1px solid green;display:inline-flex;flex-wrap:nowrap;">
+//    <div style="flex: 0 1 content;text-overflow: ellipsis;overflow:hidden;white-space:nowrap;"> Her comes very very very very very very very very very very very very very very very very very very very long </div>
+//    <div style="flex: 1 0 content;white-space:nowrap;"> &nbsp;but flexible line</div>
+// </div> */
+// }
+
 export const JettonAsset: FC<{
   jetton: JettonBalance;
   stock: TonendpointStock;
@@ -146,10 +170,14 @@ export const JettonAsset: FC<{
   const formattedBalance = format(jetton.balance, jetton.metadata?.decimals);
 
   const title = (
-    <>
-      {jetton.metadata?.name ?? t('Unknown_COIN')}{' '}
-      <Symbol>{jetton.metadata?.symbol}</Symbol>
-    </>
+    <JettonTitle>
+      <JettonTitleName>
+        {jetton.metadata?.name ?? t('Unknown_COIN')}
+      </JettonTitleName>
+      <JettonTitleSymbol>
+        <Symbol>{jetton.metadata?.symbol}</Symbol>
+      </JettonTitleSymbol>
+    </JettonTitle>
   );
 
   return (
