@@ -10,9 +10,7 @@ import {
   ListOfTokensIcon,
   LogOutIcon,
   RecoveryPhraseIcon,
-  SecurityIcon,
-  SubscriptionIcon,
-  WalletsIcon,
+  SecurityIcon, WalletsIcon
 } from './SettingsIcons';
 import { SettingsItem, SettingsList } from './SettingsList';
 
@@ -25,11 +23,11 @@ const SingleAccountSettings = () => {
 
   const mainItems = useMemo<SettingsItem[]>(() => {
     let items: SettingsItem[] = [
-      {
-        name: t('Subscriptions'),
-        icon: <SubscriptionIcon />,
-        action: () => navigate(relative(SettingsRoute.subscriptions)),
-      },
+      // {
+      //   name: t('Subscriptions'),
+      //   icon: <SubscriptionIcon />,
+      //   action: () => navigate(relative(SettingsRoute.subscriptions)),
+      // },
       {
         name: t('Recovery_phrase'),
         icon: <RecoveryPhraseIcon />,
