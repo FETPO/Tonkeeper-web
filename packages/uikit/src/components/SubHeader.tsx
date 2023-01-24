@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { BackButton } from './fields/BackButton';
 import { ChevronLeftIcon } from './Icon';
 import { H3 } from './Text';
 
@@ -14,24 +15,11 @@ const Block = styled.div`
   position: relative;
 `;
 
-export const BackButton = styled.div`
-  cursor: pointer;
+export const BackButtonLeft = styled(BackButton)`
   position: absolute;
   top: 50%;
   margin-top: -16px;
   left: 0;
-  width: 32px;
-  height: 32px;
-  border-radius: ${(props) => props.theme.cornerFull};
-  color: ${(props) => props.theme.textPrimary};
-  background: ${(props) => props.theme.backgroundContent};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &:hover {
-    background: ${(props) => props.theme.backgroundContentTint};
-  }
 `;
 
 export interface SubHeaderProps {
@@ -47,9 +35,9 @@ export const SubHeader: FC<SubHeaderProps> = ({ title }) => {
   const navigate = useNavigate();
   return (
     <Block>
-      <BackButton onClick={() => navigate(-1)}>
+      <BackButtonLeft onClick={() => navigate(-1)}>
         <ChevronLeftIcon />
-      </BackButton>
+      </BackButtonLeft>
       <Title>{title}</Title>
     </Block>
   );

@@ -3,25 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute } from '../../libs/routes';
+import { BackButton } from '../fields/BackButton';
 import { Button } from '../fields/Button';
 import { ChevronLeftIcon } from '../Icon';
 import { Body1, Body2, H2 } from '../Text';
-
-const BackButton = styled.div`
-  cursor: pointer;
-  width: 2rem;
-  height: 2rem;
-  border-radius: ${(props) => props.theme.cornerFull};
-  color: ${(props) => props.theme.textPrimary};
-  background: ${(props) => props.theme.backgroundContent};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &:hover {
-    background: ${(props) => props.theme.backgroundContentTint};
-  }
-`;
 
 const Block = styled.div`
   display: flex;
@@ -40,7 +25,7 @@ const Body = styled(Body1)`
   color: ${(props) => props.theme.textSecondary};
 `;
 
-const Grid = styled.div`
+export const WorldsGrid = styled.div`
   display: grid;
   grid-template-rows: repeat(12, minmax(0, 1fr));
   grid-auto-flow: column;
@@ -51,7 +36,7 @@ const Grid = styled.div`
 
 const World = styled(Body1)``;
 
-const Number = styled(Body2)`
+export const WorldNumber = styled(Body2)`
   display: inline-block;
   width: 24px;
   line-height: 24px;
@@ -83,13 +68,13 @@ export const Worlds: FC<{
         </div>
       </Block>
 
-      <Grid>
+      <WorldsGrid>
         {mnemonic.map((world, index) => (
           <World key={index}>
-            <Number> {index + 1}.</Number> {world}{' '}
+            <WorldNumber> {index + 1}.</WorldNumber> {world}{' '}
           </World>
         ))}
-      </Grid>
+      </WorldsGrid>
 
       <Button size="large" fullWith primary marginTop onClick={onCheck}>
         {t('Continue')}
@@ -293,28 +278,28 @@ export const ImportWords: FC<{
           <Body>{t('Enter_your_recovery_phrase_description')}</Body>
         </div>
       </Block>
-    <Block>
-      <Inputs>
-        {mnemonic.map((item, index) => (
-          <WordInput
-            key={index}
-            value={item}
-            test={index + 1}
-            valid={item}
-            onChange={(newValue) => onChange(newValue, index)}
-          />
-        ))}
-      </Inputs>
-      <Button
-        size="large"
-        fullWith
-        primary
-        disabled={!isValid}
-        loading={isLoading}
-        onClick={() => onMnemonic(mnemonic)}
-      >
-        {t('Continue')}
-      </Button>
+      <Block>
+        <Inputs>
+          {mnemonic.map((item, index) => (
+            <WordInput
+              key={index}
+              value={item}
+              test={index + 1}
+              valid={item}
+              onChange={(newValue) => onChange(newValue, index)}
+            />
+          ))}
+        </Inputs>
+        <Button
+          size="large"
+          fullWith
+          primary
+          disabled={!isValid}
+          loading={isLoading}
+          onClick={() => onMnemonic(mnemonic)}
+        >
+          {t('Continue')}
+        </Button>
       </Block>
     </>
   );

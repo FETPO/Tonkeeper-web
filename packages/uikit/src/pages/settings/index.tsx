@@ -67,22 +67,8 @@ const SettingsRouter = () => {
         }
       />
       <Route path={SettingsRoute.recovery}>
-        <Route
-          path=":publicKey"
-          element={
-            <Body>
-              <Recovery />
-            </Body>
-          }
-        />
-        <Route
-          index
-          element={
-            <Body>
-              <ActiveRecovery />
-            </Body>
-          }
-        />
+        <Route path=":publicKey" element={<Recovery />} />
+        <Route index element={<ActiveRecovery />} />
       </Route>
       <Route
         path={SettingsRoute.version}

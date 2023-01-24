@@ -5,7 +5,7 @@ import { useTranslation } from '../../hooks/translation';
 import { AppRoute, ImportRoute } from '../../libs/routes';
 import { Button } from '../fields/Button';
 import { TonkeeperIcon } from '../Icon';
-import { Notification, NotificationIcon } from '../Notification';
+import { Notification } from '../Notification';
 import { Body1, H2 } from '../Text';
 
 const BodyText = styled(Body1)`
@@ -14,6 +14,13 @@ const BodyText = styled(Body1)`
 const TextBlock = styled.div`
   text-align: center;
   margin-bottom: 2rem;
+`;
+
+const NotificationIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.75rem;
 `;
 
 export const ImportNotification: FC<{

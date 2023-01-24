@@ -3,14 +3,14 @@ import { getWalletMnemonic } from '@tonkeeper/core/dist/service/menmonicService'
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { WorldNumber, WorldsGrid } from '../../components/create/Words';
+import { BackButton } from '../../components/fields/BackButton';
 import { ChevronLeftIcon } from '../../components/Icon';
-import { Loading } from '../../components/Loading';
 import { Body1, Body2, H2 } from '../../components/Text';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
-import { AppRoute } from '../../libs/routes';
 import { getPasswordByNotification } from '../home/UnlockNotification';
 
 export const ActiveRecovery = () => {
@@ -46,39 +46,17 @@ const useMnemonic = (publicKey: string, auth: AuthState) => {
   return mnemonic;
 };
 
-const BackButton = styled.div`
-  cursor: pointer;
-  position: absolute;
-  left: 0;
-  bottom: 100%;
-  width: 28px;
-  height: 28px;
-  border-radius: ${(props) => props.theme.cornerFull};
-  color: ${(props) => props.theme.textPrimary};
-  background: ${(props) => props.theme.backgroundContent};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &:hover {
-    background: ${(props) => props.theme.backgroundContentTint};
-  }
-`;
-
 const Wrapper = styled.div`
+  flex-grow: 1;
   display: flex;
-  gap: 2rem;
   justify-content: center;
 
   flex-direction: column;
-
-  height: calc(100vh - 81px);
 `;
 
 const Block = styled.div`
   display: flex;
   text-align: center;
-  gap: 1rem;
   flex-direction: column;
 
   position: relative;
@@ -89,22 +67,6 @@ const Body = styled(Body2)`
   color: ${(props) => props.theme.textSecondary};
 `;
 
-const Grid = styled.div`
-  display: grid;
-  grid-template-rows: repeat(12, minmax(0, 1fr));
-  grid-auto-flow: column;
-  gap: 0.5rem;
-  place-content: space-around;
-`;
-
-const World = styled(Body1)``;
-
-const Number = styled.span`
-  display: inline-block;
-  width: 30px;
-  color: ${(props) => props.theme.textSecondary};
-`;
-
 const RecoveryContent: FC<{ publicKey: string }> = ({ publicKey }) => {
   const { auth } = useAppContext();
   const { t } = useTranslation();
@@ -112,11 +74,11 @@ const RecoveryContent: FC<{ publicKey: string }> = ({ publicKey }) => {
   const mnemonic = useMnemonic(publicKey, auth);
 
   const onBack = () => {
-    navigate(AppRoute.settings);
+    navigate(-1);
   };
 
   if (!mnemonic) {
-    return <Loading />;
+    return <Wrapper />;
   }
 
   return (
@@ -129,13 +91,13 @@ const RecoveryContent: FC<{ publicKey: string }> = ({ publicKey }) => {
         <Body>{t('Your_recovery_phrase_description')}</Body>
       </Block>
 
-      <Grid>
+      <WorldsGrid>
         {mnemonic.map((world, index) => (
-          <World key={index}>
-            <Number> {index + 1}.</Number> {world}{' '}
-          </World>
+          <Body1 key={index}>
+            <WorldNumber> {index + 1}.</WorldNumber> {world}{' '}
+          </Body1>
         ))}
-      </Grid>
+      </WorldsGrid>
     </Wrapper>
   );
 };

@@ -2,6 +2,7 @@ import React, { FC, useEffect, useMemo, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 import { Container } from '../styles/globalStyle';
+import { BackButton } from './fields/BackButton';
 import { CloseIcon } from './Icon';
 import { Gap } from './Layout';
 import ReactPortal from './ReactPortal';
@@ -27,23 +28,6 @@ export const ButtonContainer = styled.div`
 const Padding = styled.div`
   flex-shrink: 0;
   height: 2rem;
-`;
-
-export const CloseButton = styled.div`
-  cursor: pointer;
-  width: 2rem;
-  height: 2rem;
-  border-radius: ${(props) => props.theme.cornerFull};
-  color: ${(props) => props.theme.textPrimary};
-  background: ${(props) => props.theme.backgroundContent};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-
-  &:hover {
-    background: ${(props) => props.theme.backgroundContentTint};
-  }
 `;
 
 const Overlay = styled.div`
@@ -109,20 +93,13 @@ export const NotificationBlock = styled.form`
   align-items: center;
 `;
 
-export const NotificationIcon = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 0.75rem;
-`;
-
 export const NotificationCancelButton: FC<{ handleClose: () => void }> = ({
   handleClose,
 }) => {
   return (
-    <CloseButton onClick={handleClose}>
+    <BackButton onClick={handleClose}>
       <CloseIcon />
-    </CloseButton>
+    </BackButton>
   );
 };
 
