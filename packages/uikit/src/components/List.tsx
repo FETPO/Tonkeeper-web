@@ -56,19 +56,37 @@ export const ListItem = styled.div<{ hover?: boolean; dropDown?: boolean }>`
           background: ${(props) => props.theme.backgroundContent};
         `}
 
-  ${(props) =>
-    props.hover !== false
-      ? css`
-          cursor: pointer;
-          &:hover {
-            background: ${props.theme.backgroundContentTint};
+  ${(props) => {
+    if (props.dropDown) {
+      return props.hover !== false
+        ? css`
+            cursor: pointer;
+            &:hover {
+              background: ${props.theme.backgroundHighlighted};
 
-            > div {
-              border-top-color: ${props.theme.backgroundContentTint} !important;
+              > div {
+                border-top-color: ${props.theme
+                  .backgroundHighlighted} !important;
+              }
             }
-          }
-        `
-      : undefined}
+          `
+        : undefined;
+    } else {
+      return props.hover !== false
+        ? css`
+            cursor: pointer;
+            &:hover {
+              background: ${props.theme.backgroundContentTint};
+
+              > div {
+                border-top-color: ${props.theme
+                  .backgroundContentTint} !important;
+              }
+            }
+          `
+        : undefined;
+    }
+  }}
 
   & + & > div {
     border-top: 1px solid ${(props) => props.theme.separatorCommon};

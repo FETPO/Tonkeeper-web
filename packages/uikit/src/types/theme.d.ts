@@ -15,6 +15,7 @@ declare module 'styled-components' {
     backgroundOverlayStrong: string;
     backgroundOverlayLight: string;
     backgroundOverlayExtraLight: string;
+    backgroundHighlighted: string;
 
     iconPrimary: string;
     iconSecondary: string;

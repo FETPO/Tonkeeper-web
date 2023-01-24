@@ -69,6 +69,10 @@ const Row = styled.div`
   justify-content: space-between;
 
   background: ${(props) => props.theme.backgroundContentTint};
+
+  &:hover {
+    background: ${(props) => props.theme.backgroundHighlighted};
+  }
 `;
 
 const WalletRow: FC<{

@@ -14,6 +14,7 @@ export const defaultTheme: DefaultTheme = {
   backgroundOverlayStrong: 'rgba(0, 0, 0, 0.72)',
   backgroundOverlayLight: 'rgba(0, 0, 0, 0.48)',
   backgroundOverlayExtraLight: 'rgba(0, 0, 0, 0.24)',
+  backgroundHighlighted: 'rgba(79, 90, 112, 0.24)',
 
   iconPrimary: '#FFFFFF',
   iconSecondary: '#8994A3',

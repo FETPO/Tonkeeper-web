@@ -32,7 +32,7 @@ const DropDownListContainer = styled.div<{ center?: boolean }>`
         `}}
 
   z-index: 1;
-  background-color: ${(props) => props.theme.backgroundContent};
+  background-color: ${(props) => props.theme.backgroundContentTint};
   border-radius: ${(props) => props.theme.cornerMedium};
   max-height: 70vh;
   overflow: auto;
@@ -42,12 +42,12 @@ export const DropDownListPayload = styled.div`
   white-space: nowrap;
 `;
 
-export const ListItem = styled.div`
+const ListItem = styled.div`
   cursor: pointer;
   padding: 10px 20px;
 
   &:hover {
-    background: ${(props) => props.theme.backgroundContentTint};
+    background: ${(props) => props.theme.backgroundHighlighted};
   }
 `;
 

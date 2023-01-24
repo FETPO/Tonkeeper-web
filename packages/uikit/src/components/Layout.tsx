@@ -96,5 +96,5 @@ export const ColumnText: FC<{
 export const Divider = styled.div`
   height: 8px;
   width: 100%;
-  background: ${(props) => props.theme.backgroundOverlayExtraLight};
+  background: ${(props) => props.theme.backgroundContent};
 `;
