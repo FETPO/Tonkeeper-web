@@ -12,23 +12,13 @@ const Message = styled.div`
   top: -30px;
   left: 50%;
 
-  width: 140px;
-  margin-left: -70px;
-  padding: 1rem;
-  box-sizing: border-box;
-  text-align: center;
-
-  background: ${(props) => props.theme.backgroundContent};
-  border-radius: ${(props) => props.theme.cornerLarge};
-
   transition: all 0.1s ease-in-out;
 
   &.enter-done {
-    top: 30px;
+    top: 16px;
     opacity: 1;
     pointer-events: auto;
     transform: scale(1);
-    overflow: auto;
   }
 
   &.exit {
@@ -36,6 +26,18 @@ const Message = styled.div`
     opacity: 0;
     transform: scale(0.8);
   }
+`;
+
+const Content = styled.div`
+  width: auto;
+  text-align: center;
+  padding: 14px 24px 14px;
+  box-sizing: border-box;
+  background: ${(props) => props.theme.backgroundContent};
+  border-radius: ${(props) => props.theme.cornerLarge};
+
+  margin-left: -50%;
+  margin-right: 50%;
 `;
 
 export const CopyNotification: FC = React.memo(() => {
@@ -71,7 +73,9 @@ export const CopyNotification: FC = React.memo(() => {
         nodeRef={nodeRef}
       >
         <Message ref={nodeRef}>
-          <Label2>{t('Copied')}</Label2>
+          <Content>
+            <Label2>{t('Copied')}</Label2>
+          </Content>
         </Message>
       </CSSTransition>
     </ReactPortal>
