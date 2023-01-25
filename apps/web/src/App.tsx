@@ -146,9 +146,9 @@ const useLock = () => {
 };
 
 const Wrapper = styled(Container)`
-  @media (min-width: 550px) {
-    border-left: 1px solid ${(props) => props.theme.backgroundContentTint};
-    border-right: 1px solid ${(props) => props.theme.backgroundContentTint};
+  @media (min-width: 600px) {
+    border-left: 1px solid ${(props) => props.theme.separatorCommon};
+    border-right: 1px solid ${(props) => props.theme.separatorCommon};
   }
 `;
 

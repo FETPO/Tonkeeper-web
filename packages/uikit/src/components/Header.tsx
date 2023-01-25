@@ -40,7 +40,7 @@ const Block = styled.div<{ top: boolean; center?: boolean; second?: boolean }>`
   ${(props) =>
     !props.top &&
     css`
-      border-bottom: 1px solid ${props.theme.backgroundContentTint};
+      border-bottom: 1px solid ${props.theme.separatorCommon};
     `}
 `;
 

@@ -116,7 +116,7 @@ const Block = styled.div<{ bottom: boolean }>`
   ${(props) =>
     !props.bottom &&
     css`
-      border-top: 1px solid ${(props) => props.theme.backgroundContentTint};
+      border-top: 1px solid ${(props) => props.theme.separatorCommon};
     `}
 `;
 

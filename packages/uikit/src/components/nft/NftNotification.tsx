@@ -48,7 +48,8 @@ const NftPreview: FC<{
   const { t } = useTranslation();
   const { data: collection } = useNftCollectionData(nftItem);
 
-  const { name, description } = nftItem.metadata;
+  const { description } = nftItem.metadata;
+  const name = nftItem.dns ?? nftItem.metadata.name;
 
   const collectionName = nftItem?.collection?.name;
 
@@ -62,7 +63,7 @@ const NftPreview: FC<{
         <BackButton onClick={onClose}>
           <ChevronLeftIcon />
         </BackButton>
-        {name && <H3>{name}</H3>}
+        <H3>{nftItem.dns ?? nftItem.metadata.name}</H3>
         <BackButton>
           <EllipsisIcon />
         </BackButton>
@@ -70,7 +71,7 @@ const NftPreview: FC<{
       <NftBlock>
         {image && <Image ref={ref} url={image.url} />}
         <Text>
-          {name && <H2>{name}</H2>}
+          <H2>{name}</H2>
           {collectionName && (
             <Body open margin="small">
               {collectionName}

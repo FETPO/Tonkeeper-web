@@ -85,4 +85,6 @@ export const defaultTheme: DefaultTheme = {
   cornerMedium: '20px',
   cornerLarge: '24px',
   cornerFull: '100%',
+
+  separatorCommon: 'rgba(255, 255, 255, 0.06)',
 };

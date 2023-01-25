@@ -33,7 +33,7 @@ export function throttle<Args extends unknown[]>(
 
 export const toShortAddress = (address: string, length = 4): string => {
   address = Address.parse(address).toString();
-  return address.slice(0, length) + '....' + address.slice(-length);
+  return address.slice(0, length) + '...' + address.slice(-length);
 };
 
 export function formatTransferUrl(
