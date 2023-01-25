@@ -13,6 +13,7 @@ import { ActivityGroup, groupActivity } from '../../state/activity';
 
 const Body = styled.div`
   flex-grow: 1;
+  padding: 0 1rem;
 `;
 
 const Activity: FC = () => {

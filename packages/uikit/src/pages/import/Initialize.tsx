@@ -15,7 +15,7 @@ const Block = styled.div<{ fullHeight: boolean }>`
   display: flex;
   flex-direction: column;
   min-height: var(--app-height);
-  padding: 2rem 0;
+  padding: 2rem 1rem;
   box-sizing: border-box;
 
   ${(props) =>

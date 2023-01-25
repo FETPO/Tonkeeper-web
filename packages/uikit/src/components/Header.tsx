@@ -1,6 +1,6 @@
 import { throttle, toShortAddress } from '@tonkeeper/core/dist/utils/common';
 import React, { FC, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { useAppContext, useWalletContext } from '../hooks/appContext';
 import { useTranslation } from '../hooks/translation';
@@ -23,7 +23,7 @@ const Block = styled.div<{ top: boolean; center?: boolean; second?: boolean }>`
 
   ${(props) =>
     css`
-      padding: ${props.second ? '0.75rem 0' : '1rem 0'};
+      padding: ${props.second ? '0.75rem 1rem' : '1rem 1rem'};
     `}
 
   display: flex;
@@ -160,6 +160,7 @@ const DropDownPayload: FC<{ onClose: () => void; onCreate: () => void }> = ({
 
 const useIsScrollTop = () => {
   const [isTop, setTop] = useState(true);
+  const location = useLocation();
   useEffect(() => {
     const handler = throttle(() => {
       if (window.scrollY > 20) {
@@ -176,7 +177,7 @@ const useIsScrollTop = () => {
     return () => {
       window.removeEventListener('scroll', handler);
     };
-  }, []);
+  }, [location.pathname]);
 
   return isTop;
 };

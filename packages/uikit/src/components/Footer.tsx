@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { throttle } from '@tonkeeper/core/dist/utils/common';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -87,6 +88,7 @@ const Button = styled.div<{ active: boolean }>`
   align-items: center;
   cursor: pointer;
   gap: 0.25rem;
+  width: 20%;
 
   color: ${(props) => props.theme.tabBarInactiveIcon};
 
@@ -107,7 +109,7 @@ const Block = styled.div<{ bottom: boolean }>`
   justify-content: space-around;
   position: sticky;
   bottom: 0;
-  padding: 1rem 0;
+  padding: 1rem;
 
   background-color: ${(props) => props.theme.backgroundPage};
 
@@ -120,6 +122,9 @@ const Block = styled.div<{ bottom: boolean }>`
 
 const useIsScrollBottom = () => {
   const [isBottom, setBottom] = useState(false);
+  const location = useLocation();
+  const client = useQueryClient();
+
   useEffect(() => {
     const handler = throttle(() => {
       if (
@@ -139,7 +144,7 @@ const useIsScrollBottom = () => {
     return () => {
       window.removeEventListener('scroll', handler);
     };
-  }, []);
+  }, [location.pathname]);
 
   return isBottom;
 };

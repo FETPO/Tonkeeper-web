@@ -22,10 +22,10 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   min-height: var(--app-height);
-  padding: 0 1rem;
   background-color: ${(props) => props.theme.backgroundPage};
 `;
 
 export const Body = styled.div`
   flex-grow: 1;
+  padding: 0 1rem;
 `;

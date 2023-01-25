@@ -163,6 +163,10 @@ const SkeletonSettingsList: FC<{ size?: number }> = React.memo(
   }
 );
 
+const Container = styled.div`
+  flex-grow: 1;
+  padding: 0 1rem;
+`;
 const Body = styled.div`
   flex-grow: 1;
   display: flex;
@@ -178,15 +182,17 @@ export const ActivitySkeleton = React.memo(() => {
   return (
     <>
       <ActivityHeader />
-      <Title>
-        <SkeletonText size="large" />
-      </Title>
-      <Body>
-        <SkeletonList size={1} margin={false} />
-        <SkeletonList size={3} margin={false} />
-        <SkeletonList size={2} margin={false} />
-        <SkeletonList size={4} margin={false} />
-      </Body>
+      <Container>
+        <Title>
+          <SkeletonText size="large" />
+        </Title>
+        <Body>
+          <SkeletonList size={1} margin={false} />
+          <SkeletonList size={3} margin={false} />
+          <SkeletonList size={2} margin={false} />
+          <SkeletonList size={4} margin={false} />
+        </Body>
+      </Container>
     </>
   );
 });
@@ -195,12 +201,14 @@ export const SettingsSkeleton = React.memo(() => {
   return (
     <>
       <SettingsHeader />
-      <Body>
-        <SkeletonSettingsList size={2} />
-        <SkeletonSettingsList size={4} />
-        <SkeletonSettingsList size={3} />
-        <SkeletonSettingsList size={6} />
-      </Body>
+      <Container>
+        <Body>
+          <SkeletonSettingsList size={2} />
+          <SkeletonSettingsList size={4} />
+          <SkeletonSettingsList size={3} />
+          <SkeletonSettingsList size={6} />
+        </Body>
+      </Container>
     </>
   );
 });

@@ -25,16 +25,14 @@ export const IconPage: FC<{
   button?: React.ReactNode;
 }> = ({ icon, title, description, button }) => {
   return (
-    <>
-      <Block>
-        {icon}
-        <div>
-          {title && <H2>{title}</H2>}
-          {description && <Body>{description}</Body>}
-        </div>
-        {button}
-      </Block>
-    </>
+    <Block>
+      {icon}
+      <div>
+        {title && <H2>{title}</H2>}
+        {description && <Body>{description}</Body>}
+      </div>
+      {button}
+    </Block>
   );
 };
 
