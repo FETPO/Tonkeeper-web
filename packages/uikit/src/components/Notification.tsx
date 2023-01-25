@@ -77,7 +77,6 @@ const Content = styled.div`
   border-top-left-radius: ${(props) => props.theme.cornerLarge};
   padding: 1rem;
   flex-shrink: 0;
-  min-height: 40vh;
   box-sizing: border-box;
 `;
 
@@ -137,7 +136,7 @@ export const Notification: FC<{
       >
         <Splash ref={nodeRef}>
           <Overlay>
-            <NotificationContainer>
+            <NotificationContainer onClick={handleClose}>
               <Wrapper>
                 <Padding />
                 <Gap />

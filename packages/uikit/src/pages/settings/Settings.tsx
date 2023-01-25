@@ -10,7 +10,7 @@ export const Settings: FC = () => {
     <>
       <AccountSettings />
       <ThemeSettings />
-      <SettingsSocialList appPage="https://tonkeeper.com/" />
+      <SettingsSocialList />
       <ClearSettings />
       <SettingsNetwork />
     </>
