@@ -80,7 +80,5 @@ declare module 'styled-components' {
     cornerMedium: string;
     cornerLarge: string;
     cornerFull: string;
-
-    separatorCommon: string;
   }
 }
