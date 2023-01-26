@@ -45,6 +45,7 @@ const CopyButton = styled(Label2)`
 
   &:hover {
     background: ${(props) => props.theme.backgroundContentTint};
+    border-top: 1px solid ${(props) => props.theme.backgroundContentTint};
   }
 `;
 
@@ -124,7 +125,11 @@ const ReceiveContent = () => {
       <CopyBlock>
         <TextBlock>
           <Text>{t('Or_use_wallet_address')}</Text>
-          <AddressText>{wallet.active.friendlyAddress}</AddressText>
+          <AddressText
+            onClick={() => sdk.copyToClipboard(wallet.active.friendlyAddress)}
+          >
+            {wallet.active.friendlyAddress}
+          </AddressText>
         </TextBlock>
         <CopyButton
           onClick={() => sdk.copyToClipboard(wallet.active.friendlyAddress)}
