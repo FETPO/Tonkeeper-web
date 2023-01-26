@@ -52,6 +52,7 @@ const Wrapper = styled.div`
   justify-content: center;
 
   flex-direction: column;
+  padding: 0 1rem;
 `;
 
 const Block = styled.div`

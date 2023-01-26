@@ -53,7 +53,6 @@ export const getPasswordByNotification = async (
 const Block = styled.form`
   display: flex;
   flex-direction: column;
-  padding: 1rem 0 3rem;
   box-sizing: border-box;
 
   justify-content: center;

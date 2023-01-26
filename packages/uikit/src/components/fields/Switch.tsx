@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 export interface SwitchProps {
@@ -34,11 +34,15 @@ const Label = styled.div`
   margin: 0;
 `;
 
-const Inner = styled.span<{ checked?: boolean }>`
+const Inner = styled.span<{ checked?: boolean; active: boolean }>`
   display: block;
   width: 200%;
   margin-left: -100%;
-  transition: margin 0.3s ease-in-out 0s;
+  ${(props) =>
+    props.active &&
+    css`
+      transition: margin 0.2s ease-in-out;
+    `}
 
   &:before,
   &:after {
@@ -79,7 +83,7 @@ const Inner = styled.span<{ checked?: boolean }>`
       : undefined}
 `;
 
-const Outer = styled.span<{ checked?: boolean }>`
+const Outer = styled.span<{ checked?: boolean; active: boolean }>`
   display: block;
   width: 28px;
   height: 28px;
@@ -91,7 +95,11 @@ const Outer = styled.span<{ checked?: boolean }>`
   right: 18px;
   border: 0 solid ${(props) => props.theme.textPrimary};
   border-radius: 20px;
-  transition: all 0.3s ease-in-out 0s;
+  ${(props) =>
+    props.active &&
+    css`
+      transition: all 0.2s ease-in-out;
+    `}
 
   ${(props) =>
     props.checked
@@ -101,8 +109,19 @@ const Outer = styled.span<{ checked?: boolean }>`
       : undefined}
 `;
 
+const useActive = () => {
+  const [active, setActive] = useState(false);
+  useEffect(() => {
+    const timeout = setTimeout(() => setActive(true), 100);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
+  return active;
+};
 export const Switch: FC<SwitchProps> = React.memo(
   ({ checked, onChange, disabled }) => {
+    const active = useActive();
     return (
       <Wrapper
         disabled={disabled}
@@ -114,8 +133,8 @@ export const Switch: FC<SwitchProps> = React.memo(
         }}
       >
         <Label>
-          <Inner checked={checked} />
-          <Outer checked={checked} />
+          <Inner checked={checked} active={active} />
+          <Outer checked={checked} active={active} />
         </Label>
       </Wrapper>
     );

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChangePasswordNotification } from '../../components/create/ChangePassword';
+import { Switch } from '../../components/fields/Switch';
 import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
 import { KeyIcon, LockIcon } from '../../components/settings/SettingsIcons';
 import {
@@ -8,7 +9,6 @@ import {
   SettingsList,
 } from '../../components/settings/SettingsList';
 import { SubHeader } from '../../components/SubHeader';
-import { Switch } from '../../components/Switch';
 import { Label1 } from '../../components/Text';
 import { useAppContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';

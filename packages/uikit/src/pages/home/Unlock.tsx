@@ -19,7 +19,7 @@ const Block = styled.form<{ minHeight?: string }>`
       min-height: ${props.minHeight ?? 'var(--app-height)'};
     `}
 
-  padding: 2rem 0;
+  padding: 2rem 1rem;
   box-sizing: border-box;
 
   justify-content: center;
