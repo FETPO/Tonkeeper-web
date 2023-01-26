@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
 import {
   languages,
-  localizationText
+  localizationText,
 } from '@tonkeeper/core/dist/entries/language';
 import { getTonClient, Network } from '@tonkeeper/core/dist/entries/network';
 import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
@@ -11,25 +11,26 @@ import { CopyNotification } from '@tonkeeper/uikit/dist/components/CopyNotificat
 import { Footer } from '@tonkeeper/uikit/dist/components/Footer';
 import { Header } from '@tonkeeper/uikit/dist/components/Header';
 import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
+import MemoryScroll from '@tonkeeper/uikit/dist/components/MemoryScroll';
 import {
   ActivitySkeleton,
   CoinSkeleton,
   HomeSkeleton,
-  SettingsSkeleton
+  SettingsSkeleton,
 } from '@tonkeeper/uikit/dist/components/Skeleton';
 import {
   AppContext,
-  WalletStateContext
+  WalletStateContext,
 } from '@tonkeeper/uikit/dist/hooks/appContext';
 import {
   AfterImportAction,
   AppSdkContext,
-  OnImportAction
+  OnImportAction,
 } from '@tonkeeper/uikit/dist/hooks/appSdk';
 import { StorageContext } from '@tonkeeper/uikit/dist/hooks/storage';
 import {
   I18nContext,
-  TranslationContext
+  TranslationContext,
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
 import { Unlock } from '@tonkeeper/uikit/dist/pages/home/Unlock';
@@ -37,14 +38,14 @@ import { UnlockNotification } from '@tonkeeper/uikit/dist/pages/home/UnlockNotif
 import ImportRouter from '@tonkeeper/uikit/dist/pages/import';
 import {
   Initialize,
-  InitializeContainer
+  InitializeContainer,
 } from '@tonkeeper/uikit/dist/pages/import/Initialize';
 import { UserThemeProvider } from '@tonkeeper/uikit/dist/providers/ThemeProvider';
 import { useAccountState } from '@tonkeeper/uikit/dist/state/account';
 import { useAuthState } from '@tonkeeper/uikit/dist/state/password';
 import {
   useTonendpoint,
-  useTonenpointConfig
+  useTonenpointConfig,
 } from '@tonkeeper/uikit/dist/state/tonendpoint';
 import { useActiveWallet } from '@tonkeeper/uikit/dist/state/wallet';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
@@ -54,7 +55,7 @@ import React, {
   Suspense,
   useEffect,
   useMemo,
-  useState
+  useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -62,7 +63,7 @@ import {
   Route,
   Routes,
   useLocation,
-  useNavigate
+  useNavigate,
 } from 'react-router-dom';
 import styled from 'styled-components';
 import { BrowserAppSdk } from './libs/appSdk';
@@ -283,6 +284,7 @@ export const Content: FC<{
         />
       </Routes>
       <Footer />
+      <MemoryScroll />
     </WalletStateContext.Provider>
   );
 };
