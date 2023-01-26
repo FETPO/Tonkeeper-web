@@ -3,7 +3,7 @@ import React, {
   PropsWithChildren,
   useEffect,
   useRef,
-  useState
+  useState,
 } from 'react';
 import styled, { css } from 'styled-components';
 
@@ -27,8 +27,8 @@ const DropDownListContainer = styled.div<{ center?: boolean }>`
           top: calc(100% + 0.5rem);
         `
       : css`
-          right: 0;
-          top: -0.25rem;
+          top: -1.25rem;
+          right: -1rem;
         `}}
 
   z-index: 1;
