@@ -64,35 +64,42 @@ const Body = styled(Body3)`
   overflow: hidden;
 `;
 
-export const NftItem: FC<{ nft: NftItemRepr; resolution: string }> = React.memo(
-  ({ nft, resolution }) => {
-    const [open, setOpen] = useState(false);
-
-    const image = nft.previews?.find((item) => item.resolution === resolution);
-    return (
-      <>
-        <NftBlock hover onClick={() => setOpen(true)}>
-          <Image url={image?.url} />
-          <Text>
-            <Header>{nft.dns ?? nft.metadata.name}</Header>
-            <Body>{nft.collection?.name ?? nft.metadata.description}</Body>
-          </Text>
-        </NftBlock>
-        <NftNotification
-          nftItem={open ? nft : undefined}
-          handleClose={() => setOpen(false)}
-        />
-      </>
-    );
-  }
-);
+export const NftItem: FC<{
+  nft: NftItemRepr;
+  resolution: string;
+  onOpen: (nft: NftItemRepr) => void;
+}> = React.memo(({ nft, resolution, onOpen }) => {
+  const image = nft.previews?.find((item) => item.resolution === resolution);
+  return (
+    <NftBlock hover onClick={() => onOpen(nft)}>
+      <Image url={image?.url} />
+      <Text>
+        <Header>{nft.dns ?? nft.metadata.name}</Header>
+        <Body>{nft.collection?.name ?? nft.metadata.description}</Body>
+      </Text>
+    </NftBlock>
+  );
+});
 
 export const NftsList: FC<{ nfts: NftItemsRepr | undefined }> = ({ nfts }) => {
+  const [nftItem, setNftItem] = useState<NftItemRepr | undefined>(undefined);
+
   return (
-    <Grid>
-      {(nfts?.nftItems ?? []).map((item) => (
-        <NftItem key={item.address} nft={item} resolution="500x500" />
-      ))}
-    </Grid>
+    <>
+      <Grid>
+        {(nfts?.nftItems ?? []).map((item) => (
+          <NftItem
+            key={item.address}
+            nft={item}
+            resolution="500x500"
+            onOpen={setNftItem}
+          />
+        ))}
+      </Grid>
+      <NftNotification
+        nftItem={nftItem}
+        handleClose={() => setNftItem(undefined)}
+      />
+    </>
   );
 };
