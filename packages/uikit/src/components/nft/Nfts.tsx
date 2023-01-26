@@ -49,7 +49,7 @@ export const Image = styled.div<{ url?: string }>`
 const Text = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0.25rem 0.75rem 0.5rem;
+  padding: 0.5rem 0.75rem 0.5rem;
   white-space: nowrap;
 `;
 
