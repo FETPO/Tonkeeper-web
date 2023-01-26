@@ -50,6 +50,7 @@ const Block = styled.div<{ top: boolean; center?: boolean; second?: boolean }>`
         background: ${(props) => props.theme.separatorCommon};
         position: absolute;
         top: 100%;
+        left: 0;
       }
     `}
 `;
@@ -178,7 +179,7 @@ const DropDownPayload: FC<{ onClose: () => void; onCreate: () => void }> = ({
   }
 };
 
-const useIsScrollTop = () => {
+export const useIsScrollTop = () => {
   const [isTop, setTop] = useState(true);
   const location = useLocation();
   useEffect(() => {
