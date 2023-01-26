@@ -119,7 +119,7 @@ const WalletRow: FC<{
         />
         {activePublicKey === publicKey ? (
           <Icon>
-            <CheckIcon />
+            <CheckIcon width="16" height="16" />
           </Icon>
         ) : undefined}
       </ListItemPayload>

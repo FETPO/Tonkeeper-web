@@ -65,12 +65,15 @@ export const ChevronRightIcon = () => {
   );
 };
 
-export const CheckIcon = () => {
+export const CheckIcon: FC<{ width?: string; height?: string }> = ({
+  width = '28',
+  height = '28',
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.75rem"
-      height="1.75rem"
+      width={width}
+      height={height}
       viewBox="0 0 28 28"
       fill="none"
     >
@@ -86,8 +89,8 @@ export const CloseIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1rem"
-      height="1rem"
+      width="16"
+      height="16"
       viewBox="0 0 16 16"
       fill="none"
     >
