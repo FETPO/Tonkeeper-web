@@ -28,10 +28,12 @@ const Block = styled.div`
 const Body = styled(Label2)`
   color: ${(props) => props.theme.textSecondary};
   cursor: pointer;
+  user-select: none;
 `;
 
 const Amount = styled(Num2)`
   margin-bottom: 0.5rem;
+  user-select: none;
 `;
 const Error = styled.div`
   height: 26px;

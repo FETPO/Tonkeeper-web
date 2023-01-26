@@ -18,10 +18,16 @@ const TabsBlock = styled.div`
   position: relative;
   justify-content: center;
   gap: 2.25rem;
+
+  user-select: none;
 `;
 
 const TabsButton = styled.div<{ active?: boolean }>`
   cursor: pointer;
+
+  padding: 1rem;
+  margin -1rem;
+  box-sizing: border-box;
 
   ${(props) =>
     props.active
@@ -60,8 +66,12 @@ const Tabs: FC<{ tab: HomeTabs; onTab: (value: HomeTabs) => void }> = ({
     if (blockRef.current && lineRef.current) {
       const active = blockRef.current.childNodes[tab] as HTMLElement;
 
-      lineRef.current.style.width = active.clientWidth + 'px';
-      lineRef.current.style.left = active.offsetLeft + 'px';
+      const width = 40;
+
+      lineRef.current.style.width = width + 'px';
+      lineRef.current.style.transition = 'all 0.3s ease-in-out';
+      lineRef.current.style.left =
+        active.offsetLeft + (active.clientWidth - width) / 2 + 'px';
     }
   }, [blockRef, lineRef, tab]);
   return (

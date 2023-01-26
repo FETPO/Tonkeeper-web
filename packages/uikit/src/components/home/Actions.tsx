@@ -12,20 +12,6 @@ const Text = styled(Label3)`
   color: ${(props) => props.theme.textSecondary};
 `;
 
-const Block = styled.div`
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  width: 55px;
-  text-align: center;
-
-  &:hover ${Text} {
-    color: ${(props) => props.theme.textPrimary};
-  }
-`;
-
 const Button = styled.div`
   width: 44px;
   height: 44px;
@@ -35,8 +21,23 @@ const Button = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
 
-  &:hover {
+const Block = styled.div`
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 55px;
+  text-align: center;
+
+  user-select: none;
+
+  &:hover ${Text} {
+    color: ${(props) => props.theme.textPrimary};
+  }
+  &:hover ${Button} {
     background: ${(props) => props.theme.backgroundContentTint};
   }
 `;

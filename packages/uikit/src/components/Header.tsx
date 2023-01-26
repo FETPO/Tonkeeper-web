@@ -17,6 +17,8 @@ import { H1, H3, Label1 } from './Text';
 const Block = styled.div<{ top: boolean; center?: boolean; second?: boolean }>`
   flex-shrink: 0;
 
+  user-select: none;
+
   position: sticky;
   top: 0;
   z-index: 1;
