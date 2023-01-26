@@ -12,7 +12,6 @@ const NotificationContainer = styled(Container)`
   background: transparent;
 `;
 const Wrapper = styled.div`
-  margin: 0 -1rem;
   display: flex;
   display: flex;
   flex-direction: column;
