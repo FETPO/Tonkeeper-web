@@ -1,7 +1,7 @@
 import {
   AccountRepr,
   JettonBalance,
-  JettonsBalances,
+  JettonsBalances
 } from '@tonkeeper/core/dist/tonApi';
 import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import BigNumber from 'bignumber.js';
@@ -15,7 +15,7 @@ import {
   getJettonStockAmount,
   getJettonStockPrice,
   getTonCoinStockPrice,
-  useFormatCoinValue,
+  useFormatCoinValue
 } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute, SettingsRoute } from '../../libs/routes';
@@ -122,6 +122,8 @@ const Logo = styled.img`
   width: 44px;
   height: 44px;
   border-radius: ${(props) => props.theme.cornerFull};
+
+  pointer-events: none;
 `;
 
 export const JettonAsset: FC<{
