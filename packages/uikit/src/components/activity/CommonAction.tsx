@@ -19,7 +19,7 @@ export const ListItemGrid = styled(ListItemPayload)`
 const CommentMessage = styled(Body2)`
   padding: 0.5rem 0.75rem;
   background: ${(props) => props.theme.backgroundContentTint};
-  border-radius: ${(props) => props.theme.cornerMedium};
+  border-radius: ${(props) => props.theme.cornerSmall};
   line-break: anywhere;
   display: inline-flex;
 `;

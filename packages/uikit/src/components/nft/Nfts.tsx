@@ -18,7 +18,7 @@ export const NftBlock = styled.div<{ hover?: boolean }>`
 
   background: ${(props) => props.theme.backgroundContent};
 
-  border-radius: ${(props) => props.theme.cornerMedium};
+  border-radius: ${(props) => props.theme.cornerSmall};
 
   overflow: hidden;
 

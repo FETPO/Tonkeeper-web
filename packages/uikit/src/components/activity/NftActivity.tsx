@@ -13,7 +13,7 @@ import { ErrorAction, ListItemGrid } from './CommonAction';
 
 const NftBlock = styled.div`
   background: ${(props) => props.theme.backgroundContentTint};
-  border-radius: ${(props) => props.theme.cornerMedium};
+  border-radius: ${(props) => props.theme.cornerSmall};
   overflow: hidden;
   display: inline-flex;
   cursor: pointer;

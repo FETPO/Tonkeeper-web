@@ -101,6 +101,10 @@ export const NotificationCancelButton: FC<{ handleClose: () => void }> = ({
   );
 };
 
+const disableEvent: React.MouseEventHandler<HTMLDivElement> = (e) => {
+  e.stopPropagation();
+  e.preventDefault();
+}
 export const Notification: FC<{
   isOpen: boolean;
   handleClose: () => void;
@@ -139,7 +143,7 @@ export const Notification: FC<{
               <Wrapper>
                 <Padding />
                 <Gap />
-                <Content>
+                <Content onClick={disableEvent}>
                   {!hideButton && (
                     <ButtonContainer>
                       <NotificationCancelButton handleClose={handleClose} />

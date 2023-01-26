@@ -38,6 +38,7 @@ const Logo = styled.img<{ large?: boolean }>`
 const Description = styled.div`
   display: flex;
   gap: 1rem;
+  align-items: center;
 `;
 
 const Text = styled.div`
@@ -165,7 +166,7 @@ export const BuyItemNotification: FC<{
     );
     setOpen(false);
   };
-  const onOpen = () => {
+  const onOpen: React.MouseEventHandler<HTMLDivElement> = (e) => {
     if (hided) {
       onForceOpen();
     } else {

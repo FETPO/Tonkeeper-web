@@ -10,15 +10,11 @@ import { H2, Label2 } from '../Text';
 import { Action } from './Actions';
 import { ReceiveIcon } from './HomeIcons';
 
-const Icon = styled.span`
-  margin-top: 1rem;
-  display: inline-block;
-`;
 const Block = styled.div`
   padding: 1.5rem;
   width: 100%;
   box-sizing: border-box;
-  border-radius: ${(props) => props.theme.cornerMedium};
+  border-radius: ${(props) => props.theme.cornerSmall};
   background: ${(props) => props.theme.backgroundContent};
 
   max-width: 80%;
@@ -51,7 +47,7 @@ const Background = styled.div`
   padding: 1.5rem;
   width: 100%;
   box-sizing: border-box;
-  border-radius: ${(props) => props.theme.cornerMedium};
+  border-radius: ${(props) => props.theme.cornerSmall};
   background: ${(props) => props.theme.textPrimary};
 
   svg {

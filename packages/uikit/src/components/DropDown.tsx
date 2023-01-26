@@ -17,13 +17,13 @@ const DropDownHeader = styled.div`
 
 const DropDownListContainer = styled.div<{ center?: boolean }>`
   position: absolute;
-  min-width: 212px;
+  min-width: 240px;
   
   ${(props) =>
     props.center
       ? css`
           left: 50%;
-          margin-left: -106px;
+          margin-left: -120px;
           top: calc(100% + 0.5rem);
         `
       : css`
@@ -33,7 +33,7 @@ const DropDownListContainer = styled.div<{ center?: boolean }>`
 
   z-index: 1;
   background-color: ${(props) => props.theme.backgroundContentTint};
-  border-radius: ${(props) => props.theme.cornerMedium};
+  border-radius: ${(props) => props.theme.cornerSmall};
   max-height: 70vh;
   overflow: auto;
 `;

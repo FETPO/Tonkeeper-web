@@ -22,15 +22,15 @@ export const ListBlock = styled.div<{ margin?: boolean; dropDown?: boolean }>`
         `
       : undefined}
 
-  border-radius: ${(props) => props.theme.cornerMedium};
+  border-radius: ${(props) => props.theme.cornerSmall};
 
   > div:first-child {
-    border-top-right-radius: ${(props) => props.theme.cornerMedium};
-    border-top-left-radius: ${(props) => props.theme.cornerMedium};
+    border-top-right-radius: ${(props) => props.theme.cornerSmall};
+    border-top-left-radius: ${(props) => props.theme.cornerSmall};
   }
   > div:last-child {
-    border-bottom-right-radius: ${(props) => props.theme.cornerMedium};
-    border-bottom-left-radius: ${(props) => props.theme.cornerMedium};
+    border-bottom-right-radius: ${(props) => props.theme.cornerSmall};
+    border-bottom-left-radius: ${(props) => props.theme.cornerSmall};
   }
 `;
 
