@@ -5,12 +5,11 @@ import {
 } from '@tonkeeper/core/dist/tonApi';
 import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import React, { FC } from 'react';
-import { ActionsRow } from '../../components/home/Actions';
-import { Balance, BalanceSkeleton } from '../../components/home/Balance';
+import { Balance } from '../../components/home/Balance';
 import { CompactView } from '../../components/home/CompactView';
 import { TabsView } from '../../components/home/TabsView';
 import { HomeActions } from '../../components/home/TonActions';
-import { SkeletonAction, SkeletonList } from '../../components/Sceleton';
+import { HomeSkeleton } from '../../components/Skeleton';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useUserJettonList } from '../../state/jetton';
 import { useTonenpointStock } from '../../state/tonendpoint';
@@ -19,21 +18,6 @@ import {
   useWalletJettonList,
   useWalletNftList,
 } from '../../state/wallet';
-
-export const HomeSkeleton = () => {
-  return (
-    <>
-      <BalanceSkeleton />
-      <ActionsRow>
-        <SkeletonAction />
-        <SkeletonAction />
-        <SkeletonAction />
-        <SkeletonAction />
-      </ActionsRow>
-      <SkeletonList size={5} />
-    </>
-  );
-};
 
 const HomeAssets: FC<{
   stock: TonendpointStock;
@@ -54,7 +38,7 @@ const HomeAssets: FC<{
   }
 };
 
-export const Home = () => {
+const Home = () => {
   const wallet = useWalletContext();
 
   const { fiat, tonendpoint } = useAppContext();
@@ -84,3 +68,5 @@ export const Home = () => {
     </>
   );
 };
+
+export default Home;

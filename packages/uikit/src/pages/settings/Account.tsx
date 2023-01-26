@@ -14,7 +14,6 @@ import { DropDown } from '../../components/DropDown';
 import { EllipsisIcon, ReorderIcon } from '../../components/Icon';
 import { ColumnText, Divider } from '../../components/Layout';
 import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
-import { SkeletonListPayload } from '../../components/Sceleton';
 import {
   DeleteWalletNotification,
   LogOutWalletNotification,
@@ -22,6 +21,7 @@ import {
 import { SetUpWalletIcon } from '../../components/settings/SettingsIcons';
 import { SettingsList } from '../../components/settings/SettingsList';
 import { RenameWalletNotification } from '../../components/settings/WalletNameNotification';
+import { SkeletonListPayload } from '../../components/Skeleton';
 import { SubHeader } from '../../components/SubHeader';
 import { Label1 } from '../../components/Text';
 import { useAppContext } from '../../hooks/appContext';

@@ -61,19 +61,6 @@ declare module 'styled-components' {
     blue: string;
     red: string;
 
-    num1: string;
-    num2: string;
-    h1: string;
-    h2: string;
-    h3: string;
-    label1: string;
-    label2: string;
-    label3: string;
-    body1: string;
-    body2: string;
-    body3: string;
-    body4caps: string;
-
     cornerExtraExtraSmall: string;
     cornerExtraSmall: string;
     cornerSmall: string;

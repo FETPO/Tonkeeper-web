@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { ActivityGroupRaw } from '../../components/activity/ActivityGroup';
 import { EmptyActivity } from '../../components/activity/EmptyActivity';
 import { ActivityHeader } from '../../components/Header';
-import { ActivitySkeleton, SkeletonList } from '../../components/Sceleton';
+import { ActivitySkeleton, SkeletonList } from '../../components/Skeleton';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { QueryKey } from '../../libs/queryKey';
 import { ActivityGroup, groupActivity } from '../../state/activity';

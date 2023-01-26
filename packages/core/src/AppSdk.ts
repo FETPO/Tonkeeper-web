@@ -5,6 +5,7 @@ export interface UIEvents {
   unlock: void;
   copy: void;
   getPassword: AuthState;
+  loading: void;
   response: any;
 }
 

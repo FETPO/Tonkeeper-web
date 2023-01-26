@@ -1,7 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import styled, { css } from 'styled-components';
+import { useAppSdk } from '../hooks/appSdk';
 import { ActivityHeader, SettingsHeader } from './Header';
 import { ActionsRow } from './home/Actions';
+import { BalanceSkeleton } from './home/Balance';
 import { CoinInfoSkeleton } from './jettons/Info';
 import { ColumnText } from './Layout';
 import { ListBlock, ListItem, ListItemPayload } from './List';
@@ -179,6 +181,13 @@ const Title = styled(H3)`
 `;
 
 export const ActivitySkeleton = React.memo(() => {
+  const sdk = useAppSdk();
+  useEffect(() => {
+    return () => {
+      sdk.uiEvents.emit('loading');
+    };
+  }, []);
+
   return (
     <>
       <ActivityHeader />
@@ -198,6 +207,13 @@ export const ActivitySkeleton = React.memo(() => {
 });
 
 export const SettingsSkeleton = React.memo(() => {
+  const sdk = useAppSdk();
+  useEffect(() => {
+    return () => {
+      sdk.uiEvents.emit('loading');
+    };
+  }, []);
+
   return (
     <>
       <SettingsHeader />
@@ -218,6 +234,13 @@ export const HistoryBlock = styled.div`
 `;
 
 export const CoinHistorySkeleton = React.memo(() => {
+  const sdk = useAppSdk();
+  useEffect(() => {
+    return () => {
+      sdk.uiEvents.emit('loading');
+    };
+  }, []);
+
   return (
     <HistoryBlock>
       <Title>
@@ -228,20 +251,44 @@ export const CoinHistorySkeleton = React.memo(() => {
   );
 });
 
-export const CoinSkeleton: FC<{ activity?: number }> = ({ activity = 2 }) => {
-  return (
-    <div>
-      <SkeletonSubHeader />
-      <CoinInfoSkeleton />
-      <ActionsRow>
-        {Array(activity)
-          .fill(null)
-          .map((item, index) => (
-            <SkeletonAction key={index} />
-          ))}
-      </ActionsRow>
+export const CoinSkeleton: FC<{ activity?: number }> = React.memo(
+  ({ activity = 2 }) => {
+    return (
+      <div>
+        <SkeletonSubHeader />
+        <CoinInfoSkeleton />
+        <ActionsRow>
+          {Array(activity)
+            .fill(null)
+            .map((item, index) => (
+              <SkeletonAction key={index} />
+            ))}
+        </ActionsRow>
 
-      <CoinHistorySkeleton />
-    </div>
+        <CoinHistorySkeleton />
+      </div>
+    );
+  }
+);
+
+export const HomeSkeleton = React.memo(() => {
+  const sdk = useAppSdk();
+  useEffect(() => {
+    return () => {
+      sdk.uiEvents.emit('loading');
+    };
+  }, []);
+
+  return (
+    <>
+      <BalanceSkeleton />
+      <ActionsRow>
+        <SkeletonAction />
+        <SkeletonAction />
+        <SkeletonAction />
+        <SkeletonAction />
+      </ActionsRow>
+      <SkeletonList size={5} />
+    </>
   );
-};
+});

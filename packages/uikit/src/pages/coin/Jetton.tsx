@@ -15,7 +15,7 @@ import {
   CoinHistorySkeleton,
   CoinSkeleton,
   HistoryBlock,
-} from '../../components/Sceleton';
+} from '../../components/Skeleton';
 import { SubHeader } from '../../components/SubHeader';
 import { useAppContext } from '../../hooks/appContext';
 import {

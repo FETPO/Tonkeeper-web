@@ -11,8 +11,9 @@ import { Loading } from '@tonkeeper/uikit/dist/components/Loading';
 import {
   ActivitySkeleton,
   CoinSkeleton,
+  HomeSkeleton,
   SettingsSkeleton,
-} from '@tonkeeper/uikit/dist/components/Sceleton';
+} from '@tonkeeper/uikit/dist/components/SKeleton';
 import {
   AppContext,
   WalletStateContext,
@@ -28,7 +29,6 @@ import {
   TranslationContext,
 } from '@tonkeeper/uikit/dist/hooks/translation';
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
-import { Home } from '@tonkeeper/uikit/dist/pages/home/Home';
 import { Unlock } from '@tonkeeper/uikit/dist/pages/home/Unlock';
 import { UnlockNotification } from '@tonkeeper/uikit/dist/pages/home/UnlockNotification';
 import ImportRouter from '@tonkeeper/uikit/dist/pages/import';
@@ -71,6 +71,7 @@ const Settings = React.lazy(
 const Activity = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/activity/Activity')
 );
+const Home = React.lazy(() => import('@tonkeeper/uikit/dist/pages/home/Home'));
 const Coin = React.lazy(() => import('@tonkeeper/uikit/dist/pages/coin/Coin'));
 
 const queryClient = new QueryClient({
@@ -84,8 +85,6 @@ const sdk = new ExtensionAppSdk();
 const storage = new ExtensionStorage();
 
 export const App: FC = () => {
-  console.log('app');
-
   const translation = useMemo(() => {
     const client: I18nContext = {
       t: browser.i18n.getMessage,
@@ -274,7 +273,9 @@ export const Content: FC<{
             <>
               <Header />
               <Body>
-                <Home />
+                <Suspense fallback={<HomeSkeleton />}>
+                  <Home />
+                </Suspense>
               </Body>
             </>
           }

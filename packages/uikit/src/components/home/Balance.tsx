@@ -15,7 +15,7 @@ import {
   getTonCoinStockPrice,
 } from '../../hooks/balance';
 import { useUserJettonList } from '../../state/jetton';
-import { SkeletonText } from '../Sceleton';
+import { SkeletonText } from '../Skeleton';
 import { Label2, Num2 } from '../Text';
 
 const Block = styled.div`

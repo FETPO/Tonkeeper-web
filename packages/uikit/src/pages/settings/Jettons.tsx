@@ -13,7 +13,7 @@ import { ReorderIcon } from '../../components/Icon';
 import { ColumnText } from '../../components/Layout';
 
 import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
-import { SkeletonList } from '../../components/Sceleton';
+import { SkeletonList } from '../../components/Skeleton';
 import { SubHeader } from '../../components/SubHeader';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useCoinFullBalance } from '../../hooks/balance';

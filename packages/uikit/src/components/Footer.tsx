@@ -1,8 +1,8 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { throttle } from '@tonkeeper/core/dist/utils/common';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import { useAppSdk } from '../hooks/appSdk';
 import { useTranslation } from '../hooks/translation';
 import { AppRoute } from '../libs/routes';
 import { Label3 } from './Text';
@@ -123,7 +123,7 @@ const Block = styled.div<{ bottom: boolean }>`
 const useIsScrollBottom = () => {
   const [isBottom, setBottom] = useState(false);
   const location = useLocation();
-  const client = useQueryClient();
+  const sdk = useAppSdk();
 
   useEffect(() => {
     const handler = throttle(() => {
@@ -141,10 +141,13 @@ const useIsScrollBottom = () => {
 
     handler();
 
+    sdk.uiEvents.on('loading', handler);
+
     return () => {
       window.removeEventListener('scroll', handler);
+      sdk.uiEvents.off('loading', handler);
     };
-  }, [location.pathname]);
+  }, [location.pathname, sdk]);
 
   return isBottom;
 };

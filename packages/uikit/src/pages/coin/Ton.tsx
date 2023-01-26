@@ -13,7 +13,7 @@ import {
   CoinSkeleton,
   HistoryBlock,
   SkeletonList,
-} from '../../components/Sceleton';
+} from '../../components/Skeleton';
 import { SubHeader } from '../../components/SubHeader';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import {
