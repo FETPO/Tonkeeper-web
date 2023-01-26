@@ -125,6 +125,17 @@ export const Notification: FC<{
     });
   }, [isOpen, children, handleClose]);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen]);
+
   return (
     <ReactPortal wrapperId="react-portal-modal-container">
       <CSSTransition
