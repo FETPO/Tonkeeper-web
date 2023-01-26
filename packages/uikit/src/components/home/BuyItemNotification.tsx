@@ -61,6 +61,10 @@ const NotificationBlock = styled.div`
   align-items: center;
 `;
 
+const Center = styled.div`
+  text-align: center;
+`;
+
 const CheckboxBlock = styled.span`
   margin: 28px 0 0;
   display: flex;
@@ -87,6 +91,10 @@ const DisclaimerLink = styled(Body1)`
   cursor: pointer;
   color: ${(props) => props.theme.textSecondary};
   margin-right: 0.75rem;
+
+  &:hover {
+    color: ${(props) => props.theme.textPrimary};
+  }
 `;
 
 const Disclaimer: FC<{
@@ -144,10 +152,6 @@ const replacePlaceholders = (
     .replaceAll('{TX_ID}', config.mercuryoSecret ?? '');
 };
 
-const Title = styled(Label1)`
-  margin-bottom: 6px;
-`;
-
 export const BuyItemNotification: FC<{
   item: TonendpoinFiatItem;
   kind: 'buy' | 'sell';
@@ -196,7 +200,9 @@ export const BuyItemNotification: FC<{
           <NotificationBlock>
             <Logo large src={item.icon_url} />
             <H3>{item.title}</H3>
-            <Body>{item.description}</Body>
+            <Center>
+              <Body>{item.description}</Body>
+            </Center>
             <Disclaimer buttons={item.info_buttons} />
             <Button size="large" fullWith primary onClick={onForceOpen}>
               {item.action_button.title}

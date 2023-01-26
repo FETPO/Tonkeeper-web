@@ -75,7 +75,7 @@ const OtherLink = styled(Label2)`
   cursor: pointer;
   padding: 7.5px 1rem 8.5px;
   background: ${(props) => props.theme.backgroundContent};
-  border-radius: ${(props) => props.theme.cornerSmall};
+  border-radius: ${(props) => props.theme.cornerMedium};
   display: inline-block;
 `;
 

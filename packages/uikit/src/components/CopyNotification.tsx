@@ -33,11 +33,13 @@ const Content = styled.div`
   text-align: center;
   padding: 14px 24px 14px;
   box-sizing: border-box;
-  background: ${(props) => props.theme.backgroundContent};
+  background: ${(props) => props.theme.backgroundContentTint};
   border-radius: ${(props) => props.theme.cornerLarge};
 
   margin-left: -50%;
   margin-right: 50%;
+
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.16);
 `;
 
 export const CopyNotification: FC = React.memo(() => {
