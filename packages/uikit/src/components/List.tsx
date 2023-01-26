@@ -41,6 +41,8 @@ export const ListItemPayload = styled.div`
   justify-content: space-between;
   padding: 1rem 1rem 1rem 0;
   box-sizing: border-box;
+
+  width: 100%;
 `;
 
 export const ListItem = styled.div<{ hover?: boolean; dropDown?: boolean }>`

@@ -3,7 +3,7 @@ import React, {
   PropsWithChildren,
   useEffect,
   useRef,
-  useState,
+  useState
 } from 'react';
 import styled, { css } from 'styled-components';
 
@@ -17,7 +17,7 @@ const DropDownHeader = styled.div`
 
 const DropDownListContainer = styled.div<{ center?: boolean }>`
   position: absolute;
-  min-width: 240px;
+  width: 240px;
   
   ${(props) =>
     props.center

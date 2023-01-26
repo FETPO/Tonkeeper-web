@@ -642,5 +642,9 @@
   "Unsubscribed": {
     "message": "Unsubscribed",
     "description": "Unsubscribed activity title"
+  },
+  "NFT_collection_creation": {
+    "message": "NFT collection creation",
+    "description": "NFT collection creation activity title"
   }
 }

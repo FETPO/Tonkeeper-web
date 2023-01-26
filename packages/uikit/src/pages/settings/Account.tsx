@@ -34,6 +34,8 @@ const Row = styled.div`
   display: flex;
   gap: 0.5rem;
   align-items: center;
+
+  width: 100%;
 `;
 
 const Icon = styled.span`
@@ -65,68 +67,69 @@ const WalletRow: FC<{
             <ReorderIcon />
           </Icon>
           <ColumnText
+            noWrap
             text={wallet.name ? wallet.name : t('Wallet')}
             secondary={toShortAddress(wallet.active.friendlyAddress)}
           />
+          <DropDown
+            payload={(onClose) => (
+              <ListBlock margin={false} dropDown>
+                <ListItem
+                  dropDown
+                  onClick={() => {
+                    setRename(true);
+                    onClose();
+                  }}
+                >
+                  <ListItemPayload>
+                    <Label1>{t('Rename')}</Label1>
+                  </ListItemPayload>
+                </ListItem>
+                <ListItem
+                  dropDown
+                  onClick={() => {
+                    navigate(
+                      AppRoute.settings +
+                        SettingsRoute.recovery +
+                        `/${wallet.publicKey}`
+                    );
+                  }}
+                >
+                  <ListItemPayload>
+                    <Label1>{t('Show_recovery_phrase')}</Label1>
+                  </ListItemPayload>
+                </ListItem>
+                <Divider />
+                <ListItem
+                  dropDown
+                  onClick={() => {
+                    setLogout(true);
+                    onClose();
+                  }}
+                >
+                  <ListItemPayload>
+                    <Label1>{t('Log_out')}</Label1>
+                  </ListItemPayload>
+                </ListItem>
+                <ListItem
+                  dropDown
+                  onClick={() => {
+                    setRemove(true);
+                    onClose();
+                  }}
+                >
+                  <ListItemPayload>
+                    <Label1>{t('Delete_account')}</Label1>
+                  </ListItemPayload>
+                </ListItem>
+              </ListBlock>
+            )}
+          >
+            <Icon>
+              <EllipsisIcon />
+            </Icon>
+          </DropDown>
         </Row>
-        <DropDown
-          payload={(onClose) => (
-            <ListBlock margin={false} dropDown>
-              <ListItem
-                dropDown
-                onClick={() => {
-                  setRename(true);
-                  onClose();
-                }}
-              >
-                <ListItemPayload>
-                  <Label1>{t('Rename')}</Label1>
-                </ListItemPayload>
-              </ListItem>
-              <ListItem
-                dropDown
-                onClick={() => {
-                  navigate(
-                    AppRoute.settings +
-                      SettingsRoute.recovery +
-                      `/${wallet.publicKey}`
-                  );
-                }}
-              >
-                <ListItemPayload>
-                  <Label1>{t('Show_recovery_phrase')}</Label1>
-                </ListItemPayload>
-              </ListItem>
-              <Divider />
-              <ListItem
-                dropDown
-                onClick={() => {
-                  setLogout(true);
-                  onClose();
-                }}
-              >
-                <ListItemPayload>
-                  <Label1>{t('Log_out')}</Label1>
-                </ListItemPayload>
-              </ListItem>
-              <ListItem
-                dropDown
-                onClick={() => {
-                  setRemove(true);
-                  onClose();
-                }}
-              >
-                <ListItemPayload>
-                  <Label1>{t('Delete_account')}</Label1>
-                </ListItemPayload>
-              </ListItem>
-            </ListBlock>
-          )}
-        >
-          <Icon>
-            <EllipsisIcon />
-          </Icon>
-        </DropDown>
       </ListItemPayload>
       <RenameWalletNotification
         wallet={rename ? wallet : undefined}

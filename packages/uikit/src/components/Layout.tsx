@@ -36,14 +36,21 @@ export const IconPage: FC<{
   );
 };
 
-const Text = styled.div<{ right?: boolean }>`
+const Text = styled.div<{ right?: boolean; noWrap?: boolean }>`
   display: flex;
   flex-direction: column;
-  pap: 0.25rem;
   ${(props) =>
     props.right
       ? css`
           text-align: right;
+        `
+      : undefined}
+
+  ${(props) =>
+    props.noWrap
+      ? css`
+          flex-grow: 1;
+          overflow: hidden;
         `
       : undefined}
 `;
@@ -60,6 +67,8 @@ const Label = styled(Label1)<{ green?: boolean; noWrap?: boolean }>`
     props.noWrap
       ? css`
           white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
         `
       : undefined}
 `;
@@ -82,7 +91,7 @@ export const ColumnText: FC<{
   secondary: React.ReactNode;
 }> = ({ green, text, secondary, right, noWrap }) => {
   return (
-    <Text right={right}>
+    <Text right={right} noWrap={noWrap}>
       <Label green={green} noWrap={noWrap}>
         {text}
       </Label>

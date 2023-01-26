@@ -38,6 +38,20 @@ export const ContractDeployAction: FC<{ action: Action; date: string }> = ({
       </ListItemGrid>
     );
   }
+  if (interfaces.includes('nft_collection')) {
+    return (
+      <ListItemGrid>
+        <ActivityIcon>
+          <ContractDeployIcon />
+        </ActivityIcon>
+        <ColumnText
+          text={t('NFT_collection_creation')}
+          secondary={toShortAddress(contractDeploy.address)}
+        />
+        <ColumnText right noWrap text={`-`} secondary={date} />
+      </ListItemGrid>
+    );
+  }
   if (interfaces.includes('wallet')) {
     return (
       <ListItemGrid>

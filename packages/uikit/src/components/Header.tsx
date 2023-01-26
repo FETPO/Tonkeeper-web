@@ -59,6 +59,14 @@ const Title = styled(H3)`
   gap: 0.5rem;
 `;
 
+const TitleName = styled.span`
+  display: inline-block;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
 const DownIconWrapper = styled.span`
   color: ${(props) => props.theme.iconSecondary};
   display: flex;
@@ -66,6 +74,7 @@ const DownIconWrapper = styled.span`
 `;
 
 const Icon = styled.span`
+  padding-left: 0.5rem;
   color: ${(props) => props.theme.accentBlue};
   display: flex;
 `;
@@ -104,6 +113,7 @@ const WalletRow: FC<{
     >
       <ListItemPayload>
         <ColumnText
+          noWrap
           text={wallet?.name ? wallet.name : `${t('Wallet')} ${index + 1}`}
           secondary={wallet && toShortAddress(wallet.active.friendlyAddress)}
         />
@@ -206,7 +216,8 @@ export const Header = () => {
         )}
       >
         <Title>
-          {wallet.name ? wallet.name : t('Wallet')}
+          <TitleName> {wallet.name ? wallet.name : t('Wallet')}</TitleName>
+
           <DownIconWrapper>
             <DownIcon />
           </DownIconWrapper>
