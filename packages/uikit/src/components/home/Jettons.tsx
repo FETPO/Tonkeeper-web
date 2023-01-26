@@ -42,7 +42,8 @@ const Symbol = styled(Label1)`
 
 const DeltaColor = styled.span<{ positive: boolean }>`
   margin-left: 0.5rem;
-  
+  opacity: 0.64;
+
   ${(props) =>
     props.positive
       ? css`
