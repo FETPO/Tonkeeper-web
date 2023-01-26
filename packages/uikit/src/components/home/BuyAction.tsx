@@ -68,7 +68,7 @@ const ActionNotification: FC<{
 };
 const OtherBlock = styled.div`
   text-align: center;
-  margin: 1rem 0;
+  margin: 1rem 0 0;
 `;
 
 const OtherLink = styled(Label2)`

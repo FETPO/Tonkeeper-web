@@ -45,7 +45,7 @@ export const NftDetails: FC<{ nftItem: NftItemRepr }> = React.memo(
             {t('View_in_explorer')}
           </Link>
         </Row>
-        <ListBlock>
+        <ListBlock margin={false}>
           {owner && (
             <ListItem
               onClick={() =>

@@ -62,9 +62,10 @@ const NotificationBlock = styled.div`
 `;
 
 const CheckboxBlock = styled.span`
-  margin: 28px 0 1rem;
+  margin: 28px 0 0;
   display: flex;
 `;
+
 export const DisclaimerBlock = styled.div`
   margin: 2rem 0;
   padding: 14px 1rem;

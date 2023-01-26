@@ -222,12 +222,15 @@ const StyledSpinner = styled.svg`
   }
 `;
 
-export const ToncoinIcon = () => {
+export const ToncoinIcon: FC<{ width?: string; height?: string }> = ({
+  width = '44',
+  height = '44',
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="44"
-      height="44"
+      width={width}
+      height={height}
       viewBox="0 0 44 44"
       fill="none"
     >

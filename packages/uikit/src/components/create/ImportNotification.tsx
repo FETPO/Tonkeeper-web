@@ -56,7 +56,6 @@ export const ImportNotification: FC<{
             size="large"
             fullWith
             secondary
-            bottom
             onClick={() => {
               onClose(() => onImport(AppRoute.import + ImportRoute.import));
             }}
