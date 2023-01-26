@@ -25,8 +25,8 @@ const TabsBlock = styled.div`
 const TabsButton = styled.div<{ active?: boolean }>`
   cursor: pointer;
 
-  padding: 1rem;
-  margin -1rem;
+  padding: 0.5rem;
+  margin -0.5rem;
   box-sizing: border-box;
 
   ${(props) =>
@@ -46,7 +46,6 @@ const Line = styled.div`
   bottom: -0.5rem;
   border-radius: ${(props) => props.theme.cornerExtraExtraSmall};
   background: ${(props) => props.theme.accentBlue};
-  transition: all 0.3s ease-in-out;
 `;
 
 enum HomeTabs {
