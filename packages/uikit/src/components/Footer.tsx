@@ -116,7 +116,15 @@ const Block = styled.div<{ bottom: boolean }>`
   ${(props) =>
     !props.bottom &&
     css`
-      border-top: 1px solid ${(props) => props.theme.separatorCommon};
+      &:after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 1px;
+        background: ${(props) => props.theme.separatorCommon};
+        position: absolute;
+        bottom: 100%;
+      }
     `}
 `;
 

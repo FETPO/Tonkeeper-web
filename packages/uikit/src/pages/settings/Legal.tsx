@@ -15,6 +15,10 @@ const Icon = styled.span`
   color: ${(props) => props.theme.iconTertiary};
 `;
 
+const Title = styled(H3)`
+  margin: 14px 0;
+`;
+
 export const Legal = React.memo(() => {
   const { t } = useTranslation();
   const sdk = useAppSdk();
@@ -59,7 +63,7 @@ export const Legal = React.memo(() => {
     <>
       <SubHeader title={t('Legal')} />
       <SettingsList items={items} />
-      <H3>{t('Licenses')}</H3>
+      <Title>{t('Licenses')}</Title>
       <SettingsList items={licenses} />
     </>
   );

@@ -42,7 +42,15 @@ const Block = styled.div<{ top: boolean; center?: boolean; second?: boolean }>`
   ${(props) =>
     !props.top &&
     css`
-      border-bottom: 1px solid ${props.theme.separatorCommon};
+      &:after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 1px;
+        background: ${(props) => props.theme.separatorCommon};
+        position: absolute;
+        top: 100%;
+      }
     `}
 `;
 
