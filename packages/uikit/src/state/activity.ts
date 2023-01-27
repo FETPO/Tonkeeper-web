@@ -11,12 +11,12 @@ export const formatActivityDate = (
   timestamp: number
 ): string => {
   const date = new Date(timestamp * 1000);
-  if (key === 'today' || key === 'yesterday' || key.startsWith('week')) {
-    return new Intl.DateTimeFormat(language, { timeStyle: 'short' }).format(
+  if (key.startsWith('year')) {
+    return new Intl.DateTimeFormat(language, { dateStyle: 'short' }).format(
       date
     );
   } else {
-    return new Intl.DateTimeFormat(language, { dateStyle: 'short' }).format(
+    return new Intl.DateTimeFormat(language, { timeStyle: 'short' }).format(
       date
     );
   }
