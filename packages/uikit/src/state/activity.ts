@@ -5,28 +5,63 @@ import {
   AccountEvents200Response,
 } from '@tonkeeper/core/dist/tonApi';
 
-export const formatActivityDate = (key: string, timestamp: number): string => {
+export const formatActivityDate = (
+  language: string,
+  key: string,
+  timestamp: number
+): string => {
   const date = new Date(timestamp * 1000);
-  if (key === 'today' || key === 'yesterday') {
-    return `${date.getHours()}:${('0' + date.getMinutes()).slice(-2)}`;
+  if (key === 'today' || key === 'yesterday' || key.startsWith('week')) {
+    return new Intl.DateTimeFormat(language, { timeStyle: 'short' }).format(
+      date
+    );
   } else {
-    return date.toLocaleDateString();
+    return new Intl.DateTimeFormat(language, { dateStyle: 'short' }).format(
+      date
+    );
   }
 };
 
-export const getActivityTitle = (key: string, t: (value: string) => string) => {
+const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+
+export const getActivityTitle = (
+  language: string,
+  key: string,
+  timestamp: number
+) => {
+  const date = new Date(timestamp * 1000);
   switch (key) {
     case 'today':
-      return t('Today');
+      return capitalize(
+        new Intl.RelativeTimeFormat(language, { numeric: 'auto' }).format(
+          0,
+          'day'
+        )
+      );
     case 'yesterday':
-      return t('Yesterday');
-    case 'week':
-      return t('This_Week');
+      return capitalize(
+        new Intl.RelativeTimeFormat(language, { numeric: 'auto' }).format(
+          -1,
+          'day'
+        )
+      );
     case 'month':
-      return t('This_Month');
+      return capitalize(
+        new Intl.DateTimeFormat(language, { month: 'long' }).format(date)
+      );
     default: {
-      const [year, month] = key.split('-');
-      return `${t('month_' + month)} ${year}`;
+      if (key.startsWith('week')) {
+        return capitalize(
+          new Intl.DateTimeFormat(language, { weekday: 'long' }).format(date)
+        );
+      } else {
+        return capitalize(
+          new Intl.DateTimeFormat(language, {
+            month: 'long',
+            year: 'numeric',
+          }).format(date)
+        );
+      }
     }
   }
 };
@@ -59,7 +94,7 @@ const getEventGroup = (
     getWeek(today) === getWeek(date) &&
     today.getFullYear() === date.getFullYear()
   ) {
-    return 'week';
+    return `week-${date.getDay()}`;
   }
   if (
     today.getMonth() === date.getMonth() &&
@@ -67,7 +102,7 @@ const getEventGroup = (
   ) {
     return 'month';
   }
-  return `${date.getFullYear()}-${date.getMonth() + 1}`;
+  return `year-${date.getFullYear()}-${date.getMonth() + 1}`;
 };
 
 export interface ActivityItem {
@@ -98,18 +133,15 @@ export const groupActivity = (data: InfiniteData<AccountEvents200Response>) => {
   const yesterdayDate = new Date();
   yesterdayDate.setDate(yesterdayDate.getDate() - 1);
 
-  const { today, yesterday, week, month, ...rest } = list.reduce(
-    (acc, item) => {
-      const group = getEventGroup(item.timestamp, todayDate, yesterdayDate);
-      if (acc[group]) {
-        acc[group].push(item);
-      } else {
-        acc[group] = [item];
-      }
-      return acc;
-    },
-    {} as Record<string, ActivityItem[]>
-  );
+  const { today, yesterday, month, ...rest } = list.reduce((acc, item) => {
+    const group = getEventGroup(item.timestamp, todayDate, yesterdayDate);
+    if (acc[group]) {
+      acc[group].push(item);
+    } else {
+      acc[group] = [item];
+    }
+    return acc;
+  }, {} as Record<string, ActivityItem[]>);
 
   const result = [] as [] as ActivityGroup[];
   if (today) {
@@ -118,13 +150,18 @@ export const groupActivity = (data: InfiniteData<AccountEvents200Response>) => {
   if (yesterday) {
     result.push(['yesterday', yesterday]);
   }
-  if (week) {
-    result.push(['week', week]);
-  }
+
+  Object.entries(rest)
+    .filter(([key]) => key.startsWith('week'))
+    .forEach((value) => result.push(value));
+
   if (month) {
     result.push(['month', month]);
   }
-  result.push(...Object.entries(rest));
+
+  Object.entries(rest)
+    .filter(([key]) => key.startsWith('year'))
+    .forEach((value) => result.push(value));
 
   return result;
 };

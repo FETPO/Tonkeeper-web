@@ -19,16 +19,17 @@ const Title = styled(H3)`
 `;
 
 export const ActivityGroupRaw: FC<{ items: ActivityGroup[] }> = ({ items }) => {
-  const { t } = useTranslation();
-
+  const { t, i18n } = useTranslation();
   return (
     <>
       {items.map(([key, events]) => {
         return (
           <div key={key}>
-            <Title>{getActivityTitle(key, t)}</Title>
+            <Title>
+              {getActivityTitle(i18n.language, key, events[0].timestamp)}
+            </Title>
             {events.map(({ timestamp, event }) => {
-              const date = formatActivityDate(key, timestamp);
+              const date = formatActivityDate(i18n.language, key, timestamp);
               return (
                 <List key={event.eventId}>
                   {event.actions.map((action, index) => (
