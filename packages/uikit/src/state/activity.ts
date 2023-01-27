@@ -29,40 +29,41 @@ export const getActivityTitle = (
   key: string,
   timestamp: number
 ) => {
+  if (key == 'today') {
+    return capitalize(
+      new Intl.RelativeTimeFormat(language, { numeric: 'auto' }).format(
+        0,
+        'day'
+      )
+    );
+  }
+  if (key == 'yesterday') {
+    return capitalize(
+      new Intl.RelativeTimeFormat(language, { numeric: 'auto' }).format(
+        -1,
+        'day'
+      )
+    );
+  }
   const date = new Date(timestamp * 1000);
-  switch (key) {
-    case 'today':
-      return capitalize(
-        new Intl.RelativeTimeFormat(language, { numeric: 'auto' }).format(
-          0,
-          'day'
-        )
-      );
-    case 'yesterday':
-      return capitalize(
-        new Intl.RelativeTimeFormat(language, { numeric: 'auto' }).format(
-          -1,
-          'day'
-        )
-      );
-    case 'month':
-      return capitalize(
-        new Intl.DateTimeFormat(language, { month: 'long' }).format(date)
-      );
-    default: {
-      if (key.startsWith('week')) {
-        return capitalize(
-          new Intl.DateTimeFormat(language, { weekday: 'long' }).format(date)
-        );
-      } else {
-        return capitalize(
-          new Intl.DateTimeFormat(language, {
-            month: 'long',
-            year: 'numeric',
-          }).format(date)
-        );
-      }
-    }
+  if (key.startsWith('week')) {
+    return capitalize(
+      new Intl.DateTimeFormat(language, { weekday: 'long' }).format(date)
+    );
+  } else if (key.startsWith('month')) {
+    return capitalize(
+      new Intl.DateTimeFormat(language, {
+        day: 'numeric',
+        month: 'long',
+      }).format(date)
+    );
+  } else {
+    return capitalize(
+      new Intl.DateTimeFormat(language, {
+        month: 'long',
+        year: 'numeric',
+      }).format(date)
+    );
   }
 };
 
@@ -100,8 +101,9 @@ const getEventGroup = (
     today.getMonth() === date.getMonth() &&
     today.getFullYear() === date.getFullYear()
   ) {
-    return 'month';
+    return `month-${date.getDay()}`;
   }
+
   return `year-${date.getFullYear()}-${date.getMonth() + 1}`;
 };
 
@@ -155,9 +157,9 @@ export const groupActivity = (data: InfiniteData<AccountEvents200Response>) => {
     .filter(([key]) => key.startsWith('week'))
     .forEach((value) => result.push(value));
 
-  if (month) {
-    result.push(['month', month]);
-  }
+  Object.entries(rest)
+    .filter(([key]) => key.startsWith('month'))
+    .forEach((value) => result.push(value));
 
   Object.entries(rest)
     .filter(([key]) => key.startsWith('year'))
