@@ -70,7 +70,6 @@ const LotOutContent: FC<{
         disabled={!checked}
         size="large"
         fullWith
-        bottom
         loading={isLoading}
         onClick={async () => {
           await mutateAsync();
@@ -143,7 +142,6 @@ const DeleteContent: FC<{
         disabled={!checked}
         size="large"
         fullWith
-        bottom
         loading={isLoading}
         onClick={onDelete}
       >

@@ -30,7 +30,12 @@ export const ButtonElement = styled.button<Omit<ButtonProps, 'loading'>>`
   font-style: normal;
   font-weight: 600;
 
-  cursor: pointer;
+  ${(props) =>
+    !props.disabled
+      ? css`
+          cursor: pointer;
+        `
+      : undefined}
 
   flex-shrink: 0;
 
@@ -104,8 +109,25 @@ export const ButtonElement = styled.button<Omit<ButtonProps, 'loading'>>`
         `;
     }
   }}
-  
-  
+  &:hover {
+    ${(props) => {
+      if (props.disabled) return;
+      if (props.primary) {
+        return css`
+          background: ${props.theme.buttonPrimaryBackgroundHighlighted};
+        `;
+      } else if (props.secondary) {
+        return css`
+          background: ${props.theme.buttonSecondaryBackgroundHighlighted};
+        `;
+      } else {
+        return css`
+          background: ${props.theme.buttonTertiaryBackgroundHighlighted};
+        `;
+      }
+    }}
+  }
+
   ${(props) => {
     if (props.primary) {
       if (props.disabled) {

@@ -32,6 +32,10 @@ declare module 'styled-components' {
     buttonSecondaryBackgroundDisabled: string;
     buttonTertiaryBackgroundDisabled: string;
 
+    buttonPrimaryBackgroundHighlighted: string;
+    buttonSecondaryBackgroundHighlighted: string;
+    buttonTertiaryBackgroundHighlighted: string;
+
     buttonTertiaryForegroundDisabled: string;
     buttonSecondaryForegroundDisabled: string;
     buttonPrimaryForegroundDisabled: string;
