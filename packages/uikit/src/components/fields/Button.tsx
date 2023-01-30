@@ -105,49 +105,41 @@ export const ButtonElement = styled.button<Omit<ButtonProps, 'loading'>>`
     }
   }}
   
-  ${(props) => {
-    if (props.primary) {
-      return css`
-        color: ${props.theme.buttonPrimaryForeground};
-      `;
-    } else if (props.secondary) {
-      return css`
-        color: ${props.theme.buttonSecondaryForeground};
-      `;
-    } else {
-      return css`
-        color: ${props.theme.buttonTertiaryForeground};
-      `;
-    }
-  }}
+  
   ${(props) => {
     if (props.primary) {
       if (props.disabled) {
         return css`
+          color: ${props.theme.buttonPrimaryForegroundDisabled};
           background: ${props.theme.buttonPrimaryBackgroundDisabled};
         `;
       } else {
         return css`
+          color: ${props.theme.buttonPrimaryForeground};
           background: ${props.theme.buttonPrimaryBackground};
         `;
       }
     } else if (props.secondary) {
       if (props.disabled) {
         return css`
+          color: ${props.theme.buttonSecondaryForegroundDisabled};
           background: ${props.theme.buttonSecondaryBackgroundDisabled};
         `;
       } else {
         return css`
+          color: ${props.theme.buttonSecondaryForeground};
           background: ${props.theme.buttonSecondaryBackground};
         `;
       }
     } else {
       if (props.disabled) {
         return css`
+          color: ${props.theme.buttonTertiaryForegroundDisabled};
           background: ${props.theme.buttonTertiaryBackgroundDisabled};
         `;
       } else {
         return css`
+          color: ${props.theme.buttonTertiaryForeground};
           background: ${props.theme.buttonTertiaryBackground};
         `;
       }

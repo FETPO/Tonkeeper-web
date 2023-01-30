@@ -7,6 +7,7 @@ export interface CheckboxProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
   disabled?: boolean;
+  light?: boolean;
 }
 
 const Wrapper = styled.div`
@@ -58,8 +59,9 @@ const RadioItem = styled(IconBase)`
   border-radius: ${(props) => props.theme.cornerFull};
 `;
 
-const Text = styled(Body1)`
-  color: ${(props) => props.theme.textSecondary};
+const Text = styled(Body1)<{ light?: boolean }>`
+  color: ${(props) =>
+    props.light ? props.theme.textPrimary : props.theme.textSecondary};
 `;
 
 export const Checkbox: FC<PropsWithChildren<CheckboxProps>> = ({
@@ -67,13 +69,14 @@ export const Checkbox: FC<PropsWithChildren<CheckboxProps>> = ({
   onChange,
   disabled,
   children,
+  light,
 }) => {
   return (
     <Wrapper onClick={() => onChange(!checked)}>
       <CheckboxItem checked={checked} disabled={disabled}>
         {checked ? <CheckboxIcon /> : undefined}
       </CheckboxItem>
-      {children && <Text>{children}</Text>}
+      {children && <Text light={light}>{children}</Text>}
     </Wrapper>
   );
 };

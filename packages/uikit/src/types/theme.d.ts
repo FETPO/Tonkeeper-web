@@ -32,6 +32,10 @@ declare module 'styled-components' {
     buttonSecondaryBackgroundDisabled: string;
     buttonTertiaryBackgroundDisabled: string;
 
+    buttonTertiaryForegroundDisabled: string;
+    buttonSecondaryForegroundDisabled: string;
+    buttonPrimaryForegroundDisabled: string;
+
     fieldBackground: string;
     fieldActiveBorder: string;
     fieldErrorBorder: string;

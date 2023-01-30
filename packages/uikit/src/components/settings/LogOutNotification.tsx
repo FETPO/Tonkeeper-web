@@ -11,7 +11,7 @@ import { Button } from '../fields/Button';
 import { Checkbox } from '../fields/Checkbox';
 import { DisclaimerBlock } from '../home/BuyItemNotification';
 import { Notification } from '../Notification';
-import { Body1, H2, Label2 } from '../Text';
+import { Body1, H2, Label1, Label2 } from '../Text';
 
 const NotificationBlock = styled.form`
   display: flex;
@@ -30,7 +30,7 @@ const DisclaimerText = styled(Label2)`
   display: flex;
 `;
 
-const DisclaimerLink = styled(Label2)`
+const DisclaimerLink = styled(Label1)`
   cursor: pointer;
   color: ${(props) => props.theme.textAccent};
   margin-left: 2.1rem;
@@ -127,7 +127,7 @@ const DeleteContent: FC<{
 
       <DisclaimerBlock>
         <DisclaimerText>
-          <Checkbox checked={checked} onChange={setChecked}>
+          <Checkbox checked={checked} onChange={setChecked} light>
             {t('I_have_a_backup_copy_of_recovery_phrase')}
           </Checkbox>
         </DisclaimerText>
@@ -200,7 +200,7 @@ const DeleteAllContent: FC<{ onClose: (action: () => void) => void }> = ({
 
       <DisclaimerBlock>
         <DisclaimerText>
-          <Checkbox checked={checked} onChange={setChecked}>
+          <Checkbox checked={checked} onChange={setChecked} light>
             {t('I_have_a_backup_copy_of_recovery_phrase')}
           </Checkbox>
         </DisclaimerText>

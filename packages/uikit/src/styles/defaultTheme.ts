@@ -31,6 +31,10 @@ export const defaultTheme: DefaultTheme = {
   buttonSecondaryBackgroundDisabled: '#171F29',
   buttonTertiaryBackgroundDisabled: '#28303D',
 
+  buttonTertiaryForegroundDisabled: 'rgba(256, 256, 256, 0.48)',
+  buttonSecondaryForegroundDisabled: 'rgba(256, 256, 256, 0.48)',
+  buttonPrimaryForegroundDisabled: 'rgba(256, 256, 256, 0.48)',
+
   fieldBackground: '#1D2633',
   fieldActiveBorder: '#45AEF5',
   fieldErrorBorder: '#FF4766',
