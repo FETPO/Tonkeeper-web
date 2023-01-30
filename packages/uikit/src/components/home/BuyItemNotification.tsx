@@ -72,7 +72,7 @@ const CheckboxBlock = styled.span`
 
 export const DisclaimerBlock = styled.div`
   margin: 2rem 0;
-  padding: 14px 1rem;
+  padding: 18px 18px;
   box-sizing: border-box;
   display: flex;
   gap: 0.5rem;

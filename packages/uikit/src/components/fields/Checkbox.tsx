@@ -12,7 +12,7 @@ export interface CheckboxProps {
 
 const Wrapper = styled.div`
   display: inline-flex;
-  gap: 11px;
+  gap: 15px;
   align-items: center;
 
   cursor: pointer;

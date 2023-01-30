@@ -33,7 +33,7 @@ const DisclaimerText = styled(Label2)`
 const DisclaimerLink = styled(Label1)`
   cursor: pointer;
   color: ${(props) => props.theme.textAccent};
-  margin-left: 2.1rem;
+  margin-left: 2.35rem;
 `;
 
 const LotOutContent: FC<{
