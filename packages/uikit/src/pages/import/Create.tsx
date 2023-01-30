@@ -6,10 +6,14 @@ import { CreateAuthState } from '../../components/create/CreateAuth';
 import { UpdateWalletName } from '../../components/create/WalletName';
 import { Check, Worlds } from '../../components/create/Words';
 import { Button } from '../../components/fields/Button';
-import { CheckMarkIcon, GearIcon, WriteIcon } from '../../components/Icon';
 import { IconPage } from '../../components/Layout';
 import { useTranslation } from '../../hooks/translation';
 import { useActiveWallet } from '../../state/wallet';
+import {
+  CheckLottieIcon,
+  GearLottieIcon,
+  WriteLottieIcon,
+} from './LottieIcons';
 import { FinalView, useAddWalletMutation } from './Password';
 
 const Blue = styled.span`
@@ -54,25 +58,14 @@ export const Create = () => {
 
   if (mnemonic.length === 0) {
     return (
-      <IconPage
-        icon={
-          <Blue>
-            <GearIcon />
-          </Blue>
-        }
-        title={t('Generating_wallet')}
-      />
+      <IconPage icon={<GearLottieIcon />} title={t('Generating_wallet')} />
     );
   }
 
   if (!create) {
     return (
       <IconPage
-        icon={
-          <Green>
-            <CheckMarkIcon />
-          </Green>
-        }
+        icon={<CheckLottieIcon />}
         title={t('Your_wallet_has_just_been_created')}
       />
     );
@@ -81,11 +74,7 @@ export const Create = () => {
   if (!open) {
     return (
       <IconPage
-        icon={
-          <Blue>
-            <WriteIcon />
-          </Blue>
-        }
+        icon={<WriteLottieIcon />}
         title={t('Grab_a_pen')}
         description={t('Grab_a_pen_description')}
         button={

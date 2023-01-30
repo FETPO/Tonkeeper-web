@@ -11,7 +11,10 @@ const Block = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0.75rem;
+`;
+
+const TextBlock = styled.div`
+  margin-bottom: 1rem;
 `;
 
 const Body = styled(Body2)`
@@ -27,10 +30,10 @@ export const IconPage: FC<{
   return (
     <Block>
       {icon}
-      <div>
+      <TextBlock>
         {title && <H2>{title}</H2>}
         {description && <Body>{description}</Body>}
-      </div>
+      </TextBlock>
       {button}
     </Block>
   );

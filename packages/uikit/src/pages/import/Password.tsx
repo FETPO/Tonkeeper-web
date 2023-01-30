@@ -15,7 +15,6 @@ import { Configuration } from '@tonkeeper/core/dist/tonApi';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { mnemonicValidate } from 'ton-crypto';
-import { CheckMarkIcon } from '../../components/Icon';
 import { IconPage } from '../../components/Layout';
 import { useAppContext } from '../../hooks/appContext';
 import { useAfterImportAction, useAppSdk } from '../../hooks/appSdk';
@@ -23,6 +22,7 @@ import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
 import { QueryKey } from '../../libs/queryKey';
 import { getPasswordByNotification } from '../home/UnlockNotification';
+import { CheckLottieIcon } from './LottieIcons';
 
 const createWallet = async (
   client: QueryClient,
@@ -97,11 +97,7 @@ export const FinalView = () => {
 
   return (
     <IconPage
-      icon={
-        <Green>
-          <CheckMarkIcon />
-        </Green>
-      }
+      icon={<CheckLottieIcon />}
       title={t('Congratulations_You_ve_set_up_your_wallet')}
     />
   );
