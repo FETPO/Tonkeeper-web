@@ -121,6 +121,7 @@ const toFiatCurrencyFormat = (currency: FiatCurrencies) => {
     maximumFractionDigits: config.maximumFractionDigits,
     style: 'currency',
     currency: currency,
+    currencyDisplay: 'symbol',
   });
 };
 

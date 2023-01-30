@@ -34,7 +34,7 @@ export const FiatCurrencySymbolsConfig: Record<FiatCurrency, CurrencyState> = {
     maximumFractionDigits: 2,
   },
   [FiatCurrencies.RUB]: {
-    numberFormat: 'en-US',
+    numberFormat: 'ru-RU',
     symbol: '₽',
     side: 'end',
     maximumFractionDigits: 2,
