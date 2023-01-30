@@ -13,7 +13,7 @@ const Block = styled.div`
 export const Loading = () => {
   return (
     <Block>
-      <TonkeeperIcon />
+      <TonkeeperIcon loop />
     </Block>
   );
 };

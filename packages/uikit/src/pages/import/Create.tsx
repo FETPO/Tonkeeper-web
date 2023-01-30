@@ -7,13 +7,13 @@ import { UpdateWalletName } from '../../components/create/WalletName';
 import { Check, Worlds } from '../../components/create/Words';
 import { Button } from '../../components/fields/Button';
 import { IconPage } from '../../components/Layout';
-import { useTranslation } from '../../hooks/translation';
-import { useActiveWallet } from '../../state/wallet';
 import {
   CheckLottieIcon,
   GearLottieIcon,
   WriteLottieIcon,
-} from './LottieIcons';
+} from '../../components/lottie/LottieIcons';
+import { useTranslation } from '../../hooks/translation';
+import { useActiveWallet } from '../../state/wallet';
 import { FinalView, useAddWalletMutation } from './Password';
 
 const Blue = styled.span`

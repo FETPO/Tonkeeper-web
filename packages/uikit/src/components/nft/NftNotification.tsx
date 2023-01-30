@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useTranslation } from '../../hooks/translation';
 import { useNftCollectionData } from '../../state/wallet';
 import { BackButton } from '../fields/BackButton';
-import { ChevronLeftIcon, EllipsisIcon } from '../Icon';
+import { ChevronDownIcon, EllipsisIcon } from '../Icon';
 import { Body, CroppedBodyText } from '../jettons/CroppedText';
 import { Notification, NotificationBlock } from '../Notification';
 import { H2, H3, Label1 } from '../Text';
@@ -61,7 +61,7 @@ const NftPreview: FC<{
     <NotificationBlock>
       <TitleBlock>
         <BackButton onClick={onClose}>
-          <ChevronLeftIcon />
+          <ChevronDownIcon />
         </BackButton>
         <H3>{nftItem.dns ?? nftItem.metadata.name}</H3>
         <BackButton>

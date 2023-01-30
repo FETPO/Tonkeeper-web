@@ -16,13 +16,13 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { mnemonicValidate } from 'ton-crypto';
 import { IconPage } from '../../components/Layout';
+import { CheckLottieIcon } from '../../components/lottie/LottieIcons';
 import { useAppContext } from '../../hooks/appContext';
 import { useAfterImportAction, useAppSdk } from '../../hooks/appSdk';
 import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
 import { QueryKey } from '../../libs/queryKey';
 import { getPasswordByNotification } from '../home/UnlockNotification';
-import { CheckLottieIcon } from './LottieIcons';
 
 const createWallet = async (
   client: QueryClient,

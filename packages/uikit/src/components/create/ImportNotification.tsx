@@ -35,7 +35,7 @@ export const ImportNotification: FC<{
       {(onClose) => (
         <div>
           <NotificationIcon>
-            <TonkeeperIcon />
+            <TonkeeperIcon loop />
           </NotificationIcon>
           <TextBlock>
             <H2>{t('Let_s_set_up_your_wallet')}</H2>
