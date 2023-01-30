@@ -8,8 +8,12 @@ import { TonkeeperIcon } from '../Icon';
 import { Notification } from '../Notification';
 import { Body1, H2 } from '../Text';
 
+const Title = styled(H2)`
+  user-select: none;
+`;
 const BodyText = styled(Body1)`
   color: ${(props) => props.theme.textSecondary};
+  user-select: none;
 `;
 const TextBlock = styled.div`
   text-align: center;
@@ -38,7 +42,7 @@ export const ImportNotification: FC<{
             <TonkeeperIcon loop />
           </NotificationIcon>
           <TextBlock>
-            <H2>{t('Let_s_set_up_your_wallet')}</H2>
+            <Title>{t('Let_s_set_up_your_wallet')}</Title>
             <BodyText>{t('Let_s_set_up_your_wallet_description')}</BodyText>
           </TextBlock>
           <Button

@@ -1,10 +1,6 @@
 import React, { FC, PropsWithChildren, useState } from 'react';
 import styled, { css } from 'styled-components';
-import {
-  RocketIcon,
-  ShieldIcon,
-  TicketIcon,
-} from '../../components/create/CreateIcon';
+import { RocketIcon, ShieldIcon } from '../../components/create/CreateIcon';
 import { Description } from '../../components/create/Description';
 import { ImportNotification } from '../../components/create/ImportNotification';
 import { Button } from '../../components/fields/Button';
@@ -40,6 +36,7 @@ const Accent = styled.span`
 
 const Title = styled(H1)`
   margin-bottom: 2rem;
+  user-select: none;
 `;
 
 export const Initialize: FC = () => {
@@ -62,11 +59,11 @@ export const Initialize: FC = () => {
           title={t('End_to_end_security')}
           description={t('End_to_end_security_description')}
         />
-        <Description
+        {/* <Description
           icon={<TicketIcon />}
           title={t('Built_in_subscriptions')}
           description={t('Built_in_subscriptions_description')}
-        />
+        /> */}
       </div>
       <Button
         size="large"

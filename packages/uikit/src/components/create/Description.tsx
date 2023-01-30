@@ -28,11 +28,13 @@ const Text = styled.div`
 
 const Title = styled(Label1)`
   display: block;
+  user-select: none;
 `;
 
 const Body = styled(Body2)`
   display: block;
   color: ${(props) => props.theme.textSecondary};
+  user-select: none;
 `;
 
 export const Description: FC<DescriptionProps> = ({
