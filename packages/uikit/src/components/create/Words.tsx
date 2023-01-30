@@ -13,10 +13,9 @@ const Block = styled.div`
   text-align: center;
   gap: 1rem;
   flex-direction: column;
-  margin-bottom: 1rem;
 
   & + & {
-    margin-top: 1rem;
+    margin-top: 2rem;
   }
 `;
 
@@ -118,8 +117,8 @@ const Input = styled.input`
   border: none;
   background: transparent;
   flex-grow: 1;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 500;
+  font-size: 16px;
 
   color: ${(props) => props.theme.textPrimary};
 `;
@@ -290,6 +289,8 @@ export const ImportWords: FC<{
             />
           ))}
         </Inputs>
+      </Block>
+      <Block>
         <Button
           size="large"
           fullWith
