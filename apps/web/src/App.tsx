@@ -19,6 +19,11 @@ import {
   SettingsSkeleton,
 } from '@tonkeeper/uikit/dist/components/Skeleton';
 import {
+  AnalyticsContext,
+  useAnalyticsScreenView,
+  useFBAnalyticsEvent,
+} from '@tonkeeper/uikit/dist/hooks/analytics';
+import {
   AppContext,
   WalletStateContext,
 } from '@tonkeeper/uikit/dist/hooks/appContext';
@@ -49,6 +54,8 @@ import {
 } from '@tonkeeper/uikit/dist/state/tonendpoint';
 import { useActiveWallet } from '@tonkeeper/uikit/dist/state/wallet';
 import { Body, Container } from '@tonkeeper/uikit/dist/styles/globalStyle';
+import { getAnalytics } from 'firebase/analytics';
+import { initializeApp } from 'firebase/app';
 import React, {
   FC,
   PropsWithChildren,
@@ -69,6 +76,15 @@ import styled from 'styled-components';
 import { BrowserAppSdk } from './libs/appSdk';
 import { useAppHeight } from './libs/hooks';
 import { BrowserStorage } from './libs/storage';
+
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_FB_API_KEY,
+  authDomain: `${process.env.REACT_APP_FB_DOMAIN}.firebaseapp.com`,
+  projectId: process.env.REACT_APP_FB_DOMAIN,
+  storageBucket: `${process.env.REACT_APP_FB_DOMAIN}.appspot.com`,
+  messagingSenderId: process.env.REACT_APP_FB_MES_SEND_ID,
+  appId: process.env.REACT_APP_FB_APP_ID,
+};
 
 const ImportRouter = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/import')
@@ -91,7 +107,6 @@ const queryClient = new QueryClient({
 });
 const storage = new BrowserStorage();
 const sdk = new BrowserAppSdk();
-console.log('recreate sdk');
 
 export const App: FC<PropsWithChildren> = () => {
   const { t, i18n } = useTranslation();
@@ -110,22 +125,29 @@ export const App: FC<PropsWithChildren> = () => {
     return client;
   }, [t, i18n]);
 
+  const analytics = useMemo(() => {
+    const app = initializeApp(firebaseConfig);
+    return getAnalytics(app);
+  }, []);
+
   return (
     <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <Suspense fallback={<Loading />}>
-          <AppSdkContext.Provider value={sdk}>
-            <TranslationContext.Provider value={translation}>
-              <StorageContext.Provider value={storage}>
-                <UserThemeProvider>
-                  <Loader />
-                  <UnlockNotification sdk={sdk} />
-                </UserThemeProvider>
-              </StorageContext.Provider>
-            </TranslationContext.Provider>
-          </AppSdkContext.Provider>
-        </Suspense>
-      </QueryClientProvider>
+      <AnalyticsContext.Provider value={analytics}>
+        <QueryClientProvider client={queryClient}>
+          <Suspense fallback={<Loading />}>
+            <AppSdkContext.Provider value={sdk}>
+              <TranslationContext.Provider value={translation}>
+                <StorageContext.Provider value={storage}>
+                  <UserThemeProvider>
+                    <Loader />
+                    <UnlockNotification sdk={sdk} />
+                  </UserThemeProvider>
+                </StorageContext.Provider>
+              </TranslationContext.Provider>
+            </AppSdkContext.Provider>
+          </Suspense>
+        </QueryClientProvider>
+      </AnalyticsContext.Provider>
     </BrowserRouter>
   );
 };
@@ -173,6 +195,8 @@ export const Loader: FC = () => {
 
   const navigate = useNavigate();
   useAppHeight();
+  useAnalyticsScreenView();
+  useFBAnalyticsEvent('session_start');
 
   useEffect(() => {
     if (

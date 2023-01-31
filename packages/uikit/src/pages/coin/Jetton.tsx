@@ -5,7 +5,6 @@ import {
   JettonInfo,
 } from '@tonkeeper/core/dist/tonApi';
 import React, { FC, useMemo } from 'react';
-import { useFormatCoinValue } from '../../components/activity/ActivityAction';
 import { ActivityGroupRaw } from '../../components/activity/ActivityGroup';
 import { Action, ActionsRow } from '../../components/home/Actions';
 import { SendIcon } from '../../components/home/HomeIcons';
@@ -22,6 +21,7 @@ import {
   formatFiatCurrency,
   getJettonStockAmount,
   getJettonStockPrice,
+  useFormatCoinValue,
 } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { JettonKey, QueryKey } from '../../libs/queryKey';

@@ -37,7 +37,6 @@ export class EventEmitter {
   }
 
   emit(event: string, data: any) {
-    console.log(this.callbacks, event, data);
     let cbs = this.callbacks[event];
     if (cbs) {
       cbs.forEach((cb) => cb(data));

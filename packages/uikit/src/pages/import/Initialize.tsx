@@ -5,6 +5,7 @@ import { Description } from '../../components/create/Description';
 import { ImportNotification } from '../../components/create/ImportNotification';
 import { Button } from '../../components/fields/Button';
 import { H1 } from '../../components/Text';
+import { useFBAnalyticsEvent } from '../../hooks/analytics';
 import { useTranslation } from '../../hooks/translation';
 
 const Block = styled.div<{ fullHeight: boolean }>`
@@ -43,6 +44,8 @@ const Title = styled(H1)`
 export const Initialize: FC = () => {
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
+
+  useFBAnalyticsEvent('screen_view');
 
   return (
     <>

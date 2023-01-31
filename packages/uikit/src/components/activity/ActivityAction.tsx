@@ -1,7 +1,6 @@
-import { FiatCurrencySymbolsConfig } from '@tonkeeper/core/dist/entries/fiat';
 import { Action } from '@tonkeeper/core/dist/tonApi';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC } from 'react';
 import styled, { css } from 'styled-components';
 import {
   ActivityIcon,
@@ -10,8 +9,8 @@ import {
 } from '../../components/activity/ActivityIcons';
 import { ColumnText } from '../../components/Layout';
 import { ListItemPayload } from '../../components/List';
-import { useAppContext, useWalletContext } from '../../hooks/appContext';
-import { formatDecimals } from '../../hooks/balance';
+import { useWalletContext } from '../../hooks/appContext';
+import { useFormatCoinValue } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { Comment, ErrorAction, ListItemGrid } from './CommonAction';
 import { ContractDeployAction } from './ContractDeployAction';
@@ -21,41 +20,6 @@ import { SubscribeAction, UnSubscribeAction } from './SubscribeAction';
 export const formatDate = (timestamp: number): string => {
   const date = new Date(timestamp * 1000);
   return `${date.getHours()}:${('0' + date.getMinutes()).slice(-2)}`;
-};
-
-export const useFormatCoinValue = () => {
-  const { fiat } = useAppContext();
-
-  const commonFormat = useMemo(
-    () =>
-      new Intl.NumberFormat(FiatCurrencySymbolsConfig[fiat].numberFormat, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }),
-    [fiat]
-  );
-
-  return useCallback(
-    (amount: number | string, decimals: number = 9) => {
-      const value = formatDecimals(String(amount), decimals);
-
-      const formatted = commonFormat.format(value);
-      if (formatted != '0') {
-        return formatted;
-      }
-
-      const countFormat = new Intl.NumberFormat(
-        FiatCurrencySymbolsConfig[fiat].numberFormat,
-        {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: decimals,
-        }
-      );
-
-      return countFormat.format(value);
-    },
-    [fiat, commonFormat]
-  );
 };
 
 const ReceivedText = styled.span<{ isScam?: boolean }>`
@@ -156,9 +120,10 @@ const JettonTransferAction: FC<{ action: Action; date: string }> = ({
         <ColumnText
           text={t('Sent')}
           secondary={
-            jettonTransfer.sender.name ??
+            jettonTransfer.recipient?.name ??
             toShortAddress(
-              jettonTransfer.sender?.address ?? jettonTransfer.sendersWallet
+              jettonTransfer.recipient?.address ??
+                jettonTransfer.recipientsWallet
             )
           }
         />
@@ -183,8 +148,10 @@ const JettonTransferAction: FC<{ action: Action; date: string }> = ({
       <ColumnText
         text={t('Received')}
         secondary={
-          jettonTransfer.recipient?.name ??
-          toShortAddress(jettonTransfer.recipientsWallet)
+          jettonTransfer.sender?.name ??
+          toShortAddress(
+            jettonTransfer.sender?.address ?? jettonTransfer.sendersWallet
+          )
         }
       />
 

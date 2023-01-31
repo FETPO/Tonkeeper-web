@@ -50,7 +50,7 @@ export const useFormatCoinValue = () => {
   );
 
   return useCallback(
-    (amount: number | string, decimals?: number) => {
+    (amount: number | string, decimals: number = 9) => {
       if (amount == 0) return '0';
 
       const value = formatDecimals(amount, decimals);
@@ -65,7 +65,14 @@ export const useFormatCoinValue = () => {
         return formatted;
       }
 
-      return '<0.0001';
+      const formatFull = new Intl.NumberFormat(
+        FiatCurrencySymbolsConfig[fiat].numberFormat,
+        {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: decimals,
+        }
+      );
+      return formatFull.format(value);
     },
     [fiat, formats]
   );
