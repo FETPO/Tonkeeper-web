@@ -21,8 +21,12 @@ export interface SettingsNetworkProps {
 const Version = styled(Body3)`
   margin-top: 0.125rem;
   color: ${(props) => props.theme.textSecondary};
+  user-select: none;
 `;
 
+const Text = styled(Label2)`
+  user-select: none;
+`;
 const Icon = styled.span`
   margin-bottom: 0.25rem;
 `;
@@ -46,7 +50,7 @@ export const SettingsNetwork: FC = () => {
       <Icon>
         <TonkeeperIcon width="33" height="33" />
       </Icon>
-      <Label2>Tonkeeper Beta</Label2>
+      <Text>Tonkeeper Beta</Text>
       <Version>
         {t('Version')} {version}
       </Version>

@@ -217,17 +217,18 @@ export const Check: FC<{
           valid={mnemonic[test3 - 1]}
         />
       </Block>
-
-      <Button
-        size="large"
-        fullWith
-        primary
-        loading={isLoading}
-        disabled={!isValid}
-        onClick={onConfirm}
-      >
-        {t('Continue')}
-      </Button>
+      <Block>
+        <Button
+          size="large"
+          fullWith
+          primary
+          loading={isLoading}
+          disabled={!isValid}
+          onClick={onConfirm}
+        >
+          {t('Continue')}
+        </Button>
+      </Block>
     </>
   );
 };

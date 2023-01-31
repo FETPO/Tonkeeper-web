@@ -214,7 +214,6 @@ const DeleteAllContent: FC<{ onClose: (action: () => void) => void }> = ({
         disabled={!checked}
         size="large"
         fullWith
-        bottom
         loading={isLoading}
         onClick={onDelete}
       >
