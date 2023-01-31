@@ -1,5 +1,13 @@
 import styled from 'styled-components';
 
+export const ButtonMock = styled.div`
+  flex-shrink: 0;
+
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+`;
+
 export const BackButton = styled.div`
   flex-shrink: 0;
 

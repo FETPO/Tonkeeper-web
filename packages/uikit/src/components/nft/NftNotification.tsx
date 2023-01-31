@@ -3,8 +3,8 @@ import React, { FC, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from '../../hooks/translation';
 import { useNftCollectionData } from '../../state/wallet';
-import { BackButton } from '../fields/BackButton';
-import { ChevronDownIcon, EllipsisIcon } from '../Icon';
+import { BackButton, ButtonMock } from '../fields/BackButton';
+import { ChevronDownIcon } from '../Icon';
 import { Body, CroppedBodyText } from '../jettons/CroppedText';
 import { Notification, NotificationBlock } from '../Notification';
 import { H2, H3, Label1 } from '../Text';
@@ -64,9 +64,7 @@ const NftPreview: FC<{
           <ChevronDownIcon />
         </BackButton>
         <H3>{nftItem.dns ?? nftItem.metadata.name}</H3>
-        <BackButton>
-          <EllipsisIcon />
-        </BackButton>
+        <ButtonMock />
       </TitleBlock>
       <NftBlock>
         {image && <Image ref={ref} url={image.url} />}

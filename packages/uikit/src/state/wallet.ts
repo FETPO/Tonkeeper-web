@@ -19,7 +19,6 @@ import {
   NftItemsRepr,
 } from '@tonkeeper/core/dist/tonApi';
 import { getWalletActiveAddresses } from '@tonkeeper/core/dist/tonApiExtended/walletApi';
-import { delay } from '@tonkeeper/core/dist/utils/common';
 import { useAppContext, useWalletContext } from '../hooks/appContext';
 import { useStorage } from '../hooks/storage';
 import { JettonKey, QueryKey } from '../libs/queryKey';
@@ -100,7 +99,6 @@ export const useWalletAccountInfo = () => {
   return useQuery<AccountRepr, Error>(
     [wallet.publicKey, QueryKey.info],
     async () => {
-      await delay(1000);
       return await new AccountApi(tonApi).getAccountInfo({
         account: wallet.active.rawAddress,
       });
