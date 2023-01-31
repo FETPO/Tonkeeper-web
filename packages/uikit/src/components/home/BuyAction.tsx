@@ -35,10 +35,14 @@ const TitleRow = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+
+  user-select: none;
 `;
 
 const Title = styled(H3)`
   margin: 0;
+
+  user-select: none;
 `;
 
 const ActionNotification: FC<{
@@ -77,6 +81,10 @@ const OtherLink = styled(Label2)`
   background: ${(props) => props.theme.backgroundContent};
   border-radius: ${(props) => props.theme.cornerMedium};
   display: inline-block;
+
+  &:hover {
+    background: ${(props) => props.theme.backgroundHighlighted};
+  }
 `;
 
 export const BuyNotification: FC<{

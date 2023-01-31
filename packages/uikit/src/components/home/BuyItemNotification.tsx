@@ -20,6 +20,8 @@ import { Notification } from '../Notification';
 import { Body1, H3, Label1 } from '../Text';
 
 const Logo = styled.img<{ large?: boolean }>`
+  pointer-events: none;
+
   ${(props) =>
     props.large
       ? css`
@@ -44,6 +46,8 @@ const Description = styled.div`
 const Text = styled.div`
   display: flex;
   flex-direction: column;
+
+  user-select: none;
 `;
 
 const Body = styled(Body1)`
@@ -53,6 +57,12 @@ const Body = styled(Body1)`
 const Icon = styled.div`
   display: flex;
   color: ${(props) => props.theme.iconTertiary};
+`;
+
+const ItemPayload = styled(ListItemPayload)`
+  &:hover ${Icon} {
+    color: ${(props) => props.theme.iconPrimary};
+  }
 `;
 
 const NotificationBlock = styled.div`
@@ -182,7 +192,7 @@ export const BuyItemNotification: FC<{
   return (
     <>
       <ListItem key={item.title} onClick={onOpen}>
-        <ListItemPayload>
+        <ItemPayload>
           <Description>
             <Logo src={item.icon_url} />
             <Text>
@@ -193,7 +203,7 @@ export const BuyItemNotification: FC<{
           <Icon>
             <ChevronRightIcon />
           </Icon>
-        </ListItemPayload>
+        </ItemPayload>
       </ListItem>
       <Notification isOpen={open} handleClose={() => setOpen(false)}>
         {() => (

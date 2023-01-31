@@ -4,7 +4,7 @@ import { useAppContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { relative, SettingsRoute } from '../../libs/routes';
 import { useUserThemes } from '../../state/theme';
-import { LocalizationIcon, ThemeIcon } from './SettingsIcons';
+import { LocalizationIcon } from './SettingsIcons';
 import { SettingsItem, SettingsList } from './SettingsList';
 
 export const ThemeSettings = () => {
@@ -31,13 +31,13 @@ export const ThemeSettings = () => {
       });
     }
 
-    if (themes && themes.length > 1) {
-      items.push({
-        name: t('Theme'),
-        icon: <ThemeIcon />,
-        action: () => navigate(relative(SettingsRoute.theme)),
-      });
-    }
+    // if (themes && themes.length > 1) {
+    //   items.push({
+    //     name: t('Theme'),
+    //     icon: <ThemeIcon />,
+    //     action: () => navigate(relative(SettingsRoute.theme)),
+    //   });
+    // }
 
     return items;
   }, [t, i18n.enable, navigate, fiat, themes]);
