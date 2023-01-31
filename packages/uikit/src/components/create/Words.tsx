@@ -6,7 +6,7 @@ import { AppRoute } from '../../libs/routes';
 import { BackButton } from '../fields/BackButton';
 import { Button } from '../fields/Button';
 import { ChevronLeftIcon } from '../Icon';
-import { Body1, Body2, H2 } from '../Text';
+import { Body1, Body2, H2, Label2 } from '../Text';
 
 const Block = styled.div`
   display: flex;
@@ -49,6 +49,43 @@ const Number1 = styled(Body1)`
   color: ${(props) => props.theme.textSecondary};
 `;
 
+const LogoutButtonBlock = styled.div`
+  flex-shrink: 0;
+
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: ${(props) => props.theme.cornerMedium};
+  color: ${(props) => props.theme.textPrimary};
+  background: ${(props) => props.theme.backgroundContent};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background: ${(props) => props.theme.backgroundContentTint};
+  }
+`;
+
+export const ButtonRow = styled.div`
+  display: flex;
+`;
+
+export const LogoutBlock = styled.div`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+`;
+
+export const LogoutButton = () => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  return (
+    <LogoutButtonBlock onClick={() => navigate(AppRoute.home)}>
+      <Label2>{t('log_out')}</Label2>
+    </LogoutButtonBlock>
+  );
+};
+
 export const Worlds: FC<{
   mnemonic: string[];
   onBack: () => void;
@@ -61,6 +98,7 @@ export const Worlds: FC<{
         <BackButton onClick={onBack}>
           <ChevronLeftIcon />
         </BackButton>
+
         <div>
           <H2>{t('Your_recovery_phrase')}</H2>
           <Body>{t('Your_recovery_phrase_description')}</Body>

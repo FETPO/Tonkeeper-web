@@ -129,6 +129,12 @@ export const hideJettons = (
   });
 };
 
+export const hideEmptyJettons = (jettons: JettonBalance[]) => {
+  return jettons.filter((jetton) => {
+    return jetton.balance != '0';
+  });
+};
+
 export const useUserJettonList = (jettons?: JettonsBalances) => {
   const { hiddenJettons, orderJettons, shownJettons } = useWalletContext();
 
@@ -136,9 +142,10 @@ export const useUserJettonList = (jettons?: JettonsBalances) => {
     if (!jettons) return { balances: [] };
     const order = sortJettons(orderJettons, jettons.balances);
     const hide = hideJettons(hiddenJettons, shownJettons, order);
+    const notEmpty = hideEmptyJettons(hide);
 
     return {
-      balances: hide,
+      balances: notEmpty,
     };
   }, [jettons, hiddenJettons, orderJettons]);
 };

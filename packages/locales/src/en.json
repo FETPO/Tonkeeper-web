@@ -163,6 +163,10 @@
     "message": "Tokens",
     "description": "Tokens button"
   },
+  "log_out": {
+    "message": "Log out",
+    "description": "Tokens button"
+  },
   "Collectibles": {
     "message": "Collectibles",
     "description": "Collectibles button"

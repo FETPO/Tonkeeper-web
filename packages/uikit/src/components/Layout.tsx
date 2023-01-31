@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import styled, { css } from 'styled-components';
+import { LogoutBlock, LogoutButton } from './create/Words';
 import { Body2, H2, Label1 } from './Text';
 
 export const Gap = styled.div`
@@ -26,16 +27,24 @@ export const IconPage: FC<{
   title?: string;
   description?: string;
   button?: React.ReactNode;
-}> = ({ icon, title, description, button }) => {
+  logOut?: boolean;
+}> = ({ icon, title, description, button, logOut }) => {
   return (
-    <Block>
-      {icon}
-      <TextBlock>
-        {title && <H2>{title}</H2>}
-        {description && <Body>{description}</Body>}
-      </TextBlock>
-      {button}
-    </Block>
+    <>
+      {logOut && (
+        <LogoutBlock>
+          <LogoutButton />
+        </LogoutBlock>
+      )}
+      <Block>
+        {icon}
+        <TextBlock>
+          {title && <H2>{title}</H2>}
+          {description && <Body>{description}</Body>}
+        </TextBlock>
+        {button}
+      </Block>
+    </>
   );
 };
 

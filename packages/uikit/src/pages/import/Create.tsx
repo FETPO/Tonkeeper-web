@@ -1,6 +1,5 @@
 import { AccountState } from '@tonkeeper/core/dist/entries/account';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { mnemonicNew } from 'ton-crypto';
 import { CreateAuthState } from '../../components/create/CreateAuth';
 import { UpdateWalletName } from '../../components/create/WalletName';
@@ -15,14 +14,6 @@ import {
 import { useTranslation } from '../../hooks/translation';
 import { useActiveWallet } from '../../state/wallet';
 import { FinalView, useAddWalletMutation } from './Password';
-
-const Blue = styled.span`
-  color: ${(props) => props.theme.accentBlue};
-`;
-
-const Green = styled.span`
-  color: ${(props) => props.theme.accentGreen};
-`;
 
 export const Create = () => {
   const { t } = useTranslation();
@@ -74,6 +65,7 @@ export const Create = () => {
   if (!open) {
     return (
       <IconPage
+        logOut
         icon={<WriteLottieIcon />}
         title={t('Grab_a_pen')}
         description={t('Grab_a_pen_description')}
