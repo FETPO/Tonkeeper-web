@@ -10,6 +10,7 @@ const ImportRouter = () => {
     <Routes>
       <Route path={ImportRoute.create} element={<Create />} />
       <Route path={ImportRoute.import} element={<Import />} />
+      {/* Just for test: TODO: remove */}
       <Route path="/final" element={<FinalView />} />
     </Routes>
   );

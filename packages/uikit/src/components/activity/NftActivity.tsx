@@ -17,7 +17,6 @@ const NftBlock = styled.div`
   overflow: hidden;
   display: inline-flex;
   cursor: pointer;
-  min-width: 50%;
   max-width: 100%;
 `;
 

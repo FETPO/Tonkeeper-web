@@ -82,14 +82,24 @@ export const Worlds: FC<{
   );
 };
 
+const Input = styled.input`
+  outline: none;
+  border: none;
+  background: transparent;
+  flex-grow: 1;
+  font-weight: 500;
+  font-size: 16px;
+
+  color: ${(props) => props.theme.textPrimary};
+`;
+
 const InputBlock = styled.label<{ active: boolean; valid: boolean }>`
   width: 100%;
   line-height: 54px;
   border-radius: ${(props) => props.theme.cornerSmall};
-  display: flex;
   padding: 0 1rem;
-  gap: 0.35rem;
   box-sizing: border-box;
+  text-align: left;
 
   ${(props) =>
     props.active
@@ -108,19 +118,17 @@ const InputBlock = styled.label<{ active: boolean; valid: boolean }>`
         `}
 
   ${Number1} {
+    display: inline-block;
     line-height: 54px;
+    padding-right: 0.35rem;
   }
-`;
-
-const Input = styled.input`
-  outline: none;
-  border: none;
-  background: transparent;
-  flex-grow: 1;
-  font-weight: 500;
-  font-size: 16px;
-
-  color: ${(props) => props.theme.textPrimary};
+  ${Input} {
+    display: inline-block;
+    width: calc(100% - 38px);
+    height: 54px;
+    line-height: 54px;
+    box-sizing: border-box;
+  }
 `;
 
 const WordInput: FC<{

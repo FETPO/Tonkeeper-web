@@ -1,7 +1,7 @@
 import {
   AccountRepr,
   JettonBalance,
-  JettonsBalances
+  JettonsBalances,
 } from '@tonkeeper/core/dist/tonApi';
 import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import BigNumber from 'bignumber.js';
@@ -15,7 +15,7 @@ import {
   getJettonStockAmount,
   getJettonStockPrice,
   getTonCoinStockPrice,
-  useFormatCoinValue
+  useFormatCoinValue,
 } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute, SettingsRoute } from '../../libs/routes';
@@ -186,7 +186,7 @@ const ButtonRow = styled.div`
   display: flex;
   justify-content: center;
   margin-top: -1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 `;
 
 const EditButton = styled(Label2)`
