@@ -12,11 +12,14 @@ import {
 } from '@tonkeeper/core/dist/service/accountService';
 import { IStorage } from '@tonkeeper/core/dist/Storage';
 import { Configuration } from '@tonkeeper/core/dist/tonApi';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { mnemonicValidate } from 'ton-crypto';
 import { IconPage } from '../../components/Layout';
-import { CheckLottieIcon } from '../../components/lottie/LottieIcons';
+import {
+  CheckLottieIcon,
+  ConfettiLottieIcon,
+} from '../../components/lottie/LottieIcons';
 import { useAppContext } from '../../hooks/appContext';
 import { useAfterImportAction, useAppSdk } from '../../hooks/appSdk';
 import { useStorage } from '../../hooks/storage';
@@ -81,8 +84,11 @@ export const useAddWalletMutation = () => {
   });
 };
 
-const Green = styled.span`
-  color: ${(props) => props.theme.accentGreen};
+const ConfettiBlock = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
 `;
 
 export const FinalView = () => {
@@ -90,15 +96,30 @@ export const FinalView = () => {
   const afterImport = useAfterImportAction();
   const client = useQueryClient();
 
+  const [size, setSize] =
+    useState<{ width: number; height: number } | undefined>(undefined);
+
   useEffect(() => {
     client.invalidateQueries([]);
     setTimeout(afterImport, 3000);
   }, []);
 
+  useEffect(() => {
+    const { innerWidth: width, innerHeight: height } = window;
+    setSize({ width, height });
+  }, []);
+
   return (
-    <IconPage
-      icon={<CheckLottieIcon />}
-      title={t('Congratulations_You_ve_set_up_your_wallet')}
-    />
+    <>
+      {size && (
+        <ConfettiBlock>
+          <ConfettiLottieIcon {...size} />
+        </ConfettiBlock>
+      )}
+      <IconPage
+        icon={<CheckLottieIcon />}
+        title={t('Congratulations_You_ve_set_up_your_wallet')}
+      />
+    </>
   );
 };

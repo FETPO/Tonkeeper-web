@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import Lottie from 'react-lottie';
 import * as animationCheckData from './Check.json';
+import * as animationConfettiData from './Confetti.json';
 import * as animationGearData from './Gear.json';
 import * as animationTonkeeperLogoData from './TonkeeperLogo.json';
 import * as animationWriteData from './Write.json';
@@ -63,5 +64,23 @@ export const TonkeeperLogoLottieIcon: FC<{
       height={parseInt(height)}
       width={parseInt(width)}
     />
+  );
+};
+
+const defaultConfettiOptions = {
+  loop: false,
+  autoplay: true,
+  animationData: animationConfettiData,
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice',
+  },
+};
+
+export const ConfettiLottieIcon: FC<{ width: number; height: number }> = ({
+  width,
+  height,
+}) => {
+  return (
+    <Lottie options={defaultConfettiOptions} height={height} width={width} />
   );
 };

@@ -35,7 +35,7 @@ import {
 import { any, AppRoute } from '@tonkeeper/uikit/dist/libs/routes';
 import { Unlock } from '@tonkeeper/uikit/dist/pages/home/Unlock';
 import { UnlockNotification } from '@tonkeeper/uikit/dist/pages/home/UnlockNotification';
-import ImportRouter from '@tonkeeper/uikit/dist/pages/import';
+
 import {
   Initialize,
   InitializeContainer,
@@ -70,6 +70,9 @@ import { BrowserAppSdk } from './libs/appSdk';
 import { useAppHeight } from './libs/hooks';
 import { BrowserStorage } from './libs/storage';
 
+const ImportRouter = React.lazy(
+  () => import('@tonkeeper/uikit/dist/pages/import')
+);
 const Settings = React.lazy(
   () => import('@tonkeeper/uikit/dist/pages/settings')
 );
@@ -229,12 +232,14 @@ export const Content: FC<{
 
   if (!activeWallet || location.pathname.startsWith(AppRoute.import)) {
     return (
-      <InitializeContainer fullHeight={false}>
-        <Routes>
-          <Route path={any(AppRoute.import)} element={<ImportRouter />} />
-          <Route path="*" element={<Initialize />} />
-        </Routes>
-      </InitializeContainer>
+      <Suspense fallback={<Loading />}>
+        <InitializeContainer fullHeight={false}>
+          <Routes>
+            <Route path={any(AppRoute.import)} element={<ImportRouter />} />
+            <Route path="*" element={<Initialize />} />
+          </Routes>
+        </InitializeContainer>
+      </Suspense>
     );
   }
 
