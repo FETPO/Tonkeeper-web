@@ -44,7 +44,7 @@ const InputField = styled.input`
   flex-grow: 1;
   font-weight: 500;
   font-size: 16px;
-  padding-top: 10px;
+  padding: 8px 0 0;
   line-height: 46px;
 
   color: ${(props) => props.theme.textPrimary};

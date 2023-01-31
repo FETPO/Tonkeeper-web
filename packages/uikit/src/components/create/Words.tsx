@@ -19,7 +19,12 @@ const Block = styled.div`
   }
 `;
 
+const Header = styled(H2)`
+  user-select: none;
+`;
 const Body = styled(Body1)`
+  user-select: none;
+
   text-align: center;
   color: ${(props) => props.theme.textSecondary};
 `;
@@ -40,12 +45,17 @@ export const WorldNumber = styled(Body2)`
   width: 24px;
   line-height: 24px;
   color: ${(props) => props.theme.textSecondary};
+
+  user-select: none;
 `;
 
 const Number1 = styled(Body1)`
   display: inline-block;
   width: 26px;
   text-align: right;
+
+  font-size: 15px;
+
   color: ${(props) => props.theme.textSecondary};
 `;
 
@@ -76,6 +86,11 @@ export const LogoutBlock = styled.div`
   right: 1rem;
 `;
 
+export const BackBlock = styled.div`
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+`;
 export const LogoutButton = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -94,13 +109,14 @@ export const Worlds: FC<{
   const { t } = useTranslation();
   return (
     <>
-      <Block>
+      <BackBlock>
         <BackButton onClick={onBack}>
           <ChevronLeftIcon />
         </BackButton>
-
+      </BackBlock>
+      <Block>
         <div>
-          <H2>{t('Your_recovery_phrase')}</H2>
+          <Header>{t('Your_recovery_phrase')}</Header>
           <Body>{t('Your_recovery_phrase_description')}</Body>
         </div>
       </Block>
@@ -225,12 +241,14 @@ export const Check: FC<{
 
   return (
     <>
-      <Block>
+      <BackBlock>
         <BackButton onClick={onBack}>
           <ChevronLeftIcon />
         </BackButton>
+      </BackBlock>
+      <Block>
         <div>
-          <H2>{t('So_let_s_check')}</H2>
+          <Header>{t('So_let_s_check')}</Header>
           <Body>{description}</Body>
         </div>
       </Block>
@@ -315,12 +333,14 @@ export const ImportWords: FC<{
 
   return (
     <>
-      <Block>
+      <BackBlock>
         <BackButton onClick={() => navigate(AppRoute.home)}>
           <ChevronLeftIcon />
         </BackButton>
+      </BackBlock>
+      <Block>
         <div>
-          <H2>{t('Enter_your_recovery_phrase')}</H2>
+          <Header>{t('Enter_your_recovery_phrase')}</Header>
           <Body>{t('Enter_your_recovery_phrase_description')}</Body>
         </div>
       </Block>

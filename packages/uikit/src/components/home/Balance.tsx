@@ -104,7 +104,7 @@ export const Balance: FC<{
   return (
     <Block>
       <Error>{error && error.message}</Error>
-      <Amount onClick={onClick}>{total}</Amount>
+      <Amount>{total}</Amount>
       <Body onClick={onClick}>{toShortAddress(address)}</Body>
     </Block>
   );

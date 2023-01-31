@@ -31,15 +31,20 @@ const useMnemonic = (publicKey: string, auth: AuthState) => {
   const [mnemonic, setMnemonic] = useState<string[] | undefined>(undefined);
   const storage = useStorage();
   const sdk = useAppSdk();
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
-      const password =
-        auth.kind === 'none'
-          ? auth.kind
-          : await getPasswordByNotification(sdk, auth);
+      try {
+        const password =
+          auth.kind === 'none'
+            ? auth.kind
+            : await getPasswordByNotification(sdk, auth);
 
-      setMnemonic(await getWalletMnemonic(storage, publicKey, password));
+        setMnemonic(await getWalletMnemonic(storage, publicKey, password));
+      } catch (e) {
+        navigate(-1);
+      }
     })();
   }, [publicKey]);
 
