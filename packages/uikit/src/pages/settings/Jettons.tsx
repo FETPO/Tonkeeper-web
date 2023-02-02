@@ -5,7 +5,7 @@ import {
   Draggable,
   DraggableProvidedDragHandleProps,
   Droppable,
-  OnDragEndResponder,
+  OnDragEndResponder
 } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { Radio } from '../../components/fields/Checkbox';
@@ -18,10 +18,10 @@ import { SubHeader } from '../../components/SubHeader';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useCoinFullBalance } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
-import { sortJettons, useToggleJettonMutation } from '../../state/jetton';
+import { hideEmptyJettons, sortJettons, useToggleJettonMutation } from '../../state/jetton';
 import {
   useMutateWalletProperty,
-  useWalletJettonList,
+  useWalletJettonList
 } from '../../state/wallet';
 
 const Row = styled.div`
@@ -113,7 +113,8 @@ export const JettonsSettings = () => {
   const { data } = useWalletJettonList();
 
   const jettons = useMemo(() => {
-    return sortJettons(wallet.orderJettons, data?.balances ?? []);
+    const sort = sortJettons(wallet.orderJettons, data?.balances ?? []);
+    return hideEmptyJettons(sort);
   }, [data, wallet.orderJettons]);
 
   const { mutate } = useMutateWalletProperty();
