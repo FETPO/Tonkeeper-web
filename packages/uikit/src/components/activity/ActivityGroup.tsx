@@ -1,5 +1,5 @@
 import { NftItemRepr } from '@tonkeeper/core/dist/tonApi';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { ActivityAction } from '../../components/activity/ActivityAction';
 import { ListBlock, ListItem } from '../../components/List';
@@ -10,7 +10,8 @@ import {
   formatActivityDate,
   getActivityTitle,
 } from '../../state/activity';
-import { ActionData } from './ActivityNotification';
+import { NftNotification } from '../nft/NftNotification';
+import { ActionData, ActivityNotification } from './ActivityNotification';
 
 const List = styled(ListBlock)`
   margin: 0.5rem 0;
@@ -22,10 +23,11 @@ const Title = styled(H3)`
 
 export const ActivityGroupRaw: FC<{
   items: ActivityGroup[];
-  openActivity: (value: ActionData) => void;
-  openNft: (nft: NftItemRepr) => void;
-}> = ({ items, openActivity, openNft }) => {
+}> = ({ items }) => {
   const { t, i18n } = useTranslation();
+  const [activity, setActivity] = useState<ActionData | undefined>(undefined);
+  const [nft, setNft] = useState<NftItemRepr | undefined>(undefined);
+
   return (
     <>
       {items.map(([key, events]) => {
@@ -41,12 +43,12 @@ export const ActivityGroupRaw: FC<{
                   {event.actions.map((action, index) => (
                     <ListItem
                       key={index}
-                      onClick={() => openActivity({ action, timestamp, event })}
+                      onClick={() => setActivity({ action, timestamp, event })}
                     >
                       <ActivityAction
                         action={action}
                         date={date}
-                        openNft={openNft}
+                        openNft={setNft}
                       />
                     </ListItem>
                   ))}
@@ -56,6 +58,11 @@ export const ActivityGroupRaw: FC<{
           </div>
         );
       })}
+      <ActivityNotification
+        value={activity}
+        handleClose={() => setActivity(undefined)}
+      />
+      <NftNotification nftItem={nft} handleClose={() => setNft(undefined)} />
     </>
   );
 };

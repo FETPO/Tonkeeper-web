@@ -4,9 +4,8 @@ import {
   JettonBalance,
   JettonInfo,
 } from '@tonkeeper/core/dist/tonApi';
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useMemo } from 'react';
 import { ActivityGroupRaw } from '../../components/activity/ActivityGroup';
-import { ActivityNotification } from '../../components/activity/ActivityNotification';
 import { Action, ActionsRow } from '../../components/home/Actions';
 import { SendIcon } from '../../components/home/HomeIcons';
 import { ReceiveAction } from '../../components/home/ReceiveAction';
@@ -34,8 +33,6 @@ const JettonHistory: FC<{ info: JettonInfo; balance: JettonBalance }> = ({
   balance,
 }) => {
   const { tonApi } = useAppContext();
-  const [activity, setActivity] =
-    useState<{ action: Action; timestamp: number } | undefined>(undefined);
 
   const { fetchNextPage, hasNextPage, isFetchingNextPage, data, ...result } =
     useInfiniteQuery({
@@ -63,15 +60,7 @@ const JettonHistory: FC<{ info: JettonInfo; balance: JettonBalance }> = ({
 
   return (
     <HistoryBlock>
-      <ActivityGroupRaw
-        items={items}
-        openActivity={setActivity}
-        openNft={() => null}
-      />
-      <ActivityNotification
-        value={activity}
-        handleClose={() => setActivity(undefined)}
-      />
+      <ActivityGroupRaw items={items} />
     </HistoryBlock>
   );
 };
