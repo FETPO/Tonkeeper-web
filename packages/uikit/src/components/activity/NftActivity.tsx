@@ -91,9 +91,9 @@ export const NftItemTransferAction: FC<{ action: Action; date: string }> = ({
         <ColumnText
           text={t('Sent')}
           secondary={
-            nftItemTransfer.sender.name ??
+            nftItemTransfer.recipient?.name ??
             toShortAddress(
-              nftItemTransfer.sender?.address ?? nftItemTransfer.nft
+              nftItemTransfer.recipient?.address ?? nftItemTransfer.nft
             )
           }
         />
@@ -111,10 +111,8 @@ export const NftItemTransferAction: FC<{ action: Action; date: string }> = ({
       <ColumnText
         text={t('Received')}
         secondary={
-          nftItemTransfer.recipient?.name ??
-          toShortAddress(
-            nftItemTransfer.recipient?.address ?? nftItemTransfer.nft
-          )
+          nftItemTransfer.sender?.name ??
+          toShortAddress(nftItemTransfer.sender?.address ?? nftItemTransfer.nft)
         }
       />
 
