@@ -129,7 +129,7 @@ export const Worlds: FC<{
         ))}
       </WorldsGrid>
 
-      <Button size="large" fullWith primary marginTop onClick={onCheck}>
+      <Button size="large" fullWidth primary marginTop onClick={onCheck}>
         {t('Continue')}
       </Button>
     </>
@@ -276,7 +276,7 @@ export const Check: FC<{
       <Block>
         <Button
           size="large"
-          fullWith
+          fullWidth
           primary
           loading={isLoading}
           disabled={!isValid}
@@ -360,7 +360,7 @@ export const ImportWords: FC<{
       <Block>
         <Button
           size="large"
-          fullWith
+          fullWidth
           primary
           disabled={!isValid}
           loading={isLoading}

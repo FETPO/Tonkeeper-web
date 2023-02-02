@@ -67,7 +67,7 @@ const NftTransferContent: FC<{
         placeholder={t('Address_or_name')}
       />
       <ButtonRow>
-        <Button size="large" primary fullWith disabled={!isValid}>
+        <Button size="large" primary fullWidth disabled={!isValid}>
           {t('Continue')}
         </Button>
       </ButtonRow>

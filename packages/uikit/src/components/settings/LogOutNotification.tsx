@@ -69,7 +69,7 @@ const LotOutContent: FC<{
       <Button
         disabled={!checked}
         size="large"
-        fullWith
+        fullWidth
         loading={isLoading}
         onClick={async () => {
           await mutateAsync();
@@ -141,7 +141,7 @@ const DeleteContent: FC<{
       <Button
         disabled={!checked}
         size="large"
-        fullWith
+        fullWidth
         loading={isLoading}
         onClick={onDelete}
       >
@@ -213,7 +213,7 @@ const DeleteAllContent: FC<{ onClose: (action: () => void) => void }> = ({
       <Button
         disabled={!checked}
         size="large"
-        fullWith
+        fullWidth
         loading={isLoading}
         onClick={onDelete}
       >

@@ -1,6 +1,10 @@
 import styled, { css } from 'styled-components';
 
-export const ListBlock = styled.div<{ margin?: boolean; dropDown?: boolean }>`
+export const ListBlock = styled.div<{
+  margin?: boolean;
+  dropDown?: boolean;
+  fullWidth?: boolean;
+}>`
   display: flex;
   flex-direction: column;
 
@@ -19,6 +23,13 @@ export const ListBlock = styled.div<{ margin?: boolean; dropDown?: boolean }>`
     props.margin !== false
       ? css`
           margin: 0 0 2rem;
+        `
+      : undefined}
+
+  ${(props) =>
+    props.fullWidth
+      ? css`
+          width: 100%;
         `
       : undefined}
 

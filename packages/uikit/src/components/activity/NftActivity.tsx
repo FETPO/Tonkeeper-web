@@ -1,12 +1,11 @@
-import { Action } from '@tonkeeper/core/dist/tonApi';
+import { Action, NftItemRepr } from '@tonkeeper/core/dist/tonApi';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { useNftItemData } from '../../state/wallet';
 import { ColumnText } from '../Layout';
-import { NftNotification } from '../nft/NftNotification';
 import { Body2 } from '../Text';
 import { ActivityIcon, ReceiveIcon, SentIcon } from './ActivityIcons';
 import { ErrorAction, ListItemGrid } from './CommonAction';
@@ -42,22 +41,26 @@ const Wrapper = styled.div`
   grid-column: 2 / 4;
 `;
 
-export const NftComment: FC<{ address: string }> = ({ address }) => {
+export const NftComment: FC<{
+  address: string;
+  openNft: (nft: NftItemRepr) => void;
+}> = ({ address, openNft }) => {
   const { data } = useNftItemData(address);
 
-  const [open, setOpen] = useState(false);
   if (!data) return <></>;
   const preview = data.previews?.find((item) => item.resolution === '100x100');
   return (
     <>
-      <div>
-        <NftNotification
-          nftItem={open ? data : undefined}
-          handleClose={() => setOpen(false)}
-        />
-      </div>
+      <div></div>
       <Wrapper>
-        <NftBlock onClick={() => setOpen(true)}>
+        <NftBlock
+          onClick={(e) => {
+            e.stopPropagation();
+            if (data) {
+              openNft(data);
+            }
+          }}
+        >
           {preview && <img height="64" width="64" src={preview.url} />}
           <NftText>
             <Body>{data.dns ?? data.metadata.name}</Body>
@@ -71,10 +74,11 @@ export const NftComment: FC<{ address: string }> = ({ address }) => {
   );
 };
 
-export const NftItemTransferAction: FC<{ action: Action; date: string }> = ({
-  action,
-  date,
-}) => {
+export const NftItemTransferAction: FC<{
+  action: Action;
+  date: string;
+  openNft: (nft: NftItemRepr) => void;
+}> = ({ action, date, openNft }) => {
   const { t } = useTranslation();
   const wallet = useWalletContext();
   const { nftItemTransfer } = action;
@@ -98,7 +102,7 @@ export const NftItemTransferAction: FC<{ action: Action; date: string }> = ({
           }
         />
         <ColumnText right noWrap text={`NFT`} secondary={date} />
-        <NftComment address={nftItemTransfer.nft} />
+        <NftComment address={nftItemTransfer.nft} openNft={openNft} />
       </ListItemGrid>
     );
   }
@@ -117,7 +121,7 @@ export const NftItemTransferAction: FC<{ action: Action; date: string }> = ({
       />
 
       <ColumnText right noWrap text={`NFT`} secondary={date} />
-      <NftComment address={nftItemTransfer.nft} />
+      <NftComment address={nftItemTransfer.nft} openNft={openNft} />
     </ListItemGrid>
   );
 };

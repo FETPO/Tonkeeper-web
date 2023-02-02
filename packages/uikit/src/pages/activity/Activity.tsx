@@ -1,11 +1,16 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { EventApi } from '@tonkeeper/core/dist/tonApi';
+import { EventApi, NftItemRepr } from '@tonkeeper/core/dist/tonApi';
 import { throttle } from '@tonkeeper/core/dist/utils/common';
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { ActivityGroupRaw } from '../../components/activity/ActivityGroup';
+import {
+  ActionData,
+  ActivityNotification,
+} from '../../components/activity/ActivityNotification';
 import { EmptyActivity } from '../../components/activity/EmptyActivity';
 import { ActivityHeader } from '../../components/Header';
+import { NftNotification } from '../../components/nft/NftNotification';
 import { ActivitySkeleton, SkeletonList } from '../../components/Skeleton';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { QueryKey } from '../../libs/queryKey';
@@ -19,6 +24,10 @@ const Body = styled.div`
 const Activity: FC = () => {
   const wallet = useWalletContext();
   const { tonApi } = useAppContext();
+
+  const [nft, setNft] = useState<NftItemRepr | undefined>(undefined);
+  const [activity, setActivity] = useState<ActionData | undefined>(undefined);
+
   const { fetchNextPage, hasNextPage, isFetchingNextPage, data, ...result } =
     useInfiniteQuery({
       queryKey: [wallet.active.rawAddress, QueryKey.activity],
@@ -69,9 +78,18 @@ const Activity: FC = () => {
     <>
       <ActivityHeader />
       <Body>
-        <ActivityGroupRaw items={items} />
+        <ActivityGroupRaw
+          items={items}
+          openNft={setNft}
+          openActivity={setActivity}
+        />
         {isFetchingNextPage && <SkeletonList size={3} />}
       </Body>
+      <NftNotification nftItem={nft} handleClose={() => setNft(undefined)} />
+      <ActivityNotification
+        value={activity}
+        handleClose={() => setActivity(undefined)}
+      />
     </>
   );
 };

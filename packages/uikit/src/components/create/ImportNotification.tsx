@@ -47,7 +47,7 @@ export const ImportNotification: FC<{
           </TextBlock>
           <Button
             size="large"
-            fullWith
+            fullWidth
             primary
             bottom
             onClick={() => {
@@ -58,7 +58,7 @@ export const ImportNotification: FC<{
           </Button>
           <Button
             size="large"
-            fullWith
+            fullWidth
             secondary
             onClick={() => {
               onClose(() => onImport(AppRoute.import + ImportRoute.import));

@@ -214,7 +214,7 @@ export const BuyItemNotification: FC<{
               <Body>{item.description}</Body>
             </Center>
             <Disclaimer buttons={item.info_buttons} />
-            <Button size="large" fullWith primary onClick={onForceOpen}>
+            <Button size="large" fullWidth primary onClick={onForceOpen}>
               {item.action_button.title}
             </Button>
             <CheckboxBlock>

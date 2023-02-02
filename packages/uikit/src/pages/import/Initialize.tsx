@@ -71,7 +71,7 @@ export const Initialize: FC = () => {
       </div>
       <Button
         size="large"
-        fullWith
+        fullWidth
         primary
         marginTop
         onClick={() => setOpen(true)}

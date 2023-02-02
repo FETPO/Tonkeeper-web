@@ -9,7 +9,7 @@ export interface ButtonProps {
   primary?: boolean;
   secondary?: boolean;
   disabled?: boolean;
-  fullWith?: boolean;
+  fullWidth?: boolean;
   bottom?: boolean;
   marginTop?: boolean;
 
@@ -54,7 +54,7 @@ export const ButtonElement = styled.button<Omit<ButtonProps, 'loading'>>`
       : undefined}
 
   ${(props) =>
-    props.fullWith
+    props.fullWidth
       ? css`
           width: 100%;
         `

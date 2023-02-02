@@ -1,6 +1,9 @@
-import { Action } from '@tonkeeper/core/dist/tonApi';
+import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
+import { Action, NftItemRepr } from '@tonkeeper/core/dist/tonApi';
+import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
-import React, { FC } from 'react';
+import BigNumber from 'bignumber.js';
+import React, { FC, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import {
   ActivityIcon,
@@ -8,13 +11,31 @@ import {
   SentIcon,
 } from '../../components/activity/ActivityIcons';
 import { ColumnText } from '../../components/Layout';
-import { ListItemPayload } from '../../components/List';
-import { useWalletContext } from '../../hooks/appContext';
-import { useFormatCoinValue } from '../../hooks/balance';
+import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
+import { useAppContext, useWalletContext } from '../../hooks/appContext';
+import { useAppSdk } from '../../hooks/appSdk';
+import {
+  formatDecimals,
+  formatFiatCurrency,
+  getTonCoinStockPrice,
+  useFormatCoinValue,
+} from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
+import { useTonenpointStock } from '../../state/tonendpoint';
+import { Button } from '../fields/Button';
+import { Body1, Label1 } from '../Text';
+import { ActionData } from './ActivityNotification';
 import { Comment, ErrorAction, ListItemGrid } from './CommonAction';
 import { ContractDeployAction } from './ContractDeployAction';
 import { NftComment, NftItemTransferAction } from './NftActivity';
+import {
+  ActionDate,
+  ActionDetailsRecipient,
+  ActionDetailsSender,
+  ErrorActivityNotification,
+  Label,
+  Title,
+} from './NotificationCommon';
 import { SubscribeAction, UnSubscribeAction } from './SubscribeAction';
 
 export const formatDate = (timestamp: number): string => {
@@ -32,6 +53,121 @@ const ReceivedText = styled.span<{ isScam?: boolean }>`
           color: ${props.theme.accentGreen};
         `}
 `;
+
+const Amount = styled(Body1)`
+  display: block;
+  user-select: none;
+  color: ${(props) => props.theme.textSecondary};
+`;
+
+const Block = styled.div`
+  text-align: center;
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const useBalanceValue = (
+  amount: number | undefined,
+  stock: TonendpointStock | undefined,
+  fiat: FiatCurrencies
+) => {
+  return useMemo(() => {
+    if (!stock || !amount) {
+      return undefined;
+    }
+    const ton = new BigNumber(amount).multipliedBy(
+      formatDecimals(getTonCoinStockPrice(stock.today, fiat))
+    );
+    return formatFiatCurrency(fiat, ton);
+  }, [amount, stock]);
+};
+
+export const TonTransferActionNotification: FC<ActionData> = ({
+  action,
+  timestamp,
+  event,
+}) => {
+  console.log(action);
+
+  const { t } = useTranslation();
+  const wallet = useWalletContext();
+  const { tonTransfer } = action;
+  const sdk = useAppSdk();
+
+  const format = useFormatCoinValue();
+  const { fiat, tonendpoint } = useAppContext();
+  const { data: stock } = useTonenpointStock(tonendpoint);
+
+  const price = useBalanceValue(tonTransfer?.amount, stock, fiat);
+
+  if (!tonTransfer) {
+    return <ErrorActivityNotification />;
+  }
+
+  if (tonTransfer.recipient.address === wallet.active.rawAddress) {
+    return (
+      <Block>
+        <div>
+          <Title>+ {format(tonTransfer.amount)} TON</Title>
+          {price && <Amount>≈ {price}</Amount>}
+          <ActionDate kind="received" timestamp={timestamp} />
+        </div>
+        <ListBlock margin={false} fullWidth>
+          <ActionDetailsRecipient recipient={tonTransfer.recipient} />
+          {tonTransfer.comment && (
+            <ListItem>
+              <ListItemPayload>
+                <Label>{t('message')}</Label>
+                <Label1>{tonTransfer.comment}</Label1>
+              </ListItemPayload>
+            </ListItem>
+          )}
+        </ListBlock>
+        <Button
+          size="large"
+          fullWidth
+          onClick={() =>
+            sdk.openPage(`https://tonapi.io/transaction/${event.eventId}`)
+          }
+        >
+          {t('View_in_explorer')}
+        </Button>
+      </Block>
+    );
+  }
+
+  return (
+    <Block>
+      <div>
+        <Title>- {format(tonTransfer.amount)} TON</Title>
+        {price && <Amount>≈ {price}</Amount>}
+        <ActionDate kind="send" timestamp={timestamp} />
+      </div>
+      <ListBlock margin={false} fullWidth>
+        <ActionDetailsSender sender={tonTransfer.sender} />
+        {tonTransfer.comment && (
+          <ListItem>
+            <ListItemPayload>
+              <Label>{t('message')}</Label>
+              <Label1>{tonTransfer.comment}</Label1>
+            </ListItemPayload>
+          </ListItem>
+        )}
+      </ListBlock>
+      <Button
+        size="large"
+        fullWidth
+        onClick={() =>
+          sdk.openPage(`https://tonapi.io/transaction/${event.eventId}`)
+        }
+      >
+        {t('View_in_explorer')}
+      </Button>
+    </Block>
+  );
+};
 
 const TonTransferAction: FC<{ action: Action; date: string }> = ({
   action,
@@ -170,10 +306,11 @@ const JettonTransferAction: FC<{ action: Action; date: string }> = ({
   );
 };
 
-export const AuctionBidAction: FC<{ action: Action; date: string }> = ({
-  action,
-  date,
-}) => {
+export const AuctionBidAction: FC<{
+  action: Action;
+  date: string;
+  openNft: (nft: NftItemRepr) => void;
+}> = ({ action, date, openNft }) => {
   const { t } = useTranslation();
   const { auctionBid } = action;
 
@@ -203,14 +340,18 @@ export const AuctionBidAction: FC<{ action: Action; date: string }> = ({
         }`}
         secondary={date}
       />
-      {auctionBid.nft && <NftComment address={auctionBid.nft.address} />}
+      {auctionBid.nft && (
+        <NftComment address={auctionBid.nft.address} openNft={openNft} />
+      )}
     </ListItemGrid>
   );
 };
-export const ActivityAction: FC<{ action: Action; date: string }> = ({
-  action,
-  date,
-}) => {
+
+export const ActivityAction: FC<{
+  action: Action;
+  date: string;
+  openNft: (nft: NftItemRepr) => void;
+}> = ({ action, date, openNft }) => {
   const { t } = useTranslation();
 
   switch (action.type) {
@@ -219,15 +360,19 @@ export const ActivityAction: FC<{ action: Action; date: string }> = ({
     case 'JettonTransfer':
       return <JettonTransferAction action={action} date={date} />;
     case 'NftItemTransfer':
-      return <NftItemTransferAction action={action} date={date} />;
+      return (
+        <NftItemTransferAction action={action} date={date} openNft={openNft} />
+      );
     case 'ContractDeploy':
-      return <ContractDeployAction action={action} date={date} />;
+      return (
+        <ContractDeployAction action={action} date={date} openNft={openNft} />
+      );
     case 'UnSubscribe':
       return <UnSubscribeAction action={action} date={date} />;
     case 'Subscribe':
       return <SubscribeAction action={action} date={date} />;
     case 'AuctionBid':
-      return <AuctionBidAction action={action} date={date} />;
+      return <AuctionBidAction action={action} date={date} openNft={openNft} />;
     case 'Unknown':
       return <ErrorAction>{t('Unknown')}</ErrorAction>;
     default: {

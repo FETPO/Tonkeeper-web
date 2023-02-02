@@ -1,4 +1,4 @@
-import { Action } from '@tonkeeper/core/dist/tonApi';
+import { Action, NftItemRepr } from '@tonkeeper/core/dist/tonApi';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
 import React, { FC } from 'react';
 import {
@@ -11,10 +11,11 @@ import { useTranslation } from '../../hooks/translation';
 import { ErrorAction, ListItemGrid } from './CommonAction';
 import { NftComment } from './NftActivity';
 
-export const ContractDeployAction: FC<{ action: Action; date: string }> = ({
-  action,
-  date,
-}) => {
+export const ContractDeployAction: FC<{
+  action: Action;
+  date: string;
+  openNft: (nft: NftItemRepr) => void;
+}> = ({ action, date, openNft }) => {
   const { t } = useTranslation();
   const { contractDeploy } = action;
 
@@ -34,7 +35,7 @@ export const ContractDeployAction: FC<{ action: Action; date: string }> = ({
           secondary={toShortAddress(contractDeploy.address)}
         />
         <ColumnText right noWrap text={`-`} secondary={date} />
-        <NftComment address={contractDeploy.address} />
+        <NftComment address={contractDeploy.address} openNft={openNft} />
       </ListItemGrid>
     );
   }

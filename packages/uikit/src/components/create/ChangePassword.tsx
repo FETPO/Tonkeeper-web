@@ -94,7 +94,7 @@ const ChangePasswordContent: FC<{ handleClose: () => void }> = ({
       </Block>
       <Button
         size="large"
-        fullWith
+        fullWidth
         primary
         type="submit"
         loading={isLoading}

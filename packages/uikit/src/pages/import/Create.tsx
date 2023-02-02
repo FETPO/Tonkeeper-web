@@ -72,7 +72,7 @@ export const Create = () => {
         button={
           <Button
             size="large"
-            fullWith
+            fullWidth
             primary
             marginTop
             onClick={() => setOpen(true)}

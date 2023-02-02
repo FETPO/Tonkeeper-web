@@ -96,7 +96,7 @@ export const PasswordUnlock: FC<{ minHeight?: string }> = ({ minHeight }) => {
         isValid={!isError}
         disabled={isLoading}
       />
-      <Button size="large" primary fullWith type="submit" loading={isLoading}>
+      <Button size="large" primary fullWidth type="submit" loading={isLoading}>
         {t('Unlock')}
       </Button>
     </Block>

@@ -1,3 +1,4 @@
+import { NftItemRepr } from '@tonkeeper/core/dist/tonApi';
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { ActivityAction } from '../../components/activity/ActivityAction';
@@ -9,6 +10,7 @@ import {
   formatActivityDate,
   getActivityTitle,
 } from '../../state/activity';
+import { ActionData } from './ActivityNotification';
 
 const List = styled(ListBlock)`
   margin: 0.5rem 0;
@@ -18,7 +20,11 @@ const Title = styled(H3)`
   margin: 1.875rem 0 0.875rem;
 `;
 
-export const ActivityGroupRaw: FC<{ items: ActivityGroup[] }> = ({ items }) => {
+export const ActivityGroupRaw: FC<{
+  items: ActivityGroup[];
+  openActivity: (value: ActionData) => void;
+  openNft: (nft: NftItemRepr) => void;
+}> = ({ items, openActivity, openNft }) => {
   const { t, i18n } = useTranslation();
   return (
     <>
@@ -33,8 +39,15 @@ export const ActivityGroupRaw: FC<{ items: ActivityGroup[] }> = ({ items }) => {
               return (
                 <List key={event.eventId}>
                   {event.actions.map((action, index) => (
-                    <ListItem key={index} hover={false}>
-                      <ActivityAction action={action} date={date} />
+                    <ListItem
+                      key={index}
+                      onClick={() => openActivity({ action, timestamp, event })}
+                    >
+                      <ActivityAction
+                        action={action}
+                        date={date}
+                        openNft={openNft}
+                      />
                     </ListItem>
                   ))}
                 </List>

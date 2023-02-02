@@ -41,7 +41,7 @@ const SelectAuthType: FC<{
     <Block>
       <Button
         size="large"
-        fullWith
+        fullWidth
         onClick={() => onSelect('none')}
         loading={isLoading}
       >
@@ -49,7 +49,7 @@ const SelectAuthType: FC<{
       </Button>
       <Button
         size="large"
-        fullWith
+        fullWidth
         primary
         onClick={() => onSelect('password')}
         disabled={isLoading}
@@ -135,7 +135,7 @@ const FillPassword: FC<{
 
       <Button
         size="large"
-        fullWith
+        fullWidth
         primary
         marginTop
         loading={isLoading || isCreating}

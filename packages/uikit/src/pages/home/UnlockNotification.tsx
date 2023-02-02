@@ -168,7 +168,7 @@ const PasswordUnlock: FC<{
         <ButtonRow>
           <Button
             size="large"
-            fullWith
+            fullWidth
             onClick={onCancel}
             type="button"
             loading={isLoading}
@@ -178,7 +178,7 @@ const PasswordUnlock: FC<{
           <Button
             size="large"
             primary
-            fullWith
+            fullWidth
             type="submit"
             disabled={password.length < 5}
             loading={isLoading}

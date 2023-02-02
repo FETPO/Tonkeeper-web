@@ -96,7 +96,7 @@ export const UpdateWalletName: FC<{
 
       <Button
         size="large"
-        fullWith
+        fullWidth
         primary
         loading={isLoading}
         disabled={isLoading}
