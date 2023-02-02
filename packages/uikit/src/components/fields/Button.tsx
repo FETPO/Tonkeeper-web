@@ -169,6 +169,15 @@ export const ButtonElement = styled.button<Omit<ButtonProps, 'loading'>>`
   }}
 `;
 
+export const ButtonRow = styled.div`
+  display: flex;
+  gap: 1rem;
+
+  ${ButtonElement} {
+    flex: 1;
+  }
+`;
+
 export const Button: FC<
   PropsWithChildren<
     ButtonProps &

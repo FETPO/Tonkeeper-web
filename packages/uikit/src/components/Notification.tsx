@@ -1,4 +1,10 @@
-import React, { FC, useEffect, useMemo, useRef } from 'react';
+import React, {
+  FC,
+  PropsWithChildren,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 import { Container } from '../styles/globalStyle';
@@ -6,7 +12,7 @@ import { BackButton } from './fields/BackButton';
 import { CloseIcon } from './Icon';
 import { Gap } from './Layout';
 import ReactPortal from './ReactPortal';
-import { H2 } from './Text';
+import { H2, H3 } from './Text';
 
 const NotificationContainer = styled(Container)`
   background: transparent;
@@ -78,6 +84,31 @@ const Content = styled.div`
   flex-shrink: 0;
   box-sizing: border-box;
 `;
+
+const TitleRow = styled.div`
+  display: flex;
+  gap: 1;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  user-select: none;
+`;
+
+const RowTitle = styled(H3)`
+  margin: 0;
+  user-select: none;
+`;
+
+export const NotificationTitleRow: FC<
+  PropsWithChildren<{ handleClose: () => void }>
+> = ({ handleClose, children }) => {
+  return (
+    <TitleRow>
+      <RowTitle>{children}</RowTitle>
+      <NotificationCancelButton handleClose={handleClose} />
+    </TitleRow>
+  );
+};
 
 export const NotificationTitle = styled(H2)`
   padding-right: 2rem;

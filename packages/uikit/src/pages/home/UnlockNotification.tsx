@@ -7,13 +7,11 @@ import { getWalletState } from '@tonkeeper/core/dist/service/walletService';
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button } from '../../components/fields/Button';
+import { Button, ButtonRow } from '../../components/fields/Button';
 import { Input } from '../../components/fields/Input';
-import { TonkeeperIcon } from '../../components/Icon';
 import {
-  ButtonContainer,
   Notification,
-  NotificationCancelButton
+  NotificationTitleRow,
 } from '../../components/Notification';
 import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
@@ -57,7 +55,7 @@ const Block = styled.form`
   box-sizing: border-box;
 
   justify-content: center;
-  gap: 1rem;
+  gap: 2rem;
   width: 100%;
 `;
 
@@ -136,12 +134,14 @@ const PasswordUnlock: FC<{
   };
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    console.log('submit');
     e.preventDefault();
     await mutateAsync(password);
     onClose();
   };
 
   const onCancel = () => {
+    console.log('cancel');
     sdk.uiEvents.emit('response', {
       method: 'response',
       id: requestId,
@@ -152,13 +152,10 @@ const PasswordUnlock: FC<{
 
   return (
     <>
-      <ButtonContainer>
-        <NotificationCancelButton handleClose={onCancel} />
-      </ButtonContainer>
+      <NotificationTitleRow handleClose={onCancel}>
+        {t('enter_password')}
+      </NotificationTitleRow>
       <Block onSubmit={onSubmit}>
-        <Logo>
-          <TonkeeperIcon />
-        </Logo>
         <Input
           ref={ref}
           value={password}
@@ -168,9 +165,27 @@ const PasswordUnlock: FC<{
           isValid={!isError}
           disabled={isLoading}
         />
-        <Button size="large" primary fullWith type="submit" loading={isLoading}>
-          {t('Unlock')}
-        </Button>
+        <ButtonRow>
+          <Button
+            size="large"
+            fullWith
+            onClick={onCancel}
+            type="button"
+            loading={isLoading}
+          >
+            {t('log_out')}
+          </Button>
+          <Button
+            size="large"
+            primary
+            fullWith
+            type="submit"
+            disabled={password.length < 5}
+            loading={isLoading}
+          >
+            {t('Unlock')}
+          </Button>
+        </ButtonRow>
       </Block>
     </>
   );

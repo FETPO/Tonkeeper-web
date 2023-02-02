@@ -3,7 +3,11 @@ import { getWalletMnemonic } from '@tonkeeper/core/dist/service/menmonicService'
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { WorldNumber, WorldsGrid } from '../../components/create/Words';
+import {
+  BackBlock,
+  WorldNumber,
+  WorldsGrid,
+} from '../../components/create/Words';
 import { BackButton } from '../../components/fields/BackButton';
 import { ChevronLeftIcon } from '../../components/Icon';
 import { Body1, Body2, H2 } from '../../components/Text';
@@ -58,6 +62,7 @@ const Wrapper = styled.div`
 
   flex-direction: column;
   padding: 0 1rem;
+  position: relative;
 `;
 
 const Block = styled.div`
@@ -68,9 +73,15 @@ const Block = styled.div`
   position: relative;
 `;
 
+const Title = styled(H2)`
+  user-select: none;
+  padding: 0 2rem;
+`;
+
 const Body = styled(Body2)`
   text-align: center;
   color: ${(props) => props.theme.textSecondary};
+  user-select: none;
 `;
 
 const RecoveryContent: FC<{ publicKey: string }> = ({ publicKey }) => {
@@ -89,11 +100,13 @@ const RecoveryContent: FC<{ publicKey: string }> = ({ publicKey }) => {
 
   return (
     <Wrapper>
-      <Block>
+      <BackBlock>
         <BackButton onClick={onBack}>
           <ChevronLeftIcon />
         </BackButton>
-        <H2>{t('Your_recovery_phrase')}</H2>
+      </BackBlock>
+      <Block>
+        <Title>{t('Your_recovery_phrase')}</Title>
         <Body>{t('Your_recovery_phrase_description')}</Body>
       </Block>
 

@@ -167,6 +167,9 @@
     "message": "Log out",
     "description": "Tokens button"
   },
+  "enter_password": {
+    "message": "Enter password"
+  },
   "Collectibles": {
     "message": "Collectibles",
     "description": "Collectibles button"

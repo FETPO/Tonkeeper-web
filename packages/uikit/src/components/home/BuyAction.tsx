@@ -8,8 +8,8 @@ import { useAppContext } from '../../hooks/appContext';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useTranslation } from '../../hooks/translation';
 import { ListBlock } from '../List';
-import { Notification, NotificationCancelButton } from '../Notification';
-import { H3, Label2 } from '../Text';
+import { Notification, NotificationTitleRow } from '../Notification';
+import { Label2 } from '../Text';
 import { Action } from './Actions';
 import { BuyItemNotification } from './BuyItemNotification';
 import { BuyIcon, SellIcon } from './HomeIcons';
@@ -29,22 +29,6 @@ const BuyList: FC<{ items: TonendpoinFiatItem[]; kind: 'buy' | 'sell' }> = ({
   );
 };
 
-const TitleRow = styled.div`
-  display: flex;
-  gap: 1;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-
-  user-select: none;
-`;
-
-const Title = styled(H3)`
-  margin: 0;
-
-  user-select: none;
-`;
-
 const ActionNotification: FC<{
   item: TonendpoinFiatCategory;
   kind: 'buy' | 'sell';
@@ -55,10 +39,9 @@ const ActionNotification: FC<{
   const { config } = useAppContext();
   return (
     <div>
-      <TitleRow>
-        <Title>{item.title}</Title>
-        <NotificationCancelButton handleClose={handleClose} />
-      </TitleRow>
+      <NotificationTitleRow handleClose={handleClose}>
+        {item.title}
+      </NotificationTitleRow>
       <BuyList items={item.items} kind={kind} />
       <OtherBlock>
         <OtherLink onClick={() => sdk.openPage(config.exchangePostUrl!)}>

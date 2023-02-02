@@ -7,7 +7,7 @@ import { Input } from '../fields/Input';
 import {
   Notification,
   NotificationBlock,
-  NotificationTitle,
+  NotificationTitleRow,
 } from '../Notification';
 
 const RenameWalletContent: FC<{
@@ -26,33 +26,36 @@ const RenameWalletContent: FC<{
   };
 
   return (
-    <NotificationBlock onSubmit={onSubmit}>
-      <NotificationTitle>{t('Rename')}</NotificationTitle>
+    <>
+      <NotificationTitleRow handleClose={() => afterClose(() => null)}>
+        {t('Rename')}
+      </NotificationTitleRow>
+      <NotificationBlock onSubmit={onSubmit}>
+        <Input
+          value={name}
+          onChange={setName}
+          isValid={!isError}
+          label={t('Wallet_name')}
+        />
+        <Input
+          value={wallet.active.friendlyAddress}
+          disabled
+          label={t('Address')}
+        />
 
-      <Input
-        value={name}
-        onChange={setName}
-        isValid={!isError}
-        label={t('Wallet_name')}
-      />
-      <Input
-        value={wallet.active.friendlyAddress}
-        disabled
-        label={t('Address')}
-      />
-
-      <Button
-        size="large"
-        fullWith
-        bottom
-        primary
-        loading={isLoading}
-        disabled={isLoading}
-        type="submit"
-      >
-        {t('Save')}
-      </Button>
-    </NotificationBlock>
+        <Button
+          size="large"
+          fullWith
+          bottom
+          primary
+          loading={isLoading}
+          disabled={isLoading}
+          type="submit"
+        >
+          {t('Save')}
+        </Button>
+      </NotificationBlock>
+    </>
   );
 };
 
