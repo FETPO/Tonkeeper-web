@@ -5,6 +5,7 @@ import { getAccountState } from '@tonkeeper/core/dist/service/accountService';
 import { validateWalletMnemonic } from '@tonkeeper/core/dist/service/menmonicService';
 import { getWalletState } from '@tonkeeper/core/dist/service/walletService';
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from '../../components/fields/Button';
 import { Input } from '../../components/fields/Input';
@@ -12,7 +13,7 @@ import { TonkeeperIcon } from '../../components/Icon';
 import {
   ButtonContainer,
   Notification,
-  NotificationCancelButton,
+  NotificationCancelButton
 } from '../../components/Notification';
 import { useStorage } from '../../hooks/storage';
 import { useTranslation } from '../../hooks/translation';
@@ -111,6 +112,18 @@ const PasswordUnlock: FC<{
   );
   const [password, setPassword] = useState('');
 
+  const [active, setActive] = useState(false);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!active) {
+      setActive(true);
+    } else {
+      onClose();
+    }
+  }, [location]);
+
   useEffect(() => {
     if (ref.current) {
       ref.current.focus();
@@ -167,6 +180,11 @@ export const UnlockNotification: FC<{ sdk: IAppSdk }> = ({ sdk }) => {
   const [auth, setAuth] = useState<AuthState | undefined>(undefined);
   const [requestId, setId] = useState<number | undefined>(undefined);
 
+  const close = useCallback(() => {
+    setAuth(undefined);
+    setId(undefined);
+  }, []);
+
   useEffect(() => {
     const handler = (options: {
       method: 'getPassword';
@@ -183,13 +201,7 @@ export const UnlockNotification: FC<{ sdk: IAppSdk }> = ({ sdk }) => {
     };
   }, [sdk]);
 
-  const close = useCallback(() => {
-    setAuth(undefined);
-    setId(undefined);
-  }, []);
-
   const Content = useCallback(() => {
-    console.log('auth', auth, 'requestId', requestId);
     if (!auth || !requestId) return undefined;
     return <PasswordUnlock sdk={sdk} onClose={close} requestId={requestId} />;
   }, [auth, requestId]);
