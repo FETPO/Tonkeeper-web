@@ -211,13 +211,31 @@ function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
+const formatOrdinals = (lang: string, n: number) => {
+  if (lang === 'en') {
+    const pr = new Intl.PluralRules(lang, { type: 'ordinal' });
+    const suffixes = new Map([
+      ['one', 'st'],
+      ['two', 'nd'],
+      ['few', 'rd'],
+      ['other', 'th'],
+    ]);
+
+    const rule = pr.select(n);
+    const suffix = suffixes.get(rule);
+    return `${n}${suffix}`;
+  } else {
+    return `${n}`;
+  }
+};
+
 export const Check: FC<{
   mnemonic: string[];
   onBack: () => void;
   onConfirm: () => void;
   isLoading: boolean;
 }> = ({ onBack, onConfirm, mnemonic, isLoading }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [one, setOne] = useState('');
   const [two, setTwo] = useState('');
@@ -229,9 +247,9 @@ export const Check: FC<{
 
   const description = useMemo(() => {
     return t('So_let_s_check_description')
-      .replace(`%1%`, String(test1))
-      .replace(`%2%`, String(test2))
-      .replace(`%3%`, String(test3));
+      .replace(`%1%`, formatOrdinals(i18n.language, test1))
+      .replace(`%2%`, formatOrdinals(i18n.language, test2))
+      .replace(`%3%`, formatOrdinals(i18n.language, test3));
   }, [t, test1, test2, test3]);
 
   const isValid =

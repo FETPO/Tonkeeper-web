@@ -227,7 +227,7 @@
     "description": "Initialize screen So, let’s check title"
   },
   "So_let_s_check_description": {
-    "message": "To check whether you’ve written down your recovery phrase correctly, please enter the %1%th, %2%th, and %3%st words.",
+    "message": "To check whether you’ve written down your recovery phrase correctly, please enter the %1%, %2%, and %3% words.",
     "description": "Initialize screen So, let’s check description"
   },
   "Congratulations_You_ve_set_up_your_wallet": {
