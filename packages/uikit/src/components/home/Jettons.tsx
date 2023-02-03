@@ -20,9 +20,8 @@ import {
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute, SettingsRoute } from '../../libs/routes';
 import { ToncoinIcon } from '../Icon';
-import { ColumnText } from '../Layout';
-import { ListBlock, ListItem, ListItemPayload } from '../List';
-import { Label1, Label2 } from '../Text';
+import { ListBlock, ListItem } from '../List';
+import { Body2, Label1, Label2 } from '../Text';
 
 export interface AssetProps {
   stock: TonendpointStock;
@@ -31,9 +30,33 @@ export interface AssetProps {
 }
 
 const Description = styled.div`
+  flex-grow: 1;
+
   display: flex;
-  gap: 1rem;
-  align-items: center;
+  flex-direction: column;
+
+  white-space: nowrap;
+`;
+
+const FirstLine = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr 0fr;
+  gap: 0.25rem;
+  width: 100%;
+`;
+
+const CoinName = styled(Label1)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
+
+const SecondLine = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Secondary = styled(Body2)`
+  color: ${(props) => props.theme.textSecondary};
 `;
 
 const Symbol = styled(Label1)`
@@ -101,18 +124,20 @@ export const TonAsset: FC<{
   return (
     <ListItem onClick={() => navigate(AppRoute.coins + '/ton')}>
       <ListItemPayload>
+        <ToncoinIcon />
         <Description>
-          <ToncoinIcon />
-          <ColumnText
-            text={title}
-            secondary={
-              <>
-                {fiatPrice} <Delta stock={stock} />
-              </>
-            }
-          />
+          <FirstLine>
+            <Label1>{t('Toncoin')}</Label1>
+            <Symbol>TON</Symbol>
+            <Label1>{balance}</Label1>
+          </FirstLine>
+          <SecondLine>
+            <Secondary>
+              {fiatPrice} <Delta stock={stock} />
+            </Secondary>
+            <Secondary>{fiatAmount}</Secondary>
+          </SecondLine>
         </Description>
-        <ColumnText text={balance} secondary={fiatAmount} right />
       </ListItemPayload>
     </ListItem>
   );
@@ -124,6 +149,17 @@ const Logo = styled.img`
   border-radius: ${(props) => props.theme.cornerFull};
 
   pointer-events: none;
+`;
+
+const ListItemPayload = styled.div`
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem 1rem 0;
+  box-sizing: border-box;
+  gap: 1rem;
+  width: 100%;
 `;
 
 export const JettonAsset: FC<{
@@ -148,12 +184,7 @@ export const JettonAsset: FC<{
   const format = useFormatCoinValue();
   const formattedBalance = format(jetton.balance, jetton.metadata?.decimals);
 
-  const title = (
-    <>
-      {jetton.metadata?.name ?? t('Unknown_COIN')}{' '}
-      <Symbol>{jetton.metadata?.symbol}</Symbol>
-    </>
-  );
+  const title = <>{} </>;
 
   return (
     <ListItem
@@ -164,19 +195,19 @@ export const JettonAsset: FC<{
       }
     >
       <ListItemPayload>
+        <Logo src={jetton.metadata?.image} />
+
         <Description>
-          <Logo src={jetton.metadata?.image} />
-          {price ? (
-            <ColumnText text={title} secondary={price} />
-          ) : (
-            <Label1>{title}</Label1>
-          )}
+          <FirstLine>
+            <CoinName>{jetton.metadata?.name ?? t('Unknown_COIN')}</CoinName>
+            <Symbol>{jetton.metadata?.symbol}</Symbol>
+            <Label1>{formattedBalance}</Label1>
+          </FirstLine>
+          <SecondLine>
+            <Secondary>{price}</Secondary>
+            <Secondary>{total}</Secondary>
+          </SecondLine>
         </Description>
-        {total ? (
-          <ColumnText text={formattedBalance} secondary={total} right />
-        ) : (
-          <Label1>{formattedBalance}</Label1>
-        )}
       </ListItemPayload>
     </ListItem>
   );
