@@ -4,13 +4,12 @@ import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
 import BigNumber from 'bignumber.js';
 import React, { FC, useMemo } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import {
   ActivityIcon,
   ReceiveIcon,
   SentIcon,
 } from '../../components/activity/ActivityIcons';
-import { ColumnText } from '../../components/Layout';
 import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useAppSdk } from '../../hooks/appSdk';
@@ -25,7 +24,16 @@ import { useTonenpointStock } from '../../state/tonendpoint';
 import { Button } from '../fields/Button';
 import { Body1, Label1 } from '../Text';
 import { ActionData } from './ActivityNotification';
-import { Comment, ErrorAction, ListItemGrid } from './CommonAction';
+import {
+  AmountText,
+  Comment,
+  Description,
+  ErrorAction,
+  FirstLine,
+  ListItemGrid,
+  SecondaryText,
+  SecondLine,
+} from './CommonAction';
 import { ContractDeployAction } from './ContractDeployAction';
 import { NftComment, NftItemTransferAction } from './NftActivity';
 import {
@@ -37,22 +45,6 @@ import {
   Title,
 } from './NotificationCommon';
 import { SubscribeAction, UnSubscribeAction } from './SubscribeAction';
-
-export const formatDate = (timestamp: number): string => {
-  const date = new Date(timestamp * 1000);
-  return `${date.getHours()}:${('0' + date.getMinutes()).slice(-2)}`;
-};
-
-const ReceivedText = styled.span<{ isScam?: boolean }>`
-  ${(props) =>
-    props.isScam
-      ? css`
-          color: ${props.theme.textTertiary};
-        `
-      : css`
-          color: ${props.theme.accentGreen};
-        `}
-`;
 
 const Amount = styled(Body1)`
   display: block;
@@ -189,23 +181,26 @@ const TonTransferAction: FC<{ action: Action; date: string }> = ({
         <ActivityIcon>
           <ReceiveIcon />
         </ActivityIcon>
-        <ColumnText
-          text={tonTransfer.sender.isScam ? t('Span') : t('Received')}
-          secondary={
-            tonTransfer.sender.name ??
-            toShortAddress(tonTransfer.sender.address)
-          }
-        />
-        <ColumnText
-          right
-          noWrap
-          text={
-            <ReceivedText isScam={tonTransfer.sender.isScam}>{`+ ${format(
-              tonTransfer.amount
-            )} TON`}</ReceivedText>
-          }
-          secondary={date}
-        />
+        <Description>
+          <FirstLine>
+            <Label1>
+              {tonTransfer.sender.isScam ? t('Span') : t('Received')}
+            </Label1>
+            <AmountText isScam={tonTransfer.sender.isScam} green>
+              + {format(tonTransfer.amount)}
+            </AmountText>
+            <AmountText isScam={tonTransfer.sender.isScam} green>
+              TON
+            </AmountText>
+          </FirstLine>
+          <SecondLine>
+            <SecondaryText>
+              {tonTransfer.sender.name ??
+                toShortAddress(tonTransfer.sender.address)}
+            </SecondaryText>
+            <SecondaryText>{date}</SecondaryText>
+          </SecondLine>
+        </Description>
         <Comment comment={tonTransfer.comment} />
       </ListItemGrid>
     );
@@ -215,19 +210,20 @@ const TonTransferAction: FC<{ action: Action; date: string }> = ({
       <ActivityIcon>
         <SentIcon />
       </ActivityIcon>
-      <ColumnText
-        text={t('Sent')}
-        secondary={
-          tonTransfer.recipient.name ??
-          toShortAddress(tonTransfer.recipient.address)
-        }
-      />
-      <ColumnText
-        right
-        noWrap
-        text={`- ${format(tonTransfer.amount)} TON`}
-        secondary={date}
-      />
+      <Description>
+        <FirstLine>
+          <Label1>{t('Sent')}</Label1>
+          <AmountText>- {format(tonTransfer.amount)}</AmountText>
+          <Label1>TON</Label1>
+        </FirstLine>
+        <SecondLine>
+          <SecondaryText>
+            {tonTransfer.recipient.name ??
+              toShortAddress(tonTransfer.recipient.address)}
+          </SecondaryText>
+          <SecondaryText>{date}</SecondaryText>
+        </SecondLine>
+      </Description>
       <Comment comment={tonTransfer.comment} />
     </ListItemGrid>
   );
@@ -253,25 +249,25 @@ const JettonTransferAction: FC<{ action: Action; date: string }> = ({
         <ActivityIcon>
           <SentIcon />
         </ActivityIcon>
-        <ColumnText
-          text={t('Sent')}
-          secondary={
-            jettonTransfer.recipient?.name ??
-            toShortAddress(
-              jettonTransfer.recipient?.address ??
-                jettonTransfer.recipientsWallet
-            )
-          }
-        />
-        <ColumnText
-          right
-          noWrap
-          text={`- ${format(
-            jettonTransfer.amount,
-            jettonTransfer.jetton.decimals
-          )} ${jettonTransfer.jetton.symbol}`}
-          secondary={date}
-        />
+        <Description>
+          <FirstLine>
+            <Label1>{t('Sent')}</Label1>
+            <AmountText>
+              - {format(jettonTransfer.amount, jettonTransfer.jetton.decimals)}
+            </AmountText>
+            <Label1>{jettonTransfer.jetton.symbol}</Label1>
+          </FirstLine>
+          <SecondLine>
+            <SecondaryText>
+              {jettonTransfer.recipient?.name ??
+                toShortAddress(
+                  jettonTransfer.recipient?.address ??
+                    jettonTransfer.recipientsWallet
+                )}
+            </SecondaryText>
+            <SecondaryText>{date}</SecondaryText>
+          </SecondLine>
+        </Description>
       </ListItemGrid>
     );
   }
@@ -281,27 +277,26 @@ const JettonTransferAction: FC<{ action: Action; date: string }> = ({
       <ActivityIcon>
         <ReceiveIcon />
       </ActivityIcon>
-      <ColumnText
-        text={t('Received')}
-        secondary={
-          jettonTransfer.sender?.name ??
-          toShortAddress(
-            jettonTransfer.sender?.address ?? jettonTransfer.sendersWallet
-          )
-        }
-      />
-
-      <ColumnText
-        right
-        noWrap
-        text={
-          <ReceivedText isScam={jettonTransfer.sender?.isScam}>{`+ ${format(
-            jettonTransfer.amount,
-            jettonTransfer.jetton.decimals
-          )} ${jettonTransfer.jetton.symbol}`}</ReceivedText>
-        }
-        secondary={date}
-      />
+      <Description>
+        <FirstLine>
+          <Label1>{t('Received')}</Label1>
+          <AmountText isScam={jettonTransfer.sender?.isScam} green>
+            + {format(jettonTransfer.amount, jettonTransfer.jetton.decimals)}
+          </AmountText>
+          <AmountText isScam={jettonTransfer.sender?.isScam} green>
+            {jettonTransfer.jetton.symbol}
+          </AmountText>
+        </FirstLine>
+        <SecondLine>
+          <SecondaryText>
+            {jettonTransfer.sender?.name ??
+              toShortAddress(
+                jettonTransfer.sender?.address ?? jettonTransfer.sendersWallet
+              )}
+          </SecondaryText>
+          <SecondaryText>{date}</SecondaryText>
+        </SecondLine>
+      </Description>
     </ListItemGrid>
   );
 };
@@ -325,21 +320,20 @@ export const AuctionBidAction: FC<{
       <ActivityIcon>
         <SentIcon />
       </ActivityIcon>
-      <ColumnText
-        text={t('Bid')}
-        secondary={
-          auctionBid.auctionType ??
-          toShortAddress(auctionBid.beneficiary.address)
-        }
-      />
-      <ColumnText
-        right
-        noWrap
-        text={`- ${format(auctionBid.amount.value)} ${
-          auctionBid.amount.tokenName
-        }`}
-        secondary={date}
-      />
+      <Description>
+        <FirstLine>
+          <Label1>{t('Bid')}</Label1>
+          <AmountText>- {format(auctionBid.amount.value)}</AmountText>
+          <AmountText>{auctionBid.amount.tokenName}</AmountText>
+        </FirstLine>
+        <SecondLine>
+          <SecondaryText>
+            {auctionBid.auctionType ??
+              toShortAddress(auctionBid.beneficiary.address)}
+          </SecondaryText>
+          <SecondaryText>{date}</SecondaryText>
+        </SecondLine>
+      </Description>
       {auctionBid.nft && (
         <NftComment address={auctionBid.nft.address} openNft={openNft} />
       )}

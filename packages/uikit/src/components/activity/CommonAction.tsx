@@ -1,5 +1,5 @@
 import React, { FC, PropsWithChildren } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
   ActivityIcon,
   ReceiveIcon,
@@ -10,10 +10,58 @@ import { useTranslation } from '../../hooks/translation';
 
 export const ListItemGrid = styled(ListItemPayload)`
   display: grid;
-  grid-template-columns: min-content 1fr min-content;
+  grid-template-columns: min-content 1fr;
   column-gap: 1rem;
   row-gap: 0.5rem;
+`;
+
+export const Description = styled.div`
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  white-space: nowrap;
+`;
+
+export const FirstLine = styled.div`
+  display: grid;
+  grid-template-columns: min-content auto min-content;
+  gap: 0.25rem;
+  width: 100%;
+`;
+
+export const AmountText = styled(Label1)<{ green?: boolean; isScam?: boolean }>`
+  text-overflow: ellipsis;
   overflow: hidden;
+  text-align: right;
+
+  ${(props) =>
+    props.isScam
+      ? css`
+          color: ${props.theme.textTertiary};
+        `
+      : props.green
+      ? css`
+          color: ${props.theme.accentGreen};
+        `
+      : undefined}
+`;
+
+export const SecondLine = styled.div`
+  display: grid;
+  grid-template-columns: auto min-content;
+  gap: 0.25rem;
+  width: 100%;
+
+  > * {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+`;
+
+export const SecondaryText = styled(Body2)`
+  color: ${(props) => props.theme.textSecondary};
 `;
 
 const CommentMessage = styled(Body2)`
@@ -25,7 +73,7 @@ const CommentMessage = styled(Body2)`
 `;
 
 const Wrapper = styled.div`
-  grid-column: 2 / 4;
+  grid-column: 2 / 3;
 `;
 
 export const Comment: FC<{ comment?: string }> = ({ comment }) => {

@@ -5,10 +5,17 @@ import styled from 'styled-components';
 import { useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { useNftItemData } from '../../state/wallet';
-import { ColumnText } from '../Layout';
-import { Body2 } from '../Text';
+import { Body2, Label1 } from '../Text';
 import { ActivityIcon, ReceiveIcon, SentIcon } from './ActivityIcons';
-import { ErrorAction, ListItemGrid } from './CommonAction';
+import {
+  AmountText,
+  Description,
+  ErrorAction,
+  FirstLine,
+  ListItemGrid,
+  SecondaryText,
+  SecondLine,
+} from './CommonAction';
 
 const NftBlock = styled.div`
   background: ${(props) => props.theme.backgroundContentTint};
@@ -38,7 +45,8 @@ const BodySecondary = styled(Body2)`
 `;
 
 const Wrapper = styled.div`
-  grid-column: 2 / 4;
+  grid-column: 2 / 3;
+  overflow: hidden;
 `;
 
 export const NftComment: FC<{
@@ -50,27 +58,24 @@ export const NftComment: FC<{
   if (!data) return <></>;
   const preview = data.previews?.find((item) => item.resolution === '100x100');
   return (
-    <>
-      <div></div>
-      <Wrapper>
-        <NftBlock
-          onClick={(e) => {
-            e.stopPropagation();
-            if (data) {
-              openNft(data);
-            }
-          }}
-        >
-          {preview && <img height="64" width="64" src={preview.url} />}
-          <NftText>
-            <Body>{data.dns ?? data.metadata.name}</Body>
-            <BodySecondary>
-              {data.collection?.name ?? data.metadata.description}
-            </BodySecondary>
-          </NftText>
-        </NftBlock>
-      </Wrapper>
-    </>
+    <Wrapper>
+      <NftBlock
+        onClick={(e) => {
+          e.stopPropagation();
+          if (data) {
+            openNft(data);
+          }
+        }}
+      >
+        {preview && <img height="64" width="64" src={preview.url} />}
+        <NftText>
+          <Body>{data.dns ?? data.metadata.name}</Body>
+          <BodySecondary>
+            {data.collection?.name ?? data.metadata.description}
+          </BodySecondary>
+        </NftText>
+      </NftBlock>
+    </Wrapper>
   );
 };
 
@@ -92,16 +97,22 @@ export const NftItemTransferAction: FC<{
         <ActivityIcon>
           <SentIcon />
         </ActivityIcon>
-        <ColumnText
-          text={t('Sent')}
-          secondary={
-            nftItemTransfer.recipient?.name ??
-            toShortAddress(
-              nftItemTransfer.recipient?.address ?? nftItemTransfer.nft
-            )
-          }
-        />
-        <ColumnText right noWrap text={`NFT`} secondary={date} />
+        <Description>
+          <FirstLine>
+            <Label1>{t('Sent')}</Label1>
+            <AmountText></AmountText>
+            <AmountText>{t('NFT')}</AmountText>
+          </FirstLine>
+          <SecondLine>
+            <SecondaryText>
+              {nftItemTransfer.recipient?.name ??
+                toShortAddress(
+                  nftItemTransfer.recipient?.address ?? nftItemTransfer.nft
+                )}
+            </SecondaryText>
+            <SecondaryText>{date}</SecondaryText>
+          </SecondLine>
+        </Description>
         <NftComment address={nftItemTransfer.nft} openNft={openNft} />
       </ListItemGrid>
     );
@@ -112,15 +123,22 @@ export const NftItemTransferAction: FC<{
       <ActivityIcon>
         <ReceiveIcon />
       </ActivityIcon>
-      <ColumnText
-        text={t('Received')}
-        secondary={
-          nftItemTransfer.sender?.name ??
-          toShortAddress(nftItemTransfer.sender?.address ?? nftItemTransfer.nft)
-        }
-      />
-
-      <ColumnText right noWrap text={`NFT`} secondary={date} />
+      <Description>
+        <FirstLine>
+          <Label1>{t('Received')}</Label1>
+          <AmountText></AmountText>
+          <AmountText>{t('NFT')}</AmountText>
+        </FirstLine>
+        <SecondLine>
+          <SecondaryText>
+            {nftItemTransfer.sender?.name ??
+              toShortAddress(
+                nftItemTransfer.sender?.address ?? nftItemTransfer.nft
+              )}
+          </SecondaryText>
+          <SecondaryText>{date}</SecondaryText>
+        </SecondLine>
+      </Description>
       <NftComment address={nftItemTransfer.nft} openNft={openNft} />
     </ListItemGrid>
   );
