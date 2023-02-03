@@ -126,11 +126,15 @@ export const getStockPrice = (
   return new BigNumber(btcInFiat).div(new BigNumber(btcPrice));
 };
 
-const toFiatCurrencyFormat = (currency: FiatCurrencies) => {
+const toFiatCurrencyFormat = (
+  currency: FiatCurrencies,
+  maximumFractionDigits?: number
+) => {
   const config = FiatCurrencySymbolsConfig[currency];
   return new Intl.NumberFormat(config.numberFormat, {
     minimumFractionDigits: 0,
-    maximumFractionDigits: config.maximumFractionDigits,
+    maximumFractionDigits:
+      maximumFractionDigits ?? config.maximumFractionDigits,
     style: 'currency',
     currency: currency,
     currencyDisplay: 'symbol',
@@ -141,6 +145,12 @@ export const formatFiatCurrency = (
   currency: FiatCurrencies,
   balance: BigNumber.Value
 ) => {
+  const amount = new BigNumber(balance).toNumber();
   const balanceFormat = toFiatCurrencyFormat(currency);
-  return balanceFormat.format(new BigNumber(balance).toNumber());
+  const result = balanceFormat.format(amount);
+  if (result.match(/[1-9]/)) {
+    return result;
+  }
+  const balanceExtraFormat = toFiatCurrencyFormat(currency, 4);
+  return balanceExtraFormat.format(new BigNumber(balance).toNumber());
 };

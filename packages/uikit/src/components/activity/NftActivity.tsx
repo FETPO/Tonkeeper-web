@@ -101,7 +101,7 @@ export const NftItemTransferAction: FC<{
           <FirstLine>
             <Label1>{t('Sent')}</Label1>
             <AmountText></AmountText>
-            <AmountText>{t('NFT')}</AmountText>
+            <AmountText>NFT</AmountText>
           </FirstLine>
           <SecondLine>
             <SecondaryText>
@@ -127,7 +127,7 @@ export const NftItemTransferAction: FC<{
         <FirstLine>
           <Label1>{t('Received')}</Label1>
           <AmountText></AmountText>
-          <AmountText>{t('NFT')}</AmountText>
+          <AmountText>NFT</AmountText>
         </FirstLine>
         <SecondLine>
           <SecondaryText>

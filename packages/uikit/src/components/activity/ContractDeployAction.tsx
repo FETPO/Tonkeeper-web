@@ -6,9 +6,8 @@ import {
   ContractDeployIcon,
   CreateWalletIcon,
 } from '../../components/activity/ActivityIcons';
-import { ColumnText } from '../../components/Layout';
 import { useTranslation } from '../../hooks/translation';
-import { ErrorAction, ListItemGrid } from './CommonAction';
+import { ColumnLayout, ErrorAction, ListItemGrid } from './CommonAction';
 import { NftComment } from './NftActivity';
 
 export const ContractDeployAction: FC<{
@@ -30,11 +29,12 @@ export const ContractDeployAction: FC<{
         <ActivityIcon>
           <ContractDeployIcon />
         </ActivityIcon>
-        <ColumnText
-          text={t('NFT_creation')}
-          secondary={toShortAddress(contractDeploy.address)}
+        <ColumnLayout
+          title={t('NFT_creation')}
+          entry="-"
+          address={toShortAddress(contractDeploy.address)}
+          date={date}
         />
-        <ColumnText right noWrap text={`-`} secondary={date} />
         <NftComment address={contractDeploy.address} openNft={openNft} />
       </ListItemGrid>
     );
@@ -45,11 +45,12 @@ export const ContractDeployAction: FC<{
         <ActivityIcon>
           <ContractDeployIcon />
         </ActivityIcon>
-        <ColumnText
-          text={t('NFT_collection_creation')}
-          secondary={toShortAddress(contractDeploy.address)}
+        <ColumnLayout
+          title={t('NFT_collection_creation')}
+          entry="-"
+          address={toShortAddress(contractDeploy.address)}
+          date={date}
         />
-        <ColumnText right noWrap text={`-`} secondary={date} />
       </ListItemGrid>
     );
   }
@@ -59,11 +60,12 @@ export const ContractDeployAction: FC<{
         <ActivityIcon>
           <CreateWalletIcon />
         </ActivityIcon>
-        <ColumnText
-          text={t('Wallet_initialized')}
-          secondary={toShortAddress(contractDeploy.address)}
+        <ColumnLayout
+          title={t('Wallet_initialized')}
+          entry="-"
+          address={toShortAddress(contractDeploy.address)}
+          date={date}
         />
-        <ColumnText right noWrap text={`-`} secondary={date} />
       </ListItemGrid>
     );
   }
@@ -75,11 +77,12 @@ export const ContractDeployAction: FC<{
       <ActivityIcon>
         <ContractDeployIcon />
       </ActivityIcon>
-      <ColumnText
-        text={t('Contract_Deploy')}
-        secondary={toShortAddress(contractDeploy.address)}
+      <ColumnLayout
+        title={t('Contract_Deploy')}
+        entry="-"
+        address={toShortAddress(contractDeploy.address)}
+        date={date}
       />
-      <ColumnText right noWrap text={`-`} secondary={date} />
     </ListItemGrid>
   );
 };

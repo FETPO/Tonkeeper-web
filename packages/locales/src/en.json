@@ -653,5 +653,37 @@
   "NFT_collection_creation": {
     "message": "NFT collection creation",
     "description": "NFT collection creation activity title"
+  },
+  "received_on": {
+    "message": "Received on",
+    "description": "received_on action details title"
+  },
+  "send_on": {
+    "message": "Send on",
+    "description": "send_on action details title"
+  },
+  "fee": {
+    "message": "Fee",
+    "description": "Fee action label"
+  },
+  "message": {
+    "message": "Message",
+    "description": "message action label"
+  },
+  "recipient": {
+    "message": "Recipient",
+    "description": "recipient action label"
+  },
+  "recipient_address": {
+    "message": "Recipient address",
+    "description": "recipient_address action label"
+  },
+  "sender": {
+    "message": "Sender",
+    "description": "sender_address action label"
+  },
+  "sender_address": {
+    "message": "Sender address",
+    "description": "sender_address action label"
   }
 }

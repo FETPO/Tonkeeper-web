@@ -1,8 +1,18 @@
-import { AccountAddress } from '@tonkeeper/core/dist/tonApi';
+import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
+import { AccountAddress, Fee } from '@tonkeeper/core/dist/tonApi';
+import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
+import BigNumber from 'bignumber.js';
 import React, { FC, PropsWithChildren, useMemo } from 'react';
 import styled from 'styled-components';
+import {
+  formatDecimals,
+  formatFiatCurrency,
+  getTonCoinStockPrice,
+  useFormatCoinValue
+} from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
+import { ColumnText } from '../Layout';
 import { ListItem, ListItemPayload } from '../List';
 import { NotificationBlock } from '../Notification';
 import { Body1, H2, Label1 } from '../Text';
@@ -21,23 +31,41 @@ export const Label = styled(Body1)`
   color: ${(props) => props.theme.textSecondary};
 `;
 
-export const ActionDate: FC<{ kind: 'received' | 'send'; timestamp: number }> =
-  ({ kind, timestamp }) => {
-    const { t, i18n } = useTranslation();
+export const ActionDate: FC<{
+  kind: 'received' | 'send';
+  timestamp: number;
+}> = ({ kind, timestamp }) => {
+  const { t, i18n } = useTranslation();
 
-    const data = useMemo(() => {
-      return new Intl.DateTimeFormat(i18n.language, {
-        dateStyle: 'short',
-        timeStyle: 'short',
-      }).format(timestamp);
-    }, [timestamp, i18n.language]);
+  const data = useMemo(() => {
+    return new Intl.DateTimeFormat(i18n.language, {
+      dateStyle: 'short',
+      timeStyle: 'short',
+    }).format(timestamp);
+  }, [timestamp, i18n.language]);
 
-    return (
-      <Timestamp>
-        {kind === 'received' ? t('received_on') : t('send_on')} {data}
-      </Timestamp>
+  return (
+    <Timestamp>
+      {kind === 'received' ? t('received_on') : t('send_on')} {data}
+    </Timestamp>
+  );
+};
+
+export const useBalanceValue = (
+  amount: number | undefined,
+  stock: TonendpointStock | undefined,
+  fiat: FiatCurrencies,
+) => {
+  return useMemo(() => {
+    if (!stock || !amount) {
+      return undefined;
+    }
+    const ton = new BigNumber(amount).multipliedBy(
+      formatDecimals(getTonCoinStockPrice(stock.today, fiat))
     );
-  };
+    return formatFiatCurrency(fiat, ton);
+  }, [amount, stock]);
+};
 
 export const ErrorActivityNotification: FC<PropsWithChildren> = ({
   children,
@@ -50,7 +78,7 @@ export const ErrorActivityNotification: FC<PropsWithChildren> = ({
   );
 };
 
-export const ActionDetailsRecipient: FC<{ recipient: AccountAddress }> = ({
+export const ActionRecipientDetails: FC<{ recipient: AccountAddress }> = ({
   recipient,
 }) => {
   const { t } = useTranslation();
@@ -77,7 +105,7 @@ export const ActionDetailsRecipient: FC<{ recipient: AccountAddress }> = ({
   );
 };
 
-export const ActionDetailsSender: FC<{ sender: AccountAddress }> = ({
+export const ActionSenderDetails: FC<{ sender: AccountAddress }> = ({
   sender,
 }) => {
   const { t } = useTranslation();
@@ -99,5 +127,30 @@ export const ActionDetailsSender: FC<{ sender: AccountAddress }> = ({
         </ListItemPayload>
       </ListItem>
     </>
+  );
+};
+
+export const ActionFeeDetails: FC<{
+  fee: Fee;
+  stock: TonendpointStock | undefined;
+  fiat: FiatCurrencies;
+}> = ({ fee, stock, fiat }) => {
+  const { t } = useTranslation();
+
+  const format = useFormatCoinValue();
+
+  const price = useBalanceValue(fee.total, stock, fiat);
+
+  return (
+    <ListItem>
+      <ListItemPayload>
+        <Label>{t('fee')}</Label>
+        <ColumnText
+          right
+          text={`${format(fee.total)} TON`}
+          secondary={`≈ ${price}`}
+        />
+      </ListItemPayload>
+    </ListItem>
   );
 };

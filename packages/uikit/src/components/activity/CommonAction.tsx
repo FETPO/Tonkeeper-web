@@ -96,3 +96,24 @@ export const ErrorAction: FC<PropsWithChildren> = ({ children }) => {
     </ListItemGrid>
   );
 };
+
+export const ColumnLayout: FC<{
+  title: string;
+  entry: string;
+  address: string;
+  date: string;
+}> = ({ title, entry, address, date }) => {
+  return (
+    <Description>
+      <FirstLine>
+        <Label1>{title}</Label1>
+        <AmountText></AmountText>
+        <AmountText>{entry}</AmountText>
+      </FirstLine>
+      <SecondLine>
+        <SecondaryText>{address}</SecondaryText>
+        <SecondaryText>{date}</SecondaryText>
+      </SecondLine>
+    </Description>
+  );
+};

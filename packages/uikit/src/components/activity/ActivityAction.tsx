@@ -1,9 +1,6 @@
-import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
 import { Action, NftItemRepr } from '@tonkeeper/core/dist/tonApi';
-import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
-import BigNumber from 'bignumber.js';
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import {
   ActivityIcon,
@@ -13,12 +10,7 @@ import {
 import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useAppSdk } from '../../hooks/appSdk';
-import {
-  formatDecimals,
-  formatFiatCurrency,
-  getTonCoinStockPrice,
-  useFormatCoinValue,
-} from '../../hooks/balance';
+import { useFormatCoinValue } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { useTonenpointStock } from '../../state/tonendpoint';
 import { Button } from '../fields/Button';
@@ -38,11 +30,13 @@ import { ContractDeployAction } from './ContractDeployAction';
 import { NftComment, NftItemTransferAction } from './NftActivity';
 import {
   ActionDate,
-  ActionDetailsRecipient,
-  ActionDetailsSender,
+  ActionFeeDetails,
+  ActionRecipientDetails,
+  ActionSenderDetails,
   ErrorActivityNotification,
   Label,
   Title,
+  useBalanceValue,
 } from './NotificationCommon';
 import { SubscribeAction, UnSubscribeAction } from './SubscribeAction';
 
@@ -60,28 +54,12 @@ const Block = styled.div`
   align-items: center;
 `;
 
-const useBalanceValue = (
-  amount: number | undefined,
-  stock: TonendpointStock | undefined,
-  fiat: FiatCurrencies
-) => {
-  return useMemo(() => {
-    if (!stock || !amount) {
-      return undefined;
-    }
-    const ton = new BigNumber(amount).multipliedBy(
-      formatDecimals(getTonCoinStockPrice(stock.today, fiat))
-    );
-    return formatFiatCurrency(fiat, ton);
-  }, [amount, stock]);
-};
-
 export const TonTransferActionNotification: FC<ActionData> = ({
   action,
   timestamp,
   event,
 }) => {
-  console.log(action);
+  console.log(action, event);
 
   const { t } = useTranslation();
   const wallet = useWalletContext();
@@ -107,7 +85,8 @@ export const TonTransferActionNotification: FC<ActionData> = ({
           <ActionDate kind="received" timestamp={timestamp} />
         </div>
         <ListBlock margin={false} fullWidth>
-          <ActionDetailsRecipient recipient={tonTransfer.recipient} />
+          <ActionRecipientDetails recipient={tonTransfer.recipient} />
+          <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
           {tonTransfer.comment && (
             <ListItem>
               <ListItemPayload>
@@ -138,7 +117,8 @@ export const TonTransferActionNotification: FC<ActionData> = ({
         <ActionDate kind="send" timestamp={timestamp} />
       </div>
       <ListBlock margin={false} fullWidth>
-        <ActionDetailsSender sender={tonTransfer.sender} />
+        <ActionSenderDetails sender={tonTransfer.sender} />
+        <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
         {tonTransfer.comment && (
           <ListItem>
             <ListItemPayload>
