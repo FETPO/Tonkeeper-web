@@ -7,6 +7,7 @@ import {
   TonTransferActionNotification,
 } from './ActivityActionDetails';
 import { ContractDeployActionDetails } from './ContractDeployAction';
+import { NftItemTransferActionDetails } from './NftActivity';
 import { ErrorActivityNotification } from './NotificationCommon';
 import {
   SubscribeActionDetails,
@@ -26,7 +27,7 @@ const ActivityContent: FC<ActionData> = (props) => {
     case 'JettonTransfer':
       return <JettonTransferActionNotification {...props} />;
     case 'NftItemTransfer':
-      return <ErrorActivityNotification event={props.event} />;
+      return <NftItemTransferActionDetails {...props} />;
     case 'ContractDeploy':
       return <ContractDeployActionDetails {...props} />;
     case 'UnSubscribe':

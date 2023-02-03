@@ -2,11 +2,14 @@ import { Action, NftItemRepr } from '@tonkeeper/core/dist/tonApi';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { useWalletContext } from '../../hooks/appContext';
+import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
+import { useTonenpointStock } from '../../state/tonendpoint';
 import { useNftItemData } from '../../state/wallet';
-import { Body2, Label1 } from '../Text';
+import { ListBlock } from '../List';
+import { Body1, Body2, Label1 } from '../Text';
 import { ActivityIcon, ReceiveIcon, SentIcon } from './ActivityIcons';
+import { ActionData } from './ActivityNotification';
 import {
   AmountText,
   Description,
@@ -16,6 +19,16 @@ import {
   SecondaryText,
   SecondLine,
 } from './CommonAction';
+import {
+  ActionDate,
+  ActionDetailsBlock,
+  ActionFeeDetails,
+  ActionRecipientDetails,
+  ActionSenderDetails,
+  ActionTransactionDetails,
+  ErrorActivityNotification,
+  Title,
+} from './NotificationCommon';
 
 const NftBlock = styled.div`
   background: ${(props) => props.theme.backgroundContentTint};
@@ -141,5 +154,90 @@ export const NftItemTransferAction: FC<{
       </Description>
       <NftComment address={nftItemTransfer.nft} openNft={openNft} />
     </ListItemGrid>
+  );
+};
+
+const Amount = styled(Body1)`
+  display: block;
+  user-select: none;
+  color: ${(props) => props.theme.textSecondary};
+  margin-bottom: 4px;
+`;
+
+const Image = styled.img`
+  width: 96px;
+  width: 96px;
+  margin-bottom: 20px;
+  border-radius: ${(props) => props.theme.cornerMedium};
+`;
+
+export const NftItemTransferActionDetails: FC<ActionData> = ({
+  action,
+  timestamp,
+  event,
+}) => {
+  console.log(action, event);
+
+  const wallet = useWalletContext();
+  const { nftItemTransfer } = action;
+
+  const { fiat, tonendpoint } = useAppContext();
+  const { data: stock } = useTonenpointStock(tonendpoint);
+  const { data } = useNftItemData(nftItemTransfer?.nft);
+
+  if (!nftItemTransfer) {
+    return <ErrorActivityNotification event={event} />;
+  }
+
+  const preview = data?.previews?.find((item) => item.resolution === '100x100');
+
+  if (nftItemTransfer.sender?.address === wallet.active.rawAddress) {
+    return (
+      <ActionDetailsBlock event={event}>
+        <div>
+          {preview && <Image src={preview.url} alt="NFT Preview" />}
+          {data && (
+            <>
+              <Title>{data.dns ?? data.metadata.name}</Title>
+              <Amount>
+                {data.collection?.name ?? data.metadata.description}
+              </Amount>
+            </>
+          )}
+          <ActionDate kind="send" timestamp={timestamp} />
+        </div>
+        <ListBlock margin={false} fullWidth>
+          {nftItemTransfer.recipient && (
+            <ActionRecipientDetails recipient={nftItemTransfer.recipient} />
+          )}
+          <ActionTransactionDetails event={event} />
+          <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
+        </ListBlock>
+      </ActionDetailsBlock>
+    );
+  }
+
+  return (
+    <ActionDetailsBlock event={event}>
+      <div>
+        {preview && <Image src={preview.url} alt="NFT Preview" />}
+        {data && (
+          <>
+            <Title>{data.dns ?? data.metadata.name}</Title>
+            <Amount>
+              {data.collection?.name ?? data.metadata.description}
+            </Amount>
+          </>
+        )}
+        <ActionDate kind="received" timestamp={timestamp} />
+      </div>
+      <ListBlock margin={false} fullWidth>
+        {nftItemTransfer.sender && (
+          <ActionSenderDetails sender={nftItemTransfer.sender} />
+        )}
+        <ActionTransactionDetails event={event} />
+        <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
+      </ListBlock>
+    </ActionDetailsBlock>
   );
 };

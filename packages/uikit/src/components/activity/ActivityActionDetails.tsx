@@ -33,14 +33,6 @@ const Amount = styled(Body1)`
   color: ${(props) => props.theme.textSecondary};
 `;
 
-const Block = styled.div`
-  text-align: center;
-  display: flex;
-  gap: 2rem;
-  flex-direction: column;
-  align-items: center;
-`;
-
 export const TonTransferActionNotification: FC<ActionData> = ({
   action,
   timestamp,
