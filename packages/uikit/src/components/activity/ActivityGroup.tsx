@@ -43,7 +43,13 @@ export const ActivityGroupRaw: FC<{
                   {event.actions.map((action, index) => (
                     <ListItem
                       key={index}
-                      onClick={() => setActivity({ action, timestamp, event })}
+                      onClick={() =>
+                        setActivity({
+                          action,
+                          timestamp: timestamp * 1000,
+                          event,
+                        })
+                      }
                     >
                       <ActivityAction
                         action={action}

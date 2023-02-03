@@ -9,7 +9,7 @@ import {
   formatDecimals,
   formatFiatCurrency,
   getTonCoinStockPrice,
-  useFormatCoinValue
+  useFormatCoinValue,
 } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { ColumnText } from '../Layout';
@@ -39,8 +39,14 @@ export const ActionDate: FC<{
 
   const data = useMemo(() => {
     return new Intl.DateTimeFormat(i18n.language, {
-      dateStyle: 'short',
-      timeStyle: 'short',
+      month: 'short',
+      day: 'numeric',
+      year:
+        new Date().getFullYear() - 1 === new Date(timestamp).getFullYear()
+          ? 'numeric'
+          : undefined,
+      hour: 'numeric',
+      minute: 'numeric',
     }).format(timestamp);
   }, [timestamp, i18n.language]);
 
@@ -54,7 +60,7 @@ export const ActionDate: FC<{
 export const useBalanceValue = (
   amount: number | undefined,
   stock: TonendpointStock | undefined,
-  fiat: FiatCurrencies,
+  fiat: FiatCurrencies
 ) => {
   return useMemo(() => {
     if (!stock || !amount) {
