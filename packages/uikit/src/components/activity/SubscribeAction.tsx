@@ -6,9 +6,8 @@ import {
   SubscribeIcon,
   UnsubscribeIcon,
 } from '../../components/activity/ActivityIcons';
-import { ColumnText } from '../../components/Layout';
 import { useTranslation } from '../../hooks/translation';
-import { ErrorAction, ListItemGrid } from './CommonAction';
+import { ColumnLayout, ErrorAction, ListItemGrid } from './CommonAction';
 
 export const UnSubscribeAction: FC<{ action: Action; date: string }> = ({
   action,
@@ -25,15 +24,15 @@ export const UnSubscribeAction: FC<{ action: Action; date: string }> = ({
       <ActivityIcon>
         <UnsubscribeIcon />
       </ActivityIcon>
-      <ColumnText
-        text={t('Unsubscribed')}
-        secondary={
+      <ColumnLayout
+        title={t('Unsubscribed')}
+        entry="-"
+        address={
           unSubscribe.beneficiary.name ??
           toShortAddress(unSubscribe.beneficiary.address)
         }
+        date={date}
       />
-
-      <ColumnText right noWrap text="-" secondary={date} />
     </ListItemGrid>
   );
 };
@@ -54,15 +53,15 @@ export const SubscribeAction: FC<{ action: Action; date: string }> = ({
       <ActivityIcon>
         <SubscribeIcon />
       </ActivityIcon>
-      <ColumnText
-        text={t('Subscribed')}
-        secondary={
+      <ColumnLayout
+        title={t('Subscribed')}
+        entry="-"
+        address={
           subscribe.beneficiary.name ??
           toShortAddress(subscribe.beneficiary.address)
         }
+        date={date}
       />
-
-      <ColumnText right noWrap text="-" secondary={date} />
     </ListItemGrid>
   );
 };
