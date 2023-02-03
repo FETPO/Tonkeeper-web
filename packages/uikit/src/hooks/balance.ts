@@ -5,6 +5,7 @@ import {
 import { JettonBalance } from '@tonkeeper/core/dist/tonApi';
 import BigNumber from 'bignumber.js';
 import { useCallback, useMemo } from 'react';
+import { Address } from 'ton-core';
 import { useAppContext } from './appContext';
 
 export const formatDecimals = (
@@ -94,9 +95,13 @@ export const getJettonStockPrice = (
   currency: FiatCurrencies
 ) => {
   if (jetton.verification !== 'whitelist') return null;
-  if (!jetton.metadata?.symbol) return null;
-  return getStockPrice(jetton.metadata?.symbol, rates, currency);
+  return getStockPrice(
+    Address.parse(jetton.jettonAddress).toString(),
+    rates,
+    currency
+  );
 };
+
 export const getJettonStockAmount = (
   jetton: JettonBalance,
   price: BigNumber | null
