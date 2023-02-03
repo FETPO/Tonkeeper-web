@@ -6,9 +6,50 @@ import {
   ContractDeployIcon,
   CreateWalletIcon,
 } from '../../components/activity/ActivityIcons';
+import { useAppContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
+import { useTonenpointStock } from '../../state/tonendpoint';
+import { ListBlock } from '../List';
+import { ActionData } from './ActivityNotification';
 import { ColumnLayout, ErrorAction, ListItemGrid } from './CommonAction';
 import { NftComment } from './NftActivity';
+import {
+  ActionDate,
+  ActionDeployerDetails,
+  ActionDetailsBlock,
+  ActionFeeDetails,
+  ErrorActivityNotification,
+  Title,
+} from './NotificationCommon';
+
+export const ContractDeployActionDetails: FC<ActionData> = ({
+  action,
+  timestamp,
+  event,
+}) => {
+  const { t } = useTranslation();
+  const { contractDeploy } = action;
+
+  const { fiat, tonendpoint } = useAppContext();
+  const { data: stock } = useTonenpointStock(tonendpoint);
+
+  if (!contractDeploy) {
+    return <ErrorActivityNotification />;
+  }
+
+  return (
+    <ActionDetailsBlock event={event}>
+      <div>
+        <Title>{t('Contract_Deploy')}</Title>
+        <ActionDate kind="received" timestamp={timestamp} />
+      </div>
+      <ListBlock margin={false} fullWidth>
+        <ActionDeployerDetails deployer={contractDeploy.deployer} />
+        <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
+      </ListBlock>
+    </ActionDetailsBlock>
+  );
+};
 
 export const ContractDeployAction: FC<{
   action: Action;

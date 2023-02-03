@@ -138,6 +138,31 @@ export const ActionSenderDetails: FC<{ sender: AccountAddress }> = ({
   );
 };
 
+export const ActionDeployerDetails: FC<{ deployer: AccountAddress }> = ({
+  deployer,
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      {deployer.name && (
+        <ListItem>
+          <ListItemPayload>
+            <Label>{t('deployer')}</Label>
+            <Label1>{deployer.name}</Label1>
+          </ListItemPayload>
+        </ListItem>
+      )}
+      <ListItem>
+        <ListItemPayload>
+          <Label>{deployer.name ? t('deployer_address') : t('deployer')}</Label>
+          <Label1>{toShortAddress(deployer.address)}</Label1>
+        </ListItemPayload>
+      </ListItem>
+    </>
+  );
+};
+
 export const ActionFeeDetails: FC<{
   fee: Fee;
   stock: TonendpointStock | undefined;

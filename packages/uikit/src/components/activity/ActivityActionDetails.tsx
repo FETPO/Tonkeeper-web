@@ -1,9 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import styled from 'styled-components';
+import { Address } from 'ton-core';
 import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
-import { useAppSdk } from '../../hooks/appSdk';
-import { useFormatCoinValue } from '../../hooks/balance';
+import {
+  formatDecimals,
+  formatFiatCurrency,
+  getStockPrice,
+  useFormatCoinValue,
+} from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { useTonenpointStock } from '../../state/tonendpoint';
 import { Body1, Label1 } from '../Text';
@@ -44,7 +49,6 @@ export const TonTransferActionNotification: FC<ActionData> = ({
   const { t } = useTranslation();
   const wallet = useWalletContext();
   const { tonTransfer } = action;
-  const sdk = useAppSdk();
 
   const format = useFormatCoinValue();
   const { fiat, tonendpoint } = useAppContext();
@@ -111,14 +115,27 @@ export const JettonTransferActionNotification: FC<ActionData> = ({
 }) => {
   console.log(action, event);
 
-  const { t } = useTranslation();
   const wallet = useWalletContext();
   const { jettonTransfer } = action;
-  const sdk = useAppSdk();
 
   const format = useFormatCoinValue();
   const { fiat, tonendpoint } = useAppContext();
   const { data: stock } = useTonenpointStock(tonendpoint);
+
+  const total = useMemo(() => {
+    if (!stock || !jettonTransfer) return undefined;
+    const price = getStockPrice(
+      Address.parse(jettonTransfer.jetton.address).toString(),
+      stock.today,
+      fiat
+    );
+    if (price === null) return undefined;
+    const amount = formatDecimals(
+      price.multipliedBy(jettonTransfer.amount),
+      jettonTransfer.jetton.decimals
+    );
+    return formatFiatCurrency(fiat, amount);
+  }, [jettonTransfer?.jetton.address, stock, fiat]);
 
   if (!jettonTransfer) {
     return <ErrorActivityNotification />;
@@ -132,6 +149,7 @@ export const JettonTransferActionNotification: FC<ActionData> = ({
             - {format(jettonTransfer.amount, jettonTransfer.jetton.decimals)}{' '}
             {jettonTransfer.jetton.symbol}
           </Title>
+          {total && <Amount>≈ {total}</Amount>}
           <ActionDate kind="send" timestamp={timestamp} />
         </div>
         <ListBlock margin={false} fullWidth>
@@ -152,6 +170,7 @@ export const JettonTransferActionNotification: FC<ActionData> = ({
           + {format(jettonTransfer.amount, jettonTransfer.jetton.decimals)}{' '}
           {jettonTransfer.jetton.symbol}
         </Title>
+        {total && <Amount>≈ {total}</Amount>}
         <ActionDate kind="received" timestamp={timestamp} />
       </div>
       <ListBlock margin={false} fullWidth>

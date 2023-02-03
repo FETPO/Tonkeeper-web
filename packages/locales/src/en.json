@@ -680,10 +680,18 @@
   },
   "sender": {
     "message": "Sender",
-    "description": "sender_address action label"
+    "description": "sender action label"
   },
   "sender_address": {
     "message": "Sender address",
     "description": "sender_address action label"
+  },
+  "deployer": {
+    "message": "Deployer",
+    "description": "deployer action label"
+  },
+  "deployer_address": {
+    "message": "Deployer address",
+    "description": "deployer_address action label"
   }
 }

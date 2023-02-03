@@ -115,12 +115,6 @@ export const TonAsset: FC<{
     ] as const;
   }, [fiat, price, info.balance]);
 
-  const title = (
-    <>
-      {t('Toncoin')} <Symbol>TON</Symbol>
-    </>
-  );
-
   return (
     <ListItem onClick={() => navigate(AppRoute.coins + '/ton')}>
       <ListItemPayload>
@@ -183,8 +177,6 @@ export const JettonAsset: FC<{
 
   const format = useFormatCoinValue();
   const formattedBalance = format(jetton.balance, jetton.metadata?.decimals);
-
-  const title = <>{} </>;
 
   return (
     <ListItem

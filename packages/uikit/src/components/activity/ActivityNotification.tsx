@@ -1,11 +1,11 @@
 import { AccountEvent, Action } from '@tonkeeper/core/dist/tonApi';
 import React, { FC, useCallback } from 'react';
-import { useTranslation } from '../../hooks/translation';
 import { Notification } from '../Notification';
 import {
   JettonTransferActionNotification,
   TonTransferActionNotification,
 } from './ActivityActionDetails';
+import { ContractDeployActionDetails } from './ContractDeployAction';
 import { ErrorActivityNotification } from './NotificationCommon';
 
 export interface ActionData {
@@ -14,36 +14,26 @@ export interface ActionData {
   event: AccountEvent;
 }
 
-const ActivityContent: FC<ActionData> = ({ action, timestamp, event }) => {
-  const { t } = useTranslation();
-  switch (action.type) {
+const ActivityContent: FC<ActionData> = (props) => {
+  switch (props.action.type) {
     case 'TonTransfer':
-      return (
-        <TonTransferActionNotification
-          action={action}
-          timestamp={timestamp}
-          event={event}
-        />
-      );
+      return <TonTransferActionNotification {...props} />;
     case 'JettonTransfer':
-      return (
-        <JettonTransferActionNotification
-          action={action}
-          timestamp={timestamp}
-          event={event}
-        />
-      );
+      return <JettonTransferActionNotification {...props} />;
     case 'NftItemTransfer':
     case 'ContractDeploy':
+      return <ContractDeployActionDetails {...props} />;
     case 'UnSubscribe':
     case 'Subscribe':
     case 'AuctionBid':
     case 'Unknown':
       return <ErrorActivityNotification />;
     default: {
-      console.log(action);
+      console.log(props);
       return (
-        <ErrorActivityNotification>{action.type}</ErrorActivityNotification>
+        <ErrorActivityNotification>
+          {props.action.type}
+        </ErrorActivityNotification>
       );
     }
   }
