@@ -1,21 +1,16 @@
 import { Action, NftItemRepr } from '@tonkeeper/core/dist/tonApi';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
 import React, { FC } from 'react';
-import styled from 'styled-components';
 import {
   ActivityIcon,
   ReceiveIcon,
   SentIcon,
 } from '../../components/activity/ActivityIcons';
-import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
-import { useAppContext, useWalletContext } from '../../hooks/appContext';
-import { useAppSdk } from '../../hooks/appSdk';
+import { ListItemPayload } from '../../components/List';
+import { useWalletContext } from '../../hooks/appContext';
 import { useFormatCoinValue } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
-import { useTonenpointStock } from '../../state/tonendpoint';
-import { Button } from '../fields/Button';
-import { Body1, Label1 } from '../Text';
-import { ActionData } from './ActivityNotification';
+import { Label1 } from '../Text';
 import {
   AmountText,
   Comment,
@@ -28,118 +23,7 @@ import {
 } from './CommonAction';
 import { ContractDeployAction } from './ContractDeployAction';
 import { NftComment, NftItemTransferAction } from './NftActivity';
-import {
-  ActionDate,
-  ActionFeeDetails,
-  ActionRecipientDetails,
-  ActionSenderDetails,
-  ErrorActivityNotification,
-  Label,
-  Title,
-  useBalanceValue,
-} from './NotificationCommon';
 import { SubscribeAction, UnSubscribeAction } from './SubscribeAction';
-
-const Amount = styled(Body1)`
-  display: block;
-  user-select: none;
-  color: ${(props) => props.theme.textSecondary};
-`;
-
-const Block = styled.div`
-  text-align: center;
-  display: flex;
-  gap: 2rem;
-  flex-direction: column;
-  align-items: center;
-`;
-
-export const TonTransferActionNotification: FC<ActionData> = ({
-  action,
-  timestamp,
-  event,
-}) => {
-  console.log(action, event);
-
-  const { t } = useTranslation();
-  const wallet = useWalletContext();
-  const { tonTransfer } = action;
-  const sdk = useAppSdk();
-
-  const format = useFormatCoinValue();
-  const { fiat, tonendpoint } = useAppContext();
-  const { data: stock } = useTonenpointStock(tonendpoint);
-
-  const price = useBalanceValue(tonTransfer?.amount, stock, fiat);
-
-  if (!tonTransfer) {
-    return <ErrorActivityNotification />;
-  }
-
-  if (tonTransfer.recipient.address === wallet.active.rawAddress) {
-    return (
-      <Block>
-        <div>
-          <Title>+ {format(tonTransfer.amount)} TON</Title>
-          {price && <Amount>≈ {price}</Amount>}
-          <ActionDate kind="received" timestamp={timestamp} />
-        </div>
-        <ListBlock margin={false} fullWidth>
-          <ActionRecipientDetails recipient={tonTransfer.recipient} />
-          <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
-          {tonTransfer.comment && (
-            <ListItem>
-              <ListItemPayload>
-                <Label>{t('message')}</Label>
-                <Label1>{tonTransfer.comment}</Label1>
-              </ListItemPayload>
-            </ListItem>
-          )}
-        </ListBlock>
-        <Button
-          size="large"
-          fullWidth
-          onClick={() =>
-            sdk.openPage(`https://tonapi.io/transaction/${event.eventId}`)
-          }
-        >
-          {t('View_in_explorer')}
-        </Button>
-      </Block>
-    );
-  }
-
-  return (
-    <Block>
-      <div>
-        <Title>- {format(tonTransfer.amount)} TON</Title>
-        {price && <Amount>≈ {price}</Amount>}
-        <ActionDate kind="send" timestamp={timestamp} />
-      </div>
-      <ListBlock margin={false} fullWidth>
-        <ActionSenderDetails sender={tonTransfer.sender} />
-        <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
-        {tonTransfer.comment && (
-          <ListItem>
-            <ListItemPayload>
-              <Label>{t('message')}</Label>
-              <Label1>{tonTransfer.comment}</Label1>
-            </ListItemPayload>
-          </ListItem>
-        )}
-      </ListBlock>
-      <Button
-        size="large"
-        fullWidth
-        onClick={() =>
-          sdk.openPage(`https://tonapi.io/transaction/${event.eventId}`)
-        }
-      >
-        {t('View_in_explorer')}
-      </Button>
-    </Block>
-  );
-};
 
 const TonTransferAction: FC<{ action: Action; date: string }> = ({
   action,

@@ -2,7 +2,10 @@ import { AccountEvent, Action } from '@tonkeeper/core/dist/tonApi';
 import React, { FC, useCallback } from 'react';
 import { useTranslation } from '../../hooks/translation';
 import { Notification } from '../Notification';
-import { TonTransferActionNotification } from './ActivityAction';
+import {
+  JettonTransferActionNotification,
+  TonTransferActionNotification,
+} from './ActivityActionDetails';
 import { ErrorActivityNotification } from './NotificationCommon';
 
 export interface ActionData {
@@ -23,6 +26,13 @@ const ActivityContent: FC<ActionData> = ({ action, timestamp, event }) => {
         />
       );
     case 'JettonTransfer':
+      return (
+        <JettonTransferActionNotification
+          action={action}
+          timestamp={timestamp}
+          event={event}
+        />
+      );
     case 'NftItemTransfer':
     case 'ContractDeploy':
     case 'UnSubscribe':

@@ -1,10 +1,11 @@
 import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
-import { AccountAddress, Fee } from '@tonkeeper/core/dist/tonApi';
+import { AccountAddress, AccountEvent, Fee } from '@tonkeeper/core/dist/tonApi';
 import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
 import BigNumber from 'bignumber.js';
 import React, { FC, PropsWithChildren, useMemo } from 'react';
 import styled from 'styled-components';
+import { useAppSdk } from '../../hooks/appSdk';
 import {
   formatDecimals,
   formatFiatCurrency,
@@ -12,6 +13,7 @@ import {
   useFormatCoinValue,
 } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
+import { Button } from '../fields/Button';
 import { ColumnText } from '../Layout';
 import { ListItem, ListItemPayload } from '../List';
 import { NotificationBlock } from '../Notification';
@@ -158,5 +160,35 @@ export const ActionFeeDetails: FC<{
         />
       </ListItemPayload>
     </ListItem>
+  );
+};
+
+const Block = styled.div`
+  text-align: center;
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const ActionDetailsBlock: FC<
+  PropsWithChildren<{ event: AccountEvent }>
+> = ({ event, children }) => {
+  const { t } = useTranslation();
+  const sdk = useAppSdk();
+
+  return (
+    <Block>
+      {children}
+      <Button
+        size="large"
+        fullWidth
+        onClick={() =>
+          sdk.openPage(`https://tonapi.io/transaction/${event.eventId}`)
+        }
+      >
+        {t('View_in_explorer')}
+      </Button>
+    </Block>
   );
 };

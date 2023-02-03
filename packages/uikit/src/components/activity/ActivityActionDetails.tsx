@@ -1,0 +1,165 @@
+import React, { FC } from 'react';
+import styled from 'styled-components';
+import { ListBlock, ListItem, ListItemPayload } from '../../components/List';
+import { useAppContext, useWalletContext } from '../../hooks/appContext';
+import { useAppSdk } from '../../hooks/appSdk';
+import { useFormatCoinValue } from '../../hooks/balance';
+import { useTranslation } from '../../hooks/translation';
+import { useTonenpointStock } from '../../state/tonendpoint';
+import { Body1, Label1 } from '../Text';
+import { ActionData } from './ActivityNotification';
+import {
+  ActionDate,
+  ActionDetailsBlock,
+  ActionFeeDetails,
+  ActionRecipientDetails,
+  ActionSenderDetails,
+  ErrorActivityNotification,
+  Label,
+  Title,
+  useBalanceValue,
+} from './NotificationCommon';
+
+const Amount = styled(Body1)`
+  display: block;
+  user-select: none;
+  color: ${(props) => props.theme.textSecondary};
+`;
+
+const Block = styled.div`
+  text-align: center;
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const TonTransferActionNotification: FC<ActionData> = ({
+  action,
+  timestamp,
+  event,
+}) => {
+  console.log(action, event);
+
+  const { t } = useTranslation();
+  const wallet = useWalletContext();
+  const { tonTransfer } = action;
+  const sdk = useAppSdk();
+
+  const format = useFormatCoinValue();
+  const { fiat, tonendpoint } = useAppContext();
+  const { data: stock } = useTonenpointStock(tonendpoint);
+
+  const price = useBalanceValue(tonTransfer?.amount, stock, fiat);
+
+  if (!tonTransfer) {
+    return <ErrorActivityNotification />;
+  }
+
+  if (tonTransfer.recipient.address === wallet.active.rawAddress) {
+    return (
+      <ActionDetailsBlock event={event}>
+        <div>
+          <Title>+ {format(tonTransfer.amount)} TON</Title>
+          {price && <Amount>≈ {price}</Amount>}
+          <ActionDate kind="received" timestamp={timestamp} />
+        </div>
+        <ListBlock margin={false} fullWidth>
+          <ActionSenderDetails sender={tonTransfer.sender} />
+
+          <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
+          {tonTransfer.comment && (
+            <ListItem>
+              <ListItemPayload>
+                <Label>{t('message')}</Label>
+                <Label1>{tonTransfer.comment}</Label1>
+              </ListItemPayload>
+            </ListItem>
+          )}
+        </ListBlock>
+      </ActionDetailsBlock>
+    );
+  }
+
+  return (
+    <ActionDetailsBlock event={event}>
+      <div>
+        <Title>- {format(tonTransfer.amount)} TON</Title>
+        {price && <Amount>≈ {price}</Amount>}
+        <ActionDate kind="send" timestamp={timestamp} />
+      </div>
+      <ListBlock margin={false} fullWidth>
+        <ActionRecipientDetails recipient={tonTransfer.recipient} />
+        <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
+        {tonTransfer.comment && (
+          <ListItem>
+            <ListItemPayload>
+              <Label>{t('message')}</Label>
+              <Label1>{tonTransfer.comment}</Label1>
+            </ListItemPayload>
+          </ListItem>
+        )}
+      </ListBlock>
+    </ActionDetailsBlock>
+  );
+};
+
+export const JettonTransferActionNotification: FC<ActionData> = ({
+  action,
+  timestamp,
+  event,
+}) => {
+  console.log(action, event);
+
+  const { t } = useTranslation();
+  const wallet = useWalletContext();
+  const { jettonTransfer } = action;
+  const sdk = useAppSdk();
+
+  const format = useFormatCoinValue();
+  const { fiat, tonendpoint } = useAppContext();
+  const { data: stock } = useTonenpointStock(tonendpoint);
+
+  if (!jettonTransfer) {
+    return <ErrorActivityNotification />;
+  }
+
+  if (jettonTransfer.sender?.address === wallet.active.rawAddress) {
+    return (
+      <ActionDetailsBlock event={event}>
+        <div>
+          <Title>
+            - {format(jettonTransfer.amount, jettonTransfer.jetton.decimals)}{' '}
+            {jettonTransfer.jetton.symbol}
+          </Title>
+          <ActionDate kind="send" timestamp={timestamp} />
+        </div>
+        <ListBlock margin={false} fullWidth>
+          {jettonTransfer.recipient && (
+            <ActionRecipientDetails recipient={jettonTransfer.recipient} />
+          )}
+
+          <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
+        </ListBlock>
+      </ActionDetailsBlock>
+    );
+  }
+
+  return (
+    <ActionDetailsBlock event={event}>
+      <div>
+        <Title>
+          + {format(jettonTransfer.amount, jettonTransfer.jetton.decimals)}{' '}
+          {jettonTransfer.jetton.symbol}
+        </Title>
+        <ActionDate kind="received" timestamp={timestamp} />
+      </div>
+      <ListBlock margin={false} fullWidth>
+        {jettonTransfer.sender && (
+          <ActionSenderDetails sender={jettonTransfer.sender} />
+        )}
+        <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
+      </ListBlock>
+    </ActionDetailsBlock>
+  );
+};
