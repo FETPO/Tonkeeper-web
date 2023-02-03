@@ -19,7 +19,6 @@ import { useTranslation } from '../../hooks/translation';
 import { Button } from '../fields/Button';
 import { ColumnText } from '../Layout';
 import { ListItem, ListItemPayload } from '../List';
-import { NotificationBlock } from '../Notification';
 import { Body1, H2, Label1 } from '../Text';
 
 export const Title = styled(H2)`
@@ -63,7 +62,7 @@ export const ActionDate: FC<{
 };
 
 export const useBalanceValue = (
-  amount: number | undefined,
+  amount: BigNumber.Value | undefined,
   stock: TonendpointStock | undefined,
   fiat: FiatCurrencies
 ) => {
@@ -78,14 +77,14 @@ export const useBalanceValue = (
   }, [amount, stock]);
 };
 
-export const ErrorActivityNotification: FC<PropsWithChildren> = ({
-  children,
-}) => {
+export const ErrorActivityNotification: FC<
+  PropsWithChildren<{ event: AccountEvent }>
+> = ({ children, event }) => {
   const { t } = useTranslation();
   return (
-    <NotificationBlock>
+    <ActionDetailsBlock event={event}>
       <Title>{children ?? t('Unknown')}</Title>
-    </NotificationBlock>
+    </ActionDetailsBlock>
   );
 };
 
@@ -141,6 +140,33 @@ export const ActionSenderDetails: FC<{ sender: AccountAddress }> = ({
   );
 };
 
+export const ActionBeneficiaryDetails: FC<{ beneficiary: AccountAddress }> = ({
+  beneficiary,
+}) => {
+  const { t } = useTranslation();
+  const sdk = useAppSdk();
+  return (
+    <>
+      {beneficiary.name && (
+        <ListItem onClick={() => sdk.copyToClipboard(beneficiary.name!)}>
+          <ListItemPayload>
+            <Label>{t('beneficiary')}</Label>
+            <Label1>{beneficiary.name}</Label1>
+          </ListItemPayload>
+        </ListItem>
+      )}
+      <ListItem onClick={() => sdk.copyToClipboard(beneficiary.address)}>
+        <ListItemPayload>
+          <Label>
+            {beneficiary.name ? t('beneficiary_address') : t('beneficiary')}
+          </Label>
+          <Label1>{toShortAddress(beneficiary.address)}</Label1>
+        </ListItemPayload>
+      </ListItem>
+    </>
+  );
+};
+
 export const ActionTransactionDetails: FC<{ event: AccountEvent }> = ({
   event,
 }) => {
@@ -168,17 +194,9 @@ export const ActionDeployerDetails: FC<{ deployer: AccountAddress }> = ({
 
   return (
     <>
-      {deployer.name && (
-        <ListItem onClick={() => sdk.copyToClipboard(deployer.address)}>
-          <ListItemPayload>
-            <Label>{t('deployer')}</Label>
-            <Label1>{deployer.name}</Label1>
-          </ListItemPayload>
-        </ListItem>
-      )}
       <ListItem onClick={() => sdk.copyToClipboard(deployer.address)}>
         <ListItemPayload>
-          <Label>{deployer.name ? t('deployer_address') : t('deployer')}</Label>
+          <Label>{t('Address')}</Label>
           <Label1>{toShortAddress(deployer.address)}</Label1>
         </ListItemPayload>
       </ListItem>

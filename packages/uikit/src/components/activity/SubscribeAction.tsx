@@ -6,8 +6,81 @@ import {
   SubscribeIcon,
   UnsubscribeIcon,
 } from '../../components/activity/ActivityIcons';
+import { useAppContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
+import { useTonenpointStock } from '../../state/tonendpoint';
+import { ListBlock } from '../List';
+import { ActionData } from './ActivityNotification';
 import { ColumnLayout, ErrorAction, ListItemGrid } from './CommonAction';
+import {
+  ActionBeneficiaryDetails,
+  ActionDate,
+  ActionDetailsBlock,
+  ActionFeeDetails,
+  ActionTransactionDetails,
+  ErrorActivityNotification,
+  Title,
+} from './NotificationCommon';
+
+export const UnSubscribeActionDetails: FC<ActionData> = ({
+  action,
+  timestamp,
+  event,
+}) => {
+  const { t } = useTranslation();
+  const { unSubscribe } = action;
+
+  const { fiat, tonendpoint } = useAppContext();
+  const { data: stock } = useTonenpointStock(tonendpoint);
+
+  if (!unSubscribe) {
+    return <ErrorActivityNotification event={event} />;
+  }
+
+  return (
+    <ActionDetailsBlock event={event}>
+      <div>
+        <Title>{t('Unsubscribed')}</Title>
+        <ActionDate kind="send" timestamp={timestamp} />
+      </div>
+      <ListBlock margin={false} fullWidth>
+        <ActionBeneficiaryDetails beneficiary={unSubscribe.beneficiary} />
+        <ActionTransactionDetails event={event} />
+        <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
+      </ListBlock>
+    </ActionDetailsBlock>
+  );
+};
+
+export const SubscribeActionDetails: FC<ActionData> = ({
+  action,
+  timestamp,
+  event,
+}) => {
+  const { t } = useTranslation();
+  const { subscribe } = action;
+
+  const { fiat, tonendpoint } = useAppContext();
+  const { data: stock } = useTonenpointStock(tonendpoint);
+
+  if (!subscribe) {
+    return <ErrorActivityNotification event={event} />;
+  }
+
+  return (
+    <ActionDetailsBlock event={event}>
+      <div>
+        <Title>{t('Subscribed')}</Title>
+        <ActionDate kind="send" timestamp={timestamp} />
+      </div>
+      <ListBlock margin={false} fullWidth>
+        <ActionBeneficiaryDetails beneficiary={subscribe.beneficiary} />
+        <ActionTransactionDetails event={event} />
+        <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
+      </ListBlock>
+    </ActionDetailsBlock>
+  );
+};
 
 export const UnSubscribeAction: FC<{ action: Action; date: string }> = ({
   action,

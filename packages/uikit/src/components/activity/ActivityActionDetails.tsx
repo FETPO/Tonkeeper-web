@@ -14,6 +14,7 @@ import { useTonenpointStock } from '../../state/tonendpoint';
 import { Body1, Label1 } from '../Text';
 import { ActionData } from './ActivityNotification';
 import {
+  ActionBeneficiaryDetails,
   ActionDate,
   ActionDetailsBlock,
   ActionFeeDetails,
@@ -58,7 +59,7 @@ export const TonTransferActionNotification: FC<ActionData> = ({
   const price = useBalanceValue(tonTransfer?.amount, stock, fiat);
 
   if (!tonTransfer) {
-    return <ErrorActivityNotification />;
+    return <ErrorActivityNotification event={event} />;
   }
 
   if (tonTransfer.recipient.address === wallet.active.rawAddress) {
@@ -140,7 +141,7 @@ export const JettonTransferActionNotification: FC<ActionData> = ({
   }, [jettonTransfer?.jetton.address, stock, fiat]);
 
   if (!jettonTransfer) {
-    return <ErrorActivityNotification />;
+    return <ErrorActivityNotification event={event} />;
   }
 
   if (jettonTransfer.sender?.address === wallet.active.rawAddress) {
@@ -179,6 +180,43 @@ export const JettonTransferActionNotification: FC<ActionData> = ({
         {jettonTransfer.sender && (
           <ActionSenderDetails sender={jettonTransfer.sender} />
         )}
+        <ActionTransactionDetails event={event} />
+        <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
+      </ListBlock>
+    </ActionDetailsBlock>
+  );
+};
+
+export const AuctionBidActionDetails: FC<ActionData> = ({
+  action,
+  timestamp,
+  event,
+}) => {
+  const { t } = useTranslation();
+  const { auctionBid } = action;
+
+  const { fiat, tonendpoint } = useAppContext();
+  const { data: stock } = useTonenpointStock(tonendpoint);
+
+  const format = useFormatCoinValue();
+  const price = useBalanceValue(auctionBid?.amount.value, stock, fiat);
+
+  if (!auctionBid) {
+    return <ErrorActivityNotification event={event} />;
+  }
+
+  return (
+    <ActionDetailsBlock event={event}>
+      <div>
+        <Title>{t('Bid')}</Title>
+        <Amount>
+          {format(auctionBid.amount.value)} {auctionBid.amount.tokenName}
+        </Amount>
+        {price && <Amount>≈ {price}</Amount>}
+        <ActionDate kind="send" timestamp={timestamp} />
+      </div>
+      <ListBlock margin={false} fullWidth>
+        <ActionBeneficiaryDetails beneficiary={auctionBid.beneficiary} />
         <ActionTransactionDetails event={event} />
         <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
       </ListBlock>

@@ -35,13 +35,17 @@ export const ContractDeployActionDetails: FC<ActionData> = ({
   const { data: stock } = useTonenpointStock(tonendpoint);
 
   if (!contractDeploy) {
-    return <ErrorActivityNotification />;
+    return <ErrorActivityNotification event={event} />;
   }
 
   return (
     <ActionDetailsBlock event={event}>
       <div>
-        <Title>{t('Contract_Deploy')}</Title>
+        <Title>
+          {contractDeploy.interfaces.includes('wallet')
+            ? t('Wallet_initialized')
+            : t('Contract_Deploy')}
+        </Title>
         <ActionDate kind="received" timestamp={timestamp} />
       </div>
       <ListBlock margin={false} fullWidth>

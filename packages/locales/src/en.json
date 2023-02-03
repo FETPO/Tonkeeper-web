@@ -686,13 +686,13 @@
     "message": "Sender address",
     "description": "sender_address action label"
   },
-  "deployer": {
-    "message": "Deployer",
-    "description": "deployer action label"
+  "beneficiary": {
+    "message": "Beneficiary",
+    "description": "beneficiary action label"
   },
-  "deployer_address": {
-    "message": "Deployer address",
-    "description": "deployer_address action label"
+  "beneficiary_address": {
+    "message": "Beneficiary address",
+    "description": "beneficiary_address action label"
   },
   "transaction": {
     "message": "Transaction",

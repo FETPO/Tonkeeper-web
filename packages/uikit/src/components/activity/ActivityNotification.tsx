@@ -2,11 +2,16 @@ import { AccountEvent, Action } from '@tonkeeper/core/dist/tonApi';
 import React, { FC, useCallback } from 'react';
 import { Notification } from '../Notification';
 import {
+  AuctionBidActionDetails,
   JettonTransferActionNotification,
   TonTransferActionNotification,
 } from './ActivityActionDetails';
 import { ContractDeployActionDetails } from './ContractDeployAction';
 import { ErrorActivityNotification } from './NotificationCommon';
+import {
+  SubscribeActionDetails,
+  UnSubscribeActionDetails,
+} from './SubscribeAction';
 
 export interface ActionData {
   action: Action;
@@ -21,17 +26,21 @@ const ActivityContent: FC<ActionData> = (props) => {
     case 'JettonTransfer':
       return <JettonTransferActionNotification {...props} />;
     case 'NftItemTransfer':
+      return <ErrorActivityNotification event={props.event} />;
     case 'ContractDeploy':
       return <ContractDeployActionDetails {...props} />;
     case 'UnSubscribe':
+      return <UnSubscribeActionDetails {...props} />;
     case 'Subscribe':
+      return <SubscribeActionDetails {...props} />;
     case 'AuctionBid':
+      return <AuctionBidActionDetails {...props} />;
     case 'Unknown':
-      return <ErrorActivityNotification />;
+      return <ErrorActivityNotification event={props.event} />;
     default: {
       console.log(props);
       return (
-        <ErrorActivityNotification>
+        <ErrorActivityNotification event={props.event}>
           {props.action.type}
         </ErrorActivityNotification>
       );
