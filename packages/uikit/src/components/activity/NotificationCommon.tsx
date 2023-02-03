@@ -1,7 +1,10 @@
 import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
 import { AccountAddress, AccountEvent, Fee } from '@tonkeeper/core/dist/tonApi';
 import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
-import { toShortAddress } from '@tonkeeper/core/dist/utils/common';
+import {
+  toShortAddress,
+  toShortValue,
+} from '@tonkeeper/core/dist/utils/common';
 import BigNumber from 'bignumber.js';
 import React, { FC, PropsWithChildren, useMemo } from 'react';
 import styled from 'styled-components';
@@ -90,18 +93,18 @@ export const ActionRecipientDetails: FC<{ recipient: AccountAddress }> = ({
   recipient,
 }) => {
   const { t } = useTranslation();
-
+  const sdk = useAppSdk();
   return (
     <>
       {recipient.name && (
-        <ListItem>
+        <ListItem onClick={() => sdk.copyToClipboard(recipient.name!)}>
           <ListItemPayload>
             <Label>{t('recipient')}</Label>
             <Label1>{recipient.name}</Label1>
           </ListItemPayload>
         </ListItem>
       )}
-      <ListItem>
+      <ListItem onClick={() => sdk.copyToClipboard(recipient.address)}>
         <ListItemPayload>
           <Label>
             {recipient.name ? t('recipient_address') : t('recipient')}
@@ -117,18 +120,18 @@ export const ActionSenderDetails: FC<{ sender: AccountAddress }> = ({
   sender,
 }) => {
   const { t } = useTranslation();
-
+  const sdk = useAppSdk();
   return (
     <>
       {sender.name && (
-        <ListItem>
+        <ListItem onClick={() => sdk.copyToClipboard(sender.name!)}>
           <ListItemPayload>
             <Label>{t('sender')}</Label>
             <Label1>{sender.name}</Label1>
           </ListItemPayload>
         </ListItem>
       )}
-      <ListItem>
+      <ListItem onClick={() => sdk.copyToClipboard(sender.address)}>
         <ListItemPayload>
           <Label>{sender.name ? t('sender_address') : t('sender')}</Label>
           <Label1>{toShortAddress(sender.address)}</Label1>
@@ -138,22 +141,42 @@ export const ActionSenderDetails: FC<{ sender: AccountAddress }> = ({
   );
 };
 
+export const ActionTransactionDetails: FC<{ event: AccountEvent }> = ({
+  event,
+}) => {
+  const { t } = useTranslation();
+  const sdk = useAppSdk();
+  return (
+    <ListItem
+      onClick={() =>
+        sdk.copyToClipboard(event.eventId, t('copy_transaction_id'))
+      }
+    >
+      <ListItemPayload>
+        <Label>{t('transaction')}</Label>
+        <Label1>{toShortValue(event.eventId, 8)}</Label1>
+      </ListItemPayload>
+    </ListItem>
+  );
+};
+
 export const ActionDeployerDetails: FC<{ deployer: AccountAddress }> = ({
   deployer,
 }) => {
   const { t } = useTranslation();
+  const sdk = useAppSdk();
 
   return (
     <>
       {deployer.name && (
-        <ListItem>
+        <ListItem onClick={() => sdk.copyToClipboard(deployer.address)}>
           <ListItemPayload>
             <Label>{t('deployer')}</Label>
             <Label1>{deployer.name}</Label1>
           </ListItemPayload>
         </ListItem>
       )}
-      <ListItem>
+      <ListItem onClick={() => sdk.copyToClipboard(deployer.address)}>
         <ListItemPayload>
           <Label>{deployer.name ? t('deployer_address') : t('deployer')}</Label>
           <Label1>{toShortAddress(deployer.address)}</Label1>
@@ -171,11 +194,12 @@ export const ActionFeeDetails: FC<{
   const { t } = useTranslation();
 
   const format = useFormatCoinValue();
+  const sdk = useAppSdk();
 
   const price = useBalanceValue(fee.total, stock, fiat);
 
   return (
-    <ListItem>
+    <ListItem onClick={() => sdk.copyToClipboard(format(fee.total))}>
       <ListItemPayload>
         <Label>{t('fee')}</Label>
         <ColumnText

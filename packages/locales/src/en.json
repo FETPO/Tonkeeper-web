@@ -693,5 +693,13 @@
   "deployer_address": {
     "message": "Deployer address",
     "description": "deployer_address action label"
+  },
+  "transaction": {
+    "message": "Transaction",
+    "description": "transaction action label"
+  },
+  "copy_transaction_id": {
+    "message": "Copied Transaction Id",
+    "description": "copy_transaction_id pop-up label"
   }
 }

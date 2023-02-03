@@ -19,6 +19,7 @@ import {
   ActionFeeDetails,
   ActionRecipientDetails,
   ActionSenderDetails,
+  ActionTransactionDetails,
   ErrorActivityNotification,
   Label,
   Title,
@@ -70,7 +71,7 @@ export const TonTransferActionNotification: FC<ActionData> = ({
         </div>
         <ListBlock margin={false} fullWidth>
           <ActionSenderDetails sender={tonTransfer.sender} />
-
+          <ActionTransactionDetails event={event} />
           <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
           {tonTransfer.comment && (
             <ListItem>
@@ -94,6 +95,7 @@ export const TonTransferActionNotification: FC<ActionData> = ({
       </div>
       <ListBlock margin={false} fullWidth>
         <ActionRecipientDetails recipient={tonTransfer.recipient} />
+        <ActionTransactionDetails event={event} />
         <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
         {tonTransfer.comment && (
           <ListItem>
@@ -156,7 +158,7 @@ export const JettonTransferActionNotification: FC<ActionData> = ({
           {jettonTransfer.recipient && (
             <ActionRecipientDetails recipient={jettonTransfer.recipient} />
           )}
-
+          <ActionTransactionDetails event={event} />
           <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
         </ListBlock>
       </ActionDetailsBlock>
@@ -177,6 +179,7 @@ export const JettonTransferActionNotification: FC<ActionData> = ({
         {jettonTransfer.sender && (
           <ActionSenderDetails sender={jettonTransfer.sender} />
         )}
+        <ActionTransactionDetails event={event} />
         <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
       </ListBlock>
     </ActionDetailsBlock>

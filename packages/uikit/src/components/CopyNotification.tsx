@@ -44,16 +44,20 @@ const Content = styled.div`
 
 export const CopyNotification: FC = React.memo(() => {
   const { t } = useTranslation();
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = useState<string | boolean>(false);
   const sdk = useAppSdk();
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
-    const handler = () => {
+    const handler = (options: {
+      method: 'copy';
+      id?: number | undefined;
+      params: string;
+    }) => {
       if (timer) {
         clearTimeout(timer);
       }
-      setOpen(true);
+      setOpen(options.params ?? true);
       timer = setTimeout(() => {
         setOpen(false);
       }, 2000);
@@ -69,14 +73,14 @@ export const CopyNotification: FC = React.memo(() => {
   return (
     <ReactPortal wrapperId="react-copy-modal">
       <CSSTransition
-        in={isOpen}
+        in={!!isOpen}
         timeout={{ enter: 0, exit: 300 }}
         unmountOnExit
         nodeRef={nodeRef}
       >
         <Message ref={nodeRef}>
           <Content>
-            <Label2>{t('Copied')}</Label2>
+            <Label2>{typeof isOpen == 'string' ? isOpen : t('Copied')}</Label2>
           </Content>
         </Message>
       </CSSTransition>

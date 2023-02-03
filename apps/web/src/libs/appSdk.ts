@@ -3,9 +3,12 @@ import { EventEmitter } from '@tonkeeper/core/dist/entries/eventEmitter';
 import copyToClipboard from 'copy-to-clipboard';
 
 export class BrowserAppSdk implements IAppSdk {
-  copyToClipboard = (value: string) => {
+  copyToClipboard = (value: string, notification?: string) => {
     copyToClipboard(value);
-    this.uiEvents.emit('copy', {});
+    this.uiEvents.emit('copy', {
+      method: 'copy',
+      params: notification,
+    });
   };
   openPage = async (url: string) => {
     window.open(url, '_black');

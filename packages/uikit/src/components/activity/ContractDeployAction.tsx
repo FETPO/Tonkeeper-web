@@ -18,6 +18,7 @@ import {
   ActionDeployerDetails,
   ActionDetailsBlock,
   ActionFeeDetails,
+  ActionTransactionDetails,
   ErrorActivityNotification,
   Title,
 } from './NotificationCommon';
@@ -45,6 +46,7 @@ export const ContractDeployActionDetails: FC<ActionData> = ({
       </div>
       <ListBlock margin={false} fullWidth>
         <ActionDeployerDetails deployer={contractDeploy.deployer} />
+        <ActionTransactionDetails event={event} />
         <ActionFeeDetails fee={event.fee} stock={stock} fiat={fiat} />
       </ListBlock>
     </ActionDetailsBlock>

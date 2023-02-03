@@ -6,9 +6,12 @@ import packageJson from '../../package.json';
 import { checkForError } from './utils';
 
 export class ExtensionAppSdk implements IAppSdk {
-  copyToClipboard = (value: string) => {
+  copyToClipboard = (value: string, notification?: string) => {
     copyToClipboard(value);
-    this.uiEvents.emit('copy', {});
+    this.uiEvents.emit('copy', {
+      method: 'copy',
+      params: notification,
+    });
   };
   openPage = (url: string) => {
     return new Promise((resolve, reject) => {
