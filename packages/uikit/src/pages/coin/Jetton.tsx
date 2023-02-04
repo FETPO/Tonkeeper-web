@@ -110,7 +110,11 @@ export const JettonContent: FC<{ jettonAddress: string }> = ({
         image={image}
       />
       <ActionsRow>
-        <Action icon={<SendIcon />} title={t('Send')} action={() => null} />
+        <Action
+          icon={<SendIcon />}
+          title={t('wallet_send')}
+          action={() => null}
+        />
         <ReceiveAction />
       </ActionsRow>
 

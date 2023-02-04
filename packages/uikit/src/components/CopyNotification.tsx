@@ -80,7 +80,7 @@ export const CopyNotification: FC = React.memo(() => {
       >
         <Message ref={nodeRef}>
           <Content>
-            <Label2>{typeof isOpen == 'string' ? isOpen : t('Copied')}</Label2>
+            <Label2>{typeof isOpen == 'string' ? isOpen : t('copied')}</Label2>
           </Content>
         </Message>
       </CSSTransition>

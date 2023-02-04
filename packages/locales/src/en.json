@@ -11,228 +11,81 @@
     "message": "Open the wallet",
     "description": "The action title of the application"
   },
-  "Wallet": {
-    "message": "Wallet",
-    "description": "Wallet title"
-  },
   "Activity": {
     "message": "Activity",
     "description": "Activity footer button"
-  },
-  "Settings": {
-    "message": "Settings",
-    "description": "Settings footer button"
-  },
-  "Subscriptions": {
-    "message": "Subscriptions",
-    "description": "Subscriptions settings button"
-  },
-  "Manage_wallets": {
-    "message": "Manage wallets",
-    "description": "Manage wallets settings button"
-  },
-  "Recovery_phrase": {
-    "message": "Recovery phrase",
-    "description": "Recovery phrase settings button"
-  },
-  "Active_address": {
-    "message": "Active address",
-    "description": "Active address settings button"
-  },
-  "List_of_tokens": {
-    "message": "List of tokens",
-    "description": "List of tokens settings button"
-  },
-  "Security": {
-    "message": "Security",
-    "description": "Security settings button"
-  },
-  "Lock_screen": {
-    "message": "Lock screen",
-    "description": "Lock screen option label"
-  },
-  "Theme": {
-    "message": "Theme",
-    "description": "Theme settings button"
-  },
-  "Network": {
-    "message": "Network",
-    "description": "Network settings button"
-  },
-  "Dev": {
-    "message": "Dev Settings",
-    "description": "Dev settings title"
-  },
-  "Log_out": {
-    "message": "Log out",
-    "description": "Log out settings button"
-  },
-  "Primary_currency": {
-    "message": "Primary currency",
-    "description": "Primary currency settings button"
-  },
-  "Localization": {
-    "message": "Localization",
-    "description": "Localization settings button"
-  },
-  "Rate_this_app": {
-    "message": "Rate this app",
-    "description": "Rate this app settings button"
-  },
-  "Contact_support": {
-    "message": "Contact support",
-    "description": "Contact support settings button"
-  },
-  "Tonkeeper_news": {
-    "message": "Tonkeeper news",
-    "description": "Tonkeeper news settings button"
-  },
-  "Tonkeeper_discussion": {
-    "message": "Tonkeeper discussion",
-    "description": "Tonkeeper discussion settings button"
-  },
-  "Legal_documents": {
-    "message": "Legal documents",
-    "description": "Legal documents settings button"
-  },
-  "Delete_account": {
-    "message": "Delete account",
-    "description": "Delete account settings button"
-  },
-  "Version": {
-    "message": "Version",
-    "description": "Version settings button"
-  },
-  "Legal": {
-    "message": "Legal",
-    "description": "Legal settings header"
-  },
-  "Terms_of_use": {
-    "message": "Terms of use",
-    "description": "Terms of use settings button"
-  },
-  "Privacy_policy": {
-    "message": "Privacy policy",
-    "description": "Privacy policy settings button"
-  },
-  "Licenses": {
-    "message": "Licenses",
-    "description": "Licenses settings header"
-  },
-  "Montserrat_font": {
-    "message": "Montserrat font",
-    "description": "Montserrat font settings button"
-  },
-  "Welcome_to": {
-    "message": "Welcome to",
-    "description": "Title in initialize screen"
-  },
-  "World_class_speed": {
-    "message": " World-class speed",
-    "description": "Initialize screen bullet block title"
-  },
-  "World_class_speed_description": {
-    "message": "TON is a network designed for speed and throughput. Fees are significantly lower than on other blockchains, and transactions are confirmed in a matter of seconds.",
-    "description": "Initialize screen bullet block description"
-  },
-  "End_to_end_security": {
-    "message": "End-to-end security",
-    "description": "Initialize screen bullet block title"
-  },
-  "End_to_end_security_description": {
-    "message": "Tonkeeper stores your cryptographic keys on your device without requiring documents, personal information, contact details, or KYC.",
-    "description": "Initialize screen bullet block description"
-  },
-  "Built_in_subscriptions": {
-    "message": "Built-in subscriptions",
-    "description": "Initialize screen bullet block title"
-  },
-  "Built_in_subscriptions_description": {
-    "message": "TON subscriptions are peer-to-peer and borderless so that no one can restrict providers or customers. Near-zero fees and full control for you.",
-    "description": "Initialize screen bullet block description"
-  },
-  "Get_started": {
-    "message": "Get started",
-    "description": "Get started button"
-  },
-  "Continue": {
-    "message": "Continue",
-    "description": "Continue button"
-  },
-  "Tokens": {
-    "message": "Tokens",
-    "description": "Tokens button"
-  },
-  "log_out": {
-    "message": "Log out",
-    "description": "Tokens button"
-  },
-  "enter_password": {
-    "message": "Enter password"
   },
   "Collectibles": {
     "message": "Collectibles",
     "description": "Collectibles button"
   },
-  "Let_s_set_up_your_wallet": {
-    "message": "Let’s set up your wallet",
-    "description": "Initialize screen title"
+  "Edit_jettons": {
+    "message": "Edit"
   },
-  "Let_s_set_up_your_wallet_description": {
-    "message": "You need a connected wallet to use Tonkeeper. Either create a new wallet or import an existing one.",
-    "description": "Initialize screen description"
+  "Toncoin": {
+    "message": "Toncoin"
   },
-  "Create_new_wallet": {
-    "message": "Create new wallet",
-    "description": "Create new wallet button"
+  "Transfer_token": {
+    "message": "Transfer token",
+    "description": "Transfer token button"
   },
-  "Import_existing_wallet": {
-    "message": "Import existing wallet",
-    "description": "Import existing wallet button"
+  "View_on_market": {
+    "message": "View on market",
+    "description": "View on market button"
   },
-  "Generating_wallet": {
-    "message": "Generating wallet...",
-    "description": "Generating wallet title"
+  "About_collection": {
+    "message": "About collection",
+    "description": "About collection nft preview title"
   },
-  "Your_wallet_has_just_been_created": {
-    "message": "Your wallet has just been created!",
-    "description": "Your wallet has just been created title"
+  "NFT_creation": {
+    "message": "NFT creation",
+    "description": "NFT_creation activity title"
   },
-  "Grab_a_pen": {
-    "message": "Grab a pen and a piece of paper",
-    "description": "Initialize screen Grab a pen and a piece of paper title"
+  "Manage": {
+    "message": "Manage",
+    "description": "Manage button in header"
   },
-  "Grab_a_pen_description": {
-    "message": "We strongly recommend you write down the recovery phrase because it’s the only way to have access to and recover your wallet should you lose your device. Do not send it to yourself via email or take a screenshot. It’s safer when kept offline.",
-    "description": "Initialize screen Grab a pen and a piece of paper description"
+  "Manage_wallets": {
+    "message": "Manage wallets",
+    "description": "Manage wallets settings button"
   },
-  "Your_recovery_phrase": {
-    "message": "Your recovery phrase",
-    "description": "Initialize screen Your recovery phrase title"
+  "Localization": {
+    "message": "Localization",
+    "description": "Localization settings button"
   },
-  "Your_recovery_phrase_description": {
-    "message": "Write down these 24 words in the order given below and store them in a secret, safe place.",
-    "description": "Initialize screen Your recovery phrase description"
+  "settings_news_url_discuss": {
+    "message": "https://t.me/tonkeeper_discuss"
   },
-  "Enter_your_recovery_phrase": {
-    "message": "Enter your recovery phrase",
-    "description": "Initialize screen Enter your recovery phrase title"
+  "Delete_all_accounts_and_logout": {
+    "message": "Delete all accounts and logout",
+    "description": "Delete all accounts and logout settings button"
   },
-  "Enter_your_recovery_phrase_description": {
-    "message": "To restore access to your wallet, enter the 24 secret recovery words given to you when you created your wallet.",
-    "description": "Initialize screen Enter your recovery phrase description"
+  "Rename": {
+    "message": "Rename",
+    "description": "Rename settings button"
   },
-  "So_let_s_check": {
-    "message": "So, let’s check",
-    "description": "Initialize screen So, let’s check title"
+  "Wallet_name": {
+    "message": "Wallet name",
+    "description": "Wallet name input label"
   },
-  "So_let_s_check_description": {
-    "message": "To check whether you’ve written down your recovery phrase correctly, please enter the %1%, %2%, and %3% words.",
-    "description": "Initialize screen So, let’s check description"
+  "I_have_a_backup_copy_of_recovery_phrase": {
+    "message": "I have a backup copy of recovery phrase",
+    "description": "Dangerous notification for clear actions"
   },
-  "Congratulations_You_ve_set_up_your_wallet": {
-    "message": " Congratulations! You’ve set up your wallet",
-    "description": "Initialize screen Congratulations! You’ve set up your wallet title"
+  "Back_up_now": {
+    "message": "Back up now",
+    "description": "Back up now button label"
+  },
+  "Delete_wallet_data": {
+    "message": "Delete wallet data",
+    "description": "Delete wallet data notification title"
+  },
+  "Delete_wallet_data_description": {
+    "message": "Wallet keys and all personal data will be erased from this device.",
+    "description": "Delete wallet data notification description"
+  },
+  "enter_password": {
+    "message": "Enter password"
   },
   "Create_password": {
     "message": "Create password",
@@ -246,249 +99,20 @@
     "message": "Old password",
     "description": "Settings Old password label"
   },
-  "Change": {
-    "message": "Change",
-    "description": "Settings Change button label"
-  },
-  "USD_full": {
-    "message": "United States Dollar",
-    "description": "USD fill name"
-  },
-  "EUR_full": {
-    "message": "Euro",
-    "description": "EUR fill name"
-  },
-  "RUB_full": {
-    "message": "Russian Ruble",
-    "description": "RUB fill name"
-  },
-  "AED_full": {
-    "message": "United Arab Emirates Dirham",
-    "description": "AED fill name"
-  },
-  "GBP_full": {
-    "message": "Great Britain Pound",
-    "description": "GBP fill name"
-  },
-  "CHF_full": {
-    "message": "Swiss Franc",
-    "description": "CHF fill name"
-  },
-  "CNY_full": {
-    "message": "China Yuan",
-    "description": "CNY fill name"
-  },
-  "KRW_full": {
-    "message": "South Korean Won",
-    "description": "KRW fill name"
-  },
-  "IDR_full": {
-    "message": "Indonesian Rupiah",
-    "description": "IDR fill name"
-  },
-  "INR_full": {
-    "message": "Indian Rupee",
-    "description": "INR fill name"
-  },
-  "JPY_full": {
-    "message": "Japanese Yen",
-    "description": "JPY fill name"
-  },
-  "Buy": {
-    "message": "Buy",
-    "description": "Buy action button on home page"
-  },
-  "Send": {
-    "message": "Send",
-    "description": "Send action button on home page"
-  },
-  "Receive": {
-    "message": "Receive",
-    "description": "Receive action button on home page"
-  },
-  "Sell": {
-    "message": "Sell",
-    "description": "Sell action button on home page"
-  },
-  "Open": {
-    "message": "Open",
-    "description": "Open button"
-  },
-  "Toncoin": {
-    "message": "Toncoin",
-    "description": "Toncoin currency"
-  },
-  "Set_up_wallet": {
-    "message": "Set up wallet",
-    "description": "Set up wallet button in header"
-  },
-  "Manage": {
-    "message": "Manage",
-    "description": "Manage button in header"
-  },
-  "Terms_Of_Use": {
-    "message": "Terms Of Use",
-    "description": "Terms Of Use"
-  },
-  "Privacy_Policy": {
-    "message": "Privacy Policy",
-    "description": "Privacy Policy button"
-  },
-  "Do_not_show_again": {
-    "message": "Do not show again",
-    "description": "Do not show again checkbox label"
-  },
-  "Buy_TON": {
-    "message": "Buy Toncoin",
-    "description": "Buy TON title"
-  },
-  "Sell_TON": {
-    "message": "Sell TON",
-    "description": "Sell TON title"
-  },
-  "Other_ways_to_buy_TON": {
-    "message": "Other ways to buy",
-    "description": "Other ways to buy TON link"
-  },
-  "Other_ways_to_sell_TON": {
-    "message": "Other ways to sell",
-    "description": "Other ways to sell TON link"
-  },
-  "Mercuryo_description": {
-    "message": "Instantly buy with a credit card",
-    "description": "Buy TON Mercuryo description"
-  },
-  "Mercuryo_sell_description": {
-    "message": "Sale with withdrawal to a credit card",
-    "description": "Sale TON Mercuryo description"
-  },
-  "Neocrypto_description": {
-    "message": "Instantly buy with a credit card",
-    "description": "Buy TON Mercuryo description"
-  },
-  "Dreamwalkers_description": {
-    "message": "Instantly buy with RUB, UAH credit card",
-    "description": "Buy TON Dreamwalkers description"
-  },
-  "Wallet_description": {
-    "message": "Instantly buy with a credit card",
-    "description": "Buy TON Mercuryo description"
-  },
-  "Telegram_bot": {
-    "message": "Telegram Bot",
-    "description": "Telegram Bot label"
-  },
-  "You_are_opening_an_external_app": {
-    "message": "You are opening an external app not operated by Tonkeeper",
-    "description": "You are opening an external app disclaimer"
-  },
-  "Log_out_description": {
-    "message": "Wallet keys will be erased from this device.",
-    "description": "Log out description"
-  },
-  "I_have_a_backup_copy_of_recovery_phrase": {
-    "message": "I have a backup copy of recovery phrase",
-    "description": "Dangerous notification for clear actions"
-  },
-  "Back_up_now": {
-    "message": "Back up now",
-    "description": "Back up now button label"
-  },
-  "Unknown_COIN": {
-    "message": "Unknown COIN",
-    "description": "Label for missing jettons names"
-  },
-  "Rename": {
-    "message": "Rename",
-    "description": "Rename settings button"
-  },
-  "Edit": {
-    "message": "Edit",
-    "description": "Edit settings button"
-  },
-  "Show_recovery_phrase": {
-    "message": "Show recovery phrase",
-    "description": "Show recovery phrase settings button"
-  },
-  "Transfer": {
-    "message": "Transfer",
-    "description": "Transfer button"
-  },
-  "Details": {
-    "message": "Details",
-    "description": "Details header"
-  },
-  "Owner": {
-    "message": "Owner",
-    "description": "Owner header"
-  },
-  "Contract_address": {
-    "message": "Contract address",
-    "description": "Contract address header"
-  },
-  "View_in_explorer": {
-    "message": "View in explorer",
-    "description": " View in explorer button"
-  },
-  "Transfer_token": {
-    "message": "Transfer token",
-    "description": "Transfer token button"
-  },
-  "Transfer_DNS": {
-    "message": "Transfer DNS",
-    "description": "Transfer DNS button"
-  },
-  "Transfer_number": {
-    "message": "Transfer number",
-    "description": "Transfer number button"
-  },
-  "Transfer_name": {
-    "message": "Transfer name",
-    "description": "Transfer name button"
-  },
-  "View_on_market": {
-    "message": "View on market",
-    "description": "View on market button"
-  },
-  "Transfer_NFT": {
-    "message": "Transfer NFT",
-    "description": "Transfer NFT header"
-  },
-  "Address_or_name": {
-    "message": "Address or name",
-    "description": "Address or name input placeholder"
-  },
   "Password": {
     "message": "Password",
     "description": "Password input label"
-  },
-  "Confirm": {
-    "message": "Confirm",
-    "description": "Confirm input label"
-  },
-  "Save": {
-    "message": "Save",
-    "description": "Save button label"
-  },
-  "Without_authentication": {
-    "message": "Without authentication",
-    "description": "Without authentication button label"
   },
   "Unlock": {
     "message": "Unlock",
     "description": "Unlock button label"
   },
-  "Delete_all_accounts_and_logout": {
-    "message": "Delete all accounts and logout",
-    "description": "Delete all accounts and logout settings button"
+  "check_words_caption": {
+    "message": "To check whether you’ve written down your recovery phrase correctly, please enter the %1%, %2%, and  %3% words."
   },
-  "Delete_wallet_data": {
-    "message": "Delete wallet data",
-    "description": "Delete wallet data notification title"
-  },
-  "Delete_wallet_data_description": {
-    "message": "Wallet keys and all personal data will be erased from this device.",
-    "description": "Delete wallet data notification description"
+  "Lock_screen": {
+    "message": "Lock screen",
+    "description": "Lock screen option label"
   },
   "Name_your_wallet": {
     "message": "Name your wallet",
@@ -498,208 +122,11 @@
     "message": "Name your wallet to easily identify it while using the Tonkeeper. These names are stored locally, and can only be seen by you.",
     "description": "Name your wallet notification description"
   },
-  "Wallet_name": {
-    "message": "Wallet name",
-    "description": "Wallet name input label"
-  },
-  "Address": {
-    "message": "Address",
-    "description": "Address input label"
-  },
-  "Sent": {
-    "message": "Sent",
-    "description": "Sent activity title"
-  },
-  "Received": {
-    "message": "Received",
-    "description": "Received activity title"
-  },
-  "Unknown": {
-    "message": "Unknown",
-    "description": "Unknown activity title"
-  },
-  "Copy": {
-    "message": "Copy",
-    "description": "Copy button label"
-  },
-  "Copied": {
-    "message": "Copied!",
-    "description": "Copied notification"
-  },
-  "Receive_TON_and_other_tokens": {
-    "message": "Receive TON and other tokens",
-    "description": "Receive TON and other tokens activity title"
-  },
-  "Show_QR_code_to_receive": {
-    "message": "Show QR code to receive",
-    "description": "Show QR code to receive activity"
-  },
-  "Or_use_wallet_address": {
-    "message": "Or use wallet address",
-    "description": "Or use wallet address activity"
-  },
   "Ton_page_description": {
     "message": "TON is a fully decentralized layer-1 blockchain designed by Telegram to onboard billions of users. It boasts ultra-fast transactions, tiny fees, easy-to-use apps, and is environmentally friendly.",
     "description": "The description of the ton coin"
   },
-  "More": {
-    "message": "More",
-    "description": "expand text content button"
-  },
-  "About_collection": {
-    "message": "About collection",
-    "description": "About collection nft preview title"
-  },
-  "Your_activity_will_be_shown_here": {
-    "message": "Your activity will be shown here",
-    "description": "Empty activity title"
-  },
-  "Make_your_first_transaction": {
-    "message": "Make your first transaction!",
-    "description": "Empty activity call to action"
-  },
-  "Today": {
-    "message": "Today",
-    "description": "Today activity title"
-  },
-  "Yesterday": {
-    "message": "Yesterday",
-    "description": "Yesterday activity title"
-  },
-  "This_Week": {
-    "message": "This Week",
-    "description": "This Week activity title"
-  },
-  "This_Month": {
-    "message": "This Month",
-    "description": "This_Month activity title"
-  },
-  "month_12": {
-    "message": "December",
-    "description": "December activity title"
-  },
-  "month_11": {
-    "message": "November",
-    "description": "November activity title"
-  },
-  "month_10": {
-    "message": "October",
-    "description": "October activity title"
-  },
-  "month_9": {
-    "message": "September",
-    "description": "September activity title"
-  },
-  "month_8": {
-    "message": "August",
-    "description": "August activity title"
-  },
-  "month_7": {
-    "message": "July",
-    "description": "July activity title"
-  },
-  "month_6": {
-    "message": "June",
-    "description": "June activity title"
-  },
-  "month_5": {
-    "message": "May",
-    "description": "May activity title"
-  },
-  "month_4": {
-    "message": "April",
-    "description": "April activity title"
-  },
-  "month_3": {
-    "message": "March",
-    "description": "March activity title"
-  },
-  "month_2": {
-    "message": "February",
-    "description": "February activity title"
-  },
-  "month_1": {
-    "message": "January",
-    "description": "January activity title"
-  },
-  "NFT_creation": {
-    "message": "NFT creation",
-    "description": "NFT_creation activity title"
-  },
-  "Contract_Deploy": {
-    "message": "Contract Deploy",
-    "description": "Contract_Deploy activity title"
-  },
-  "Wallet_initialized": {
-    "message": "Wallet initialized",
-    "description": "Wallet_initialized activity title"
-  },
-  "Span": {
-    "message": "Span",
-    "description": "Span activity title"
-  },
-  "Bid": {
-    "message": "Bid",
-    "description": "Bid activity title"
-  },
-  "Subscribed": {
-    "message": "Subscribed",
-    "description": "Subscribed activity title"
-  },
-  "Unsubscribed": {
-    "message": "Unsubscribed",
-    "description": "Unsubscribed activity title"
-  },
-  "NFT_collection_creation": {
-    "message": "NFT collection creation",
-    "description": "NFT collection creation activity title"
-  },
-  "received_on": {
-    "message": "Received on",
-    "description": "received_on action details title"
-  },
-  "send_on": {
-    "message": "Send on",
-    "description": "send_on action details title"
-  },
-  "fee": {
-    "message": "Fee",
-    "description": "Fee action label"
-  },
-  "message": {
-    "message": "Message",
-    "description": "message action label"
-  },
-  "recipient": {
-    "message": "Recipient",
-    "description": "recipient action label"
-  },
-  "recipient_address": {
-    "message": "Recipient address",
-    "description": "recipient_address action label"
-  },
-  "sender": {
-    "message": "Sender",
-    "description": "sender action label"
-  },
-  "sender_address": {
-    "message": "Sender address",
-    "description": "sender_address action label"
-  },
-  "beneficiary": {
-    "message": "Beneficiary",
-    "description": "beneficiary action label"
-  },
-  "beneficiary_address": {
-    "message": "Beneficiary address",
-    "description": "beneficiary_address action label"
-  },
-  "transaction": {
-    "message": "Transaction",
-    "description": "transaction action label"
-  },
-  "copy_transaction_id": {
-    "message": "Copied Transaction Id",
-    "description": "copy_transaction_id pop-up label"
+  "wallet_sell": {
+    "message": "Sell"
   }
 }

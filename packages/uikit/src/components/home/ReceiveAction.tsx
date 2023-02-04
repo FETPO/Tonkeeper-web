@@ -110,9 +110,9 @@ const ReceiveContent = () => {
   return (
     <NotificationBlock>
       <ToncoinIcon width="72" height="72" />
-      <Title>{t('Receive_TON_and_other_tokens')}</Title>
+      <Title>{t('receive_ton_and_jettons')}</Title>
       <Block>
-        <TitleText>{t('Show_QR_code_to_receive')}</TitleText>
+        <TitleText>{t('receive_qr_title')}</TitleText>
         <Background>
           <QRCode
             size={400}
@@ -124,7 +124,7 @@ const ReceiveContent = () => {
       </Block>
       <CopyBlock>
         <TextBlock>
-          <Text>{t('Or_use_wallet_address')}</Text>
+          <Text>{t('receive_address_title')}</Text>
           <AddressText
             onClick={() => sdk.copyToClipboard(wallet.active.friendlyAddress)}
           >
@@ -135,7 +135,7 @@ const ReceiveContent = () => {
           onClick={() => sdk.copyToClipboard(wallet.active.friendlyAddress)}
         >
           <CopyIcon />
-          <span>{t('Copy')}</span>
+          <span>{t('receive_copy')}</span>
         </CopyButton>
       </CopyBlock>
     </NotificationBlock>
@@ -166,7 +166,7 @@ export const ReceiveAction = () => {
     <>
       <Action
         icon={<ReceiveIcon />}
-        title={t('Receive')}
+        title={t('wallet_receive')}
         action={() => setOpen(true)}
       />
       <ReceiveNotification open={open} handleClose={() => setOpen(false)} />

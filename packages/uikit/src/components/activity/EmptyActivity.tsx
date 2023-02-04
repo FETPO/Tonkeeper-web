@@ -53,7 +53,9 @@ export const EmptyActivity = () => {
       <BodyText>{t('Make_your_first_transaction')}</BodyText>
       <ButtonRow>
         <Button onClick={() => setOpenBuy(true)}>{t('Buy_TON')}</Button>
-        <Button onClick={() => setOpenReceive(true)}>{t('Receive')}</Button>
+        <Button onClick={() => setOpenReceive(true)}>
+          {t('wallet_receive')}
+        </Button>
       </ButtonRow>
       <ReceiveNotification
         open={openReceive}

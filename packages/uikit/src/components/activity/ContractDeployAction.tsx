@@ -43,8 +43,8 @@ export const ContractDeployActionDetails: FC<ActionData> = ({
       <div>
         <Title>
           {contractDeploy.interfaces.includes('wallet')
-            ? t('Wallet_initialized')
-            : t('Contract_Deploy')}
+            ? t('transaction_type_wallet_initialized')
+            : t('transaction_type_contract_deploy')}
         </Title>
         <ActionDate kind="received" timestamp={timestamp} />
       </div>
@@ -93,7 +93,7 @@ export const ContractDeployAction: FC<{
           <ContractDeployIcon />
         </ActivityIcon>
         <ColumnLayout
-          title={t('NFT_collection_creation')}
+          title={t('nft_deploy_collection_title')}
           entry="-"
           address={toShortAddress(contractDeploy.address)}
           date={date}
@@ -108,7 +108,7 @@ export const ContractDeployAction: FC<{
           <CreateWalletIcon />
         </ActivityIcon>
         <ColumnLayout
-          title={t('Wallet_initialized')}
+          title={t('transaction_type_wallet_initialized')}
           entry="-"
           address={toShortAddress(contractDeploy.address)}
           date={date}
@@ -125,7 +125,7 @@ export const ContractDeployAction: FC<{
         <ContractDeployIcon />
       </ActivityIcon>
       <ColumnLayout
-        title={t('Contract_Deploy')}
+        title={t('transaction_type_contract_deploy')}
         entry="-"
         address={toShortAddress(contractDeploy.address)}
         date={date}

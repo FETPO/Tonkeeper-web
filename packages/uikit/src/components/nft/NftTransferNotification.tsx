@@ -68,7 +68,7 @@ const NftTransferContent: FC<{
       />
       <ButtonRow>
         <Button size="large" primary fullWidth disabled={!isValid}>
-          {t('Continue')}
+          {t('create_wallet_continue_button')}
         </Button>
       </ButtonRow>
     </NotificationBlock>

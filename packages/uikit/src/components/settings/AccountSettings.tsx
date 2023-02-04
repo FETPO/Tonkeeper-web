@@ -10,7 +10,8 @@ import {
   ListOfTokensIcon,
   LogOutIcon,
   RecoveryPhraseIcon,
-  SecurityIcon, WalletsIcon
+  SecurityIcon,
+  WalletsIcon,
 } from './SettingsIcons';
 import { SettingsItem, SettingsList } from './SettingsList';
 
@@ -29,31 +30,31 @@ const SingleAccountSettings = () => {
       //   action: () => navigate(relative(SettingsRoute.subscriptions)),
       // },
       {
-        name: t('Recovery_phrase'),
+        name: t('settings_recovery_phrase'),
         icon: <RecoveryPhraseIcon />,
         action: () => navigate(relative(SettingsRoute.recovery)),
       },
       {
-        name: t('Active_address'),
+        name: t('settings_wallet_version'),
         icon: walletVersionText(wallet.active.version),
         action: () => navigate(relative(SettingsRoute.version)),
       },
     ];
     if (jettons?.balances.length) {
       items.push({
-        name: t('List_of_tokens'),
+        name: t('settings_jettons_list'),
         icon: <ListOfTokensIcon />,
         action: () => navigate(relative(SettingsRoute.jettons)),
       });
     }
 
     items.push({
-      name: t('Security'),
+      name: t('settings_security'),
       icon: <SecurityIcon />,
       action: () => navigate(relative(SettingsRoute.security)),
     });
     items.push({
-      name: t('Log_out'),
+      name: t('settings_reset'),
       icon: <LogOutIcon />,
       action: () => setLogout(true),
     });
@@ -98,25 +99,25 @@ const MultipleAccountSettings = () => {
   const mainItems = useMemo<SettingsItem[]>(() => {
     const items: SettingsItem[] = [
       {
-        name: t('Recovery_phrase'),
+        name: t('settings_recovery_phrase'),
         icon: <RecoveryPhraseIcon />,
         action: () => navigate(relative(SettingsRoute.recovery)),
       },
       {
-        name: t('Active_address'),
+        name: t('settings_wallet_version'),
         icon: walletVersionText(wallet.active.version),
         action: () => navigate(relative(SettingsRoute.version)),
       },
     ];
     if (jettons?.balances.length) {
       items.push({
-        name: t('List_of_tokens'),
+        name: t('settings_jettons_list'),
         icon: <ListOfTokensIcon />,
         action: () => navigate(relative(SettingsRoute.jettons)),
       });
     }
     items.push({
-      name: t('Security'),
+      name: t('settings_security'),
       icon: <SecurityIcon />,
       action: () => navigate(relative(SettingsRoute.security)),
     });

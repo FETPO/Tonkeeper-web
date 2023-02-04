@@ -68,7 +68,7 @@ const WalletRow: FC<{
           </Icon>
           <ColumnText
             noWrap
-            text={wallet.name ? wallet.name : t('Wallet')}
+            text={wallet.name ? wallet.name : t('wallet_title')}
             secondary={toShortAddress(wallet.active.friendlyAddress)}
           />
           <DropDown
@@ -96,7 +96,7 @@ const WalletRow: FC<{
                   }}
                 >
                   <ListItemPayload>
-                    <Label1>{t('Show_recovery_phrase')}</Label1>
+                    <Label1>{t('settings_backup_seed')}</Label1>
                   </ListItemPayload>
                 </ListItem>
                 <Divider />
@@ -108,7 +108,7 @@ const WalletRow: FC<{
                   }}
                 >
                   <ListItemPayload>
-                    <Label1>{t('Log_out')}</Label1>
+                    <Label1>{t('settings_reset')}</Label1>
                   </ListItemPayload>
                 </ListItem>
                 <ListItem
@@ -119,7 +119,7 @@ const WalletRow: FC<{
                   }}
                 >
                   <ListItemPayload>
-                    <Label1>{t('Delete_account')}</Label1>
+                    <Label1>{t('settings_delete_account')}</Label1>
                   </ListItemPayload>
                 </ListItem>
               </ListBlock>
@@ -157,7 +157,7 @@ export const Account = () => {
   const createItems = useMemo(() => {
     return [
       {
-        name: t('Set_up_wallet'),
+        name: t('balances_setup_wallet'),
         icon: <SetUpWalletIcon />,
         action: () => setOpen(true),
       },

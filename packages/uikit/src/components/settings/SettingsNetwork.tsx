@@ -50,9 +50,9 @@ export const SettingsNetwork: FC = () => {
       <Icon>
         <TonkeeperIcon width="33" height="33" />
       </Icon>
-      <Text>Tonkeeper Beta</Text>
+      <Text>Tonkeeper X</Text>
       <Version>
-        {t('Version')} {version}
+        {t('settings_version')} {version}
       </Version>
     </Block>
   );

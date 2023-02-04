@@ -142,7 +142,7 @@ const FillPassword: FC<{
         disabled={isCreating || error != null}
         onClick={onCreate}
       >
-        {t('Continue')}
+        {t('create_wallet_continue_button')}
       </Button>
     </>
   );
@@ -152,8 +152,9 @@ export const CreateAuthState: FC<{
   afterCreate: (password?: string) => void;
   isLoading?: boolean;
 }> = ({ afterCreate, isLoading }) => {
-  const [authType, setAuthType] =
-    useState<AuthState['kind'] | undefined>('password');
+  const [authType, setAuthType] = useState<AuthState['kind'] | undefined>(
+    'password'
+  );
 
   const { mutateAsync: setNoneAuth, isLoading: isNoneLoading } =
     useSetNoneAuthMutation();

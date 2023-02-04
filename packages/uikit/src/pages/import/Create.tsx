@@ -49,7 +49,10 @@ export const Create = () => {
 
   if (mnemonic.length === 0) {
     return (
-      <IconPage icon={<GearLottieIcon />} title={t('Generating_wallet')} />
+      <IconPage
+        icon={<GearLottieIcon />}
+        title={t('create_wallet_generating')}
+      />
     );
   }
 
@@ -57,7 +60,7 @@ export const Create = () => {
     return (
       <IconPage
         icon={<CheckLottieIcon />}
-        title={t('Your_wallet_has_just_been_created')}
+        title={t('create_wallet_generated')}
       />
     );
   }
@@ -67,8 +70,8 @@ export const Create = () => {
       <IconPage
         logOut
         icon={<WriteLottieIcon />}
-        title={t('Grab_a_pen')}
-        description={t('Grab_a_pen_description')}
+        title={t('create_wallet_title')}
+        description={t('create_wallet_caption')}
         button={
           <Button
             size="large"
@@ -77,7 +80,7 @@ export const Create = () => {
             marginTop
             onClick={() => setOpen(true)}
           >
-            {t('Continue')}
+            {t('create_wallet_continue_button')}
           </Button>
         }
       />

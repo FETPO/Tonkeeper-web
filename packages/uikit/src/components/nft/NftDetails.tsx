@@ -38,11 +38,11 @@ export const NftDetails: FC<{ nftItem: NftItemRepr }> = React.memo(
     return (
       <Block>
         <Row>
-          <H3>{t('Details')}</H3>
+          <H3>{t('nft_details')}</H3>
           <Link
             onClick={() => sdk.openPage(`https://tonapi.io/account/${address}`)}
           >
-            {t('View_in_explorer')}
+            {t('nft_view_in_explorer')}
           </Link>
         </Row>
         <ListBlock margin={false}>
@@ -53,7 +53,7 @@ export const NftDetails: FC<{ nftItem: NftItemRepr }> = React.memo(
               }
             >
               <ListItemPayload>
-                <RightText>{t('Owner')}</RightText>
+                <RightText>{t('nft_owner_address')}</RightText>
                 <Label1>
                   {toShortAddress(Address.parse(owner).toString())}
                 </Label1>
@@ -62,7 +62,7 @@ export const NftDetails: FC<{ nftItem: NftItemRepr }> = React.memo(
           )}
           <ListItem onClick={() => sdk.copyToClipboard(address)}>
             <ListItemPayload>
-              <RightText>{t('Contract_address')}</RightText>
+              <RightText>{t('nft_contract_address')}</RightText>
               <Label1>{toShortAddress(address)}</Label1>
             </ListItemPayload>
           </ListItem>

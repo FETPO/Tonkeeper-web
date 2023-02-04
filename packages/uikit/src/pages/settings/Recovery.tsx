@@ -106,8 +106,8 @@ const RecoveryContent: FC<{ publicKey: string }> = ({ publicKey }) => {
         </BackButton>
       </BackBlock>
       <Block>
-        <Title>{t('Your_recovery_phrase')}</Title>
-        <Body>{t('Your_recovery_phrase_description')}</Body>
+        <Title>{t('secret_words_title')}</Title>
+        <Body>{t('secret_words_caption')}</Body>
       </Block>
 
       <WorldsGrid>

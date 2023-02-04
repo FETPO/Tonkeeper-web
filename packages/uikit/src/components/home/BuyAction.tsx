@@ -103,7 +103,7 @@ export const BuyAction: FC<{ buy: TonendpoinFiatCategory | undefined }> = ({
     <>
       <Action
         icon={<BuyIcon />}
-        title={t('Buy')}
+        title={t('wallet_buy')}
         action={() => setOpen(true)}
       />
       <BuyNotification
@@ -135,7 +135,7 @@ export const SellAction: FC<{ sell: TonendpoinFiatCategory | undefined }> = ({
     <>
       <Action
         icon={<SellIcon />}
-        title={t('Sell')}
+        title={t('wallet_sell')}
         action={() => setOpen(true)}
       />
       <Notification

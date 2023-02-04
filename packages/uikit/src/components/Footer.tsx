@@ -182,7 +182,7 @@ export const Footer = () => {
         onClick={() => navigate(AppRoute.home)}
       >
         <WalletIcon />
-        <Label3>{t('Wallet')}</Label3>
+        <Label3>{t('wallet_title')}</Label3>
       </Button>
       <Button
         active={active === AppRoute.activity}
@@ -196,7 +196,7 @@ export const Footer = () => {
         onClick={() => navigate(AppRoute.settings)}
       >
         <SettingsIcon />
-        <Label3>{t('Settings')}</Label3>
+        <Label3>{t('settings_title')}</Label3>
       </Button>
     </Block>
   );

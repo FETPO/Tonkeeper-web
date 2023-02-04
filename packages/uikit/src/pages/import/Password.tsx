@@ -96,8 +96,9 @@ export const FinalView = () => {
   const afterImport = useAfterImportAction();
   const client = useQueryClient();
 
-  const [size, setSize] =
-    useState<{ width: number; height: number } | undefined>(undefined);
+  const [size, setSize] = useState<
+    { width: number; height: number } | undefined
+  >(undefined);
 
   useEffect(() => {
     client.invalidateQueries([]);
@@ -116,10 +117,7 @@ export const FinalView = () => {
           <ConfettiLottieIcon {...size} />
         </ConfettiBlock>
       )}
-      <IconPage
-        icon={<CheckLottieIcon />}
-        title={t('Congratulations_You_ve_set_up_your_wallet')}
-      />
+      <IconPage icon={<CheckLottieIcon />} title={t('check_words_success')} />
     </>
   );
 };

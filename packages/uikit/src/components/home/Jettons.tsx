@@ -249,7 +249,7 @@ export const JettonList: FC<AssetProps> = ({ info, jettons, stock }) => {
           <EditButton
             onClick={() => navigate(AppRoute.settings + SettingsRoute.jettons)}
           >
-            {t('Edit')}
+            {t('Edit_jettons')}
           </EditButton>
         </ButtonRow>
       )}

@@ -22,22 +22,22 @@ export const SettingsSocialList: FC = React.memo(() => {
     const result = [] as SettingsItem[];
     return result.concat([
       {
-        name: t('Contact_support'),
+        name: t('settings_contact_support'),
         icon: <ContactSupportIcon />,
         action: () => sdk.openPage('mailto:support@tonkeeper.com'),
       },
       {
-        name: t('Tonkeeper_news'),
+        name: t('settings_news'),
         icon: <TelegramIcon />,
-        action: () => sdk.openPage('https://t.me/tonkeeper'),
+        action: () => sdk.openPage(t('settings_news_url')),
       },
       {
-        name: t('Tonkeeper_discussion'),
+        name: t('settings_support'),
         icon: <TelegramIcon />,
-        action: () => sdk.openPage('https://t.me/tonkeeper_discuss'),
+        action: () => sdk.openPage(t('settings_news_url_discuss')),
       },
       {
-        name: t('Legal_documents'),
+        name: t('settings_legal_documents'),
         icon: <LegalDocumentsIcon />,
         action: () => navigate(relative(SettingsRoute.legal)),
       },

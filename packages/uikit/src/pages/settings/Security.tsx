@@ -71,7 +71,7 @@ const ShowPhrases = () => {
   const items = useMemo(() => {
     const items: SettingsItem[] = [
       {
-        name: t('Show_recovery_phrase'),
+        name: t('settings_backup_seed'),
         icon: <KeyIcon />,
         action: () => navigate(AppRoute.settings + SettingsRoute.recovery),
       },
@@ -86,7 +86,7 @@ export const SecuritySettings = () => {
   const { t } = useTranslation();
   return (
     <>
-      <SubHeader title={t('Security')} />
+      <SubHeader title={t('settings_security')} />
       <LockSwitch />
       <ChangePassword />
       <ShowPhrases />

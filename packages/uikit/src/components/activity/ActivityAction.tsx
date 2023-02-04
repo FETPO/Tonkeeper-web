@@ -48,7 +48,9 @@ const TonTransferAction: FC<{ action: Action; date: string }> = ({
         <Description>
           <FirstLine>
             <Label1>
-              {tonTransfer.sender.isScam ? t('Span') : t('Received')}
+              {tonTransfer.sender.isScam
+                ? t('spam_action')
+                : t('transaction_type_receive')}
             </Label1>
             <AmountText isScam={tonTransfer.sender.isScam} green>
               + {format(tonTransfer.amount)}
@@ -76,7 +78,7 @@ const TonTransferAction: FC<{ action: Action; date: string }> = ({
       </ActivityIcon>
       <Description>
         <FirstLine>
-          <Label1>{t('Sent')}</Label1>
+          <Label1>{t('transaction_type_sent')}</Label1>
           <AmountText>- {format(tonTransfer.amount)}</AmountText>
           <Label1>TON</Label1>
         </FirstLine>
@@ -115,7 +117,7 @@ const JettonTransferAction: FC<{ action: Action; date: string }> = ({
         </ActivityIcon>
         <Description>
           <FirstLine>
-            <Label1>{t('Sent')}</Label1>
+            <Label1>{t('transaction_type_sent')}</Label1>
             <AmountText>
               - {format(jettonTransfer.amount, jettonTransfer.jetton.decimals)}
             </AmountText>
@@ -143,7 +145,7 @@ const JettonTransferAction: FC<{ action: Action; date: string }> = ({
       </ActivityIcon>
       <Description>
         <FirstLine>
-          <Label1>{t('Received')}</Label1>
+          <Label1>{t('transaction_type_receive')}</Label1>
           <AmountText isScam={jettonTransfer.sender?.isScam} green>
             + {format(jettonTransfer.amount, jettonTransfer.jetton.decimals)}
           </AmountText>
@@ -232,7 +234,7 @@ export const ActivityAction: FC<{
     case 'AuctionBid':
       return <AuctionBidAction action={action} date={date} openNft={openNft} />;
     case 'Unknown':
-      return <ErrorAction>{t('Unknown')}</ErrorAction>;
+      return <ErrorAction>{t('unknownTransaction')}</ErrorAction>;
     default: {
       console.log(action);
       return <ListItemPayload>{action.type}</ListItemPayload>;

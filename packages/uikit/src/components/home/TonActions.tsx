@@ -18,7 +18,11 @@ export const HomeActions = () => {
   return (
     <ActionsRow>
       <BuyAction buy={buy} />
-      <Action icon={<SendIcon />} title={t('Send')} action={() => null} />
+      <Action
+        icon={<SendIcon />}
+        title={t('wallet_send')}
+        action={() => null}
+      />
       <ReceiveAction />
       <SellAction sell={sell} />
     </ActionsRow>

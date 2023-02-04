@@ -42,8 +42,8 @@ export const ImportNotification: FC<{
             <TonkeeperIcon loop />
           </NotificationIcon>
           <TextBlock>
-            <Title>{t('Let_s_set_up_your_wallet')}</Title>
-            <BodyText>{t('Let_s_set_up_your_wallet_description')}</BodyText>
+            <Title>{t('require_create_wallet_modal_title')}</Title>
+            <BodyText>{t('require_create_wallet_modal_caption')}</BodyText>
           </TextBlock>
           <Button
             size="large"
@@ -54,7 +54,7 @@ export const ImportNotification: FC<{
               onClose(() => onImport(AppRoute.import + ImportRoute.create));
             }}
           >
-            {t('Create_new_wallet')}
+            {t('require_create_wallet_modal_create_new')}
           </Button>
           <Button
             size="large"
@@ -64,7 +64,7 @@ export const ImportNotification: FC<{
               onClose(() => onImport(AppRoute.import + ImportRoute.import));
             }}
           >
-            {t('Import_existing_wallet')}
+            {t('require_create_wallet_modal_import')}
           </Button>
         </div>
       )}

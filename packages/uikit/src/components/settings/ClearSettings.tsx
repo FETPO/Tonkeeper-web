@@ -16,7 +16,7 @@ export const ClearSettings = () => {
         name:
           account.publicKeys.length > 1
             ? t('Delete_all_accounts_and_logout')
-            : t('Delete_account'),
+            : t('settings_delete_account'),
         icon: <DeleteAccountIcon />,
         action: () => setOpen(true),
       },

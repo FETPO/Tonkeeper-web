@@ -25,7 +25,7 @@ export const Legal = React.memo(() => {
   const items = useMemo<SettingsItem[]>(() => {
     return [
       {
-        name: t('Terms_of_use'),
+        name: t('legal_terms'),
         icon: (
           <Icon>
             <ChevronRightIcon />
@@ -34,7 +34,7 @@ export const Legal = React.memo(() => {
         action: () => sdk.openPage('https://tonkeeper.com/terms/'),
       },
       {
-        name: t('Privacy_policy'),
+        name: t('legal_privacy'),
         icon: (
           <Icon>
             <ChevronRightIcon />
@@ -48,7 +48,7 @@ export const Legal = React.memo(() => {
   const licenses = useMemo<SettingsItem[]>(() => {
     return [
       {
-        name: t('Montserrat_font'),
+        name: t('legal_font_license'),
         icon: (
           <Icon>
             <ChevronRightIcon />
@@ -61,9 +61,9 @@ export const Legal = React.memo(() => {
 
   return (
     <>
-      <SubHeader title={t('Legal')} />
+      <SubHeader title={t('legal_header_title')} />
       <SettingsList items={items} />
-      <Title>{t('Licenses')}</Title>
+      <Title>{t('legal_licenses_title')}</Title>
       <SettingsList items={licenses} />
     </>
   );

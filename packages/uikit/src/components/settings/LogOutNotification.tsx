@@ -48,8 +48,8 @@ const LotOutContent: FC<{
   return (
     <NotificationBlock>
       <TextBlock>
-        <H2>{t('Log_out')}</H2>
-        <BodyText>{t('Log_out_description')}</BodyText>
+        <H2>{t('settings_reset_alert_title')}</H2>
+        <BodyText>{t('settings_reset_alert_caption')}</BodyText>
       </TextBlock>
 
       <DisclaimerBlock>
@@ -76,7 +76,7 @@ const LotOutContent: FC<{
           onClose(() => navigate(AppRoute.home));
         }}
       >
-        {t('Log_out')}
+        {t('settings_reset')}
       </Button>
     </NotificationBlock>
   );

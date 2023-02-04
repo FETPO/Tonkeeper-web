@@ -96,7 +96,7 @@ export const LogoutButton = () => {
   const { t } = useTranslation();
   return (
     <LogoutButtonBlock onClick={() => navigate(AppRoute.home)}>
-      <Label2>{t('log_out')}</Label2>
+      <Label2>{t('settings_reset')}</Label2>
     </LogoutButtonBlock>
   );
 };
@@ -116,8 +116,8 @@ export const Worlds: FC<{
       </BackBlock>
       <Block>
         <div>
-          <Header>{t('Your_recovery_phrase')}</Header>
-          <Body>{t('Your_recovery_phrase_description')}</Body>
+          <Header>{t('secret_words_title')}</Header>
+          <Body>{t('secret_words_caption')}</Body>
         </div>
       </Block>
 
@@ -130,7 +130,7 @@ export const Worlds: FC<{
       </WorldsGrid>
 
       <Button size="large" fullWidth primary marginTop onClick={onCheck}>
-        {t('Continue')}
+        {t('create_wallet_continue_button')}
       </Button>
     </>
   );
@@ -246,7 +246,7 @@ export const Check: FC<{
   }, []);
 
   const description = useMemo(() => {
-    return t('So_let_s_check_description')
+    return t('check_words_caption')
       .replace(`%1%`, formatOrdinals(i18n.language, test1))
       .replace(`%2%`, formatOrdinals(i18n.language, test2))
       .replace(`%3%`, formatOrdinals(i18n.language, test3));
@@ -266,7 +266,7 @@ export const Check: FC<{
       </BackBlock>
       <Block>
         <div>
-          <Header>{t('So_let_s_check')}</Header>
+          <Header>{t('check_words_title')}</Header>
           <Body>{description}</Body>
         </div>
       </Block>
@@ -300,7 +300,7 @@ export const Check: FC<{
           disabled={!isValid}
           onClick={onConfirm}
         >
-          {t('Continue')}
+          {t('create_wallet_continue_button')}
         </Button>
       </Block>
     </>
@@ -358,8 +358,8 @@ export const ImportWords: FC<{
       </BackBlock>
       <Block>
         <div>
-          <Header>{t('Enter_your_recovery_phrase')}</Header>
-          <Body>{t('Enter_your_recovery_phrase_description')}</Body>
+          <Header>{t('import_wallet_title')}</Header>
+          <Body>{t('import_wallet_caption')}</Body>
         </div>
       </Block>
       <Block>
@@ -384,7 +384,7 @@ export const ImportWords: FC<{
           loading={isLoading}
           onClick={() => onMnemonic(mnemonic)}
         >
-          {t('Continue')}
+          {t('create_wallet_continue_button')}
         </Button>
       </Block>
     </>

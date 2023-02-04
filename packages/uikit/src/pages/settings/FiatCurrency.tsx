@@ -22,7 +22,7 @@ export const FiatCurrency = () => {
   const items = useMemo<SettingsItem[]>(() => {
     return Object.entries(FiatCurrencySymbolsConfig).map(([key, value]) => ({
       name: key,
-      secondary: t(`${key}_full`),
+      secondary: t(key),
       icon: key === fiat ? <CheckIcon /> : undefined,
       action: () => mutate({ fiat: key as FiatCurrencies }),
     }));
@@ -30,7 +30,7 @@ export const FiatCurrency = () => {
 
   return (
     <>
-      <SubHeader title={t('Primary_currency')} />
+      <SubHeader title={t('settings_primary_currency')} />
       <SettingsList items={items} />
     </>
   );

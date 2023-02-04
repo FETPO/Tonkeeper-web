@@ -40,7 +40,7 @@ const RenameWalletContent: FC<{
         <Input
           value={wallet.active.friendlyAddress}
           disabled
-          label={t('Address')}
+          label={t('address_label')}
         />
 
         <Button
@@ -52,7 +52,7 @@ const RenameWalletContent: FC<{
           disabled={isLoading}
           type="submit"
         >
-          {t('Save')}
+          {t('save')}
         </Button>
       </NotificationBlock>
     </>
@@ -72,7 +72,7 @@ export const RenameWalletNotification: FC<{
   );
 
   return (
-    <Notification isOpen={wallet != null} handleClose={handleClose}>
+    <Notification isOpen={wallet != null} handleClose={handleClose} hideButton>
       {Content}
     </Notification>
   );

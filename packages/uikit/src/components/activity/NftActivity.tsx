@@ -112,7 +112,7 @@ export const NftItemTransferAction: FC<{
         </ActivityIcon>
         <Description>
           <FirstLine>
-            <Label1>{t('Sent')}</Label1>
+            <Label1>{t('transaction_type_sent')}</Label1>
             <AmountText></AmountText>
             <AmountText>NFT</AmountText>
           </FirstLine>
@@ -138,7 +138,7 @@ export const NftItemTransferAction: FC<{
       </ActivityIcon>
       <Description>
         <FirstLine>
-          <Label1>{t('Received')}</Label1>
+          <Label1>{t('transaction_type_receive')}</Label1>
           <AmountText></AmountText>
           <AmountText>NFT</AmountText>
         </FirstLine>

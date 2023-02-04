@@ -41,3 +41,4 @@ Thumbs.db
 .turbo
 
 **/public/locales/*
+**/src/wallet-translation/*

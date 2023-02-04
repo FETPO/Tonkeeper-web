@@ -76,7 +76,9 @@ export const CroppedBodyText: FC<{
   return (
     <Body ref={ref} onClick={() => setOpen(true)} open={open} margin={margin}>
       {text}
-      {open ? undefined : <More contentColor={contentColor}>{t('More')}</More>}
+      {open ? undefined : (
+        <More contentColor={contentColor}>{t('nft_more')}</More>
+      )}
     </Body>
   );
 };

@@ -115,7 +115,9 @@ const WalletRow: FC<{
       <ListItemPayload>
         <ColumnText
           noWrap
-          text={wallet?.name ? wallet.name : `${t('Wallet')} ${index + 1}`}
+          text={
+            wallet?.name ? wallet.name : `${t('wallet_title')} ${index + 1}`
+          }
           secondary={wallet && toShortAddress(wallet.active.friendlyAddress)}
         />
         {activePublicKey === publicKey ? (
@@ -144,7 +146,7 @@ const DropDownPayload: FC<{ onClose: () => void; onCreate: () => void }> = ({
           onCreate();
         }}
       >
-        <Label1>{t('Set_up_wallet')}</Label1>
+        <Label1>{t('balances_setup_wallet')}</Label1>
         <Icon>
           <PlusIcon />
         </Icon>
@@ -217,7 +219,10 @@ export const Header = () => {
         )}
       >
         <Title>
-          <TitleName> {wallet.name ? wallet.name : t('Wallet')}</TitleName>
+          <TitleName>
+            {' '}
+            {wallet.name ? wallet.name : t('wallet_title')}
+          </TitleName>
 
           <DownIconWrapper>
             <DownIcon />
@@ -246,7 +251,7 @@ export const SettingsHeader = () => {
 
   return (
     <Block top={top} second>
-      <H1>{t('Settings')}</H1>
+      <H1>{t('settings_title')}</H1>
     </Block>
   );
 };

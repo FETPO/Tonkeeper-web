@@ -5,7 +5,7 @@ import {
   Draggable,
   DraggableProvidedDragHandleProps,
   Droppable,
-  OnDragEndResponder
+  OnDragEndResponder,
 } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { Radio } from '../../components/fields/Checkbox';
@@ -18,10 +18,14 @@ import { SubHeader } from '../../components/SubHeader';
 import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useCoinFullBalance } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
-import { hideEmptyJettons, sortJettons, useToggleJettonMutation } from '../../state/jetton';
+import {
+  hideEmptyJettons,
+  sortJettons,
+  useToggleJettonMutation,
+} from '../../state/jetton';
 import {
   useMutateWalletProperty,
-  useWalletJettonList
+  useWalletJettonList,
 } from '../../state/wallet';
 
 const Row = styled.div`
@@ -102,7 +106,7 @@ const JettonSkeleton = () => {
 
   return (
     <>
-      <SubHeader title={t('List_of_tokens')} />
+      <SubHeader title={t('settings_jettons_list')} />
       <SkeletonList size={5} />
     </>
   );
@@ -135,7 +139,7 @@ export const JettonsSettings = () => {
 
   return (
     <>
-      <SubHeader title={t('List_of_tokens')} />
+      <SubHeader title={t('settings_jettons_list')} />
       <DragDropContext onDragEnd={handleDrop}>
         <Droppable droppableId="jettons">
           {(provided) => (

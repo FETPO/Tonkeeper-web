@@ -173,7 +173,7 @@ const PasswordUnlock: FC<{
             type="button"
             loading={isLoading}
           >
-            {t('log_out')}
+            {t('settings_reset')}
           </Button>
           <Button
             size="large"

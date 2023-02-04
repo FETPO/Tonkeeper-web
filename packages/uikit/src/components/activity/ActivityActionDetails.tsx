@@ -69,7 +69,7 @@ export const TonTransferActionNotification: FC<ActionData> = ({
           {tonTransfer.comment && (
             <ListItem>
               <ListItemPayload>
-                <Label>{t('message')}</Label>
+                <Label>{t('transaction_message')}</Label>
                 <Label1>{tonTransfer.comment}</Label1>
               </ListItemPayload>
             </ListItem>
@@ -93,7 +93,7 @@ export const TonTransferActionNotification: FC<ActionData> = ({
         {tonTransfer.comment && (
           <ListItem>
             <ListItemPayload>
-              <Label>{t('message')}</Label>
+              <Label>{t('transaction_message')}</Label>
               <Label1>{tonTransfer.comment}</Label1>
             </ListItemPayload>
           </ListItem>

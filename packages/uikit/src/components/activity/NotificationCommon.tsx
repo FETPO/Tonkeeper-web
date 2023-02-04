@@ -41,7 +41,7 @@ export const ActionDate: FC<{
 }> = ({ kind, timestamp }) => {
   const { t, i18n } = useTranslation();
 
-  const data = useMemo(() => {
+  const date = useMemo(() => {
     return new Intl.DateTimeFormat(i18n.language, {
       month: 'short',
       day: 'numeric',
@@ -56,7 +56,10 @@ export const ActionDate: FC<{
 
   return (
     <Timestamp>
-      {kind === 'received' ? t('received_on') : t('send_on')} {data}
+      {(kind === 'received'
+        ? t('transaction_receive_date')
+        : t('transaction_sent_date')
+      ).replace('%{date}', date)}
     </Timestamp>
   );
 };
@@ -83,7 +86,7 @@ export const ErrorActivityNotification: FC<
   const { t } = useTranslation();
   return (
     <ActionDetailsBlock event={event}>
-      <Title>{children ?? t('Unknown')}</Title>
+      <Title>{children ?? t('unknownTransaction')}</Title>
     </ActionDetailsBlock>
   );
 };
@@ -98,15 +101,21 @@ export const ActionRecipientDetails: FC<{ recipient: AccountAddress }> = ({
       {recipient.name && (
         <ListItem onClick={() => sdk.copyToClipboard(recipient.name!)}>
           <ListItemPayload>
-            <Label>{t('recipient')}</Label>
+            <Label>{t('transaction_recipient')}</Label>
             <Label1>{recipient.name}</Label1>
           </ListItemPayload>
         </ListItem>
       )}
-      <ListItem onClick={() => sdk.copyToClipboard(recipient.address)}>
+      <ListItem
+        onClick={() =>
+          sdk.copyToClipboard(recipient.address, t('address_copied'))
+        }
+      >
         <ListItemPayload>
           <Label>
-            {recipient.name ? t('recipient_address') : t('recipient')}
+            {recipient.name
+              ? t('transaction_recipient_address')
+              : t('transaction_recipient')}
           </Label>
           <Label1>{toShortAddress(recipient.address)}</Label1>
         </ListItemPayload>
@@ -125,14 +134,20 @@ export const ActionSenderDetails: FC<{ sender: AccountAddress }> = ({
       {sender.name && (
         <ListItem onClick={() => sdk.copyToClipboard(sender.name!)}>
           <ListItemPayload>
-            <Label>{t('sender')}</Label>
+            <Label>{t('transaction_sender')}</Label>
             <Label1>{sender.name}</Label1>
           </ListItemPayload>
         </ListItem>
       )}
-      <ListItem onClick={() => sdk.copyToClipboard(sender.address)}>
+      <ListItem
+        onClick={() => sdk.copyToClipboard(sender.address, t('address_copied'))}
+      >
         <ListItemPayload>
-          <Label>{sender.name ? t('sender_address') : t('sender')}</Label>
+          <Label>
+            {sender.name
+              ? t('transaction_sender_address')
+              : t('transaction_sender')}
+          </Label>
           <Label1>{toShortAddress(sender.address)}</Label1>
         </ListItemPayload>
       </ListItem>
@@ -150,15 +165,21 @@ export const ActionBeneficiaryDetails: FC<{ beneficiary: AccountAddress }> = ({
       {beneficiary.name && (
         <ListItem onClick={() => sdk.copyToClipboard(beneficiary.name!)}>
           <ListItemPayload>
-            <Label>{t('beneficiary')}</Label>
+            <Label>{t('transaction_merchant')}</Label>
             <Label1>{beneficiary.name}</Label1>
           </ListItemPayload>
         </ListItem>
       )}
-      <ListItem onClick={() => sdk.copyToClipboard(beneficiary.address)}>
+      <ListItem
+        onClick={() =>
+          sdk.copyToClipboard(beneficiary.address, t('address_copied'))
+        }
+      >
         <ListItemPayload>
           <Label>
-            {beneficiary.name ? t('beneficiary_address') : t('beneficiary')}
+            {beneficiary.name
+              ? t('transaction_merchant_address')
+              : t('transaction_merchant')}
           </Label>
           <Label1>{toShortAddress(beneficiary.address)}</Label1>
         </ListItemPayload>
@@ -173,13 +194,9 @@ export const ActionTransactionDetails: FC<{ event: AccountEvent }> = ({
   const { t } = useTranslation();
   const sdk = useAppSdk();
   return (
-    <ListItem
-      onClick={() =>
-        sdk.copyToClipboard(event.eventId, t('copy_transaction_id'))
-      }
-    >
+    <ListItem onClick={() => sdk.copyToClipboard(event.eventId, t('copied'))}>
       <ListItemPayload>
-        <Label>{t('transaction')}</Label>
+        <Label>{t('transaction_hash')}</Label>
         <Label1>{toShortValue(event.eventId, 8)}</Label1>
       </ListItemPayload>
     </ListItem>
@@ -196,7 +213,7 @@ export const ActionDeployerDetails: FC<{ deployer: AccountAddress }> = ({
     <>
       <ListItem onClick={() => sdk.copyToClipboard(deployer.address)}>
         <ListItemPayload>
-          <Label>{t('Address')}</Label>
+          <Label>{t('address_label')}</Label>
           <Label1>{toShortAddress(deployer.address)}</Label1>
         </ListItemPayload>
       </ListItem>
@@ -219,7 +236,7 @@ export const ActionFeeDetails: FC<{
   return (
     <ListItem onClick={() => sdk.copyToClipboard(format(fee.total))}>
       <ListItemPayload>
-        <Label>{t('fee')}</Label>
+        <Label>{t('transaction_fee')}</Label>
         <ColumnText
           right
           text={`${format(fee.total)} TON`}
@@ -254,7 +271,7 @@ export const ActionDetailsBlock: FC<
           sdk.openPage(`https://tonapi.io/transaction/${event.eventId}`)
         }
       >
-        {t('View_in_explorer')}
+        {t('nft_view_in_explorer')}
       </Button>
     </Block>
   );

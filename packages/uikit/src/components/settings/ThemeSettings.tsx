@@ -17,7 +17,7 @@ export const ThemeSettings = () => {
   const secondaryItems = useMemo(() => {
     const items: SettingsItem[] = [
       {
-        name: t('Primary_currency'),
+        name: t('settings_primary_currency'),
         icon: fiat,
         action: () => navigate(relative(SettingsRoute.fiat)),
       },

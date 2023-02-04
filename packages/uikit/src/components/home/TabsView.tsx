@@ -79,7 +79,7 @@ const Tabs: FC<{ tab: HomeTabs; onTab: (value: HomeTabs) => void }> = ({
         active={tab === HomeTabs.Tokens}
         onClick={() => onTab(HomeTabs.Tokens)}
       >
-        <Label1>{t('Tokens')}</Label1>
+        <Label1>{t('jettons_list_title')}</Label1>
       </TabsButton>
       <TabsButton
         active={tab === HomeTabs.Collectibles}

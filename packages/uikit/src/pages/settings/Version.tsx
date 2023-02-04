@@ -36,7 +36,7 @@ export const WalletVersion = () => {
 
   return (
     <>
-      <SubHeader title={t('Active_address')} />
+      <SubHeader title={t('settings_wallet_version')} />
       <SettingsList items={items} loading={isLoading} />
     </>
   );

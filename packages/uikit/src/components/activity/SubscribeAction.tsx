@@ -40,7 +40,7 @@ export const UnSubscribeActionDetails: FC<ActionData> = ({
   return (
     <ActionDetailsBlock event={event}>
       <div>
-        <Title>{t('Unsubscribed')}</Title>
+        <Title>{t('transaction_type_unsubscription')}</Title>
         <ActionDate kind="send" timestamp={timestamp} />
       </div>
       <ListBlock margin={false} fullWidth>
@@ -70,7 +70,7 @@ export const SubscribeActionDetails: FC<ActionData> = ({
   return (
     <ActionDetailsBlock event={event}>
       <div>
-        <Title>{t('Subscribed')}</Title>
+        <Title>{t('transaction_type_subscription')}</Title>
         <ActionDate kind="send" timestamp={timestamp} />
       </div>
       <ListBlock margin={false} fullWidth>
@@ -98,7 +98,7 @@ export const UnSubscribeAction: FC<{ action: Action; date: string }> = ({
         <UnsubscribeIcon />
       </ActivityIcon>
       <ColumnLayout
-        title={t('Unsubscribed')}
+        title={t('transaction_type_unsubscription')}
         entry="-"
         address={
           unSubscribe.beneficiary.name ??
@@ -127,7 +127,7 @@ export const SubscribeAction: FC<{ action: Action; date: string }> = ({
         <SubscribeIcon />
       </ActivityIcon>
       <ColumnLayout
-        title={t('Subscribed')}
+        title={t('transaction_type_subscription')}
         entry="-"
         address={
           subscribe.beneficiary.name ??
