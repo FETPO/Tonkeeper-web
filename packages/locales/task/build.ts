@@ -27,11 +27,12 @@ const toDict = (
   value: object
 ): Record<string, Message> => {
   return Object.entries(value).reduce((acc, [key, message]) => {
+    const item_key = parentKey ? `${parentKey}_${key}` : key;
     if (typeof message === 'string') {
-      acc[key] = { message };
+      acc[item_key] = { message };
       return acc;
     } else {
-      const dict = toDict(parentKey ? `${parentKey}_${key}` : key, message);
+      const dict = toDict(item_key, message);
       return { ...acc, ...dict };
     }
   }, {} as Record<string, Message>);

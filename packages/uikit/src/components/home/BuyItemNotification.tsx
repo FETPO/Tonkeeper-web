@@ -4,7 +4,7 @@ import { WalletState } from '@tonkeeper/core/dist/entries/wallet';
 import {
   TonendpoinFiatButton,
   TonendpoinFiatItem,
-  TonendpointConfig,
+  TonendpointConfig
 } from '@tonkeeper/core/dist/tonkeeperApi/tonendpoint';
 import React, { FC, useState } from 'react';
 import styled, { css } from 'styled-components';
@@ -115,7 +115,7 @@ const Disclaimer: FC<{
 
   return (
     <DisclaimerBlock>
-      <DisclaimerText>{t('You_are_opening_an_external_app')}</DisclaimerText>
+      <DisclaimerText>{t('exchange_method_open_warning')}</DisclaimerText>
       {buttons && buttons.length > 0 && (
         <div>
           {buttons.map((button, index) => (
@@ -219,7 +219,7 @@ export const BuyItemNotification: FC<{
             </Button>
             <CheckboxBlock>
               <Checkbox checked={!!hided} onChange={mutate}>
-                {t('Do_not_show_again')}
+                {t('exchange_method_dont_show_again')}
               </Checkbox>
             </CheckboxBlock>
           </NotificationBlock>

@@ -125,6 +125,18 @@
   "wallet_sell": {
     "message": "Продать"
   },
+  "Other_ways_to_buy_TON": {
+    "message": "Другие способы покупки",
+    "description": "Other ways to buy TON link"
+  },
+  "Other_ways_to_buy_TON_link": {
+    "message": "https://t.me/toncoin_rus/90",
+    "description": "Other ways to buy TON link"
+  },
+  "Other_ways_to_sell_TON": {
+    "message": "Другие способы продажи",
+    "description": "Other ways to sell TON link"
+  },
   "Change": {
     "message": "Изменить"
   }

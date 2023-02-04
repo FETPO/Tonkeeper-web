@@ -36,6 +36,8 @@ export const WorldsGrid = styled.div`
   gap: 0.5rem;
   place-content: space-evenly;
   margin: 1rem 0;
+
+  white-space: normal;
 `;
 
 const World = styled(Body1)``;

@@ -102,7 +102,7 @@ export const UpdateWalletName: FC<{
         disabled={isLoading}
         type="submit"
       >
-        {t('save')}
+        {t('add_edit_favorite_save')}
       </Button>
     </Block>
   );

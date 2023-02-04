@@ -22,7 +22,7 @@ export const FiatCurrency = () => {
   const items = useMemo<SettingsItem[]>(() => {
     return Object.entries(FiatCurrencySymbolsConfig).map(([key, value]) => ({
       name: key,
-      secondary: t(key),
+      secondary: t(`choose_currency_currencies_${key}`),
       icon: key === fiat ? <CheckIcon /> : undefined,
       action: () => mutate({ fiat: key as FiatCurrencies }),
     }));

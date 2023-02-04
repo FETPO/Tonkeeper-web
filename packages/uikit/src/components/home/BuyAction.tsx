@@ -4,7 +4,6 @@ import {
 } from '@tonkeeper/core/dist/tonkeeperApi/tonendpoint';
 import React, { FC, useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { useAppContext } from '../../hooks/appContext';
 import { useAppSdk } from '../../hooks/appSdk';
 import { useTranslation } from '../../hooks/translation';
 import { ListBlock } from '../List';
@@ -36,7 +35,6 @@ const ActionNotification: FC<{
 }> = ({ item, kind, handleClose }) => {
   const sdk = useAppSdk();
   const { t } = useTranslation();
-  const { config } = useAppContext();
   return (
     <div>
       <NotificationTitleRow handleClose={handleClose}>
@@ -44,7 +42,9 @@ const ActionNotification: FC<{
       </NotificationTitleRow>
       <BuyList items={item.items} kind={kind} />
       <OtherBlock>
-        <OtherLink onClick={() => sdk.openPage(config.exchangePostUrl!)}>
+        <OtherLink
+          onClick={() => sdk.openPage(t('Other_ways_to_buy_TON_link'))}
+        >
           {kind === 'buy'
             ? t('Other_ways_to_buy_TON')
             : t('Other_ways_to_sell_TON')}

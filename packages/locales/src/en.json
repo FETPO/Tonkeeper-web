@@ -129,6 +129,18 @@
   "wallet_sell": {
     "message": "Sell"
   },
+  "Other_ways_to_buy_TON": {
+    "message": "Other ways to buy",
+    "description": "Other ways to buy TON link"
+  },
+  "Other_ways_to_buy_TON_link": {
+    "message": "https://t.me/toncoin/703",
+    "description": "Other ways to buy TON link"
+  },
+  "Other_ways_to_sell_TON": {
+    "message": "Other ways to sell",
+    "description": "Other ways to sell TON link"
+  },
   "Change": {
     "message": "Change"
   }
