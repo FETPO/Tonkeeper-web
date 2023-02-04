@@ -128,5 +128,8 @@
   },
   "wallet_sell": {
     "message": "Sell"
+  },
+  "Change": {
+    "message": "Change"
   }
 }

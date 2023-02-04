@@ -83,7 +83,7 @@ const ChangePasswordContent: FC<{ handleClose: () => void }> = ({
 
         <Input
           type="password"
-          label={t('Confirm')}
+          label={t('nft_confirm_operation')}
           value={confirm}
           onChange={(value) => {
             setError(undefined);

@@ -50,23 +50,24 @@ export const Initialize: FC = () => {
   return (
     <>
       <Title>
-        {t('Welcome_to')}&nbsp;<Accent>Tonkeeper</Accent>
+        {t('intro_title')}
+        <Accent>Tonkeeper</Accent>
       </Title>
       <div>
         <Description
           icon={<RocketIcon />}
-          title={t('World_class_speed')}
-          description={t('World_class_speed_description')}
+          title={t('intro_item1_title')}
+          description={t('intro_item1_caption')}
         />
         <Description
           icon={<ShieldIcon />}
-          title={t('End_to_end_security')}
-          description={t('End_to_end_security_description')}
+          title={t('intro_item2_title')}
+          description={t('intro_item2_caption')}
         />
         {/* <Description
           icon={<TicketIcon />}
-          title={t('Built_in_subscriptions')}
-          description={t('Built_in_subscriptions_description')}
+          title={t('intro_item3_title')}
+          description={t('intro_item3_caption')}
         /> */}
       </div>
       <Button
@@ -76,7 +77,7 @@ export const Initialize: FC = () => {
         marginTop
         onClick={() => setOpen(true)}
       >
-        {t('Get_started')}
+        {t('intro_continue_btn')}
       </Button>
       <ImportNotification isOpen={isOpen} setOpen={setOpen} />
     </>

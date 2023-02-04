@@ -8,6 +8,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: ${(props) => props.theme.backgroundContent};
   color:  ${(props) => props.theme.textPrimary};
+
+
 }
 
 :root {
@@ -23,6 +25,8 @@ export const Container = styled.div`
   flex-direction: column;
   min-height: var(--app-height);
   background-color: ${(props) => props.theme.backgroundPage};
+
+  white-space: pre-wrap;
 `;
 
 export const Body = styled.div`
