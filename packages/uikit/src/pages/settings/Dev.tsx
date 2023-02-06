@@ -19,7 +19,7 @@ export const DevSettings = React.memo(() => {
     const network = wallet.network ?? Network.MAINNET;
     return [
       {
-        name: t('Network'),
+        name: t('settings_network_alert_title'),
         icon: network,
         action: () => mutate({ network: switchNetwork(network) }),
       },
@@ -28,7 +28,7 @@ export const DevSettings = React.memo(() => {
 
   return (
     <>
-      <SubHeader title={t('Dev')} />
+      <SubHeader title="Dev Menu" />
       <SettingsList items={items} />
     </>
   );

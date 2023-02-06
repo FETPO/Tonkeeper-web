@@ -3,7 +3,7 @@ import { AccountAddress, AccountEvent, Fee } from '@tonkeeper/core/dist/tonApi';
 import { TonendpointStock } from '@tonkeeper/core/dist/tonkeeperApi/stock';
 import {
   toShortAddress,
-  toShortValue,
+  toShortValue
 } from '@tonkeeper/core/dist/utils/common';
 import BigNumber from 'bignumber.js';
 import React, { FC, PropsWithChildren, useMemo } from 'react';
@@ -13,7 +13,7 @@ import {
   formatDecimals,
   formatFiatCurrency,
   getTonCoinStockPrice,
-  useFormatCoinValue,
+  useFormatCoinValue
 } from '../../hooks/balance';
 import { useTranslation } from '../../hooks/translation';
 import { Button } from '../fields/Button';
@@ -86,7 +86,7 @@ export const ErrorActivityNotification: FC<
   const { t } = useTranslation();
   return (
     <ActionDetailsBlock event={event}>
-      <Title>{children ?? t('unknownTransaction')}</Title>
+      <Title>{children ?? t('txActions_signRaw_types_unknownTransaction')}</Title>
     </ActionDetailsBlock>
   );
 };

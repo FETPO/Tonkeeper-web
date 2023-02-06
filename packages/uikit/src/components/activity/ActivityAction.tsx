@@ -234,7 +234,11 @@ export const ActivityAction: FC<{
     case 'AuctionBid':
       return <AuctionBidAction action={action} date={date} openNft={openNft} />;
     case 'Unknown':
-      return <ErrorAction>{t('unknownTransaction')}</ErrorAction>;
+      return (
+        <ErrorAction>
+          {t('txActions_signRaw_types_unknownTransaction')}
+        </ErrorAction>
+      );
     default: {
       console.log(action);
       return <ListItemPayload>{action.type}</ListItemPayload>;
