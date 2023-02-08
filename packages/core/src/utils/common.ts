@@ -39,20 +39,24 @@ export const toShortValue = (value: string, length = 4): string => {
   return value.slice(0, length) + '...' + value.slice(-length);
 };
 
-export function formatTransferUrl(
-  address: string,
-  amount?: string,
-  text?: string
-) {
-  let url = 'ton://transfer/' + Address.parse(address).toString();
+export function formatTransferUrl(options: {
+  address: string;
+  amount?: string;
+  text?: string;
+  jetton?: string;
+}) {
+  let url = 'ton://transfer/' + Address.parse(options.address).toString();
 
   const params = [];
 
-  if (amount) {
-    params.push('amount=' + amount);
+  if (options.amount) {
+    params.push('amount=' + options.amount);
   }
-  if (text) {
-    params.push('text=' + encodeURIComponent(text));
+  if (options.text) {
+    params.push('text=' + encodeURIComponent(options.text));
+  }
+  if (options.jetton) {
+    params.push('jetton=' + Address.parse(options.jetton).toString());
   }
 
   if (params.length === 0) return url;

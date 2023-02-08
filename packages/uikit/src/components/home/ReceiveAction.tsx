@@ -1,3 +1,4 @@
+import { JettonInfo } from '@tonkeeper/core/dist/tonApi';
 import { formatTransferUrl } from '@tonkeeper/core/dist/utils/common';
 import React, { FC, useCallback, useState } from 'react';
 import QRCode from 'react-qr-code';
@@ -50,10 +51,10 @@ const CopyButton = styled(Label2)`
 `;
 
 const Background = styled.div`
-  padding: 2rem;
+  padding: 1.625rem;
   width: 100%;
   box-sizing: border-box;
-  border-radius: ${(props) => props.theme.cornerSmall};
+  border-radius: 8px;
   background: ${(props) => props.theme.textPrimary};
 
   svg {
@@ -102,21 +103,40 @@ const CopyIcon = () => {
   );
 };
 
-const ReceiveContent = () => {
+const Logo = styled.img`
+  width: 72px;
+  height: 72px;
+  border-radius: ${(props) => props.theme.cornerFull};
+
+  pointer-events: none;
+`;
+
+const ReceiveContent: FC<{ info?: JettonInfo }> = ({ info }) => {
   const { t } = useTranslation();
   const sdk = useAppSdk();
   const wallet = useWalletContext();
 
   return (
     <NotificationBlock>
-      <ToncoinIcon width="72" height="72" />
-      <Title>{t('receive_ton_and_jettons')}</Title>
+      {info?.metadata.image ? (
+        <Logo src={info?.metadata.image} />
+      ) : (
+        <ToncoinIcon width="72" height="72" />
+      )}
+      <Title>
+        {info
+          ? t('receive_title').replace('%{currency}', info.metadata.symbol)
+          : t('receive_ton_and_jettons')}
+      </Title>
       <Block>
         <TitleText>{t('receive_qr_title')}</TitleText>
         <Background>
           <QRCode
             size={400}
-            value={formatTransferUrl(wallet.active.friendlyAddress)}
+            value={formatTransferUrl({
+              address: wallet.active.friendlyAddress,
+              jetton: info?.metadata.address,
+            })}
             strokeLinecap="round"
             strokeLinejoin="miter"
           />
@@ -145,11 +165,12 @@ const ReceiveContent = () => {
 export const ReceiveNotification: FC<{
   open: boolean;
   handleClose: () => void;
-}> = ({ open, handleClose }) => {
+  info?: JettonInfo;
+}> = ({ open, handleClose, info }) => {
   const Content = useCallback(() => {
     if (!open) return undefined;
-    return <ReceiveContent />;
-  }, [open]);
+    return <ReceiveContent info={info} />;
+  }, [open, info]);
 
   return (
     <Notification isOpen={open} handleClose={handleClose}>
@@ -158,7 +179,7 @@ export const ReceiveNotification: FC<{
   );
 };
 
-export const ReceiveAction = () => {
+export const ReceiveAction: FC<{ info?: JettonInfo }> = ({ info }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
@@ -169,7 +190,11 @@ export const ReceiveAction = () => {
         title={t('wallet_receive')}
         action={() => setOpen(true)}
       />
-      <ReceiveNotification open={open} handleClose={() => setOpen(false)} />
+      <ReceiveNotification
+        open={open}
+        handleClose={() => setOpen(false)}
+        info={info}
+      />
     </>
   );
 };

@@ -115,7 +115,7 @@ export const JettonContent: FC<{ jettonAddress: string }> = ({
           title={t('wallet_send')}
           action={() => null}
         />
-        <ReceiveAction />
+        <ReceiveAction info={info} />
       </ActionsRow>
 
       <JettonHistory info={info} balance={balance} />
