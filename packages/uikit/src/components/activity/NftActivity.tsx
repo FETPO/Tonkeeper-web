@@ -9,13 +9,14 @@ import { useNftItemData } from '../../state/wallet';
 import { VerificationIcon } from '../Icon';
 import { ListBlock } from '../List';
 import { NftHeaderBody2 } from '../nft/NftHeader';
-import { Body1, Body2, Label1 } from '../Text';
+import { Body1, Body2 } from '../Text';
 import { ActivityIcon, ReceiveIcon, SentIcon } from './ActivityIcons';
 import { ActionData } from './ActivityNotification';
 import {
   AmountText,
   Description,
   ErrorAction,
+  FirstLabel,
   FirstLine,
   ListItemGrid,
   SecondaryText,
@@ -47,11 +48,7 @@ const NftText = styled.div`
   flex-direction: column;
   white-space: nowrap;
   overflow: hidden;
-`;
-
-const Body = styled(Body2)`
-  text-overflow: ellipsis;
-  overflow: hidden;
+  user-select: none;
 `;
 
 const BodySecondary = styled(Body2)`
@@ -63,6 +60,10 @@ const BodySecondary = styled(Body2)`
 const Wrapper = styled.div`
   grid-column: 2 / 3;
   overflow: hidden;
+`;
+
+const NftImage = styled.img`
+  user-select: none;
 `;
 
 export const NftComment: FC<{
@@ -83,7 +84,7 @@ export const NftComment: FC<{
           }
         }}
       >
-        {preview && <img height="64" width="64" src={preview.url} />}
+        {preview && <NftImage height="64" width="64" src={preview.url} />}
         <NftText>
           <NftHeaderBody2 nft={data} />
           <BodySecondary>
@@ -115,7 +116,7 @@ export const NftItemTransferAction: FC<{
         </ActivityIcon>
         <Description>
           <FirstLine>
-            <Label1>{t('transaction_type_sent')}</Label1>
+            <FirstLabel>{t('transaction_type_sent')}</FirstLabel>
             <AmountText></AmountText>
             <AmountText>NFT</AmountText>
           </FirstLine>
@@ -141,7 +142,7 @@ export const NftItemTransferAction: FC<{
       </ActivityIcon>
       <Description>
         <FirstLine>
-          <Label1>{t('transaction_type_receive')}</Label1>
+          <FirstLabel>{t('transaction_type_receive')}</FirstLabel>
           <AmountText></AmountText>
           <AmountText>NFT</AmountText>
         </FirstLine>
@@ -172,12 +173,14 @@ const Image = styled.img`
   width: 96px;
   margin-bottom: 20px;
   border-radius: ${(props) => props.theme.cornerMedium};
+  user-select: none;
 `;
 
 const Icon = styled.span`
   position: relative;
   top: 3px;
   margin-left: 4px;
+  user-select: none;
 `;
 
 export const NftItemTransferActionDetails: FC<ActionData> = ({

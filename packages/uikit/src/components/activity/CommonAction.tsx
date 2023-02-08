@@ -60,8 +60,13 @@ export const SecondLine = styled.div`
   }
 `;
 
+export const FirstLabel = styled(Label1)`
+  user-select: none;
+`;
+
 export const SecondaryText = styled(Body2)`
   color: ${(props) => props.theme.textSecondary};
+  user-select: none;
 `;
 
 const CommentMessage = styled(Body2)`
@@ -92,7 +97,7 @@ export const ErrorAction: FC<PropsWithChildren> = ({ children }) => {
       <ActivityIcon>
         <ReceiveIcon />
       </ActivityIcon>
-      <Label1>{children ?? t('Error')}</Label1>
+      <FirstLabel>{children ?? t('Error')}</FirstLabel>
     </ListItemGrid>
   );
 };
@@ -106,7 +111,7 @@ export const ColumnLayout: FC<{
   return (
     <Description>
       <FirstLine>
-        <Label1>{title}</Label1>
+        <FirstLabel>{title}</FirstLabel>
         <AmountText></AmountText>
         <AmountText>{entry}</AmountText>
       </FirstLine>

@@ -19,6 +19,7 @@ const List = styled(ListBlock)`
 
 const Title = styled(H3)`
   margin: 1.875rem 0 0.875rem;
+  user-select: none;
 `;
 
 export const ActivityGroupRaw: FC<{

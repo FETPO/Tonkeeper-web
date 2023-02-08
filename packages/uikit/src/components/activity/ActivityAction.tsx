@@ -16,6 +16,7 @@ import {
   Comment,
   Description,
   ErrorAction,
+  FirstLabel,
   FirstLine,
   ListItemGrid,
   SecondaryText,
@@ -47,13 +48,13 @@ const TonTransferAction: FC<{ action: Action; date: string }> = ({
         </ActivityIcon>
         <Description>
           <FirstLine>
-            <Label1>
+            <FirstLabel>
               {tonTransfer.sender.isScam
                 ? t('spam_action')
                 : t('transaction_type_receive')}
-            </Label1>
+            </FirstLabel>
             <AmountText isScam={tonTransfer.sender.isScam} green>
-              + {format(tonTransfer.amount)}
+              +&thinsp;{format(tonTransfer.amount)}
             </AmountText>
             <AmountText isScam={tonTransfer.sender.isScam} green>
               TON
@@ -78,8 +79,8 @@ const TonTransferAction: FC<{ action: Action; date: string }> = ({
       </ActivityIcon>
       <Description>
         <FirstLine>
-          <Label1>{t('transaction_type_sent')}</Label1>
-          <AmountText>- {format(tonTransfer.amount)}</AmountText>
+          <FirstLabel>{t('transaction_type_sent')}</FirstLabel>
+          <AmountText>-&thinsp;{format(tonTransfer.amount)}</AmountText>
           <Label1>TON</Label1>
         </FirstLine>
         <SecondLine>
@@ -117,9 +118,10 @@ const JettonTransferAction: FC<{ action: Action; date: string }> = ({
         </ActivityIcon>
         <Description>
           <FirstLine>
-            <Label1>{t('transaction_type_sent')}</Label1>
+            <FirstLabel>{t('transaction_type_sent')}</FirstLabel>
             <AmountText>
-              - {format(jettonTransfer.amount, jettonTransfer.jetton.decimals)}
+              -&thinsp;
+              {format(jettonTransfer.amount, jettonTransfer.jetton.decimals)}
             </AmountText>
             <Label1>{jettonTransfer.jetton.symbol}</Label1>
           </FirstLine>
@@ -145,9 +147,10 @@ const JettonTransferAction: FC<{ action: Action; date: string }> = ({
       </ActivityIcon>
       <Description>
         <FirstLine>
-          <Label1>{t('transaction_type_receive')}</Label1>
+          <FirstLabel>{t('transaction_type_receive')}</FirstLabel>
           <AmountText isScam={jettonTransfer.sender?.isScam} green>
-            + {format(jettonTransfer.amount, jettonTransfer.jetton.decimals)}
+            +&thinsp;
+            {format(jettonTransfer.amount, jettonTransfer.jetton.decimals)}
           </AmountText>
           <AmountText isScam={jettonTransfer.sender?.isScam} green>
             {jettonTransfer.jetton.symbol}
@@ -188,8 +191,8 @@ export const AuctionBidAction: FC<{
       </ActivityIcon>
       <Description>
         <FirstLine>
-          <Label1>{t('Bid')}</Label1>
-          <AmountText>- {format(auctionBid.amount.value)}</AmountText>
+          <FirstLabel>{t('Bid')}</FirstLabel>
+          <AmountText>-&thinsp;{format(auctionBid.amount.value)}</AmountText>
           <AmountText>{auctionBid.amount.tokenName}</AmountText>
         </FirstLine>
         <SecondLine>
