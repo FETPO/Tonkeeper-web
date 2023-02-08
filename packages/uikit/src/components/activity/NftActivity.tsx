@@ -6,7 +6,9 @@ import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { useTonenpointStock } from '../../state/tonendpoint';
 import { useNftItemData } from '../../state/wallet';
+import { VerificationIcon } from '../Icon';
 import { ListBlock } from '../List';
+import { NftHeaderBody2 } from '../nft/NftHeader';
 import { Body1, Body2, Label1 } from '../Text';
 import { ActivityIcon, ReceiveIcon, SentIcon } from './ActivityIcons';
 import { ActionData } from './ActivityNotification';
@@ -51,6 +53,7 @@ const Body = styled(Body2)`
   text-overflow: ellipsis;
   overflow: hidden;
 `;
+
 const BodySecondary = styled(Body2)`
   color: ${(props) => props.theme.textSecondary};
   text-overflow: ellipsis;
@@ -82,7 +85,7 @@ export const NftComment: FC<{
       >
         {preview && <img height="64" width="64" src={preview.url} />}
         <NftText>
-          <Body>{data.dns ?? data.metadata.name}</Body>
+          <NftHeaderBody2 nft={data} />
           <BodySecondary>
             {data.collection?.name ?? data.metadata.description}
           </BodySecondary>
@@ -171,6 +174,12 @@ const Image = styled.img`
   border-radius: ${(props) => props.theme.cornerMedium};
 `;
 
+const Icon = styled.span`
+  position: relative;
+  top: 3px;
+  margin-left: 4px;
+`;
+
 export const NftItemTransferActionDetails: FC<ActionData> = ({
   action,
   timestamp,
@@ -201,6 +210,11 @@ export const NftItemTransferActionDetails: FC<ActionData> = ({
               <Title>{data.dns ?? data.metadata.name}</Title>
               <Amount>
                 {data.collection?.name ?? data.metadata.description}
+                {data.approvedBy && data.approvedBy.length > 0 && (
+                  <Icon>
+                    <VerificationIcon />
+                  </Icon>
+                )}
               </Amount>
             </>
           )}

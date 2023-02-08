@@ -1,8 +1,8 @@
 import { NftItemRepr, NftItemsRepr } from '@tonkeeper/core/dist/tonApi';
 import React, { FC, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { VerificationIcon } from '../Icon';
-import { Body3, Label2 } from '../Text';
+import { Body3 } from '../Text';
+import { NftHeaderLabel2 } from './NftHeader';
 import { NftNotification } from './NftNotification';
 
 const Grid = styled.div`
@@ -54,33 +54,6 @@ const Text = styled.div`
   white-space: nowrap;
 `;
 
-const Header = styled(Label2)<{ verified?: boolean }>`
-  display: inline-flex;
-  width: fit-content;
-  max-width: 100%;
-  box-sizing: border-box;
-
-  ${(props) =>
-    props.verified &&
-    css`
-      padding-right: 19px;
-      position: relative;
-    `}
-`;
-
-const HeaderContent = styled.span`
-  display: inline-block;
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const Icon = styled.span`
-  position: absolute;
-  top: 2px;
-  right: 0;
-`;
-
 const Body = styled(Body3)`
   color: ${(props) => props.theme.textSecondary};
   text-overflow: ellipsis;
@@ -98,14 +71,7 @@ export const NftItem: FC<{
     <NftBlock hover onClick={() => onOpen(nft)}>
       <Image url={image?.url} />
       <Text>
-        <Header verified={nft.approvedBy && nft.approvedBy.length > 0}>
-          <HeaderContent>{nft.dns ?? nft.metadata.name}</HeaderContent>
-          {nft.approvedBy && (
-            <Icon>
-              <VerificationIcon />
-            </Icon>
-          )}
-        </Header>
+        <NftHeaderLabel2 nft={nft} />
         <Body>{nft.collection?.name ?? nft.metadata.description}</Body>
       </Text>
     </NftBlock>
