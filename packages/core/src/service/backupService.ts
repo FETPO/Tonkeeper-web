@@ -1,10 +1,11 @@
-import { sign } from 'ton-crypto';
+import nacl from 'tweetnacl';
 import { FiatCurrencies } from '../entries/fiat';
 import { Language } from '../entries/language';
 import { Network } from '../entries/network';
 import { WalletProxy } from '../entries/proxy';
 import { WalletState, WalletVersion, WalletVoucher } from '../entries/wallet';
 import { BackupApi, Configuration } from '../tonApi';
+import { sha256 } from './cryptoService';
 import { createExpireTimestamp } from './voucherService';
 
 const tenMin = 10 * 60;
@@ -18,6 +19,19 @@ const createBody = async (
   voucher: WalletVoucher,
   payload = Buffer.alloc(0)
 ) => {
+  if (payload.length > 0) {
+    console.log('set payload', payload);
+    const nonce = nacl.randomBytes(nacl.box.nonceLength);
+    const encrypted = nacl.box.after(
+      payload,
+      nonce,
+      Buffer.from(voucher.sharedKey, 'hex')
+    );
+
+    payload = Buffer.concat([nonce, encrypted]);
+    console.log('set encrypted', payload);
+  }
+
   const requestBody = Buffer.concat([
     Buffer.from(primaryPublicKey, 'hex'),
     Buffer.from(voucher.voucher, 'hex'),
@@ -25,10 +39,12 @@ const createBody = async (
     payload,
   ]);
 
-  const body = Buffer.concat([
-    sign(requestBody, Buffer.from(voucher.secretKey, 'hex')),
-    requestBody,
-  ]);
+  const signature = nacl.sign.detached(
+    sha256(requestBody),
+    Buffer.from(voucher.secretKey, 'hex')
+  );
+
+  const body = Buffer.concat([signature, requestBody]);
 
   return new Blob([body]);
 };
@@ -48,7 +64,30 @@ export const getWalletBackup = async (
   voucher: WalletVoucher
 ) => {
   const body = await createBody(publicKey, voucher);
-  return new BackupApi(tonApi).getWalletConfig({ body });
+  const result = await new BackupApi(tonApi).getWalletConfig({ body });
+  console.log('get payload', await result.arrayBuffer());
+
+  const messageWithNonceAsUint8Array = Buffer.from(await result.arrayBuffer());
+
+  console.log('get payload', messageWithNonceAsUint8Array);
+  const nonce = messageWithNonceAsUint8Array.subarray(0, nacl.box.nonceLength);
+  const message = messageWithNonceAsUint8Array.subarray(
+    nacl.box.nonceLength,
+    messageWithNonceAsUint8Array.length
+  );
+
+  const decrypted = nacl.box.open.after(
+    message,
+    nonce,
+    Buffer.from(voucher.sharedKey, 'hex')
+  );
+
+  if (!decrypted) {
+    throw new Error('Missing payload.');
+  }
+
+  console.log('get dencrypted', Buffer.from(decrypted));
+  return Buffer.from(decrypted);
 };
 
 export const putWalletBackup = async (
@@ -63,9 +102,9 @@ export const putWalletBackup = async (
 
 const writeBase = (base: number[]) => {
   const buf = Buffer.allocUnsafe(4 * base.length);
-  for (const item of base) {
-    buf.writeInt32BE(item);
-  }
+  base.forEach((item, index) => {
+    buf.writeInt32BE(item, index * 4);
+  });
   return buf;
 };
 

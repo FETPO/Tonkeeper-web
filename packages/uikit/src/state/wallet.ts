@@ -4,6 +4,7 @@ import {
   accountLogOutWallet,
   getAccountState,
 } from '@tonkeeper/core/dist/service/accountService';
+import { getWalletBackup } from '@tonkeeper/core/dist/service/backupService';
 import {
   getWalletState,
   updateWalletProperty,
@@ -22,6 +23,28 @@ import { getWalletActiveAddresses } from '@tonkeeper/core/dist/tonApiExtended/wa
 import { useAppContext, useWalletContext } from '../hooks/appContext';
 import { useStorage } from '../hooks/storage';
 import { JettonKey, QueryKey } from '../libs/queryKey';
+
+export const checkWalletBackup = () => {
+  const wallet = useWalletContext();
+  const { tonApi } = useAppContext();
+  return useQuery(
+    ['voucher'],
+    async () => {
+      if (!wallet.voucher) {
+        return;
+      }
+
+      const backup = await getWalletBackup(
+        tonApi,
+        wallet.publicKey,
+        wallet.voucher
+      );
+
+      console.log(backup);
+    },
+    { retry: 0 }
+  );
+};
 
 export const useActiveWallet = () => {
   const storage = useStorage();

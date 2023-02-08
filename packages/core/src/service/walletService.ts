@@ -11,10 +11,12 @@ import { IStorage } from '../Storage';
 import { Configuration, WalletApi } from '../tonApi';
 import {
   createWalletBackup,
+  deleteWalletBackup,
   getWalletBackup,
   putWalletBackup,
 } from './backupService';
 import { encrypt } from './cryptoService';
+import { getWalletMnemonic } from './menmonicService';
 import { createWalletVoucher } from './voucherService';
 
 export const importWallet = async (
@@ -171,6 +173,7 @@ export const updateWalletProperty = async (
     | 'lang'
     | 'fiat'
     | 'network'
+    | 'voucher'
   >
 ) => {
   const updated: WalletState = {
@@ -180,12 +183,14 @@ export const updateWalletProperty = async (
   };
   await setWalletState(storage, updated);
 
-  putWalletBackup(
-    tonApi,
-    updated.publicKey,
-    updated.voucher,
-    createWalletBackup(updated)
-  );
+  if (updated.voucher) {
+    putWalletBackup(
+      tonApi,
+      updated.publicKey,
+      updated.voucher,
+      createWalletBackup(updated)
+    );
+  }
 };
 
 export const getWalletState = (storage: IStorage, publicKey: string) => {
@@ -198,4 +203,34 @@ export const setWalletState = (storage: IStorage, state: WalletState) => {
 
 export const deleteWalletState = (storage: IStorage, publicKey: string) => {
   return storage.delete(`${AppKey.wallet}_${publicKey}`);
+};
+
+export const addWalletVoucher = async (
+  tonApi: Configuration,
+  storage: IStorage,
+  wallet: WalletState,
+  password: string
+) => {
+  const mnemonic = await getWalletMnemonic(storage, wallet.publicKey, password);
+  const keyPair = await mnemonicToPrivateKey(mnemonic);
+  await updateWalletProperty(tonApi, storage, wallet, {
+    voucher: await createWalletVoucher(keyPair),
+  });
+};
+
+export const deleteWalletVoucher = async (
+  tonApi: Configuration,
+  storage: IStorage,
+  wallet: WalletState
+) => {
+  if (wallet.voucher) {
+    try {
+      await deleteWalletBackup(tonApi, wallet.publicKey, wallet.voucher);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  await updateWalletProperty(tonApi, storage, wallet, {
+    voucher: undefined,
+  });
 };

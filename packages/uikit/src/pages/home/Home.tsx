@@ -14,6 +14,7 @@ import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useUserJettonList } from '../../state/jetton';
 import { useTonenpointStock } from '../../state/tonendpoint';
 import {
+  checkWalletBackup,
   useWalletAccountInfo,
   useWalletJettonList,
   useWalletNftList,
@@ -48,6 +49,8 @@ const Home = () => {
   const { data: info, error } = useWalletAccountInfo();
   const { data: jettons } = useWalletJettonList();
   const { data: nfts } = useWalletNftList();
+
+  checkWalletBackup();
 
   if (!stock || !nfts || !jettons || !info) {
     return <HomeSkeleton />;
