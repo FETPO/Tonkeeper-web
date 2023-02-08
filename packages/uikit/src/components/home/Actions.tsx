@@ -29,7 +29,8 @@ const Block = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  width: 55px;
+  min-width: 55px;
+  max-width: 70px;
   text-align: center;
 
   user-select: none;
