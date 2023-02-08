@@ -1,10 +1,11 @@
 import { throttle } from '@tonkeeper/core/dist/utils/common';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { useAppSdk } from '../hooks/appSdk';
 import { useTranslation } from '../hooks/translation';
 import { AppRoute } from '../libs/routes';
+import { useIsScrollTop } from './Header';
 import { Label3 } from './Text';
 
 export const WalletIcon = () => {
@@ -165,6 +166,8 @@ export const Footer = () => {
   const navigate = useNavigate();
 
   const bottom = useIsScrollBottom();
+  const top = useIsScrollTop();
+
   const active = useMemo<AppRoute>(() => {
     if (location.pathname.includes(AppRoute.activity)) {
       return AppRoute.activity;
@@ -175,25 +178,42 @@ export const Footer = () => {
     return AppRoute.home;
   }, [location.pathname]);
 
+  const scrollTop = useCallback(() => {
+    window.requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+    });
+  }, []);
   return (
     <Block bottom={bottom}>
       <Button
         active={active === AppRoute.home}
-        onClick={() => navigate(AppRoute.home)}
+        onClick={() =>
+          active === AppRoute.home && !top
+            ? scrollTop()
+            : navigate(AppRoute.home)
+        }
       >
         <WalletIcon />
         <Label3>{t('wallet_title')}</Label3>
       </Button>
       <Button
         active={active === AppRoute.activity}
-        onClick={() => navigate(AppRoute.activity)}
+        onClick={() =>
+          active === AppRoute.activity && !top
+            ? scrollTop()
+            : navigate(AppRoute.activity)
+        }
       >
         <ActivityIcon />
         <Label3>{t('Activity')}</Label3>
       </Button>
       <Button
         active={active === AppRoute.settings}
-        onClick={() => navigate(AppRoute.settings)}
+        onClick={() =>
+          active === AppRoute.settings && !top
+            ? scrollTop()
+            : navigate(AppRoute.settings)
+        }
       >
         <SettingsIcon />
         <Label3>{t('settings_title')}</Label3>
