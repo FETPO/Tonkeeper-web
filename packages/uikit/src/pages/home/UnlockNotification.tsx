@@ -69,7 +69,7 @@ const Logo = styled.div`
   margin-bottom: 2rem;
 `;
 
-const useMutateUnlock = (sdk: IAppSdk, requestId: number) => {
+const useMutateUnlock = (sdk: IAppSdk, requestId?: number) => {
   const storage = useStorage();
 
   return useMutation<void, Error, string>(async (password) => {
@@ -97,21 +97,16 @@ const useMutateUnlock = (sdk: IAppSdk, requestId: number) => {
 };
 
 const PasswordUnlock: FC<{
-  sdk: IAppSdk;
   onClose: () => void;
-  requestId: number;
-}> = ({ sdk, onClose, requestId }) => {
+  onSubmit: (password: string) => void;
+  isError: boolean;
+  isLoading: boolean;
+}> = ({ onClose, onSubmit, isError, isLoading }) => {
   const { t } = useTranslation();
 
   const ref = useRef<HTMLInputElement | null>(null);
-  const { mutateAsync, isLoading, isError, reset } = useMutateUnlock(
-    sdk,
-    requestId
-  );
   const [password, setPassword] = useState('');
-
   const [active, setActive] = useState(false);
-
   const location = useLocation();
 
   useEffect(() => {
@@ -129,33 +124,21 @@ const PasswordUnlock: FC<{
   }, [ref.current]);
 
   const onChange = (value: string) => {
-    reset();
     setPassword(value);
   };
 
-  const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     console.log('submit');
     e.preventDefault();
-    await mutateAsync(password);
-    onClose();
-  };
-
-  const onCancel = () => {
-    console.log('cancel');
-    sdk.uiEvents.emit('response', {
-      method: 'response',
-      id: requestId,
-      params: new Error('Cancel auth request'),
-    });
-    onClose();
+    onSubmit(password);
   };
 
   return (
     <>
-      <NotificationTitleRow handleClose={onCancel}>
+      <NotificationTitleRow handleClose={onClose}>
         {t('enter_password')}
       </NotificationTitleRow>
-      <Block onSubmit={onSubmit}>
+      <Block onSubmit={handleSubmit}>
         <Input
           ref={ref}
           value={password}
@@ -169,7 +152,7 @@ const PasswordUnlock: FC<{
           <Button
             size="large"
             fullWidth
-            onClick={onCancel}
+            onClick={onClose}
             type="button"
             loading={isLoading}
           >
@@ -195,10 +178,31 @@ export const UnlockNotification: FC<{ sdk: IAppSdk }> = ({ sdk }) => {
   const [auth, setAuth] = useState<AuthState | undefined>(undefined);
   const [requestId, setId] = useState<number | undefined>(undefined);
 
+  const { mutateAsync, isLoading, isError, reset } = useMutateUnlock(
+    sdk,
+    requestId
+  );
+
   const close = useCallback(() => {
     setAuth(undefined);
     setId(undefined);
   }, []);
+
+  const onSubmit = async (password: string) => {
+    reset();
+    await mutateAsync(password);
+    close();
+  };
+
+  const onCancel = () => {
+    console.log('cancel');
+    sdk.uiEvents.emit('response', {
+      method: 'response',
+      id: requestId,
+      params: new Error('Cancel auth request'),
+    });
+    close();
+  };
 
   useEffect(() => {
     const handler = (options: {
@@ -218,11 +222,18 @@ export const UnlockNotification: FC<{ sdk: IAppSdk }> = ({ sdk }) => {
 
   const Content = useCallback(() => {
     if (!auth || !requestId) return undefined;
-    return <PasswordUnlock sdk={sdk} onClose={close} requestId={requestId} />;
-  }, [auth, requestId]);
+    return (
+      <PasswordUnlock
+        onClose={onCancel}
+        onSubmit={onSubmit}
+        isLoading={isLoading}
+        isError={isError}
+      />
+    );
+  }, [auth, requestId, onSubmit]);
 
   return (
-    <Notification isOpen={auth != null} hideButton handleClose={close}>
+    <Notification isOpen={auth != null} hideButton handleClose={onCancel}>
       {Content}
     </Notification>
   );
