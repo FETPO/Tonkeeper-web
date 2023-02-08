@@ -5,7 +5,7 @@ import { useFBAnalyticsEvent } from '../../hooks/analytics';
 import { useTranslation } from '../../hooks/translation';
 import { useNftCollectionData } from '../../state/wallet';
 import { BackButton, ButtonMock } from '../fields/BackButton';
-import { ChevronDownIcon } from '../Icon';
+import { ChevronDownIcon, VerificationIcon } from '../Icon';
 import { Body, CroppedBodyText } from '../jettons/CroppedText';
 import { Notification, NotificationBlock } from '../Notification';
 import { H2, H3, Label1 } from '../Text';
@@ -39,6 +39,12 @@ const DelimiterExtra = styled.div`
 
 const CollectionTitle = styled(Label1)`
   margin-bottom: 0.5rem;
+`;
+
+const Icon = styled.span`
+  position: relative;
+  top: 3px;
+  margin-left: 4px;
 `;
 
 const NftPreview: FC<{
@@ -76,6 +82,11 @@ const NftPreview: FC<{
           {collectionName && (
             <Body open margin="small">
               {collectionName}
+              {nftItem.approvedBy && nftItem.approvedBy.length > 0 && (
+                <Icon>
+                  <VerificationIcon />
+                </Icon>
+              )}
             </Body>
           )}
           {description && (
