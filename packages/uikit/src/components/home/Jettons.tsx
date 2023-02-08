@@ -1,3 +1,4 @@
+import { FiatCurrencies } from '@tonkeeper/core/dist/entries/fiat';
 import {
   AccountRepr,
   JettonBalance,
@@ -79,8 +80,13 @@ const DeltaColor = styled.span<{ positive: boolean }>`
 
 export const Delta: FC<{ stock: TonendpointStock }> = ({ stock }) => {
   const [positive, delta] = useMemo(() => {
-    const today = new BigNumber(stock.today['TON']);
-    const yesterday = new BigNumber(stock.yesterday['TON']);
+    const today = new BigNumber(stock.today[FiatCurrencies.USD]).div(
+      stock.today['TON']
+    );
+    const yesterday = new BigNumber(stock.yesterday[FiatCurrencies.USD]).div(
+      stock.yesterday['TON']
+    );
+
     const delta = today.minus(yesterday);
 
     const value = delta.div(yesterday).multipliedBy(100).toFixed(2);
