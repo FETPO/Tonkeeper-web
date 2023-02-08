@@ -10,23 +10,35 @@ import {
 } from '../../components/settings/SettingsList';
 import { SubHeader } from '../../components/SubHeader';
 import { Label1 } from '../../components/Text';
-import { useAppContext } from '../../hooks/appContext';
+import { useAppContext, useWalletContext } from '../../hooks/appContext';
 import { useTranslation } from '../../hooks/translation';
 import { AppRoute, SettingsRoute } from '../../libs/routes';
-import { useLookScreen, useMutateLookScreen } from '../../state/password';
+import {
+  useLookScreen,
+  useMutateLookScreen,
+  useMutateVoucher,
+} from '../../state/password';
 
 const LockSwitch = () => {
   const { t } = useTranslation();
 
   const { data } = useLookScreen();
-  const { mutate } = useMutateLookScreen();
+  const { mutate: toggleLock } = useMutateLookScreen();
+  const wallet = useWalletContext();
+  const { mutate: toggleVoucher } = useMutateVoucher();
 
   return (
     <ListBlock>
       <ListItem hover={false}>
         <ListItemPayload>
           <Label1>{t('Lock_screen')}</Label1>
-          <Switch checked={!!data} onChange={mutate} />
+          <Switch checked={!!data} onChange={toggleLock} />
+        </ListItemPayload>
+      </ListItem>
+      <ListItem hover={false}>
+        <ListItemPayload>
+          <Label1>{t('Enable_storing_config')}</Label1>
+          <Switch checked={!!wallet.voucher} onChange={toggleVoucher} />
         </ListItemPayload>
       </ListItem>
     </ListBlock>

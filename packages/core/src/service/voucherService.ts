@@ -1,10 +1,7 @@
-import {
-  getSecureRandomBytes,
-  KeyPair,
-  keyPairFromSeed,
-  sign,
-} from 'ton-crypto';
+import { KeyPair } from 'ton-crypto';
+import nacl from 'tweetnacl';
 import { WalletVoucher } from '../entries/wallet';
+import { sha256 } from './cryptoService';
 
 const hundredYears = 100 * 355 * 24 * 60 * 60;
 
@@ -22,22 +19,30 @@ export const createExpireTimestamp = (expired: number) => {
 export const createWalletVoucher = async (
   walletKeyPair: KeyPair
 ): Promise<WalletVoucher> => {
-  const voucherSeed = await getSecureRandomBytes(32);
-  const voucherKeypair = keyPairFromSeed(voucherSeed);
+  const sharedKey = nacl.box.before(
+    walletKeyPair.publicKey,
+    walletKeyPair.secretKey.subarray(0, 32)
+  );
+
+  const voucherSeed = nacl.randomBytes(32);
+  const voucherKeypair = nacl.sign.keyPair.fromSeed(voucherSeed);
 
   const voucherBody = Buffer.concat([
     createExpireTimestamp(hundredYears),
     voucherKeypair.publicKey,
   ]);
 
-  const voucher = Buffer.concat([
-    sign(voucherBody, walletKeyPair.secretKey),
-    voucherBody,
-  ]);
+  const signature = nacl.sign.detached(
+    sha256(voucherBody),
+    walletKeyPair.secretKey
+  );
+  console.log('signature', signature.length);
+  const voucher = Buffer.concat([signature, voucherBody]);
 
   return {
-    secretKey: voucherKeypair.secretKey.toString('hex'),
-    publicKey: voucherKeypair.publicKey.toString('hex'),
+    secretKey: Buffer.from(voucherKeypair.secretKey).toString('hex'),
+    publicKey: Buffer.from(voucherKeypair.publicKey).toString('hex'),
+    sharedKey: Buffer.from(sharedKey).toString('hex'),
     voucher: voucher.toString('hex'),
   };
 };

@@ -38,6 +38,7 @@ export interface WalletAddress {
 export interface WalletVoucher {
   secretKey: string;
   publicKey: string;
+  sharedKey: string;
   voucher: string;
 }
 
@@ -45,7 +46,7 @@ export interface WalletState {
   publicKey: string;
   revision: number;
 
-  voucher: WalletVoucher;
+  voucher?: WalletVoucher;
 
   active: WalletAddress;
 

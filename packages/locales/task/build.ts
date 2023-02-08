@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import path from 'path';
 
 const pathToWallet =
-  'https://raw.githubusercontent.com/tonkeeper/wallet/main/src/translation/locales/';
+  'https://raw.githubusercontent.com/tonkeeper/wallet/main/packages/mobile/src/translation/locales/';
 const all = ['en', 'ru'];
 
 const src = './src/';

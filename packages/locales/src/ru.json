@@ -139,5 +139,8 @@
   },
   "Change": {
     "message": "Изменить"
+  },
+  "Enable_storing_config": {
+    "message": "Cохранение конфигурации"
   }
 }

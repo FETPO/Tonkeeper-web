@@ -143,5 +143,8 @@
   },
   "Change": {
     "message": "Change"
+  },
+  "Enable_storing_config": {
+    "message": "Enable storing config"
   }
 }
