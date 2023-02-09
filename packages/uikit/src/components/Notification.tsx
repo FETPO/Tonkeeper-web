@@ -122,6 +122,18 @@ export const NotificationBlock = styled.form`
   align-items: center;
 `;
 
+export const FullHeightBlock = styled(NotificationBlock)`
+  min-height: calc(100vh - 4rem);
+`;
+
+export const NotificationTitleBlock = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  gap: 1rem;
+`;
+
 export const NotificationCancelButton: FC<{ handleClose: () => void }> = ({
   handleClose,
 }) => {

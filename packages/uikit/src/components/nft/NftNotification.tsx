@@ -7,19 +7,15 @@ import { useNftCollectionData } from '../../state/wallet';
 import { BackButton, ButtonMock } from '../fields/BackButton';
 import { ChevronDownIcon, VerificationIcon } from '../Icon';
 import { Body, CroppedBodyText } from '../jettons/CroppedText';
-import { Notification, NotificationBlock } from '../Notification';
+import {
+  Notification,
+  NotificationBlock,
+  NotificationTitleBlock,
+} from '../Notification';
 import { H2, H3, Label1 } from '../Text';
 import { NftAction } from './NftAction';
 import { NftDetails } from './NftDetails';
 import { Image, NftBlock } from './Nfts';
-
-const TitleBlock = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  width: 100%;
-  gap: 1rem;
-`;
 
 const Text = styled.div`
   display: flex;
@@ -68,13 +64,13 @@ const NftPreview: FC<{
 
   return (
     <NotificationBlock>
-      <TitleBlock>
+      <NotificationTitleBlock>
         <BackButton onClick={onClose}>
           <ChevronDownIcon />
         </BackButton>
         <H3>{nftItem.dns ?? nftItem.metadata.name}</H3>
         <ButtonMock />
-      </TitleBlock>
+      </NotificationTitleBlock>
       <NftBlock>
         {image && <Image ref={ref} url={image.url} />}
         <Text>
